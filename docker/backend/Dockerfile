@@ -28,7 +28,7 @@ RUN pip install -r requirements/dev.txt
 
 COPY backend/ .
 COPY docker/backend/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
 RUN adduser --disabled-password --gecos '' appuser && chown -R appuser:appuser /app
 USER appuser
@@ -41,7 +41,7 @@ FROM deps AS production
 
 COPY backend/ .
 COPY docker/backend/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
 RUN adduser --disabled-password --gecos '' appuser \
     && mkdir -p /app/staticfiles /app/media /app/logs \

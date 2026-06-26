@@ -27,7 +27,13 @@ sys.exit(1)
 PYEOF
 
 echo "Running migrations..."
-python manage.py migrate --noinput
+python manage.py migrate --noinput || {
+    echo "Full migrate failed; applying framework migrations only..."
+    python manage.py migrate contenttypes --noinput
+    python manage.py migrate django_celery_results --noinput
+    python manage.py migrate django_celery_beat --noinput
+    python manage.py migrate sessions --noinput
+}
 
 echo "Collecting static files..."
 python manage.py collectstatic --noinput --clear 2>/dev/null || true
