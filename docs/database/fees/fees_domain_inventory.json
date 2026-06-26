@@ -1,0 +1,1769 @@
+{
+  "domain": "fees",
+  "app": "fees",
+  "table_count": 16,
+  "tables": [
+    {
+      "table": "expense_head",
+      "row_count": 3,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exp_category",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "yes",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_deleted",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `expense_head` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `exp_category` varchar(50) DEFAULT NULL,\n  `description` text DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'yes',\n  `is_deleted` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "expenses",
+          "column": "exp_head_id"
+        }
+      ]
+    },
+    {
+      "table": "expenses",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 12,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exp_head_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "invoice_no",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "amount",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "documents",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "yes",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_deleted",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "exp_head_id",
+          "references_table": "expense_head",
+          "references_column": "id",
+          "constraint": "expenses_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "expense_head"
+      ],
+      "create_sql": "CREATE TABLE `expenses` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `exp_head_id` int(11) DEFAULT NULL,\n  `name` varchar(50) DEFAULT NULL,\n  `invoice_no` varchar(200) DEFAULT NULL,\n  `date` date DEFAULT NULL,\n  `amount` float(10,2) DEFAULT NULL,\n  `documents` varchar(255) DEFAULT NULL,\n  `note` text DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'yes',\n  `is_deleted` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `exp_head_id` (`exp_head_id`),\n  CONSTRAINT `expenses_ibfk_1` FOREIGN KEY (`exp_head_id`) REFERENCES `expense_head` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "fee_groups",
+      "row_count": 11,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "is_system",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `fee_groups` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(200) DEFAULT NULL,\n  `is_system` int(11) NOT NULL DEFAULT 0,\n  `description` text DEFAULT NULL,\n  `is_active` varchar(10) NOT NULL DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "fee_groups_feetype",
+          "column": "fee_groups_id"
+        },
+        {
+          "table": "fee_session_groups",
+          "column": "fee_groups_id"
+        }
+      ]
+    },
+    {
+      "table": "fee_groups_feetype",
+      "row_count": 65,
+      "primary_key": "id",
+      "column_count": 15,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "parent_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "fee_session_group_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "fee_groups_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "feetype_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "amount",
+          "mysql_type": "decimal(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DecimalField(max_digits=10, decimal_places=2)"
+        },
+        {
+          "name": "fine_type",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": "none",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "due_date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "fine_percentage",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "fine_amount",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "collection_type",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "fee_session_group_id",
+          "references_table": "fee_session_groups",
+          "references_column": "id",
+          "constraint": "fee_groups_feetype_ibfk_1"
+        },
+        {
+          "column": "fee_groups_id",
+          "references_table": "fee_groups",
+          "references_column": "id",
+          "constraint": "fee_groups_feetype_ibfk_2"
+        },
+        {
+          "column": "feetype_id",
+          "references_table": "feetype",
+          "references_column": "id",
+          "constraint": "fee_groups_feetype_ibfk_3"
+        },
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "fee_groups_feetype_ibfk_4"
+        }
+      ],
+      "depends_on": [
+        "fee_groups",
+        "fee_session_groups",
+        "feetype",
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `fee_groups_feetype` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `parent_id` int(11) DEFAULT NULL,\n  `fee_session_group_id` int(11) DEFAULT NULL,\n  `fee_groups_id` int(11) DEFAULT NULL,\n  `feetype_id` int(11) DEFAULT NULL,\n  `session_id` int(11) DEFAULT NULL,\n  `class_id` int(11) DEFAULT NULL,\n  `amount` decimal(10,2) DEFAULT NULL,\n  `fine_type` varchar(50) NOT NULL DEFAULT 'none',\n  `due_date` date DEFAULT NULL,\n  `fine_percentage` float(10,2) NOT NULL DEFAULT 0.00,\n  `fine_amount` float(10,2) NOT NULL DEFAULT 0.00,\n  `collection_type` int(11) NOT NULL,\n  `is_active` varchar(10) NOT NULL DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `fee_session_group_id` (`fee_session_group_id`),\n  KEY `fee_groups_id` (`fee_groups_id`),\n  KEY `feetype_id` (`feetype_id`),\n  KEY `session_id` (`session_id`),\n  CONSTRAINT `fee_groups_feetype_ibfk_1` FOREIGN KEY (`fee_session_group_id`) REFERENCES `fee_session_groups` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `fee_groups_feetype_ibfk_2` FOREIGN KEY (`fee_groups_id`) REFERENCES `fee_groups` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `fee_groups_feetype_ibfk_3` FOREIGN KEY (`feetype_id`) REFERENCES `feetype` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `fee_groups_feetype_ibfk_4` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=602 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "offline_fees_payments",
+          "column": "fee_groups_feetype_id"
+        },
+        {
+          "table": "student_fees_deposite",
+          "column": "fee_groups_feetype_id"
+        },
+        {
+          "table": "student_fees_processing",
+          "column": "fee_groups_feetype_id"
+        }
+      ]
+    },
+    {
+      "table": "fee_receipt_no",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 2,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "payment",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `fee_receipt_no` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `payment` int(11) NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "fee_session_groups",
+      "row_count": 35,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "fee_groups_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "class_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "fee_groups_id",
+          "references_table": "fee_groups",
+          "references_column": "id",
+          "constraint": "fee_session_groups_ibfk_1"
+        },
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "fee_session_groups_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "fee_groups",
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `fee_session_groups` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `fee_groups_id` int(11) DEFAULT NULL,\n  `session_id` int(11) DEFAULT NULL,\n  `is_active` varchar(10) NOT NULL DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `class_id` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `fee_groups_id` (`fee_groups_id`),\n  KEY `session_id` (`session_id`),\n  CONSTRAINT `fee_session_groups_ibfk_1` FOREIGN KEY (`fee_groups_id`) REFERENCES `fee_groups` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `fee_session_groups_ibfk_2` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "fee_groups_feetype",
+          "column": "fee_session_group_id"
+        },
+        {
+          "table": "student_fees_master",
+          "column": "fee_session_group_id"
+        }
+      ]
+    },
+    {
+      "table": "feemasters",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "feetype_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "amount",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "feemasters_ibfk_1"
+        },
+        {
+          "column": "feetype_id",
+          "references_table": "feetype",
+          "references_column": "id",
+          "constraint": "feemasters_ibfk_2"
+        },
+        {
+          "column": "class_id",
+          "references_table": "classes",
+          "references_column": "id",
+          "constraint": "feemasters_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "classes",
+        "feetype",
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `feemasters` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `session_id` int(11) DEFAULT NULL,\n  `feetype_id` int(11) NOT NULL,\n  `class_id` int(11) DEFAULT NULL,\n  `amount` float(10,2) DEFAULT NULL,\n  `description` text DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `session_id` (`session_id`),\n  KEY `feetype_id` (`feetype_id`),\n  KEY `class_id` (`class_id`),\n  CONSTRAINT `feemasters_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `feemasters_ibfk_2` FOREIGN KEY (`feetype_id`) REFERENCES `feetype` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `feemasters_ibfk_3` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "student_fees",
+          "column": "feemaster_id"
+        }
+      ]
+    },
+    {
+      "table": "fees_discounts",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "code",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "percentage",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "amount",
+          "mysql_type": "decimal(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DecimalField(max_digits=10, decimal_places=2)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "fees_discounts_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `fees_discounts` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `session_id` int(11) DEFAULT NULL,\n  `name` varchar(100) DEFAULT NULL,\n  `code` varchar(100) DEFAULT NULL,\n  `type` varchar(20) DEFAULT NULL,\n  `percentage` float(10,2) DEFAULT NULL,\n  `amount` decimal(10,2) DEFAULT NULL,\n  `description` text DEFAULT NULL,\n  `is_active` varchar(10) NOT NULL DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `session_id` (`session_id`),\n  CONSTRAINT `fees_discounts_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "student_fees_discounts",
+          "column": "fees_discount_id"
+        }
+      ]
+    },
+    {
+      "table": "fees_reminder",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "reminder_type",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "day",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `fees_reminder` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `reminder_type` varchar(10) DEFAULT NULL,\n  `day` int(11) DEFAULT NULL,\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "feetype",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_system",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "feecategory_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "code",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `feetype` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `is_system` int(11) NOT NULL DEFAULT 0,\n  `feecategory_id` int(11) DEFAULT NULL,\n  `type` varchar(50) DEFAULT NULL,\n  `code` varchar(100) NOT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `description` text DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "fee_groups_feetype",
+          "column": "feetype_id"
+        },
+        {
+          "table": "feemasters",
+          "column": "feetype_id"
+        }
+      ]
+    },
+    {
+      "table": "gateway_ins",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "online_admission_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "gateway_name",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "module_type",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "unique_id",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "parameter_details",
+          "mysql_type": "mediumtext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "payment_status",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "online_admission_id",
+          "references_table": "online_admissions",
+          "references_column": "id",
+          "constraint": "gateway_ins_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "online_admissions"
+      ],
+      "create_sql": "CREATE TABLE `gateway_ins` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `online_admission_id` int(11) DEFAULT NULL,\n  `gateway_name` varchar(50) NOT NULL,\n  `module_type` varchar(255) NOT NULL,\n  `unique_id` varchar(255) NOT NULL,\n  `parameter_details` mediumtext NOT NULL,\n  `payment_status` varchar(255) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `online_admission_id` (`online_admission_id`),\n  CONSTRAINT `gateway_ins_ibfk_1` FOREIGN KEY (`online_admission_id`) REFERENCES `online_admissions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "gateway_ins_response",
+          "column": "gateway_ins_id"
+        },
+        {
+          "table": "student_fees_processing",
+          "column": "gateway_ins_id"
+        }
+      ]
+    },
+    {
+      "table": "gateway_ins_response",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "gateway_ins_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "posted_data",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "response",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "gateway_ins_id",
+          "references_table": "gateway_ins",
+          "references_column": "id",
+          "constraint": "gateway_ins_response_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "gateway_ins"
+      ],
+      "create_sql": "CREATE TABLE `gateway_ins_response` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `gateway_ins_id` int(11) DEFAULT NULL,\n  `posted_data` text DEFAULT NULL,\n  `response` text DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `gateway_ins_id` (`gateway_ins_id`),\n  CONSTRAINT `gateway_ins_response_ibfk_1` FOREIGN KEY (`gateway_ins_id`) REFERENCES `gateway_ins` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "income",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 12,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "income_head_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "invoice_no",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "amount",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "yes",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "documents",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_deleted",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "income_head_id",
+          "references_table": "income_head",
+          "references_column": "id",
+          "constraint": "income_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "income_head"
+      ],
+      "create_sql": "CREATE TABLE `income` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `income_head_id` int(11) DEFAULT NULL,\n  `name` varchar(50) DEFAULT NULL,\n  `invoice_no` varchar(200) DEFAULT NULL,\n  `date` date DEFAULT NULL,\n  `amount` float(10,2) DEFAULT 0.00,\n  `note` text DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'yes',\n  `documents` varchar(255) DEFAULT NULL,\n  `is_deleted` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `income_head_id` (`income_head_id`),\n  CONSTRAINT `income_ibfk_1` FOREIGN KEY (`income_head_id`) REFERENCES `income_head` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "income_head",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "income_category",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": "yes",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_deleted",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `income_head` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `income_category` varchar(255) DEFAULT NULL,\n  `description` varchar(255) DEFAULT NULL,\n  `is_active` varchar(255) NOT NULL DEFAULT 'yes',\n  `is_deleted` varchar(255) NOT NULL DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "income",
+          "column": "income_head_id"
+        }
+      ]
+    },
+    {
+      "table": "offline_fees_payments",
+      "row_count": 60,
+      "primary_key": "id",
+      "column_count": 19,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "invoice_id",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "student_session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_fees_master_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "fee_groups_feetype_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_transport_fee_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "payment_date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "bank_from",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "bank_account_transferred",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "reference",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "amount",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "submit_date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "approve_date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "attachment",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "reply",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "approved_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(1)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=1)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "alt_mobile_no",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "student_fees_master_id",
+          "references_table": "student_fees_master",
+          "references_column": "id",
+          "constraint": "offline_fees_payments_ibfk_1"
+        },
+        {
+          "column": "fee_groups_feetype_id",
+          "references_table": "fee_groups_feetype",
+          "references_column": "id",
+          "constraint": "offline_fees_payments_ibfk_2"
+        },
+        {
+          "column": "student_transport_fee_id",
+          "references_table": "student_transport_fees",
+          "references_column": "id",
+          "constraint": "offline_fees_payments_ibfk_3"
+        },
+        {
+          "column": "approved_by",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "offline_fees_payments_ibfk_4"
+        },
+        {
+          "column": "student_session_id",
+          "references_table": "student_session",
+          "references_column": "id",
+          "constraint": "offline_fees_payments_ibfk_5"
+        }
+      ],
+      "depends_on": [
+        "fee_groups_feetype",
+        "staff",
+        "student_fees_master",
+        "student_session",
+        "student_transport_fees"
+      ],
+      "create_sql": "CREATE TABLE `offline_fees_payments` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `invoice_id` varchar(50) DEFAULT NULL,\n  `student_session_id` int(11) DEFAULT NULL,\n  `student_fees_master_id` int(11) DEFAULT NULL,\n  `fee_groups_feetype_id` int(11) DEFAULT NULL,\n  `student_transport_fee_id` int(11) DEFAULT NULL,\n  `payment_date` date DEFAULT NULL,\n  `bank_from` varchar(200) DEFAULT NULL,\n  `bank_account_transferred` varchar(200) DEFAULT NULL,\n  `reference` varchar(200) DEFAULT NULL,\n  `amount` float(10,2) DEFAULT NULL,\n  `submit_date` datetime DEFAULT NULL,\n  `approve_date` datetime DEFAULT NULL,\n  `attachment` text DEFAULT NULL,\n  `reply` text DEFAULT NULL,\n  `approved_by` int(11) DEFAULT NULL,\n  `is_active` varchar(1) DEFAULT '0',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `alt_mobile_no` varchar(50) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `student_fees_master_id` (`student_fees_master_id`),\n  KEY `fee_groups_feetype_id` (`fee_groups_feetype_id`),\n  KEY `student_transport_fee_id` (`student_transport_fee_id`),\n  KEY `offline_fees_payments_ibfk_4` (`approved_by`),\n  KEY `student_session_id` (`student_session_id`),\n  CONSTRAINT `offline_fees_payments_ibfk_1` FOREIGN KEY (`student_fees_master_id`) REFERENCES `student_fees_master` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `offline_fees_payments_ibfk_2` FOREIGN KEY (`fee_groups_feetype_id`) REFERENCES `fee_groups_feetype` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `offline_fees_payments_ibfk_3` FOREIGN KEY (`student_transport_fee_id`) REFERENCES `student_transport_fees` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `offline_fees_payments_ibfk_4` FOREIGN KEY (`approved_by`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `offline_fees_payments_ibfk_5` FOREIGN KEY (`student_session_id`) REFERENCES `student_session` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "payment_settings",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 17,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "payment_type",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "api_username",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "api_secret_key",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "salt",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "api_publishable_key",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "api_password",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "api_signature",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "api_email",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "paypal_demo",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "account_no",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "gateway_mode",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "paytm_website",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "paytm_industrytype",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `payment_settings` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `payment_type` varchar(200) NOT NULL,\n  `api_username` varchar(200) DEFAULT NULL,\n  `api_secret_key` varchar(200) NOT NULL,\n  `salt` varchar(200) NOT NULL,\n  `api_publishable_key` varchar(200) NOT NULL,\n  `api_password` varchar(200) DEFAULT NULL,\n  `api_signature` varchar(200) DEFAULT NULL,\n  `api_email` varchar(200) DEFAULT NULL,\n  `paypal_demo` varchar(100) NOT NULL,\n  `account_no` varchar(200) NOT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `gateway_mode` int(11) NOT NULL COMMENT '0 Testing, 1 live',\n  `paytm_website` varchar(255) NOT NULL,\n  `paytm_industrytype` varchar(255) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    }
+  ]
+}

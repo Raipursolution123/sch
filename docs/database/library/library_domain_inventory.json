@@ -1,0 +1,366 @@
+{
+  "domain": "library",
+  "app": "library",
+  "table_count": 3,
+  "tables": [
+    {
+      "table": "book_issues",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "book_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "member_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "duereturn_date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "return_date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "issue_date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "is_returned",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "book_id",
+          "references_table": "books",
+          "references_column": "id",
+          "constraint": "book_issues_ibfk_1"
+        },
+        {
+          "column": "member_id",
+          "references_table": "libarary_members",
+          "references_column": "id",
+          "constraint": "book_issues_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "books",
+        "libarary_members"
+      ],
+      "create_sql": "CREATE TABLE `book_issues` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `book_id` int(11) NOT NULL,\n  `member_id` int(11) DEFAULT NULL,\n  `duereturn_date` date DEFAULT NULL,\n  `return_date` date DEFAULT NULL,\n  `issue_date` date DEFAULT NULL,\n  `is_returned` int(11) DEFAULT 0,\n  `is_active` varchar(10) NOT NULL DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `book_id` (`book_id`),\n  KEY `member_id` (`member_id`),\n  CONSTRAINT `book_issues_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `book_issues_ibfk_2` FOREIGN KEY (`member_id`) REFERENCES `libarary_members` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "books",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 18,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "book_title",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "book_no",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "isbn_no",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "subject",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "claases",
+          "mysql_type": "varchar(44)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "category",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "rack_no",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "publish",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "author",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "qty",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "perunitcost",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "postdate",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "available",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": "yes",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `books` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `book_title` varchar(100) NOT NULL,\n  `book_no` varchar(50) NOT NULL,\n  `isbn_no` varchar(100) NOT NULL,\n  `subject` varchar(100) DEFAULT NULL,\n  `claases` varchar(44) DEFAULT NULL,\n  `category` varchar(255) DEFAULT NULL,\n  `rack_no` varchar(100) NOT NULL,\n  `publish` varchar(100) DEFAULT NULL,\n  `author` varchar(100) DEFAULT NULL,\n  `qty` int(11) DEFAULT NULL,\n  `perunitcost` float(10,2) DEFAULT NULL,\n  `postdate` date DEFAULT NULL,\n  `description` text DEFAULT NULL,\n  `available` varchar(10) DEFAULT 'yes',\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "book_issues",
+          "column": "book_id"
+        }
+      ]
+    },
+    {
+      "table": "libarary_members",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "library_card_no",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "member_type",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "member_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `libarary_members` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `library_card_no` varchar(50) DEFAULT NULL,\n  `member_type` varchar(50) DEFAULT NULL,\n  `member_id` int(11) DEFAULT NULL,\n  `is_active` varchar(10) NOT NULL DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "book_issues",
+          "column": "member_id"
+        }
+      ]
+    }
+  ]
+}

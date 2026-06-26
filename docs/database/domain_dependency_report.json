@@ -1,0 +1,1530 @@
+{
+  "domains": {
+    "accounts": {
+      "table_count": 11,
+      "tables": [
+        "captcha",
+        "notification_roles",
+        "permission_category",
+        "permission_group",
+        "permission_student",
+        "roles",
+        "roles_permissions",
+        "staff_roles",
+        "userlog",
+        "users",
+        "users_authentication"
+      ],
+      "depends_on_external": [
+        "class_sections",
+        "send_notification",
+        "staff"
+      ],
+      "referenced_by_external": [
+        "content_for",
+        "events",
+        "share_content_for",
+        "sidebar_menus",
+        "sidebar_sub_menus"
+      ]
+    },
+    "students": {
+      "table_count": 20,
+      "tables": [
+        "student_applyleave",
+        "student_attendences",
+        "student_attendences_hostel",
+        "student_attendences_transport",
+        "student_behaviour",
+        "student_doc",
+        "student_edit_fields",
+        "student_fees",
+        "student_fees_deposite",
+        "student_fees_discounts",
+        "student_fees_master",
+        "student_fees_processing",
+        "student_incident_comments",
+        "student_incidents",
+        "student_quiz_status",
+        "student_session",
+        "student_subject_attendances",
+        "student_timeline",
+        "student_transport_fees",
+        "students"
+      ],
+      "depends_on_external": [
+        "attendence_type",
+        "classes",
+        "fee_groups_feetype",
+        "fee_session_groups",
+        "feemasters",
+        "fees_discounts",
+        "gateway_ins",
+        "hostel_rooms",
+        "online_course_quiz",
+        "route_pickup_point",
+        "sections",
+        "sessions",
+        "staff",
+        "subject_timetable",
+        "transport_feemaster",
+        "vehicle_routes"
+      ],
+      "referenced_by_external": [
+        "alumni_students",
+        "cbse_exam_student_subject_rank",
+        "cbse_exam_students",
+        "cbse_observation_term_student_subparameter",
+        "cbse_student_exam_ranks",
+        "cbse_student_template_rank",
+        "chat_users",
+        "conferences_history",
+        "course_progress",
+        "course_quiz_answer",
+        "daily_assignment",
+        "exam_group_class_batch_exam_students",
+        "exam_group_students",
+        "gmeet_history",
+        "homework_evaluation",
+        "lesson_plan_forum",
+        "offline_fees_payments",
+        "onlineexam_students",
+        "read_notification",
+        "share_content_for",
+        "submit_assignment",
+        "visitors_book"
+      ]
+    },
+    "academics": {
+      "table_count": 5,
+      "tables": [
+        "class_sections",
+        "classes",
+        "sections",
+        "sessions",
+        "subjects"
+      ],
+      "depends_on_external": [],
+      "referenced_by_external": [
+        "alumni_events",
+        "cbse_exam_class_sections",
+        "cbse_exam_student_subject_rank",
+        "cbse_exam_timetable",
+        "cbse_exams",
+        "cbse_observation_terms",
+        "cbse_template",
+        "cbse_template_class_sections",
+        "class_section_times",
+        "class_teacher",
+        "conference_sections",
+        "contents",
+        "enquiry",
+        "exam_group_class_batch_exam_subjects",
+        "exam_group_class_batch_exams",
+        "exam_schedules",
+        "exams",
+        "fee_groups_feetype",
+        "fee_session_groups",
+        "feemasters",
+        "fees_discounts",
+        "gmeet",
+        "gmeet_sections",
+        "homework",
+        "lesson",
+        "online_admissions",
+        "online_course_class_sections",
+        "onlineexam",
+        "onlineexam_questions",
+        "questions",
+        "share_content_for",
+        "student_session",
+        "subject_group_class_sections",
+        "subject_group_subjects",
+        "subject_groups",
+        "subject_syllabus",
+        "subject_timetable",
+        "topic",
+        "transport_feemaster",
+        "userlog",
+        "video_tutorial_class_sections"
+      ]
+    },
+    "staff": {
+      "table_count": 16,
+      "tables": [
+        "conference_staff",
+        "cyc_staff_payroll",
+        "cyc_staff_payroll_increment",
+        "department",
+        "gmeet_staff",
+        "staff",
+        "staff_attendance",
+        "staff_attendance_type",
+        "staff_designation",
+        "staff_id_card",
+        "staff_leave_details",
+        "staff_leave_request",
+        "staff_payroll",
+        "staff_payslip",
+        "staff_rating",
+        "staff_timeline"
+      ],
+      "depends_on_external": [
+        "conferences",
+        "gmeet",
+        "leave_types"
+      ],
+      "referenced_by_external": [
+        "chat_users",
+        "class_teacher",
+        "conferences",
+        "conferences_history",
+        "contents",
+        "daily_assignment",
+        "enquiry",
+        "follow_up",
+        "gmeet",
+        "gmeet_history",
+        "homework",
+        "item_issue",
+        "lesson_plan_forum",
+        "offline_fees_payments",
+        "online_course_quiz",
+        "online_courses",
+        "payslip_allowance",
+        "questions",
+        "read_notification",
+        "send_notification",
+        "share_content_for",
+        "share_contents",
+        "staff_roles",
+        "student_applyleave",
+        "subject_syllabus",
+        "subject_timetable",
+        "upload_contents",
+        "video_tutorial",
+        "visitors_book"
+      ]
+    },
+    "attendance": {
+      "table_count": 1,
+      "tables": [
+        "attendence_type"
+      ],
+      "depends_on_external": [],
+      "referenced_by_external": [
+        "student_attendences",
+        "student_attendences_hostel",
+        "student_attendences_transport",
+        "student_subject_attendances"
+      ]
+    },
+    "fees": {
+      "table_count": 8,
+      "tables": [
+        "fee_groups",
+        "fee_groups_feetype",
+        "fee_receipt_no",
+        "fee_session_groups",
+        "feemasters",
+        "fees_discounts",
+        "fees_reminder",
+        "feetype"
+      ],
+      "depends_on_external": [
+        "classes",
+        "sessions"
+      ],
+      "referenced_by_external": [
+        "offline_fees_payments",
+        "student_fees",
+        "student_fees_deposite",
+        "student_fees_discounts",
+        "student_fees_master",
+        "student_fees_processing"
+      ]
+    },
+    "examinations": {
+      "table_count": 41,
+      "tables": [
+        "cbse_exam_assessment_types",
+        "cbse_exam_assessments",
+        "cbse_exam_class_sections",
+        "cbse_exam_grades",
+        "cbse_exam_grades_range",
+        "cbse_exam_observations",
+        "cbse_exam_student_subject_rank",
+        "cbse_exam_students",
+        "cbse_exam_timetable",
+        "cbse_exam_timetable_assessment_types",
+        "cbse_exam_timetable_grade",
+        "cbse_exams",
+        "cbse_marksheet_type",
+        "cbse_observation_class_section",
+        "cbse_observation_parameters",
+        "cbse_observation_subparameter",
+        "cbse_observation_term_student_subparameter",
+        "cbse_observation_terms",
+        "cbse_student_exam_ranks",
+        "cbse_student_subject_marks",
+        "cbse_student_subject_result",
+        "cbse_student_template_rank",
+        "cbse_template",
+        "cbse_template_class_sections",
+        "cbse_template_term_exams",
+        "cbse_template_terms",
+        "cbse_terms",
+        "exam_group_class_batch_exam_students",
+        "exam_group_class_batch_exam_subjects",
+        "exam_group_class_batch_exams",
+        "exam_group_exam_connections",
+        "exam_group_exam_results",
+        "exam_group_students",
+        "exam_groups",
+        "exam_schedules",
+        "exams",
+        "onlineexam",
+        "onlineexam_attempts",
+        "onlineexam_questions",
+        "onlineexam_student_results",
+        "onlineexam_students"
+      ],
+      "depends_on_external": [
+        "class_sections",
+        "questions",
+        "sessions",
+        "student_session",
+        "students",
+        "subjects"
+      ],
+      "referenced_by_external": []
+    },
+    "library": {
+      "table_count": 2,
+      "tables": [
+        "book_issues",
+        "books"
+      ],
+      "depends_on_external": [
+        "libarary_members"
+      ],
+      "referenced_by_external": []
+    },
+    "transport": {
+      "table_count": 5,
+      "tables": [
+        "route_pickup_point",
+        "transport_feemaster",
+        "transport_route",
+        "vehicle_routes",
+        "vehicles"
+      ],
+      "depends_on_external": [
+        "pickup_point",
+        "sessions"
+      ],
+      "referenced_by_external": [
+        "student_session",
+        "student_transport_fees"
+      ]
+    },
+    "admissions": {
+      "table_count": 4,
+      "tables": [
+        "online_admission_custom_field_value",
+        "online_admission_fields",
+        "online_admission_payment",
+        "online_admissions"
+      ],
+      "depends_on_external": [
+        "categories",
+        "class_sections",
+        "custom_fields",
+        "hostel_rooms",
+        "school_houses"
+      ],
+      "referenced_by_external": [
+        "gateway_ins"
+      ]
+    },
+    "lms": {
+      "table_count": 14,
+      "tables": [
+        "course_category",
+        "course_lesson_quiz_order",
+        "course_progress",
+        "course_quiz_answer",
+        "course_quiz_question",
+        "course_rating",
+        "online_course_class_sections",
+        "online_course_lesson",
+        "online_course_payment",
+        "online_course_processing_payment",
+        "online_course_quiz",
+        "online_course_section",
+        "online_course_settings",
+        "online_courses"
+      ],
+      "depends_on_external": [
+        "class_sections",
+        "staff",
+        "students"
+      ],
+      "referenced_by_external": [
+        "student_quiz_status"
+      ]
+    }
+  },
+  "implementation_order": [
+    "accounts",
+    "settings (sch_settings, sessions already in academics)",
+    "academics (core done)",
+    "staff (done)",
+    "students (done)",
+    "attendance (done)",
+    "fees (done)",
+    "examinations (done)",
+    "library",
+    "transport",
+    "hostel",
+    "admissions",
+    "lms",
+    "communications / cms / cyc_extensions"
+  ],
+  "cross_domain_edges": [
+    {
+      "from_domain": "other",
+      "from_table": "alumni_events",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "alumni_events",
+      "column": "class_id",
+      "to_domain": "academics",
+      "to_table": "classes"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "alumni_students",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "library",
+      "from_table": "book_issues",
+      "column": "member_id",
+      "to_domain": "other",
+      "to_table": "libarary_members"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_exams",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_exam_class_sections",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_exam_students",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_exam_student_subject_rank",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_exam_student_subject_rank",
+      "column": "subject_id",
+      "to_domain": "academics",
+      "to_table": "subjects"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_exam_timetable",
+      "column": "subject_id",
+      "to_domain": "academics",
+      "to_table": "subjects"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_observation_terms",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_observation_term_student_subparameter",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_student_exam_ranks",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_student_template_rank",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_template",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "cbse_template_class_sections",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "chat_users",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "chat_users",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "chat_users",
+      "column": "create_staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "chat_users",
+      "column": "create_student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "class_section_times",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "class_teacher",
+      "column": "class_id",
+      "to_domain": "academics",
+      "to_table": "classes"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "class_teacher",
+      "column": "section_id",
+      "to_domain": "academics",
+      "to_table": "sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "class_teacher",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "class_teacher",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "conferences",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "conferences",
+      "column": "created_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "conferences_history",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "conferences_history",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "conference_sections",
+      "column": "cls_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "staff",
+      "from_table": "conference_staff",
+      "column": "conference_id",
+      "to_domain": "other",
+      "to_table": "conferences"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "contents",
+      "column": "created_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "contents",
+      "column": "class_id",
+      "to_domain": "academics",
+      "to_table": "classes"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "contents",
+      "column": "cls_sec_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "content_for",
+      "column": "user_id",
+      "to_domain": "accounts",
+      "to_table": "users"
+    },
+    {
+      "from_domain": "lms",
+      "from_table": "course_progress",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "lms",
+      "from_table": "course_quiz_answer",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "daily_assignment",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "daily_assignment",
+      "column": "evaluated_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "enquiry",
+      "column": "created_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "enquiry",
+      "column": "assigned",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "enquiry",
+      "column": "class_id",
+      "to_domain": "academics",
+      "to_table": "classes"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "events",
+      "column": "role_id",
+      "to_domain": "accounts",
+      "to_table": "roles"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "exams",
+      "column": "sesion_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "exam_group_class_batch_exams",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "exam_group_class_batch_exam_students",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "exam_group_class_batch_exam_students",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "exam_group_class_batch_exam_subjects",
+      "column": "subject_id",
+      "to_domain": "academics",
+      "to_table": "subjects"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "exam_group_students",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "exam_group_students",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "exam_schedules",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "fees",
+      "from_table": "feemasters",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "fees",
+      "from_table": "feemasters",
+      "column": "class_id",
+      "to_domain": "academics",
+      "to_table": "classes"
+    },
+    {
+      "from_domain": "fees",
+      "from_table": "fees_discounts",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "fees",
+      "from_table": "fee_groups_feetype",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "fees",
+      "from_table": "fee_session_groups",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "follow_up",
+      "column": "followup_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "gateway_ins",
+      "column": "online_admission_id",
+      "to_domain": "admissions",
+      "to_table": "online_admissions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "gmeet",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "gmeet",
+      "column": "created_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "gmeet",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "gmeet_history",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "gmeet_history",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "gmeet_sections",
+      "column": "cls_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "staff",
+      "from_table": "gmeet_staff",
+      "column": "gmeet_id",
+      "to_domain": "other",
+      "to_table": "gmeet"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "homework",
+      "column": "class_id",
+      "to_domain": "academics",
+      "to_table": "classes"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "homework",
+      "column": "section_id",
+      "to_domain": "academics",
+      "to_table": "sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "homework",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "homework",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "homework",
+      "column": "subject_id",
+      "to_domain": "academics",
+      "to_table": "subjects"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "homework",
+      "column": "evaluated_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "homework",
+      "column": "created_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "homework_evaluation",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "homework_evaluation",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "hostel",
+      "from_table": "hostel_rooms",
+      "column": "room_type_id",
+      "to_domain": "other",
+      "to_table": "room_types"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "item_issue",
+      "column": "issue_to",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "item_issue",
+      "column": "issue_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "lesson",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "lesson_plan_forum",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "lesson_plan_forum",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "accounts",
+      "from_table": "notification_roles",
+      "column": "send_notification_id",
+      "to_domain": "other",
+      "to_table": "send_notification"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "offline_fees_payments",
+      "column": "student_fees_master_id",
+      "to_domain": "students",
+      "to_table": "student_fees_master"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "offline_fees_payments",
+      "column": "fee_groups_feetype_id",
+      "to_domain": "fees",
+      "to_table": "fee_groups_feetype"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "offline_fees_payments",
+      "column": "student_transport_fee_id",
+      "to_domain": "students",
+      "to_table": "student_transport_fees"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "offline_fees_payments",
+      "column": "approved_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "offline_fees_payments",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "onlineexam",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "onlineexam_questions",
+      "column": "question_id",
+      "to_domain": "other",
+      "to_table": "questions"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "onlineexam_questions",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "examinations",
+      "from_table": "onlineexam_students",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    },
+    {
+      "from_domain": "admissions",
+      "from_table": "online_admissions",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "admissions",
+      "from_table": "online_admissions",
+      "column": "category_id",
+      "to_domain": "other",
+      "to_table": "categories"
+    },
+    {
+      "from_domain": "admissions",
+      "from_table": "online_admissions",
+      "column": "hostel_room_id",
+      "to_domain": "hostel",
+      "to_table": "hostel_rooms"
+    },
+    {
+      "from_domain": "admissions",
+      "from_table": "online_admissions",
+      "column": "school_house_id",
+      "to_domain": "other",
+      "to_table": "school_houses"
+    },
+    {
+      "from_domain": "admissions",
+      "from_table": "online_admission_custom_field_value",
+      "column": "custom_field_id",
+      "to_domain": "other",
+      "to_table": "custom_fields"
+    },
+    {
+      "from_domain": "lms",
+      "from_table": "online_courses",
+      "column": "created_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "lms",
+      "from_table": "online_course_class_sections",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "lms",
+      "from_table": "online_course_quiz",
+      "column": "created_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "payslip_allowance",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "payslip_allowance",
+      "column": "payslip_id",
+      "to_domain": "staff",
+      "to_table": "staff_payslip"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "questions",
+      "column": "subject_id",
+      "to_domain": "academics",
+      "to_table": "subjects"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "questions",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "questions",
+      "column": "subject_id",
+      "to_domain": "academics",
+      "to_table": "subjects"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "questions",
+      "column": "class_id",
+      "to_domain": "academics",
+      "to_table": "classes"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "questions",
+      "column": "section_id",
+      "to_domain": "academics",
+      "to_table": "sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "questions",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "read_notification",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "read_notification",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "transport",
+      "from_table": "route_pickup_point",
+      "column": "pickup_point_id",
+      "to_domain": "other",
+      "to_table": "pickup_point"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "send_notification",
+      "column": "created_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "share_contents",
+      "column": "created_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "share_content_for",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "share_content_for",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "share_content_for",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "share_content_for",
+      "column": "user_parent_id",
+      "to_domain": "accounts",
+      "to_table": "users"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "sidebar_menus",
+      "column": "permission_group_id",
+      "to_domain": "accounts",
+      "to_table": "permission_group"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "sidebar_sub_menus",
+      "column": "permission_group_id",
+      "to_domain": "accounts",
+      "to_table": "permission_group"
+    },
+    {
+      "from_domain": "staff",
+      "from_table": "staff_leave_details",
+      "column": "leave_type_id",
+      "to_domain": "other",
+      "to_table": "leave_types"
+    },
+    {
+      "from_domain": "staff",
+      "from_table": "staff_leave_request",
+      "column": "leave_type_id",
+      "to_domain": "other",
+      "to_table": "leave_types"
+    },
+    {
+      "from_domain": "accounts",
+      "from_table": "staff_roles",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_applyleave",
+      "column": "approve_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_attendences",
+      "column": "attendence_type_id",
+      "to_domain": "attendance",
+      "to_table": "attendence_type"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_attendences_hostel",
+      "column": "attendence_type_id",
+      "to_domain": "attendance",
+      "to_table": "attendence_type"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_attendences_transport",
+      "column": "attendence_type_id",
+      "to_domain": "attendance",
+      "to_table": "attendence_type"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_fees",
+      "column": "feemaster_id",
+      "to_domain": "fees",
+      "to_table": "feemasters"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_fees_deposite",
+      "column": "fee_groups_feetype_id",
+      "to_domain": "fees",
+      "to_table": "fee_groups_feetype"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_fees_discounts",
+      "column": "fees_discount_id",
+      "to_domain": "fees",
+      "to_table": "fees_discounts"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_fees_master",
+      "column": "fee_session_group_id",
+      "to_domain": "fees",
+      "to_table": "fee_session_groups"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_fees_processing",
+      "column": "fee_groups_feetype_id",
+      "to_domain": "fees",
+      "to_table": "fee_groups_feetype"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_fees_processing",
+      "column": "gateway_ins_id",
+      "to_domain": "other",
+      "to_table": "gateway_ins"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_quiz_status",
+      "column": "course_quiz_id",
+      "to_domain": "lms",
+      "to_table": "online_course_quiz"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_session",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_session",
+      "column": "class_id",
+      "to_domain": "academics",
+      "to_table": "classes"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_session",
+      "column": "section_id",
+      "to_domain": "academics",
+      "to_table": "sections"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_session",
+      "column": "vehroute_id",
+      "to_domain": "transport",
+      "to_table": "vehicle_routes"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_session",
+      "column": "route_pickup_point_id",
+      "to_domain": "transport",
+      "to_table": "route_pickup_point"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_session",
+      "column": "hostel_room_id",
+      "to_domain": "hostel",
+      "to_table": "hostel_rooms"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_subject_attendances",
+      "column": "attendence_type_id",
+      "to_domain": "attendance",
+      "to_table": "attendence_type"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_subject_attendances",
+      "column": "subject_timetable_id",
+      "to_domain": "other",
+      "to_table": "subject_timetable"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_transport_fees",
+      "column": "route_pickup_point_id",
+      "to_domain": "transport",
+      "to_table": "route_pickup_point"
+    },
+    {
+      "from_domain": "students",
+      "from_table": "student_transport_fees",
+      "column": "transport_feemaster_id",
+      "to_domain": "transport",
+      "to_table": "transport_feemaster"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_groups",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_group_class_sections",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_group_class_sections",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_group_subjects",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_group_subjects",
+      "column": "subject_id",
+      "to_domain": "academics",
+      "to_table": "subjects"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_syllabus",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_syllabus",
+      "column": "created_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_syllabus",
+      "column": "created_for",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_timetable",
+      "column": "class_id",
+      "to_domain": "academics",
+      "to_table": "classes"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_timetable",
+      "column": "section_id",
+      "to_domain": "academics",
+      "to_table": "sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_timetable",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "subject_timetable",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "submit_assignment",
+      "column": "student_id",
+      "to_domain": "students",
+      "to_table": "students"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "topic",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "transport",
+      "from_table": "transport_feemaster",
+      "column": "session_id",
+      "to_domain": "academics",
+      "to_table": "sessions"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "upload_contents",
+      "column": "upload_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "accounts",
+      "from_table": "userlog",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "video_tutorial",
+      "column": "created_by",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "video_tutorial_class_sections",
+      "column": "class_section_id",
+      "to_domain": "academics",
+      "to_table": "class_sections"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "visitors_book",
+      "column": "staff_id",
+      "to_domain": "staff",
+      "to_table": "staff"
+    },
+    {
+      "from_domain": "other",
+      "from_table": "visitors_book",
+      "column": "student_session_id",
+      "to_domain": "students",
+      "to_table": "student_session"
+    }
+  ]
+}

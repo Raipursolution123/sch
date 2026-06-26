@@ -1,0 +1,2314 @@
+{
+  "domain": "communications",
+  "app": "communications",
+  "table_count": 21,
+  "tables": [
+    {
+      "table": "chat_connections",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "chat_user_one",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "chat_user_two",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ip",
+          "mysql_type": "varchar(30)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=30)"
+        },
+        {
+          "name": "time",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "chat_user_one",
+          "references_table": "chat_users",
+          "references_column": "id",
+          "constraint": "chat_connections_ibfk_1"
+        },
+        {
+          "column": "chat_user_two",
+          "references_table": "chat_users",
+          "references_column": "id",
+          "constraint": "chat_connections_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "chat_users"
+      ],
+      "create_sql": "CREATE TABLE `chat_connections` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `chat_user_one` int(11) NOT NULL,\n  `chat_user_two` int(11) NOT NULL,\n  `ip` varchar(30) DEFAULT NULL,\n  `time` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `chat_user_one` (`chat_user_one`),\n  KEY `chat_user_two` (`chat_user_two`),\n  CONSTRAINT `chat_connections_ibfk_1` FOREIGN KEY (`chat_user_one`) REFERENCES `chat_users` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `chat_connections_ibfk_2` FOREIGN KEY (`chat_user_two`) REFERENCES `chat_users` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "chat_messages",
+          "column": "chat_connection_id"
+        }
+      ]
+    },
+    {
+      "table": "chat_messages",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "message",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "chat_user_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ip",
+          "mysql_type": "varchar(30)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=30)"
+        },
+        {
+          "name": "time",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_first",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_read",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "chat_connection_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "chat_user_id",
+          "references_table": "chat_users",
+          "references_column": "id",
+          "constraint": "chat_messages_ibfk_1"
+        },
+        {
+          "column": "chat_connection_id",
+          "references_table": "chat_connections",
+          "references_column": "id",
+          "constraint": "chat_messages_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "chat_connections",
+        "chat_users"
+      ],
+      "create_sql": "CREATE TABLE `chat_messages` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `message` text DEFAULT NULL,\n  `chat_user_id` int(11) NOT NULL,\n  `ip` varchar(30) NOT NULL,\n  `time` int(11) NOT NULL,\n  `is_first` int(11) DEFAULT 0,\n  `is_read` int(11) NOT NULL DEFAULT 0,\n  `chat_connection_id` int(11) NOT NULL,\n  `created_at` datetime DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `chat_user_id` (`chat_user_id`),\n  KEY `chat_connection_id` (`chat_connection_id`),\n  CONSTRAINT `chat_messages_ibfk_1` FOREIGN KEY (`chat_user_id`) REFERENCES `chat_users` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `chat_messages_ibfk_2` FOREIGN KEY (`chat_connection_id`) REFERENCES `chat_connections` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "chat_users",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "user_type",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "create_staff_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "create_student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "staff_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "chat_users_ibfk_1"
+        },
+        {
+          "column": "student_id",
+          "references_table": "students",
+          "references_column": "id",
+          "constraint": "chat_users_ibfk_2"
+        },
+        {
+          "column": "create_staff_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "chat_users_ibfk_3"
+        },
+        {
+          "column": "create_student_id",
+          "references_table": "students",
+          "references_column": "id",
+          "constraint": "chat_users_ibfk_4"
+        }
+      ],
+      "depends_on": [
+        "staff",
+        "students"
+      ],
+      "create_sql": "CREATE TABLE `chat_users` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `user_type` varchar(20) DEFAULT NULL,\n  `staff_id` int(11) DEFAULT NULL,\n  `student_id` int(11) DEFAULT NULL,\n  `create_staff_id` int(11) DEFAULT NULL,\n  `create_student_id` int(11) DEFAULT NULL,\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `staff_id` (`staff_id`),\n  KEY `student_id` (`student_id`),\n  KEY `create_staff_id` (`create_staff_id`),\n  KEY `create_student_id` (`create_student_id`),\n  CONSTRAINT `chat_users_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `chat_users_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `chat_users_ibfk_3` FOREIGN KEY (`create_staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `chat_users_ibfk_4` FOREIGN KEY (`create_student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "chat_connections",
+          "column": "chat_user_one"
+        },
+        {
+          "table": "chat_connections",
+          "column": "chat_user_two"
+        },
+        {
+          "table": "chat_messages",
+          "column": "chat_user_id"
+        }
+      ]
+    },
+    {
+      "table": "conference_sections",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "conference_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cls_section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "conference_id",
+          "references_table": "conferences",
+          "references_column": "id",
+          "constraint": "conference_sections_ibfk_1"
+        },
+        {
+          "column": "cls_section_id",
+          "references_table": "class_sections",
+          "references_column": "id",
+          "constraint": "conference_sections_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "class_sections",
+        "conferences"
+      ],
+      "create_sql": "CREATE TABLE `conference_sections` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `conference_id` int(11) DEFAULT NULL,\n  `cls_section_id` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `conference_sections_ibfk_1` (`conference_id`),\n  KEY `conference_sections_ibfk_2` (`cls_section_id`),\n  CONSTRAINT `conference_sections_ibfk_1` FOREIGN KEY (`conference_id`) REFERENCES `conferences` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `conference_sections_ibfk_2` FOREIGN KEY (`cls_section_id`) REFERENCES `class_sections` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "conferences",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 20,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "purpose",
+          "mysql_type": "varchar(20)",
+          "nullable": false,
+          "key": "",
+          "default": "class",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_id",
+          "mysql_type": "int(10)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "duration",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "password",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "subject",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "class_id",
+          "mysql_type": "int(10)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "section_id",
+          "mysql_type": "int(10)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(10)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "host_video",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "client_video",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "timezone",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "return_response",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "api_type",
+          "mysql_type": "varchar(30)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=30)"
+        },
+        {
+          "name": "status",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "staff_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "conferences_ibfk_1"
+        },
+        {
+          "column": "created_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "conferences_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "staff"
+      ],
+      "create_sql": "CREATE TABLE `conferences` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `purpose` varchar(20) NOT NULL DEFAULT 'class',\n  `staff_id` int(11) DEFAULT NULL,\n  `created_id` int(10) NOT NULL,\n  `title` text DEFAULT NULL,\n  `date` datetime DEFAULT NULL,\n  `duration` int(11) DEFAULT NULL,\n  `password` varchar(50) DEFAULT NULL,\n  `subject` varchar(50) DEFAULT NULL,\n  `class_id` int(10) DEFAULT NULL,\n  `section_id` int(10) DEFAULT NULL,\n  `session_id` int(10) NOT NULL,\n  `host_video` int(1) NOT NULL DEFAULT 1,\n  `client_video` int(1) NOT NULL DEFAULT 1,\n  `description` varchar(50) DEFAULT NULL,\n  `timezone` varchar(100) DEFAULT NULL,\n  `return_response` text DEFAULT NULL,\n  `api_type` varchar(30) NOT NULL,\n  `status` int(1) NOT NULL DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `conferences_ibfk_1` (`staff_id`),\n  KEY `conferences_ibfk_2` (`created_id`),\n  CONSTRAINT `conferences_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `conferences_ibfk_2` FOREIGN KEY (`created_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "conference_sections",
+          "column": "conference_id"
+        },
+        {
+          "table": "conference_staff",
+          "column": "conference_id"
+        },
+        {
+          "table": "conferences_history",
+          "column": "conference_id"
+        }
+      ]
+    },
+    {
+      "table": "conferences_history",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "conference_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "total_hit",
+          "mysql_type": "int(10)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "conference_id",
+          "references_table": "conferences",
+          "references_column": "id",
+          "constraint": "conferences_history_ibfk_1"
+        },
+        {
+          "column": "staff_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "conferences_history_ibfk_2"
+        },
+        {
+          "column": "student_id",
+          "references_table": "students",
+          "references_column": "id",
+          "constraint": "conferences_history_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "conferences",
+        "staff",
+        "students"
+      ],
+      "create_sql": "CREATE TABLE `conferences_history` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `conference_id` int(11) NOT NULL,\n  `staff_id` int(11) DEFAULT NULL,\n  `student_id` int(11) DEFAULT NULL,\n  `total_hit` int(10) NOT NULL DEFAULT 1,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `conferences_history_ibfk_1` (`conference_id`),\n  KEY `conferences_history_ibfk_2` (`staff_id`),\n  KEY `conferences_history_ibfk_3` (`student_id`),\n  CONSTRAINT `conferences_history_ibfk_1` FOREIGN KEY (`conference_id`) REFERENCES `conferences` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `conferences_history_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `conferences_history_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "email_attachments",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "message_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "directory",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "attachment",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "attachment_name",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": true,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "message_id",
+          "references_table": "messages",
+          "references_column": "id",
+          "constraint": "email_attachments_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "messages"
+      ],
+      "create_sql": "CREATE TABLE `email_attachments` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `message_id` int(11) NOT NULL,\n  `directory` varchar(255) NOT NULL,\n  `attachment` varchar(255) NOT NULL,\n  `attachment_name` varchar(200) NOT NULL,\n  `created_at` timestamp NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `message_id` (`message_id`),\n  CONSTRAINT `email_attachments_ibfk_1` FOREIGN KEY (`message_id`) REFERENCES `messages` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "email_config",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 13,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(10) unsigned",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "email_type",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "smtp_server",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "smtp_port",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "smtp_username",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "smtp_password",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "ssl_tls",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "smtp_auth",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "api_key",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "api_secret",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "region",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `email_config` (\n  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,\n  `email_type` varchar(100) DEFAULT NULL,\n  `smtp_server` varchar(100) DEFAULT NULL,\n  `smtp_port` varchar(100) DEFAULT NULL,\n  `smtp_username` varchar(100) DEFAULT NULL,\n  `smtp_password` varchar(100) DEFAULT NULL,\n  `ssl_tls` varchar(100) DEFAULT NULL,\n  `smtp_auth` varchar(10) NOT NULL,\n  `api_key` varchar(255) DEFAULT NULL,\n  `api_secret` varchar(255) DEFAULT NULL,\n  `region` varchar(255) DEFAULT NULL,\n  `is_active` varchar(10) NOT NULL DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "email_template",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "message",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `email_template` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `title` varchar(100) NOT NULL,\n  `message` text NOT NULL,\n  `created_at` date NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "email_template_attachment",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "email_template_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "attachment",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "attachment_name",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `email_template_attachment` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `email_template_id` int(11) NOT NULL,\n  `attachment` varchar(100) NOT NULL,\n  `attachment_name` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "gmeet",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 16,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "purpose",
+          "mysql_type": "varchar(20)",
+          "nullable": false,
+          "key": "",
+          "default": "class",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(20)",
+          "nullable": false,
+          "key": "",
+          "default": "manual",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "api_data",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "duration",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "subject",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "url",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "timezone",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "staff_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "gmeet_ibfk_1"
+        },
+        {
+          "column": "created_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "gmeet_ibfk_2"
+        },
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "gmeet_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "sessions",
+        "staff"
+      ],
+      "create_sql": "CREATE TABLE `gmeet` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `purpose` varchar(20) NOT NULL DEFAULT 'class',\n  `staff_id` int(11) DEFAULT NULL,\n  `created_id` int(11) NOT NULL,\n  `title` text DEFAULT NULL,\n  `date` datetime DEFAULT NULL,\n  `type` varchar(20) NOT NULL DEFAULT 'manual',\n  `api_data` text DEFAULT NULL,\n  `duration` int(11) DEFAULT NULL,\n  `subject` varchar(50) DEFAULT NULL,\n  `url` text NOT NULL,\n  `session_id` int(11) NOT NULL,\n  `description` varchar(50) DEFAULT NULL,\n  `timezone` varchar(100) DEFAULT NULL,\n  `status` int(11) NOT NULL DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `staff_id` (`staff_id`),\n  KEY `created_id` (`created_id`),\n  KEY `session_id` (`session_id`),\n  CONSTRAINT `gmeet_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `gmeet_ibfk_2` FOREIGN KEY (`created_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `gmeet_ibfk_3` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "gmeet_history",
+          "column": "gmeet_id"
+        },
+        {
+          "table": "gmeet_sections",
+          "column": "gmeet_id"
+        },
+        {
+          "table": "gmeet_staff",
+          "column": "gmeet_id"
+        }
+      ]
+    },
+    {
+      "table": "gmeet_history",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "gmeet_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "total_hit",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "gmeet_id",
+          "references_table": "gmeet",
+          "references_column": "id",
+          "constraint": "gmeet_history_ibfk_1"
+        },
+        {
+          "column": "staff_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "gmeet_history_ibfk_2"
+        },
+        {
+          "column": "student_id",
+          "references_table": "students",
+          "references_column": "id",
+          "constraint": "gmeet_history_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "gmeet",
+        "staff",
+        "students"
+      ],
+      "create_sql": "CREATE TABLE `gmeet_history` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `gmeet_id` int(11) NOT NULL,\n  `staff_id` int(11) DEFAULT NULL,\n  `student_id` int(11) DEFAULT NULL,\n  `total_hit` int(11) NOT NULL DEFAULT 1,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `gmeet_id` (`gmeet_id`),\n  KEY `staff_id` (`staff_id`),\n  KEY `student_id` (`student_id`),\n  CONSTRAINT `gmeet_history_ibfk_1` FOREIGN KEY (`gmeet_id`) REFERENCES `gmeet` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `gmeet_history_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `gmeet_history_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "gmeet_sections",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "gmeet_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cls_section_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cls_section_id",
+          "references_table": "class_sections",
+          "references_column": "id",
+          "constraint": "gmeet_sections_ibfk_1"
+        },
+        {
+          "column": "gmeet_id",
+          "references_table": "gmeet",
+          "references_column": "id",
+          "constraint": "gmeet_sections_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "class_sections",
+        "gmeet"
+      ],
+      "create_sql": "CREATE TABLE `gmeet_sections` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `gmeet_id` int(11) NOT NULL,\n  `cls_section_id` int(11) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cls_section_id` (`cls_section_id`),\n  KEY `gmeet_id` (`gmeet_id`),\n  CONSTRAINT `gmeet_sections_ibfk_1` FOREIGN KEY (`cls_section_id`) REFERENCES `class_sections` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `gmeet_sections_ibfk_2` FOREIGN KEY (`gmeet_id`) REFERENCES `gmeet` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "gmeet_settings",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "api_key",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "api_secret",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "use_api",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `gmeet_settings` (\n  `id` int(11) NOT NULL,\n  `api_key` varchar(200) DEFAULT NULL,\n  `api_secret` varchar(200) DEFAULT NULL,\n  `use_api` int(11) DEFAULT 1,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "messages",
+      "row_count": 101,
+      "primary_key": "id",
+      "column_count": 21,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "template_id",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "email_template_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "sms_template_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "send_through",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "message",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "send_mail",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "send_sms",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "is_group",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "is_individual",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "is_class",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_schedule",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "sent",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "schedule_date_time",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "group_list",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "user_list",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "schedule_class",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "schedule_section",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `messages` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `title` varchar(200) DEFAULT NULL,\n  `template_id` varchar(100) DEFAULT NULL,\n  `email_template_id` int(11) DEFAULT NULL,\n  `sms_template_id` int(11) DEFAULT NULL,\n  `send_through` varchar(20) DEFAULT NULL,\n  `message` text DEFAULT NULL,\n  `send_mail` varchar(10) DEFAULT '0',\n  `send_sms` varchar(10) DEFAULT '0',\n  `is_group` varchar(10) DEFAULT '0',\n  `is_individual` varchar(10) DEFAULT '0',\n  `is_class` int(11) NOT NULL DEFAULT 0,\n  `is_schedule` int(11) NOT NULL,\n  `sent` int(11) DEFAULT NULL,\n  `schedule_date_time` datetime DEFAULT NULL,\n  `group_list` text DEFAULT NULL,\n  `user_list` text DEFAULT NULL,\n  `schedule_class` int(11) DEFAULT NULL,\n  `schedule_section` varchar(255) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "email_attachments",
+          "column": "message_id"
+        }
+      ]
+    },
+    {
+      "table": "notification_setting",
+      "row_count": 33,
+      "primary_key": "id",
+      "column_count": 18,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "is_mail",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "is_sms",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "is_notification",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "display_notification",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "display_sms",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_student_recipient",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_guardian_recipient",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_staff_recipient",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "display_student_recipient",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "display_guardian_recipient",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "display_staff_recipient",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "subject",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "template_id",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "template",
+          "mysql_type": "longtext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "variables",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `notification_setting` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `type` varchar(100) DEFAULT NULL,\n  `is_mail` varchar(10) DEFAULT '0',\n  `is_sms` varchar(10) DEFAULT '0',\n  `is_notification` int(11) NOT NULL DEFAULT 0,\n  `display_notification` int(11) NOT NULL DEFAULT 0,\n  `display_sms` int(11) NOT NULL DEFAULT 1,\n  `is_student_recipient` int(11) DEFAULT NULL,\n  `is_guardian_recipient` int(11) DEFAULT NULL,\n  `is_staff_recipient` int(11) DEFAULT NULL,\n  `display_student_recipient` int(11) DEFAULT NULL,\n  `display_guardian_recipient` int(11) DEFAULT NULL,\n  `display_staff_recipient` int(11) DEFAULT NULL,\n  `subject` varchar(255) NOT NULL,\n  `template_id` varchar(100) NOT NULL,\n  `template` longtext NOT NULL,\n  `variables` text NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "read_notification",
+      "row_count": 1106,
+      "primary_key": "id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "parent_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "notification_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "notification_id",
+          "references_table": "send_notification",
+          "references_column": "id",
+          "constraint": "read_notification_ibfk_1"
+        },
+        {
+          "column": "staff_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "read_notification_ibfk_2"
+        },
+        {
+          "column": "student_id",
+          "references_table": "students",
+          "references_column": "id",
+          "constraint": "read_notification_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "send_notification",
+        "staff",
+        "students"
+      ],
+      "create_sql": "CREATE TABLE `read_notification` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `student_id` int(11) DEFAULT NULL,\n  `parent_id` int(11) DEFAULT NULL,\n  `staff_id` int(11) DEFAULT NULL,\n  `notification_id` int(11) DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `notification_id` (`notification_id`),\n  KEY `staff_id` (`staff_id`),\n  KEY `student_id` (`student_id`),\n  CONSTRAINT `read_notification_ibfk_1` FOREIGN KEY (`notification_id`) REFERENCES `send_notification` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `read_notification_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `read_notification_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=1107 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "send_notification",
+      "row_count": 10,
+      "primary_key": "id",
+      "column_count": 14,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "publish_date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "attachment",
+          "mysql_type": "varchar(500)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        },
+        {
+          "name": "message",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "visible_student",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "visible_staff",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "visible_parent",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "varchar(60)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=60)"
+        },
+        {
+          "name": "created_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "created_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "send_notification_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "staff"
+      ],
+      "create_sql": "CREATE TABLE `send_notification` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `title` varchar(50) DEFAULT NULL,\n  `publish_date` date DEFAULT NULL,\n  `date` date DEFAULT NULL,\n  `attachment` varchar(500) DEFAULT NULL,\n  `message` text DEFAULT NULL,\n  `visible_student` varchar(10) NOT NULL DEFAULT 'no',\n  `visible_staff` varchar(10) NOT NULL DEFAULT 'no',\n  `visible_parent` varchar(10) NOT NULL DEFAULT 'no',\n  `created_by` varchar(60) DEFAULT NULL,\n  `created_id` int(11) DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `created_id` (`created_id`),\n  CONSTRAINT `send_notification_ibfk_1` FOREIGN KEY (`created_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "notification_roles",
+          "column": "send_notification_id"
+        },
+        {
+          "table": "read_notification",
+          "column": "notification_id"
+        }
+      ]
+    },
+    {
+      "table": "sms_config",
+      "row_count": 2,
+      "primary_key": "id",
+      "column_count": 13,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "api_id",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "authkey",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "senderid",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "contact",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "username",
+          "mysql_type": "varchar(150)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=150)"
+        },
+        {
+          "name": "url",
+          "mysql_type": "varchar(150)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=150)"
+        },
+        {
+          "name": "password",
+          "mysql_type": "varchar(150)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=150)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "disabled",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `sms_config` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `type` varchar(50) NOT NULL,\n  `name` varchar(100) NOT NULL,\n  `api_id` varchar(100) NOT NULL,\n  `authkey` varchar(100) NOT NULL,\n  `senderid` varchar(100) NOT NULL,\n  `contact` text DEFAULT NULL,\n  `username` varchar(150) DEFAULT NULL,\n  `url` varchar(150) DEFAULT NULL,\n  `password` varchar(150) DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'disabled',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "sms_template",
+      "row_count": 31,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "message",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `sms_template` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `title` varchar(100) NOT NULL,\n  `message` text NOT NULL,\n  `created_at` date NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "zoom_settings",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "zoom_api_key",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "zoom_api_secret",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "use_teacher_api",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "use_zoom_app",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "use_zoom_app_user",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `zoom_settings` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `zoom_api_key` varchar(200) DEFAULT NULL,\n  `zoom_api_secret` varchar(200) DEFAULT NULL,\n  `use_teacher_api` int(1) DEFAULT 1,\n  `use_zoom_app` int(1) DEFAULT 1,\n  `use_zoom_app_user` int(1) DEFAULT 1,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    }
+  ]
+}

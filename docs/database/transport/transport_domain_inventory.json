@@ -1,0 +1,671 @@
+{
+  "domain": "transport",
+  "app": "transport",
+  "table_count": 6,
+  "tables": [
+    {
+      "table": "pickup_point",
+      "row_count": 24,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "latitude",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "longitude",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `pickup_point` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) NOT NULL,\n  `latitude` varchar(100) DEFAULT NULL,\n  `longitude` varchar(100) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "route_pickup_point",
+          "column": "pickup_point_id"
+        }
+      ]
+    },
+    {
+      "table": "route_pickup_point",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "transport_route_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "pickup_point_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "fees",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "destination_distance",
+          "mysql_type": "float(10,1)",
+          "nullable": true,
+          "key": "",
+          "default": "0.0",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "pickup_time",
+          "mysql_type": "time",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "order_number",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "transport_route_id",
+          "references_table": "transport_route",
+          "references_column": "id",
+          "constraint": "route_pickup_point_ibfk_1"
+        },
+        {
+          "column": "pickup_point_id",
+          "references_table": "pickup_point",
+          "references_column": "id",
+          "constraint": "route_pickup_point_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "pickup_point",
+        "transport_route"
+      ],
+      "create_sql": "CREATE TABLE `route_pickup_point` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `transport_route_id` int(11) NOT NULL,\n  `pickup_point_id` int(11) NOT NULL,\n  `fees` float(10,2) DEFAULT 0.00,\n  `destination_distance` float(10,1) DEFAULT 0.0,\n  `pickup_time` time DEFAULT NULL,\n  `order_number` float NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `transport_route_id` (`transport_route_id`),\n  KEY `pickup_point_id` (`pickup_point_id`),\n  CONSTRAINT `route_pickup_point_ibfk_1` FOREIGN KEY (`transport_route_id`) REFERENCES `transport_route` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `route_pickup_point_ibfk_2` FOREIGN KEY (`pickup_point_id`) REFERENCES `pickup_point` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "student_session",
+          "column": "route_pickup_point_id"
+        },
+        {
+          "table": "student_transport_fees",
+          "column": "route_pickup_point_id"
+        }
+      ]
+    },
+    {
+      "table": "transport_feemaster",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "month",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "due_date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "fine_amount",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "fine_type",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "fine_percentage",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "transport_feemaster_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `transport_feemaster` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `session_id` int(11) NOT NULL,\n  `month` varchar(50) DEFAULT NULL,\n  `due_date` date DEFAULT NULL,\n  `fine_amount` float(10,2) DEFAULT 0.00,\n  `fine_type` varchar(50) DEFAULT NULL,\n  `fine_percentage` float(10,2) DEFAULT 0.00,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `session_id` (`session_id`),\n  CONSTRAINT `transport_feemaster_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "student_transport_fees",
+          "column": "transport_feemaster_id"
+        }
+      ]
+    },
+    {
+      "table": "transport_route",
+      "row_count": 24,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "route_title",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "route_from",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "route_to",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "route_distance",
+          "mysql_type": "double",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "no_of_vehicle",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `transport_route` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `route_title` varchar(100) DEFAULT NULL,\n  `route_from` varchar(255) DEFAULT NULL,\n  `route_to` varchar(255) DEFAULT NULL,\n  `route_distance` double DEFAULT NULL,\n  `no_of_vehicle` int(11) DEFAULT NULL,\n  `note` text DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "route_pickup_point",
+          "column": "transport_route_id"
+        },
+        {
+          "table": "vehicle_routes",
+          "column": "route_id"
+        }
+      ]
+    },
+    {
+      "table": "vehicle_routes",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "route_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "vehicle_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "route_id",
+          "references_table": "transport_route",
+          "references_column": "id",
+          "constraint": "vehicle_routes_ibfk_1"
+        },
+        {
+          "column": "vehicle_id",
+          "references_table": "vehicles",
+          "references_column": "id",
+          "constraint": "vehicle_routes_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "transport_route",
+        "vehicles"
+      ],
+      "create_sql": "CREATE TABLE `vehicle_routes` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `route_id` int(11) DEFAULT NULL,\n  `vehicle_id` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `route_id` (`route_id`),\n  KEY `vehicle_id` (`vehicle_id`),\n  CONSTRAINT `vehicle_routes_ibfk_1` FOREIGN KEY (`route_id`) REFERENCES `transport_route` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `vehicle_routes_ibfk_2` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "student_session",
+          "column": "vehroute_id"
+        }
+      ]
+    },
+    {
+      "table": "vehicles",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 22,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "vehicle_no",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "vehicle_model",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": "None",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "vehicle_base_average",
+          "mysql_type": "double",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "vehicle_photo",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "manufacture_year",
+          "mysql_type": "varchar(4)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=4)"
+        },
+        {
+          "name": "registration_number",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "chasis_number",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "max_seating_capacity",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "driver_name",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "driver_licence",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": "None",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "driver_contact",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "swap_with",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "swap_till",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "swap_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "swap_history",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "v_name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "v_color",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "v_group",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "v_api_url",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `vehicles` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `vehicle_no` varchar(20) DEFAULT NULL,\n  `vehicle_model` varchar(100) NOT NULL DEFAULT 'None',\n  `vehicle_base_average` double DEFAULT NULL,\n  `vehicle_photo` varchar(255) DEFAULT NULL,\n  `manufacture_year` varchar(4) DEFAULT NULL,\n  `registration_number` varchar(50) NOT NULL,\n  `chasis_number` varchar(100) NOT NULL,\n  `max_seating_capacity` varchar(255) NOT NULL,\n  `driver_name` varchar(50) DEFAULT NULL,\n  `driver_licence` varchar(50) NOT NULL DEFAULT 'None',\n  `driver_contact` varchar(20) DEFAULT NULL,\n  `note` text DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `swap_with` varchar(44) NOT NULL,\n  `swap_till` date NOT NULL,\n  `swap_status` int(11) NOT NULL,\n  `swap_history` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`swap_history`)),\n  `v_name` varchar(255) NOT NULL,\n  `v_color` varchar(255) NOT NULL,\n  `v_group` varchar(255) NOT NULL,\n  `v_api_url` varchar(255) NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "vehicle_routes",
+          "column": "vehicle_id"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "duplicate_groups_detail": [
+    {
+      "username": "std1",
+      "role": "student",
+      "user_id": 1,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "1,107"
+    },
+    {
+      "username": "std24",
+      "role": "student",
+      "user_id": 24,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "43,153"
+    },
+    {
+      "username": "std25",
+      "role": "student",
+      "user_id": 25,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "45,155"
+    },
+    {
+      "username": "std26",
+      "role": "student",
+      "user_id": 26,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "47,157"
+    },
+    {
+      "username": "std27",
+      "role": "student",
+      "user_id": 27,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "49,159"
+    },
+    {
+      "username": "std28",
+      "role": "student",
+      "user_id": 28,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "51,161"
+    },
+    {
+      "username": "std29",
+      "role": "student",
+      "user_id": 29,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "53,163"
+    },
+    {
+      "username": "std3",
+      "role": "student",
+      "user_id": 3,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "5,111"
+    },
+    {
+      "username": "std30",
+      "role": "student",
+      "user_id": 30,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "55,165"
+    },
+    {
+      "username": "std31",
+      "role": "student",
+      "user_id": 31,
+      "count": 2,
+      "distinct_passwords": 2,
+      "distinct_childs": 1,
+      "distinct_verification_codes": 1,
+      "user_row_ids": "57,167"
+    }
+  ],
+  "student_password_correlation": {
+    "password_equals_admission_no": 0,
+    "password_equals_roll_no": 1,
+    "password_equals_admission_or_roll": 1,
+    "total_student_users_with_student_join": 3641
+  },
+  "staff_linked_users": 0,
+  "role_distribution": {
+    "student": 3641,
+    "parent": 3610
+  },
+  "multi_token_users_sample": [
+    {
+      "users_id": 112,
+      "username": "parent3",
+      "role": "parent",
+      "token_count": 56
+    },
+    {
+      "users_id": 116,
+      "username": "parent5",
+      "role": "parent",
+      "token_count": 2
+    },
+    {
+      "users_id": 160,
+      "username": "parent27",
+      "role": "parent",
+      "token_count": 2
+    },
+    {
+      "users_id": 663,
+      "username": "std279",
+      "role": "student",
+      "token_count": 2
+    },
+    {
+      "users_id": 703,
+      "username": "std299",
+      "role": "student",
+      "token_count": 2
+    }
+  ],
+  "parent_email_style_usernames": 0
+}

@@ -1,0 +1,1399 @@
+{
+  "domain": "lms",
+  "app": "lms",
+  "table_count": 14,
+  "tables": [
+    {
+      "table": "course_category",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "category_name",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "slug",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `course_category` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `category_name` varchar(255) DEFAULT NULL,\n  `slug` varchar(255) DEFAULT NULL,\n  `is_active` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "course_lesson_quiz_order",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "course_section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "lesson_quiz_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "order",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "course_section_id",
+          "references_table": "online_course_section",
+          "references_column": "id",
+          "constraint": "course_lesson_quiz_order_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "online_course_section"
+      ],
+      "create_sql": "CREATE TABLE `course_lesson_quiz_order` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `type` varchar(10) DEFAULT NULL,\n  `course_section_id` int(11) DEFAULT NULL,\n  `lesson_quiz_id` int(11) DEFAULT NULL,\n  `order` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `section_id` (`course_section_id`),\n  CONSTRAINT `course_lesson_quiz_order_ibfk_1` FOREIGN KEY (`course_section_id`) REFERENCES `online_course_section` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "course_progress",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guest_id",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "lesson_quiz_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "lesson_quiz_type",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "course_id",
+          "references_table": "online_courses",
+          "references_column": "id",
+          "constraint": "course_progress_ibfk_1"
+        },
+        {
+          "column": "student_id",
+          "references_table": "students",
+          "references_column": "id",
+          "constraint": "course_progress_ibfk_2"
+        },
+        {
+          "column": "course_section_id",
+          "references_table": "online_course_section",
+          "references_column": "id",
+          "constraint": "course_progress_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "online_course_section",
+        "online_courses",
+        "students"
+      ],
+      "create_sql": "CREATE TABLE `course_progress` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `student_id` int(11) DEFAULT NULL,\n  `guest_id` int(1) DEFAULT NULL,\n  `course_id` int(11) DEFAULT NULL,\n  `course_section_id` int(11) DEFAULT NULL,\n  `lesson_quiz_id` int(11) DEFAULT NULL,\n  `lesson_quiz_type` int(11) DEFAULT NULL COMMENT '1 lesson, 2 quiz',\n  PRIMARY KEY (`id`),\n  KEY `course_id` (`course_id`),\n  KEY `student_id` (`student_id`),\n  KEY `course_section_id` (`course_section_id`),\n  CONSTRAINT `course_progress_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `online_courses` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `course_progress_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `course_progress_ibfk_3` FOREIGN KEY (`course_section_id`) REFERENCES `online_course_section` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "course_quiz_answer",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guest_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_quiz_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_quiz_question_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "answer",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_date",
+          "mysql_type": "timestamp",
+          "nullable": true,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "student_id",
+          "references_table": "students",
+          "references_column": "id",
+          "constraint": "course_quiz_answer_ibfk_1"
+        },
+        {
+          "column": "course_quiz_id",
+          "references_table": "online_course_quiz",
+          "references_column": "id",
+          "constraint": "course_quiz_answer_ibfk_2"
+        },
+        {
+          "column": "course_quiz_question_id",
+          "references_table": "course_quiz_question",
+          "references_column": "id",
+          "constraint": "course_quiz_answer_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "course_quiz_question",
+        "online_course_quiz",
+        "students"
+      ],
+      "create_sql": "CREATE TABLE `course_quiz_answer` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `student_id` int(11) DEFAULT NULL,\n  `guest_id` int(11) DEFAULT NULL,\n  `course_quiz_id` int(11) DEFAULT NULL,\n  `course_quiz_question_id` int(11) DEFAULT NULL,\n  `answer` varchar(255) DEFAULT NULL,\n  `created_date` timestamp NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `student_id` (`student_id`),\n  KEY `quiz_id` (`course_quiz_id`),\n  KEY `question_id` (`course_quiz_question_id`),\n  CONSTRAINT `course_quiz_answer_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `course_quiz_answer_ibfk_2` FOREIGN KEY (`course_quiz_id`) REFERENCES `online_course_quiz` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `course_quiz_answer_ibfk_3` FOREIGN KEY (`course_quiz_question_id`) REFERENCES `course_quiz_question` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "course_quiz_question",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_quiz_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "question",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "option_1",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "option_2",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "option_3",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "option_4",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "option_5",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "correct_answer",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_date",
+          "mysql_type": "timestamp",
+          "nullable": true,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "course_quiz_id",
+          "references_table": "online_course_quiz",
+          "references_column": "id",
+          "constraint": "course_quiz_question_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "online_course_quiz"
+      ],
+      "create_sql": "CREATE TABLE `course_quiz_question` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `course_quiz_id` int(11) DEFAULT NULL,\n  `question` text DEFAULT NULL,\n  `option_1` varchar(255) DEFAULT NULL,\n  `option_2` varchar(255) DEFAULT NULL,\n  `option_3` varchar(255) DEFAULT NULL,\n  `option_4` varchar(255) DEFAULT NULL,\n  `option_5` varchar(255) DEFAULT NULL,\n  `correct_answer` varchar(255) DEFAULT NULL,\n  `created_date` timestamp NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `course_quiz_id` (`course_quiz_id`),\n  CONSTRAINT `course_quiz_question_ibfk_1` FOREIGN KEY (`course_quiz_id`) REFERENCES `online_course_quiz` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "course_quiz_answer",
+          "column": "course_quiz_question_id"
+        }
+      ]
+    },
+    {
+      "table": "course_rating",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guest_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "rating",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "review",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `course_rating` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `student_id` int(11) DEFAULT NULL,\n  `guest_id` int(11) DEFAULT NULL,\n  `course_id` int(11) NOT NULL,\n  `rating` varchar(200) NOT NULL,\n  `review` text NOT NULL,\n  `date` date NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `idx_course_id` (`course_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "online_course_class_sections",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "course_id",
+          "references_table": "online_courses",
+          "references_column": "id",
+          "constraint": "online_course_class_sections_ibfk_1"
+        },
+        {
+          "column": "class_section_id",
+          "references_table": "class_sections",
+          "references_column": "id",
+          "constraint": "online_course_class_sections_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "class_sections",
+        "online_courses"
+      ],
+      "create_sql": "CREATE TABLE `online_course_class_sections` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `course_id` int(11) DEFAULT NULL,\n  `class_section_id` int(11) DEFAULT NULL,\n  `created_date` datetime DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `course_id` (`course_id`),\n  KEY `class_section_id` (`class_section_id`),\n  CONSTRAINT `online_course_class_sections_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `online_courses` (`id`),\n  CONSTRAINT `online_course_class_sections_ibfk_2` FOREIGN KEY (`class_section_id`) REFERENCES `class_sections` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "online_course_lesson",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 12,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "lesson_title",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "lesson_type",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "thumbnail",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "summary",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "attachment",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "video_provider",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "video_url",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "video_id",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "duration",
+          "mysql_type": "time",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "created_date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "course_section_id",
+          "references_table": "online_course_section",
+          "references_column": "id",
+          "constraint": "online_course_lesson_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "online_course_section"
+      ],
+      "create_sql": "CREATE TABLE `online_course_lesson` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `course_section_id` int(11) DEFAULT NULL,\n  `lesson_title` varchar(255) DEFAULT NULL,\n  `lesson_type` varchar(20) DEFAULT NULL,\n  `thumbnail` varchar(100) DEFAULT NULL,\n  `summary` text DEFAULT NULL,\n  `attachment` varchar(200) DEFAULT NULL,\n  `video_provider` varchar(20) DEFAULT NULL,\n  `video_url` text DEFAULT NULL,\n  `video_id` varchar(50) DEFAULT NULL,\n  `duration` time DEFAULT NULL,\n  `created_date` datetime DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `course_section_id` (`course_section_id`) USING BTREE,\n  CONSTRAINT `online_course_lesson_ibfk_1` FOREIGN KEY (`course_section_id`) REFERENCES `online_course_section` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "online_course_payment",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 12,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guest_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "online_courses_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_name",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "actual_price",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "paid_amount",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "payment_mode",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "payment_type",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "transaction_id",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `online_course_payment` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `student_id` int(11) DEFAULT NULL,\n  `guest_id` int(11) DEFAULT NULL,\n  `online_courses_id` int(11) DEFAULT NULL,\n  `course_name` varchar(255) DEFAULT NULL,\n  `actual_price` float(10,2) NOT NULL DEFAULT 0.00,\n  `paid_amount` float(10,2) NOT NULL DEFAULT 0.00,\n  `payment_mode` varchar(50) DEFAULT NULL,\n  `payment_type` varchar(100) DEFAULT NULL,\n  `transaction_id` varchar(100) DEFAULT NULL,\n  `note` text DEFAULT NULL,\n  `date` datetime DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `idx_online_courses_id` (`online_courses_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "online_course_processing_payment",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 13,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guest_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "online_courses_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_name",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "actual_price",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "paid_amount",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "payment_mode",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "payment_type",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "transaction_id",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "gateway_ins_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `online_course_processing_payment` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `student_id` int(11) DEFAULT NULL,\n  `guest_id` int(11) DEFAULT NULL,\n  `online_courses_id` int(11) DEFAULT NULL,\n  `course_name` varchar(255) DEFAULT NULL,\n  `actual_price` float(10,2) NOT NULL DEFAULT 0.00,\n  `paid_amount` float(10,2) NOT NULL DEFAULT 0.00,\n  `payment_mode` varchar(50) DEFAULT NULL,\n  `payment_type` varchar(100) DEFAULT NULL,\n  `transaction_id` varchar(100) DEFAULT NULL,\n  `note` text DEFAULT NULL,\n  `date` datetime DEFAULT NULL,\n  `gateway_ins_id` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `student_id` (`student_id`),\n  KEY `online_courses_id` (`online_courses_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "online_course_quiz",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "course_section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "quiz_title",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "quiz_instruction",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(10)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "course_section_id",
+          "references_table": "online_course_section",
+          "references_column": "id",
+          "constraint": "online_course_quiz_ibfk_1"
+        },
+        {
+          "column": "created_by",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "online_course_quiz_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "online_course_section",
+        "staff"
+      ],
+      "create_sql": "CREATE TABLE `online_course_quiz` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `course_section_id` int(11) DEFAULT NULL,\n  `quiz_title` varchar(255) DEFAULT NULL,\n  `quiz_instruction` text DEFAULT NULL,\n  `created_by` int(10) DEFAULT NULL,\n  `created_date` datetime DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `created_by` (`created_by`),\n  KEY `course_section_id` (`course_section_id`) USING BTREE,\n  CONSTRAINT `online_course_quiz_ibfk_1` FOREIGN KEY (`course_section_id`) REFERENCES `online_course_section` (`id`),\n  CONSTRAINT `online_course_quiz_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `staff` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "course_quiz_answer",
+          "column": "course_quiz_id"
+        },
+        {
+          "table": "course_quiz_question",
+          "column": "course_quiz_id"
+        },
+        {
+          "table": "student_quiz_status",
+          "column": "course_quiz_id"
+        }
+      ]
+    },
+    {
+      "table": "online_course_section",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "online_course_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "section_title",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "order",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "tinyint(1)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "online_course_id",
+          "references_table": "online_courses",
+          "references_column": "id",
+          "constraint": "online_course_section_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "online_courses"
+      ],
+      "create_sql": "CREATE TABLE `online_course_section` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `online_course_id` int(11) DEFAULT NULL,\n  `section_title` varchar(255) DEFAULT NULL,\n  `order` int(11) DEFAULT NULL,\n  `is_active` tinyint(1) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `online_course_id` (`online_course_id`),\n  CONSTRAINT `online_course_section_ibfk_1` FOREIGN KEY (`online_course_id`) REFERENCES `online_courses` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "course_lesson_quiz_order",
+          "column": "course_section_id"
+        },
+        {
+          "table": "course_progress",
+          "column": "course_section_id"
+        },
+        {
+          "table": "online_course_lesson",
+          "column": "course_section_id"
+        },
+        {
+          "table": "online_course_quiz",
+          "column": "course_section_id"
+        }
+      ]
+    },
+    {
+      "table": "online_course_settings",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guest_prefix",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "guest_id_start_from",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guest_login",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `online_course_settings` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `guest_prefix` varchar(50) NOT NULL,\n  `guest_id_start_from` int(11) NOT NULL,\n  `guest_login` int(11) DEFAULT 0,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "online_courses",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 21,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "UNI",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "slug",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "url",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "teacher_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "category_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "outcomes",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "course_thumbnail",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "course_provider",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "course_url",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "video_id",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "price",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "discount",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "free_course",
+          "mysql_type": "tinyint(1)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "view_count",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "front_side_visibility",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "yes",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "status",
+          "mysql_type": "tinyint(1)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "created_by",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "online_courses_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "staff"
+      ],
+      "create_sql": "CREATE TABLE `online_courses` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `title` varchar(255) DEFAULT NULL,\n  `slug` varchar(200) NOT NULL,\n  `url` varchar(200) NOT NULL,\n  `description` text DEFAULT NULL,\n  `teacher_id` int(11) DEFAULT NULL,\n  `category_id` int(11) NOT NULL,\n  `outcomes` text DEFAULT NULL,\n  `course_thumbnail` varchar(100) DEFAULT NULL,\n  `course_provider` varchar(100) DEFAULT NULL,\n  `course_url` varchar(255) DEFAULT NULL,\n  `video_id` text DEFAULT NULL,\n  `price` float(10,2) NOT NULL DEFAULT 0.00,\n  `discount` float(10,2) NOT NULL DEFAULT 0.00,\n  `free_course` tinyint(1) DEFAULT NULL COMMENT '0=paid,1=free',\n  `view_count` int(11) DEFAULT NULL,\n  `front_side_visibility` varchar(10) NOT NULL DEFAULT 'yes',\n  `status` tinyint(1) DEFAULT 0,\n  `created_by` int(11) DEFAULT NULL,\n  `created_date` datetime DEFAULT current_timestamp(),\n  `updated_date` datetime DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `title` (`title`),\n  KEY `created_by` (`created_by`),\n  KEY `idx_category_id` (`category_id`),\n  CONSTRAINT `online_courses_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `staff` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "course_progress",
+          "column": "course_id"
+        },
+        {
+          "table": "online_course_class_sections",
+          "column": "course_id"
+        },
+        {
+          "table": "online_course_section",
+          "column": "online_course_id"
+        }
+      ]
+    }
+  ]
+}

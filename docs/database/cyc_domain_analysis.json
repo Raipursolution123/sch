@@ -1,0 +1,2270 @@
+{
+  "table_count": 35,
+  "tables": [
+    {
+      "table": "cyc_additional_section_teacher",
+      "row_count": 1,
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "at_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "class_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "section_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "staff_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "from_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "to_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "session_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_advance_exam_group",
+      "row_count": 6,
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "exam_group_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "group_title",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "group_code",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "group_description",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "group_term",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "created_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_biometric_events",
+      "row_count": 0,
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "link_to",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "event_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "event_time",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "event_card_id",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "event_timestamp",
+          "type": "datetime",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_campaign",
+      "row_count": 2,
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "c_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "c_title",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "c_description",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "c_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "c_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "c_manager",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "c_manager_data",
+          "type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "c_status",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": "Active"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_campaign_time",
+      "row_count": 36,
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "ct_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "c_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "staff_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "time",
+          "type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "type",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "duration",
+          "type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_class_coordinator",
+      "row_count": 10,
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "cc_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "staff_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "class_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_classes_grouping",
+      "row_count": 0,
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "cg_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "group_id",
+          "type": "varchar(100)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "class_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "section_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "class_section_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "subject_group_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "subject_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "session_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_entries",
+      "row_count": 2343,
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "tag_id",
+          "type": "bigint(20)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "entrytype_id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "number",
+          "type": "bigint(20)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "dr_total",
+          "type": "decimal(25,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00"
+        },
+        {
+          "name": "cr_total",
+          "type": "decimal(25,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00"
+        },
+        {
+          "name": "notes",
+          "type": "varchar(500)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "transaction_id",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "entrytype_id",
+          "ref_table": "cyc_entrytypes",
+          "ref_column": "id"
+        },
+        {
+          "column": "tag_id",
+          "ref_table": "cyc_tags",
+          "ref_column": "id"
+        }
+      ],
+      "depends_on": [
+        "cyc_entrytypes",
+        "cyc_tags"
+      ]
+    },
+    {
+      "table": "cyc_entryitems",
+      "row_count": 4686,
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "entry_id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "ledger_id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "amount",
+          "type": "decimal(25,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00"
+        },
+        {
+          "name": "dc",
+          "type": "char(1)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "reconciliation_date",
+          "type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "narration",
+          "type": "varchar(500)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "entry_id",
+          "ref_table": "cyc_entries",
+          "ref_column": "id"
+        },
+        {
+          "column": "ledger_id",
+          "ref_table": "cyc_ledgers",
+          "ref_column": "id"
+        }
+      ],
+      "depends_on": [
+        "cyc_entries",
+        "cyc_ledgers"
+      ]
+    },
+    {
+      "table": "cyc_entrytypes",
+      "row_count": 4,
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "label",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "base_type",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "numbering",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1"
+        },
+        {
+          "name": "prefix",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "suffix",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "zero_padding",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "restriction_bankcash",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_fee_head_ledger",
+      "row_count": 0,
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "fhl_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "ledger_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "head_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_fuel_refill",
+      "row_count": 0,
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "fr_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "vehicle_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "fuel_price",
+          "type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "fuel_quantity",
+          "type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "total_cost",
+          "type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "entry_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_groups",
+      "row_count": 38,
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "parent_id",
+          "type": "bigint(20)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "code",
+          "type": "varchar(255)",
+          "nullable": true,
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "affects_gross",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "parent_id",
+          "ref_table": "cyc_groups",
+          "ref_column": "id"
+        }
+      ],
+      "depends_on": [
+        "cyc_groups"
+      ]
+    },
+    {
+      "table": "cyc_holiday",
+      "row_count": 0,
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_hostel_room_bed",
+      "row_count": 9,
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "hostel_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "room_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "room_number",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "bed_code",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "bed_status",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_leads",
+      "row_count": 4,
+      "column_count": 31,
+      "columns": [
+        {
+          "name": "l_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "c_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "is_student_admitted",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "student_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "l_name",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_father_name",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_class",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_address",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_phone_number",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_taken_status",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "taken_by",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "current_agent",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_reverse_status",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "l_taken_data",
+          "type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_reverse_data",
+          "type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_follow_up_data",
+          "type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_status",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": "Open"
+        },
+        {
+          "name": "is_closed",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "closed_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "closed_by",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_manager",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_manager_data",
+          "type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_mother_name",
+          "type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_location",
+          "type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_qualification",
+          "type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_alternative_phone",
+          "type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_email",
+          "type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_source",
+          "type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_resources",
+          "type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "individual_status",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_leads_counsellor",
+      "row_count": 4,
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "lc_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "c_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "staff_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_leads_followup",
+      "row_count": 14,
+      "column_count": 12,
+      "columns": [
+        {
+          "name": "f_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "c_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "l_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "followup_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "followup_time",
+          "type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "next_followup_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "next_followup_time",
+          "type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "followup_remark",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "call_status",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "followup_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "followup_status",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "followup_priority",
+          "type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_leads_followup_status",
+      "row_count": 6,
+      "column_count": 2,
+      "columns": [
+        {
+          "name": "fws_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "title",
+          "type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_ledgers",
+      "row_count": 117,
+      "column_count": 15,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "group_id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "code",
+          "type": "varchar(255)",
+          "nullable": true,
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "op_balance",
+          "type": "decimal(25,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00"
+        },
+        {
+          "name": "op_balance_dc",
+          "type": "char(1)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "type",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "reconciliation",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "feetype_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "fee_types",
+          "type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "is_link_to_transport_fee",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "income_head_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "expenses_head_id",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "is_link_to_payroll",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "notes",
+          "type": "varchar(500)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_logs",
+      "row_count": 0,
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "date",
+          "type": "datetime",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "level",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "host_ip",
+          "type": "varchar(25)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "user_id",
+          "type": "varchar(25)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "url",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "user_agent",
+          "type": "varchar(300)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "message",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_ptm",
+      "row_count": 0,
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "ptm_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "ptm_title",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "from_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "to_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "remark",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "host_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_ptm_attendance",
+      "row_count": 0,
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "ptma_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "ptm_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "student_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "parent_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "teacher_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "feedback_score",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "feedback_remark",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "parents_complain",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "special_case",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_ptm_schedule",
+      "row_count": 0,
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "ptms_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "ptm_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "student_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "parent_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "teacher_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "time_from",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "time_to",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "room",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "remark",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_scheme_and_scholarship",
+      "row_count": 5,
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "ss_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "ss_name",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "ss_type",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "ss_applicable_on",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "ss_status",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": "1"
+        },
+        {
+          "name": "created_at",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_scheme_and_scholarship_feetype",
+      "row_count": 2,
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "ssvft_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "ss_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "feetype_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "ssvft_status",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_scheme_and_scholarship_student",
+      "row_count": 3,
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "sss_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "ss_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "student_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "applied_on",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "applied_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "applied_status",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_scheme_and_scholarship_value",
+      "row_count": 1,
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "ssv_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "ss_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "fee_concession_type",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "fee_concession",
+          "type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "applicable_class",
+          "type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "ssv_status",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": "1"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_staff_payroll",
+      "row_count": 4,
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "employee_id",
+          "type": "double",
+          "nullable": true,
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "payroll_type",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "payroll_title",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "payroll_amount",
+          "type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_staff_payroll_increment",
+      "row_count": 3,
+      "column_count": 11,
+      "columns": [
+        {
+          "name": "pi_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "staff_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "month",
+          "type": "varchar(44)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "year",
+          "type": "varchar(44)",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "basic_salary",
+          "type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "increment",
+          "type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "entry_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "status",
+          "type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": "pending"
+        },
+        {
+          "name": "action_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "action_date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_student_addon_fee",
+      "row_count": 1,
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "af_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "student_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "amount",
+          "type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "remark",
+          "type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "entry_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_tags",
+      "row_count": 0,
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "color",
+          "type": "char(6)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "background",
+          "type": "char(6)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_vehicle_parts_info",
+      "row_count": 0,
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "vp_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "vehicle_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "battery_number",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "battery_amp",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "battery_warranty",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "tyre_number",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "tyre_size",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "tool_box",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "cctv",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_vehicle_rto_info",
+      "row_count": 0,
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "vr_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "vehicle_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "permit_number",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "permit_upto",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "fitness_upto",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "road_tax_upto",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "insurance_company",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "insurance_upto",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    },
+    {
+      "table": "cyc_vehicle_services",
+      "row_count": 0,
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "srv_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "vehicle_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "driver_id",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "vendor",
+          "type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "service_details",
+          "type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "total_cost",
+          "type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "entry_by",
+          "type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": []
+    }
+  ],
+  "external_dependencies": {},
+  "referenced_by_non_cyc": {},
+  "functional_clusters": {
+    "finance_ledger": [
+      "cyc_entryitems",
+      "cyc_entrytypes",
+      "cyc_fee_head_ledger",
+      "cyc_ledgers"
+    ],
+    "leads_admissions": [
+      "cyc_leads",
+      "cyc_leads_counsellor",
+      "cyc_leads_followup",
+      "cyc_leads_followup_status"
+    ],
+    "ptm": [
+      "cyc_ptm",
+      "cyc_ptm_attendance",
+      "cyc_ptm_schedule"
+    ],
+    "vehicle_transport": [
+      "cyc_vehicle_parts_info",
+      "cyc_vehicle_rto_info",
+      "cyc_vehicle_services"
+    ],
+    "hostel": [
+      "cyc_hostel_room_bed"
+    ],
+    "exam": [
+      "cyc_advance_exam_group"
+    ],
+    "staff_payroll": [
+      "cyc_staff_payroll",
+      "cyc_staff_payroll_increment"
+    ],
+    "scholarship": [
+      "cyc_scheme_and_scholarship",
+      "cyc_scheme_and_scholarship_feetype",
+      "cyc_scheme_and_scholarship_student",
+      "cyc_scheme_and_scholarship_value"
+    ],
+    "biometric": [
+      "cyc_biometric_events"
+    ],
+    "misc": [
+      "cyc_additional_section_teacher",
+      "cyc_campaign",
+      "cyc_campaign_time",
+      "cyc_class_coordinator",
+      "cyc_classes_grouping",
+      "cyc_entries",
+      "cyc_fuel_refill",
+      "cyc_groups",
+      "cyc_holiday",
+      "cyc_logs",
+      "cyc_student_addon_fee",
+      "cyc_tags"
+    ]
+  },
+  "proposed_domain": {
+    "name": "cyc_extensions",
+    "rationale": "cyc_* tables are school-specific custom extensions spanning finance/ledger, leads, PTM, transport, hostel, scholarships, and exam grouping. They share the cyc_ prefix, mostly lack FK constraints, and depend on core domains (students, staff, fees, sessions) without replacing them. Recommend a single bounded context app after core domains are mapped \u2014 not before students/staff/fees baselines exist.",
+    "recommended_app_name": "cyc_extensions",
+    "do_not_create_yet": true,
+    "prerequisite_domains": []
+  }
+}

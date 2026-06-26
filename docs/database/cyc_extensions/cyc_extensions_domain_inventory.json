@@ -1,0 +1,2842 @@
+{
+  "domain": "cyc_extensions",
+  "app": "cyc_extensions",
+  "table_count": 35,
+  "tables": [
+    {
+      "table": "cy_ptm_time_slot",
+      "row_count": 0,
+      "primary_key": "pts_id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "pts_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ptm_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "time_from",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "time_to",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cy_ptm_time_slot` (\n  `pts_id` int(11) NOT NULL AUTO_INCREMENT,\n  `ptm_id` int(11) NOT NULL,\n  `time_from` varchar(44) NOT NULL,\n  `time_to` varchar(44) NOT NULL,\n  PRIMARY KEY (`pts_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cy_vehicle_ticket",
+      "row_count": 0,
+      "primary_key": "vt_id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "vt_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "vehicle_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "driver_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ticket_type",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "ticket_description",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "ticket_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "ticket_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ticket_status",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "ticket_updates",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cy_vehicle_ticket` (\n  `vt_id` int(11) NOT NULL AUTO_INCREMENT,\n  `vehicle_id` int(11) NOT NULL,\n  `driver_id` int(11) NOT NULL,\n  `ticket_type` varchar(44) NOT NULL,\n  `ticket_description` text NOT NULL,\n  `ticket_date` date NOT NULL,\n  `ticket_by` int(11) NOT NULL,\n  `ticket_status` varchar(44) NOT NULL,\n  `ticket_updates` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,\n  PRIMARY KEY (`vt_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_additional_section_teacher",
+      "row_count": 1,
+      "primary_key": "at_id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "at_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "section_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "from_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "to_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_additional_section_teacher` (\n  `at_id` int(11) NOT NULL AUTO_INCREMENT,\n  `class_id` int(11) NOT NULL,\n  `section_id` int(11) NOT NULL,\n  `staff_id` int(11) NOT NULL,\n  `from_date` date NOT NULL,\n  `to_date` date NOT NULL,\n  `session_id` int(11) NOT NULL,\n  PRIMARY KEY (`at_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_advance_exam_group",
+      "row_count": 6,
+      "primary_key": "exam_group_id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "exam_group_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "group_title",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "group_code",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "group_description",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "group_term",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_advance_exam_group` (\n  `exam_group_id` int(11) NOT NULL AUTO_INCREMENT,\n  `group_title` varchar(255) NOT NULL,\n  `group_code` varchar(255) NOT NULL,\n  `group_description` text NOT NULL,\n  `group_term` int(11) NOT NULL,\n  `created_by` int(11) NOT NULL,\n  PRIMARY KEY (`exam_group_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_biometric_events",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "link_to",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "event_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "event_time",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "event_card_id",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "event_timestamp",
+          "mysql_type": "datetime",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_biometric_events` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `link_to` varchar(44) NOT NULL,\n  `event_date` date NOT NULL,\n  `event_time` varchar(44) NOT NULL,\n  `event_card_id` varchar(255) NOT NULL,\n  `event_timestamp` datetime NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_campaign",
+      "row_count": 2,
+      "primary_key": "c_id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "c_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "c_title",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "c_description",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "c_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "c_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "c_manager",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "c_manager_data",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "c_status",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": "Active",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_campaign` (\n  `c_id` int(11) NOT NULL AUTO_INCREMENT,\n  `c_title` varchar(255) NOT NULL,\n  `c_description` text NOT NULL,\n  `c_date` date NOT NULL,\n  `c_by` int(11) NOT NULL,\n  `c_manager` int(11) NOT NULL,\n  `c_manager_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`c_manager_data`)),\n  `c_status` varchar(44) NOT NULL DEFAULT 'Active',\n  PRIMARY KEY (`c_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_campaign_time",
+      "row_count": 36,
+      "primary_key": "ct_id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "ct_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "c_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "time",
+          "mysql_type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "duration",
+          "mysql_type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_campaign_time` (\n  `ct_id` int(11) NOT NULL AUTO_INCREMENT,\n  `c_id` int(11) NOT NULL,\n  `staff_id` int(11) NOT NULL,\n  `date` date NOT NULL,\n  `time` time NOT NULL,\n  `type` varchar(44) NOT NULL,\n  `duration` double NOT NULL,\n  PRIMARY KEY (`ct_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_class_coordinator",
+      "row_count": 10,
+      "primary_key": "cc_id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "cc_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_class_coordinator` (\n  `cc_id` int(11) NOT NULL AUTO_INCREMENT,\n  `staff_id` int(11) NOT NULL,\n  `class_id` int(11) NOT NULL,\n  PRIMARY KEY (`cc_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_classes_grouping",
+      "row_count": 0,
+      "primary_key": "cg_id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "cg_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "group_id",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "class_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "subject_group_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "subject_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_classes_grouping` (\n  `cg_id` int(11) NOT NULL AUTO_INCREMENT,\n  `group_id` varchar(100) NOT NULL,\n  `class_id` int(11) DEFAULT NULL,\n  `section_id` int(11) DEFAULT NULL,\n  `class_section_id` int(11) DEFAULT NULL,\n  `subject_group_id` int(11) DEFAULT NULL,\n  `subject_id` int(11) DEFAULT NULL,\n  `session_id` int(11) NOT NULL,\n  PRIMARY KEY (`cg_id`),\n  KEY `group_id` (`group_id`),\n  KEY `class_id` (`class_id`,`section_id`,`class_section_id`,`subject_group_id`,`subject_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_entries",
+      "row_count": 2343,
+      "primary_key": "id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "tag_id",
+          "mysql_type": "bigint(20)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "entrytype_id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "number",
+          "mysql_type": "bigint(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "dr_total",
+          "mysql_type": "decimal(25,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "DecimalField(max_digits=25, decimal_places=2)"
+        },
+        {
+          "name": "cr_total",
+          "mysql_type": "decimal(25,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "DecimalField(max_digits=25, decimal_places=2)"
+        },
+        {
+          "name": "notes",
+          "mysql_type": "varchar(500)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        },
+        {
+          "name": "transaction_id",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "entrytype_id",
+          "references_table": "cyc_entrytypes",
+          "references_column": "id",
+          "constraint": "cyc_entries_fk_check_entrytype_id"
+        },
+        {
+          "column": "tag_id",
+          "references_table": "cyc_tags",
+          "references_column": "id",
+          "constraint": "cyc_entries_fk_check_tag_id"
+        }
+      ],
+      "depends_on": [
+        "cyc_entrytypes",
+        "cyc_tags"
+      ],
+      "create_sql": "CREATE TABLE `cyc_entries` (\n  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n  `tag_id` bigint(20) DEFAULT NULL,\n  `entrytype_id` bigint(20) NOT NULL,\n  `number` bigint(20) DEFAULT NULL,\n  `date` date NOT NULL,\n  `dr_total` decimal(25,2) NOT NULL DEFAULT 0.00,\n  `cr_total` decimal(25,2) NOT NULL DEFAULT 0.00,\n  `notes` varchar(500) NOT NULL,\n  `transaction_id` text NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `unique_id` (`id`),\n  KEY `id` (`id`),\n  KEY `tag_id` (`tag_id`),\n  KEY `entrytype_id` (`entrytype_id`),\n  CONSTRAINT `cyc_entries_fk_check_entrytype_id` FOREIGN KEY (`entrytype_id`) REFERENCES `cyc_entrytypes` (`id`),\n  CONSTRAINT `cyc_entries_fk_check_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `cyc_tags` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=2344 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": [
+        {
+          "table": "cyc_entryitems",
+          "column": "entry_id"
+        }
+      ]
+    },
+    {
+      "table": "cyc_entryitems",
+      "row_count": 4686,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "entry_id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "ledger_id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "amount",
+          "mysql_type": "decimal(25,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "DecimalField(max_digits=25, decimal_places=2)"
+        },
+        {
+          "name": "dc",
+          "mysql_type": "char(1)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "UNKNOWN(char(1))"
+        },
+        {
+          "name": "reconciliation_date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "narration",
+          "mysql_type": "varchar(500)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "entry_id",
+          "references_table": "cyc_entries",
+          "references_column": "id",
+          "constraint": "cyc_entryitems_fk_check_entry_id"
+        },
+        {
+          "column": "ledger_id",
+          "references_table": "cyc_ledgers",
+          "references_column": "id",
+          "constraint": "cyc_entryitems_fk_check_ledger_id"
+        }
+      ],
+      "depends_on": [
+        "cyc_entries",
+        "cyc_ledgers"
+      ],
+      "create_sql": "CREATE TABLE `cyc_entryitems` (\n  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n  `entry_id` bigint(20) NOT NULL,\n  `ledger_id` bigint(20) NOT NULL,\n  `amount` decimal(25,2) NOT NULL DEFAULT 0.00,\n  `dc` char(1) NOT NULL,\n  `reconciliation_date` date DEFAULT NULL,\n  `narration` varchar(500) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `unique_id` (`id`),\n  KEY `id` (`id`),\n  KEY `entry_id` (`entry_id`),\n  KEY `ledger_id` (`ledger_id`),\n  CONSTRAINT `cyc_entryitems_fk_check_entry_id` FOREIGN KEY (`entry_id`) REFERENCES `cyc_entries` (`id`),\n  CONSTRAINT `cyc_entryitems_fk_check_ledger_id` FOREIGN KEY (`ledger_id`) REFERENCES `cyc_ledgers` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=4687 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_entrytypes",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "label",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "UNI",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "base_type",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "numbering",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "prefix",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "suffix",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "zero_padding",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "restriction_bankcash",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_entrytypes` (\n  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n  `label` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `description` varchar(255) NOT NULL,\n  `base_type` int(11) NOT NULL DEFAULT 0,\n  `numbering` int(11) NOT NULL DEFAULT 1,\n  `prefix` varchar(255) NOT NULL,\n  `suffix` varchar(255) NOT NULL,\n  `zero_padding` int(11) NOT NULL DEFAULT 0,\n  `restriction_bankcash` int(11) NOT NULL DEFAULT 1,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `unique_id` (`id`),\n  UNIQUE KEY `label` (`label`),\n  KEY `id` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": [
+        {
+          "table": "cyc_entries",
+          "column": "entrytype_id"
+        }
+      ]
+    },
+    {
+      "table": "cyc_fee_head_ledger",
+      "row_count": 0,
+      "primary_key": "fhl_id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "fhl_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ledger_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "head_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_fee_head_ledger` (\n  `fhl_id` int(11) NOT NULL AUTO_INCREMENT,\n  `ledger_id` int(11) NOT NULL,\n  `head_id` int(11) NOT NULL,\n  PRIMARY KEY (`fhl_id`),\n  KEY `ledger_id` (`ledger_id`,`head_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_fuel_refill",
+      "row_count": 0,
+      "primary_key": "fr_id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "fr_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "vehicle_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "fuel_price",
+          "mysql_type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "fuel_quantity",
+          "mysql_type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "total_cost",
+          "mysql_type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "entry_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_fuel_refill` (\n  `fr_id` int(11) NOT NULL AUTO_INCREMENT,\n  `vehicle_id` int(11) NOT NULL,\n  `fuel_price` double NOT NULL,\n  `fuel_quantity` double NOT NULL,\n  `total_cost` double NOT NULL,\n  `date` date NOT NULL,\n  `entry_by` int(11) NOT NULL,\n  PRIMARY KEY (`fr_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_groups",
+      "row_count": 38,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "parent_id",
+          "mysql_type": "bigint(20)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "code",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "UNI",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "affects_gross",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "parent_id",
+          "references_table": "cyc_groups",
+          "references_column": "id",
+          "constraint": "cyc_groups_fk_check_parent_id"
+        }
+      ],
+      "depends_on": [
+        "cyc_groups"
+      ],
+      "create_sql": "CREATE TABLE `cyc_groups` (\n  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n  `parent_id` bigint(20) DEFAULT NULL,\n  `name` varchar(255) NOT NULL,\n  `code` varchar(255) DEFAULT NULL,\n  `affects_gross` int(11) NOT NULL DEFAULT 0,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `unique_id` (`id`),\n  UNIQUE KEY `code` (`code`),\n  KEY `id` (`id`),\n  KEY `parent_id` (`parent_id`),\n  CONSTRAINT `cyc_groups_fk_check_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `cyc_groups` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": [
+        {
+          "table": "cyc_groups",
+          "column": "parent_id"
+        }
+      ]
+    },
+    {
+      "table": "cyc_holiday",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_holiday` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `date` date NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_hostel_room_bed",
+      "row_count": 9,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "hostel_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "room_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "room_number",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "bed_code",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "bed_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_hostel_room_bed` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `hostel_id` int(11) NOT NULL,\n  `room_id` int(11) DEFAULT NULL,\n  `room_number` varchar(44) NOT NULL,\n  `bed_code` varchar(44) NOT NULL,\n  `bed_status` int(11) NOT NULL DEFAULT 1,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_leads",
+      "row_count": 4,
+      "primary_key": "l_id",
+      "column_count": 31,
+      "columns": [
+        {
+          "name": "l_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "c_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_student_admitted",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "l_name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "l_father_name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "l_class",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "l_address",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "l_phone_number",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "l_taken_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "taken_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "current_agent",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "l_reverse_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "l_taken_data",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "l_reverse_data",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "l_follow_up_data",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "l_status",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": "Open",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_closed",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "closed_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "closed_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "l_manager",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "l_manager_data",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "l_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "l_mother_name",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "l_location",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "l_qualification",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "l_alternative_phone",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "l_email",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "l_source",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "l_resources",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "individual_status",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_leads` (\n  `l_id` int(11) NOT NULL AUTO_INCREMENT,\n  `c_id` int(11) NOT NULL,\n  `is_student_admitted` int(11) NOT NULL COMMENT '1 = yes, 0 = no',\n  `student_id` int(11) DEFAULT NULL,\n  `l_name` varchar(255) NOT NULL,\n  `l_father_name` varchar(255) NOT NULL,\n  `l_class` varchar(44) NOT NULL,\n  `l_address` text NOT NULL,\n  `l_phone_number` varchar(255) NOT NULL,\n  `l_taken_status` int(11) NOT NULL DEFAULT 0 COMMENT '1 = yes, 0 = no',\n  `taken_by` int(11) DEFAULT NULL,\n  `current_agent` int(11) DEFAULT NULL,\n  `l_reverse_status` int(11) NOT NULL DEFAULT 0 COMMENT '1 = yes, 0 = no',\n  `l_taken_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,\n  `l_reverse_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,\n  `l_follow_up_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,\n  `l_status` varchar(255) NOT NULL DEFAULT 'Open',\n  `is_closed` int(11) NOT NULL DEFAULT 0 COMMENT '1 = yes, 0 = no',\n  `closed_date` date NOT NULL,\n  `closed_by` int(11) DEFAULT NULL,\n  `l_manager` int(11) NOT NULL,\n  `l_manager_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`l_manager_data`)),\n  `l_date` date NOT NULL,\n  `l_mother_name` varchar(255) DEFAULT NULL,\n  `l_location` varchar(255) DEFAULT NULL,\n  `l_qualification` varchar(255) DEFAULT NULL,\n  `l_alternative_phone` varchar(255) DEFAULT NULL,\n  `l_email` varchar(255) DEFAULT NULL,\n  `l_source` varchar(255) DEFAULT NULL,\n  `l_resources` varchar(100) DEFAULT NULL,\n  `individual_status` int(11) DEFAULT NULL,\n  PRIMARY KEY (`l_id`),\n  KEY `student_id` (`student_id`,`taken_by`,`closed_by`)\n) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_leads_counsellor",
+      "row_count": 4,
+      "primary_key": "lc_id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "lc_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "c_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_leads_counsellor` (\n  `lc_id` int(11) NOT NULL AUTO_INCREMENT,\n  `c_id` int(11) NOT NULL,\n  `staff_id` int(11) NOT NULL,\n  PRIMARY KEY (`lc_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_leads_followup",
+      "row_count": 14,
+      "primary_key": "f_id",
+      "column_count": 12,
+      "columns": [
+        {
+          "name": "f_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "c_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "l_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "followup_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "followup_time",
+          "mysql_type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "next_followup_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "next_followup_time",
+          "mysql_type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "followup_remark",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "call_status",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "followup_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "followup_status",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "followup_priority",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_leads_followup` (\n  `f_id` int(11) NOT NULL AUTO_INCREMENT,\n  `c_id` int(11) DEFAULT NULL,\n  `l_id` int(11) NOT NULL,\n  `followup_date` date NOT NULL,\n  `followup_time` time NOT NULL,\n  `next_followup_date` date NOT NULL,\n  `next_followup_time` time NOT NULL,\n  `followup_remark` text NOT NULL,\n  `call_status` varchar(44) NOT NULL,\n  `followup_by` int(11) NOT NULL,\n  `followup_status` int(11) DEFAULT 0,\n  `followup_priority` varchar(100) NOT NULL,\n  PRIMARY KEY (`f_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_leads_followup_status",
+      "row_count": 6,
+      "primary_key": "fws_id",
+      "column_count": 2,
+      "columns": [
+        {
+          "name": "fws_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_leads_followup_status` (\n  `fws_id` int(11) NOT NULL AUTO_INCREMENT,\n  `title` varchar(100) NOT NULL,\n  PRIMARY KEY (`fws_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_ledgers",
+      "row_count": 117,
+      "primary_key": "id",
+      "column_count": 15,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "group_id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "code",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "UNI",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "op_balance",
+          "mysql_type": "decimal(25,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "DecimalField(max_digits=25, decimal_places=2)"
+        },
+        {
+          "name": "op_balance_dc",
+          "mysql_type": "char(1)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "UNKNOWN(char(1))"
+        },
+        {
+          "name": "type",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "reconciliation",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "feetype_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "fee_types",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_link_to_transport_fee",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "income_head_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "expenses_head_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_link_to_payroll",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "notes",
+          "mysql_type": "varchar(500)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_ledgers` (\n  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n  `group_id` bigint(20) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `code` varchar(255) DEFAULT NULL,\n  `op_balance` decimal(25,2) NOT NULL DEFAULT 0.00,\n  `op_balance_dc` char(1) NOT NULL,\n  `type` int(11) NOT NULL DEFAULT 0,\n  `reconciliation` int(11) NOT NULL DEFAULT 0,\n  `feetype_id` int(11) DEFAULT NULL,\n  `fee_types` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`fee_types`)),\n  `is_link_to_transport_fee` int(11) NOT NULL,\n  `income_head_id` int(11) DEFAULT NULL,\n  `expenses_head_id` int(11) DEFAULT NULL,\n  `is_link_to_payroll` int(11) DEFAULT NULL,\n  `notes` varchar(500) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `unique_id` (`id`),\n  UNIQUE KEY `code` (`code`),\n  KEY `id` (`id`),\n  KEY `group_id` (`group_id`),\n  KEY `feetype_id` (`feetype_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": [
+        {
+          "table": "cyc_entryitems",
+          "column": "ledger_id"
+        }
+      ]
+    },
+    {
+      "table": "cyc_logs",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "datetime",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "level",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "host_ip",
+          "mysql_type": "varchar(25)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=25)"
+        },
+        {
+          "name": "user_id",
+          "mysql_type": "varchar(25)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=25)"
+        },
+        {
+          "name": "url",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "user_agent",
+          "mysql_type": "varchar(300)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=300)"
+        },
+        {
+          "name": "message",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_logs` (\n  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n  `date` datetime NOT NULL,\n  `level` int(11) NOT NULL,\n  `host_ip` varchar(25) NOT NULL,\n  `user_id` varchar(25) NOT NULL,\n  `url` varchar(255) NOT NULL,\n  `user_agent` varchar(300) NOT NULL,\n  `message` varchar(255) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `unique_id` (`id`),\n  KEY `id` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_ptm",
+      "row_count": 0,
+      "primary_key": "ptm_id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "ptm_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ptm_title",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "from_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "to_date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "remark",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "host_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_ptm` (\n  `ptm_id` int(11) NOT NULL AUTO_INCREMENT,\n  `ptm_title` text NOT NULL,\n  `from_date` date NOT NULL,\n  `to_date` date NOT NULL,\n  `remark` text NOT NULL,\n  `host_by` int(11) NOT NULL,\n  PRIMARY KEY (`ptm_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_ptm_attendance",
+      "row_count": 0,
+      "primary_key": "ptma_id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "ptma_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ptm_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "parent_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "teacher_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "feedback_score",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "feedback_remark",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "parents_complain",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "special_case",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_ptm_attendance` (\n  `ptma_id` int(11) NOT NULL AUTO_INCREMENT,\n  `ptm_id` int(11) NOT NULL,\n  `student_id` int(11) NOT NULL,\n  `parent_id` int(11) NOT NULL,\n  `teacher_id` int(11) NOT NULL,\n  `feedback_score` int(11) NOT NULL,\n  `feedback_remark` text NOT NULL,\n  `parents_complain` text NOT NULL,\n  `special_case` int(11) NOT NULL,\n  PRIMARY KEY (`ptma_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_ptm_schedule",
+      "row_count": 0,
+      "primary_key": "ptms_id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "ptms_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ptm_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "parent_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "teacher_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "time_from",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "time_to",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "room",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "remark",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_ptm_schedule` (\n  `ptms_id` int(11) NOT NULL AUTO_INCREMENT,\n  `ptm_id` int(11) NOT NULL,\n  `student_id` int(11) NOT NULL,\n  `parent_id` int(11) NOT NULL,\n  `teacher_id` int(11) NOT NULL,\n  `date` date NOT NULL,\n  `time_from` varchar(44) NOT NULL,\n  `time_to` varchar(44) NOT NULL,\n  `room` int(11) NOT NULL,\n  `remark` text NOT NULL,\n  PRIMARY KEY (`ptms_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_scheme_and_scholarship",
+      "row_count": 5,
+      "primary_key": "ss_id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "ss_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ss_name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "ss_type",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "ss_applicable_on",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "ss_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_scheme_and_scholarship` (\n  `ss_id` int(11) NOT NULL AUTO_INCREMENT,\n  `ss_name` varchar(255) NOT NULL,\n  `ss_type` varchar(255) NOT NULL,\n  `ss_applicable_on` varchar(255) NOT NULL,\n  `ss_status` int(11) NOT NULL DEFAULT 1 COMMENT '1 = active, 0 = inactive',\n  `created_at` int(11) NOT NULL,\n  PRIMARY KEY (`ss_id`),\n  KEY `ss_status` (`ss_status`)\n) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_scheme_and_scholarship_feetype",
+      "row_count": 2,
+      "primary_key": "ssvft_id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "ssvft_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ss_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "feetype_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ssvft_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_scheme_and_scholarship_feetype` (\n  `ssvft_id` int(11) NOT NULL AUTO_INCREMENT,\n  `ss_id` int(11) NOT NULL,\n  `feetype_id` int(11) NOT NULL,\n  `ssvft_status` int(11) NOT NULL DEFAULT 1,\n  PRIMARY KEY (`ssvft_id`),\n  KEY `ss_id` (`ss_id`,`feetype_id`,`ssvft_status`)\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_scheme_and_scholarship_student",
+      "row_count": 3,
+      "primary_key": "sss_id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "sss_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ss_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "applied_on",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "applied_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "applied_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_scheme_and_scholarship_student` (\n  `sss_id` int(11) NOT NULL AUTO_INCREMENT,\n  `ss_id` int(11) NOT NULL,\n  `student_id` int(11) NOT NULL,\n  `applied_on` date NOT NULL,\n  `applied_by` int(11) NOT NULL,\n  `applied_status` int(11) NOT NULL COMMENT '0 = pending, 1 = approved, 2 = rejected',\n  PRIMARY KEY (`sss_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_scheme_and_scholarship_value",
+      "row_count": 1,
+      "primary_key": "ssv_id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "ssv_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ss_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "fee_concession_type",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "fee_concession",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "applicable_class",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ssv_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_scheme_and_scholarship_value` (\n  `ssv_id` int(11) NOT NULL AUTO_INCREMENT,\n  `ss_id` int(11) NOT NULL,\n  `fee_concession_type` varchar(255) NOT NULL,\n  `fee_concession` float NOT NULL,\n  `applicable_class` int(11) DEFAULT NULL,\n  `ssv_status` int(11) NOT NULL DEFAULT 1,\n  PRIMARY KEY (`ssv_id`),\n  KEY `ss_id` (`ss_id`,`fee_concession_type`,`fee_concession`,`applicable_class`),\n  KEY `ssv_status` (`ssv_status`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_student_addon_fee",
+      "row_count": 1,
+      "primary_key": "af_id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "af_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "amount",
+          "mysql_type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "remark",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "entry_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_student_addon_fee` (\n  `af_id` int(11) NOT NULL AUTO_INCREMENT,\n  `student_id` int(11) NOT NULL,\n  `amount` double NOT NULL,\n  `remark` text NOT NULL,\n  `date` date NOT NULL,\n  `entry_by` int(11) NOT NULL,\n  PRIMARY KEY (`af_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_tags",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "bigint(20)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "BigIntegerField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "UNI",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "color",
+          "mysql_type": "char(6)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "UNKNOWN(char(6))"
+        },
+        {
+          "name": "background",
+          "mysql_type": "char(6)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "UNKNOWN(char(6))"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_tags` (\n  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n  `title` varchar(255) NOT NULL,\n  `color` char(6) NOT NULL,\n  `background` char(6) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `unique_id` (`id`),\n  UNIQUE KEY `title` (`title`),\n  KEY `id` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": [
+        {
+          "table": "cyc_entries",
+          "column": "tag_id"
+        }
+      ]
+    },
+    {
+      "table": "cyc_vehicle_parts_info",
+      "row_count": 0,
+      "primary_key": "vp_id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "vp_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "vehicle_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "battery_number",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "battery_amp",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "battery_warranty",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "tyre_number",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "tyre_size",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "tool_box",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "cctv",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_vehicle_parts_info` (\n  `vp_id` int(11) NOT NULL AUTO_INCREMENT,\n  `vehicle_id` int(11) NOT NULL,\n  `battery_number` varchar(255) NOT NULL,\n  `battery_amp` varchar(255) NOT NULL,\n  `battery_warranty` date NOT NULL,\n  `tyre_number` varchar(255) NOT NULL,\n  `tyre_size` varchar(255) NOT NULL,\n  `tool_box` varchar(255) NOT NULL,\n  `cctv` varchar(255) NOT NULL,\n  PRIMARY KEY (`vp_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_vehicle_rto_info",
+      "row_count": 0,
+      "primary_key": "vr_id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "vr_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "vehicle_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "permit_number",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "permit_upto",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "fitness_upto",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "road_tax_upto",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "insurance_company",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "insurance_upto",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_vehicle_rto_info` (\n  `vr_id` int(11) NOT NULL AUTO_INCREMENT,\n  `vehicle_id` int(11) NOT NULL,\n  `permit_number` varchar(255) NOT NULL,\n  `permit_upto` date NOT NULL,\n  `fitness_upto` date NOT NULL,\n  `road_tax_upto` date NOT NULL,\n  `insurance_company` varchar(255) NOT NULL,\n  `insurance_upto` date NOT NULL,\n  PRIMARY KEY (`vr_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cyc_vehicle_services",
+      "row_count": 0,
+      "primary_key": "srv_id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "srv_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "vehicle_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "driver_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "vendor",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "service_details",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "total_cost",
+          "mysql_type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "entry_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cyc_vehicle_services` (\n  `srv_id` int(11) NOT NULL AUTO_INCREMENT,\n  `vehicle_id` int(11) NOT NULL,\n  `driver_id` int(11) NOT NULL,\n  `vendor` varchar(255) NOT NULL,\n  `service_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`service_details`)),\n  `total_cost` double NOT NULL,\n  `date` date NOT NULL,\n  `entry_by` int(11) NOT NULL,\n  PRIMARY KEY (`srv_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "referenced_by": []
+    }
+  ]
+}

@@ -1,0 +1,5232 @@
+{
+  "domain": "examinations",
+  "app": "examinations",
+  "table_count": 45,
+  "tables": [
+    {
+      "table": "cbse_exam_assessment_types",
+      "row_count": 15,
+      "primary_key": "id",
+      "column_count": 11,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_assessment_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "code",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "maximum_marks",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "pass_percentage",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "mediumtext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "scholastic_area",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_for_grade",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_assessment_id",
+          "references_table": "cbse_exam_assessments",
+          "references_column": "id",
+          "constraint": "cbse_exam_assessment_types_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "cbse_exam_assessments"
+      ],
+      "create_sql": "CREATE TABLE `cbse_exam_assessment_types` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_assessment_id` int(11) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `code` varchar(100) NOT NULL,\n  `maximum_marks` float NOT NULL,\n  `pass_percentage` float NOT NULL,\n  `description` mediumtext NOT NULL,\n  `created_by` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `scholastic_area` int(11) DEFAULT NULL,\n  `is_for_grade` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `cbse_exam_assessment_id` (`cbse_exam_assessment_id`),\n  KEY `idx_name` (`name`),\n  KEY `idx_code` (`code`),\n  CONSTRAINT `cbse_exam_assessment_types_ibfk_1` FOREIGN KEY (`cbse_exam_assessment_id`) REFERENCES `cbse_exam_assessments` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_exam_timetable_assessment_types",
+          "column": "cbse_exam_assessment_type_id"
+        },
+        {
+          "table": "cbse_student_subject_marks",
+          "column": "cbse_exam_assessment_type_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_exam_assessments",
+      "row_count": 10,
+      "primary_key": "id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "mediumtext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cbse_exam_assessments` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) NOT NULL,\n  `description` mediumtext NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `idx_name` (`name`)\n) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_exam_assessment_types",
+          "column": "cbse_exam_assessment_id"
+        },
+        {
+          "table": "cbse_exams",
+          "column": "cbse_exam_assessment_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_exam_class_sections",
+      "row_count": 676,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_section_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "class_section_id",
+          "references_table": "class_sections",
+          "references_column": "id",
+          "constraint": "cbse_exam_class_sections_ibfk_1"
+        },
+        {
+          "column": "cbse_exam_id",
+          "references_table": "cbse_exams",
+          "references_column": "id",
+          "constraint": "cbse_exam_class_sections_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "cbse_exams",
+        "class_sections"
+      ],
+      "create_sql": "CREATE TABLE `cbse_exam_class_sections` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_id` int(11) NOT NULL,\n  `class_section_id` int(11) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `class_section_id` (`class_section_id`),\n  KEY `cbse_exam_id` (`cbse_exam_id`),\n  CONSTRAINT `cbse_exam_class_sections_ibfk_1` FOREIGN KEY (`class_section_id`) REFERENCES `class_sections` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_exam_class_sections_ibfk_2` FOREIGN KEY (`cbse_exam_id`) REFERENCES `cbse_exams` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=3245 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_exam_grades",
+      "row_count": 2,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "mediumtext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cbse_exam_grades` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) NOT NULL,\n  `description` mediumtext NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `idx_name` (`name`)\n) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_exam_grades_range",
+          "column": "cbse_exam_grade_id"
+        },
+        {
+          "table": "cbse_exams",
+          "column": "cbse_exam_grade_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_exam_grades_range",
+      "row_count": 16,
+      "primary_key": "id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_grade_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "minimum_percentage",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "maximum_percentage",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "mediumtext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_grade_id",
+          "references_table": "cbse_exam_grades",
+          "references_column": "id",
+          "constraint": "cbse_exam_grades_range_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "cbse_exam_grades"
+      ],
+      "create_sql": "CREATE TABLE `cbse_exam_grades_range` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_grade_id` int(11) DEFAULT NULL,\n  `name` varchar(255) NOT NULL,\n  `minimum_percentage` float NOT NULL,\n  `maximum_percentage` float NOT NULL,\n  `description` mediumtext NOT NULL,\n  `created_by` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cbse_exam_grade_id` (`cbse_exam_grade_id`),\n  KEY `idx_name` (`name`),\n  CONSTRAINT `cbse_exam_grades_range_ibfk_1` FOREIGN KEY (`cbse_exam_grade_id`) REFERENCES `cbse_exam_grades` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_exam_observations",
+      "row_count": 12,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cbse_exam_observations` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(200) DEFAULT NULL,\n  `description` text DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `idx_name` (`name`)\n) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_observation_subparameter",
+          "column": "cbse_exam_observation_id"
+        },
+        {
+          "table": "cbse_observation_terms",
+          "column": "cbse_exam_observation_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_exam_student_subject_rank",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_template_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "subject_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "rank",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "rank_percentage",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_template_id",
+          "references_table": "cbse_template",
+          "references_column": "id",
+          "constraint": "cbse_exam_student_subject_rank_ibfk_1"
+        },
+        {
+          "column": "student_session_id",
+          "references_table": "student_session",
+          "references_column": "id",
+          "constraint": "cbse_exam_student_subject_rank_ibfk_2"
+        },
+        {
+          "column": "subject_id",
+          "references_table": "subjects",
+          "references_column": "id",
+          "constraint": "cbse_exam_student_subject_rank_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "cbse_template",
+        "student_session",
+        "subjects"
+      ],
+      "create_sql": "CREATE TABLE `cbse_exam_student_subject_rank` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_template_id` int(11) DEFAULT NULL,\n  `student_session_id` int(11) DEFAULT NULL,\n  `subject_id` int(11) DEFAULT NULL,\n  `rank` int(11) DEFAULT NULL,\n  `rank_percentage` float(10,2) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cbse_template_id` (`cbse_template_id`),\n  KEY `student_session_id` (`student_session_id`),\n  KEY `subject_id` (`subject_id`),\n  KEY `idx_rank` (`rank`),\n  CONSTRAINT `cbse_exam_student_subject_rank_ibfk_1` FOREIGN KEY (`cbse_template_id`) REFERENCES `cbse_template` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_exam_student_subject_rank_ibfk_2` FOREIGN KEY (`student_session_id`) REFERENCES `student_session` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_exam_student_subject_rank_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_exam_students",
+      "row_count": 23305,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "roll_no",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "remark",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "total_present_days",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "delete_student_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "room_number",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_id",
+          "references_table": "cbse_exams",
+          "references_column": "id",
+          "constraint": "cbse_exam_students_ibfk_1"
+        },
+        {
+          "column": "student_session_id",
+          "references_table": "student_session",
+          "references_column": "id",
+          "constraint": "cbse_exam_students_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "cbse_exams",
+        "student_session"
+      ],
+      "create_sql": "CREATE TABLE `cbse_exam_students` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_id` int(11) NOT NULL,\n  `student_session_id` int(11) NOT NULL,\n  `staff_id` int(11) DEFAULT NULL,\n  `roll_no` varchar(20) DEFAULT NULL,\n  `remark` text DEFAULT NULL,\n  `total_present_days` int(11) DEFAULT NULL,\n  `delete_student_id` int(11) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  `room_number` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `cbse_exam_id` (`cbse_exam_id`),\n  KEY `student_session_id` (`student_session_id`),\n  CONSTRAINT `cbse_exam_students_ibfk_1` FOREIGN KEY (`cbse_exam_id`) REFERENCES `cbse_exams` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_exam_students_ibfk_2` FOREIGN KEY (`student_session_id`) REFERENCES `student_session` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=26636 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_student_subject_marks",
+          "column": "cbse_exam_student_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_exam_timetable",
+      "row_count": 654,
+      "primary_key": "id",
+      "column_count": 15,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "subject_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "time_from",
+          "mysql_type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "time_to",
+          "mysql_type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "duration",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "room_no",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_written",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "written_maximum_marks",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "is_practical",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "practical_maximum_mark",
+          "mysql_type": "float",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "scholastic_area",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_id",
+          "references_table": "cbse_exams",
+          "references_column": "id",
+          "constraint": "cbse_exam_timetable_ibfk_1"
+        },
+        {
+          "column": "subject_id",
+          "references_table": "subjects",
+          "references_column": "id",
+          "constraint": "cbse_exam_timetable_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "cbse_exams",
+        "subjects"
+      ],
+      "create_sql": "CREATE TABLE `cbse_exam_timetable` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_id` int(11) DEFAULT NULL,\n  `subject_id` int(11) DEFAULT NULL,\n  `date` date NOT NULL,\n  `time_from` time NOT NULL,\n  `time_to` time NOT NULL,\n  `duration` int(11) NOT NULL,\n  `room_no` varchar(255) NOT NULL,\n  `is_written` int(1) NOT NULL DEFAULT 1,\n  `written_maximum_marks` float NOT NULL,\n  `is_practical` int(1) NOT NULL,\n  `practical_maximum_mark` float DEFAULT NULL,\n  `created_by` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `scholastic_area` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `cbse_exam_id` (`cbse_exam_id`),\n  KEY `subject_id` (`subject_id`),\n  CONSTRAINT `cbse_exam_timetable_ibfk_1` FOREIGN KEY (`cbse_exam_id`) REFERENCES `cbse_exams` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_exam_timetable_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=711 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_exam_timetable_assessment_types",
+          "column": "cbse_exam_timetable_id"
+        },
+        {
+          "table": "cbse_student_subject_marks",
+          "column": "cbse_exam_timetable_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_exam_timetable_assessment_types",
+      "row_count": 816,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_timetable_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_assessment_type_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_timetable_id",
+          "references_table": "cbse_exam_timetable",
+          "references_column": "id",
+          "constraint": "cbse_exam_timetable_assessment_types_ibfk_1"
+        },
+        {
+          "column": "cbse_exam_assessment_type_id",
+          "references_table": "cbse_exam_assessment_types",
+          "references_column": "id",
+          "constraint": "cbse_exam_timetable_assessment_types_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "cbse_exam_assessment_types",
+        "cbse_exam_timetable"
+      ],
+      "create_sql": "CREATE TABLE `cbse_exam_timetable_assessment_types` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_timetable_id` int(11) DEFAULT NULL,\n  `cbse_exam_assessment_type_id` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cbse_exam_timetable_id` (`cbse_exam_timetable_id`),\n  KEY `cbse_exam_assessment_type_id` (`cbse_exam_assessment_type_id`),\n  CONSTRAINT `cbse_exam_timetable_assessment_types_ibfk_1` FOREIGN KEY (`cbse_exam_timetable_id`) REFERENCES `cbse_exam_timetable` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_exam_timetable_assessment_types_ibfk_2` FOREIGN KEY (`cbse_exam_assessment_type_id`) REFERENCES `cbse_exam_assessment_types` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=1021 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_student_subject_marks",
+          "column": "cbse_exam_timetable_assessment_type_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_exam_timetable_grade",
+      "row_count": 4600,
+      "primary_key": "tg_id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "tg_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_timetable_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "subject_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "grade_value",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "grade_min_per",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "grade_max_per",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "grade_desc",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cbse_exam_timetable_grade` (\n  `tg_id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_timetable_id` int(11) NOT NULL,\n  `cbse_exam_id` int(11) NOT NULL,\n  `subject_id` int(11) NOT NULL,\n  `grade_value` varchar(44) NOT NULL,\n  `grade_min_per` int(11) NOT NULL,\n  `grade_max_per` int(11) NOT NULL,\n  `grade_desc` text NOT NULL,\n  PRIMARY KEY (`tg_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=4601 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_exams",
+      "row_count": 108,
+      "primary_key": "id",
+      "column_count": 17,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "total_working_days",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_term_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_term_group_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_assessment_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_grade_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "exam_code",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "mediumtext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "combined_ew",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_publish",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "use_exam_roll_no",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "promote_class",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_term_id",
+          "references_table": "cbse_terms",
+          "references_column": "id",
+          "constraint": "cbse_exams_ibfk_1"
+        },
+        {
+          "column": "cbse_exam_grade_id",
+          "references_table": "cbse_exam_grades",
+          "references_column": "id",
+          "constraint": "cbse_exams_ibfk_2"
+        },
+        {
+          "column": "cbse_exam_assessment_id",
+          "references_table": "cbse_exam_assessments",
+          "references_column": "id",
+          "constraint": "cbse_exams_ibfk_3"
+        },
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "cbse_exams_ibfk_4"
+        }
+      ],
+      "depends_on": [
+        "cbse_exam_assessments",
+        "cbse_exam_grades",
+        "cbse_terms",
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `cbse_exams` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `total_working_days` int(11) DEFAULT 0,\n  `cbse_term_id` int(11) DEFAULT NULL,\n  `cbse_term_group_id` int(11) DEFAULT NULL,\n  `cbse_exam_assessment_id` int(11) DEFAULT NULL,\n  `cbse_exam_grade_id` int(11) DEFAULT NULL,\n  `name` varchar(255) NOT NULL,\n  `exam_code` varchar(200) DEFAULT NULL,\n  `session_id` int(11) NOT NULL,\n  `description` mediumtext NOT NULL,\n  `combined_ew` int(11) DEFAULT NULL,\n  `is_publish` int(1) NOT NULL,\n  `is_active` int(1) NOT NULL,\n  `created_by` int(11) DEFAULT NULL,\n  `use_exam_roll_no` int(1) NOT NULL DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  `promote_class` varchar(100) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `cbse_term_id` (`cbse_term_id`),\n  KEY `cbse_exam_grade_id` (`cbse_exam_grade_id`),\n  KEY `cbse_exam_assessment_id` (`cbse_exam_assessment_id`),\n  KEY `session_id` (`session_id`),\n  KEY `idx_name` (`name`),\n  KEY `idx_exam_code` (`exam_code`),\n  CONSTRAINT `cbse_exams_ibfk_1` FOREIGN KEY (`cbse_term_id`) REFERENCES `cbse_terms` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_exams_ibfk_2` FOREIGN KEY (`cbse_exam_grade_id`) REFERENCES `cbse_exam_grades` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_exams_ibfk_3` FOREIGN KEY (`cbse_exam_assessment_id`) REFERENCES `cbse_exam_assessments` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_exams_ibfk_4` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_exam_class_sections",
+          "column": "cbse_exam_id"
+        },
+        {
+          "table": "cbse_exam_students",
+          "column": "cbse_exam_id"
+        },
+        {
+          "table": "cbse_exam_timetable",
+          "column": "cbse_exam_id"
+        },
+        {
+          "table": "cbse_student_exam_ranks",
+          "column": "cbse_exam_id"
+        },
+        {
+          "table": "cbse_template",
+          "column": "gradeexam_id"
+        },
+        {
+          "table": "cbse_template",
+          "column": "remarkexam_id"
+        },
+        {
+          "table": "cbse_template_term_exams",
+          "column": "cbse_exam_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_marksheet_type",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "short_code",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cbse_marksheet_type` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) NOT NULL,\n  `short_code` varchar(255) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `idx_name` (`name`),\n  KEY `idx_short_code` (`short_code`)\n) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_observation_class_section",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_observation_parameter_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_section_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cbse_observation_class_section` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_observation_parameter_id` int(11) NOT NULL,\n  `class_section_id` int(11) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_observation_parameters",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "mediumtext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cbse_observation_parameters` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) NOT NULL,\n  `description` mediumtext NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `idx_name` (`name`)\n) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_observation_subparameter",
+          "column": "cbse_observation_parameter_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_observation_subparameter",
+      "row_count": 33,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_observation_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_observation_parameter_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "maximum_marks",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "mediumtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_observation_id",
+          "references_table": "cbse_exam_observations",
+          "references_column": "id",
+          "constraint": "cbse_exam_observation_id_ibfk_1"
+        },
+        {
+          "column": "cbse_observation_parameter_id",
+          "references_table": "cbse_observation_parameters",
+          "references_column": "id",
+          "constraint": "cbse_observation_parameter_id_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "cbse_exam_observations",
+        "cbse_observation_parameters"
+      ],
+      "create_sql": "CREATE TABLE `cbse_observation_subparameter` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_observation_id` int(11) NOT NULL,\n  `cbse_observation_parameter_id` int(11) NOT NULL,\n  `maximum_marks` float NOT NULL,\n  `description` mediumtext DEFAULT NULL,\n  `created_by` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cbse_observation_parameter_id_ibfk_1` (`cbse_observation_parameter_id`),\n  KEY `cbse_exam_observation_id_ibfk_1` (`cbse_exam_observation_id`),\n  CONSTRAINT `cbse_exam_observation_id_ibfk_1` FOREIGN KEY (`cbse_exam_observation_id`) REFERENCES `cbse_exam_observations` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_observation_parameter_id_ibfk_1` FOREIGN KEY (`cbse_observation_parameter_id`) REFERENCES `cbse_observation_parameters` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_observation_term_student_subparameter",
+          "column": "cbse_observation_subparameter_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_observation_term_student_subparameter",
+      "row_count": 17809,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_ovservation_term_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_observation_subparameter_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "obtain_marks",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_ovservation_term_id",
+          "references_table": "cbse_observation_terms",
+          "references_column": "id",
+          "constraint": "cbse_observation_term_student_subparameter_ibfk_1"
+        },
+        {
+          "column": "cbse_observation_subparameter_id",
+          "references_table": "cbse_observation_subparameter",
+          "references_column": "id",
+          "constraint": "cbse_observation_term_student_subparameter_ibfk_2"
+        },
+        {
+          "column": "student_session_id",
+          "references_table": "student_session",
+          "references_column": "id",
+          "constraint": "cbse_observation_term_student_subparameter_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "cbse_observation_subparameter",
+        "cbse_observation_terms",
+        "student_session"
+      ],
+      "create_sql": "CREATE TABLE `cbse_observation_term_student_subparameter` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_ovservation_term_id` int(11) DEFAULT NULL,\n  `cbse_observation_subparameter_id` int(11) DEFAULT NULL,\n  `student_session_id` int(11) DEFAULT NULL,\n  `obtain_marks` float(10,2) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cbse_observation_term_student_subparameter_ibfk_1` (`cbse_ovservation_term_id`),\n  KEY `cbse_observation_subparameter_id` (`cbse_observation_subparameter_id`),\n  KEY `student_session_id` (`student_session_id`),\n  CONSTRAINT `cbse_observation_term_student_subparameter_ibfk_1` FOREIGN KEY (`cbse_ovservation_term_id`) REFERENCES `cbse_observation_terms` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_observation_term_student_subparameter_ibfk_2` FOREIGN KEY (`cbse_observation_subparameter_id`) REFERENCES `cbse_observation_subparameter` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_observation_term_student_subparameter_ibfk_3` FOREIGN KEY (`student_session_id`) REFERENCES `student_session` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=30073 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_observation_terms",
+      "row_count": 18,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_observation_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_term_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_observation_id",
+          "references_table": "cbse_exam_observations",
+          "references_column": "id",
+          "constraint": "cbse_exam_observations_ibfk_1"
+        },
+        {
+          "column": "cbse_term_id",
+          "references_table": "cbse_terms",
+          "references_column": "id",
+          "constraint": "cbse_observation_terms_ibfk_2"
+        },
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "cbse_observation_terms_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "cbse_exam_observations",
+        "cbse_terms",
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `cbse_observation_terms` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_observation_id` int(11) NOT NULL,\n  `cbse_term_id` int(11) NOT NULL,\n  `session_id` int(11) NOT NULL,\n  `description` text DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `cbse_term_id` (`cbse_term_id`),\n  KEY `cbse_ovservation_terms_ibfk_3` (`session_id`),\n  KEY `cbse_exam_observations_ibfk_1` (`cbse_exam_observation_id`),\n  CONSTRAINT `cbse_exam_observations_ibfk_1` FOREIGN KEY (`cbse_exam_observation_id`) REFERENCES `cbse_exam_observations` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_observation_terms_ibfk_2` FOREIGN KEY (`cbse_term_id`) REFERENCES `cbse_terms` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_observation_terms_ibfk_3` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_observation_term_student_subparameter",
+          "column": "cbse_ovservation_term_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_student_exam_ranks",
+      "row_count": 240,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "rank",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "rank_percentage",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_id",
+          "references_table": "cbse_exams",
+          "references_column": "id",
+          "constraint": "cbse_student_exam_ranks_ibfk_1"
+        },
+        {
+          "column": "student_session_id",
+          "references_table": "student_session",
+          "references_column": "id",
+          "constraint": "cbse_student_exam_ranks_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "cbse_exams",
+        "student_session"
+      ],
+      "create_sql": "CREATE TABLE `cbse_student_exam_ranks` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_id` int(11) NOT NULL,\n  `student_session_id` int(11) DEFAULT NULL,\n  `rank` int(11) DEFAULT NULL,\n  `rank_percentage` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cbse_exam_id` (`cbse_exam_id`),\n  KEY `student_session_id` (`student_session_id`),\n  KEY `idx_rank` (`rank`),\n  KEY `idx_rank_percentage` (`rank_percentage`),\n  CONSTRAINT `cbse_student_exam_ranks_ibfk_1` FOREIGN KEY (`cbse_exam_id`) REFERENCES `cbse_exams` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_student_exam_ranks_ibfk_2` FOREIGN KEY (`student_session_id`) REFERENCES `student_session` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=241 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_student_subject_marks",
+      "row_count": 169901,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_timetable_assessment_type_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_timetable_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_assessment_type_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_absent",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "marks",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "marks_grade",
+          "mysql_type": "varchar(44)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_timetable_assessment_type_id",
+          "references_table": "cbse_exam_timetable_assessment_types",
+          "references_column": "id",
+          "constraint": "cbse_exam_timetable_assessment_type_ibfk_4"
+        },
+        {
+          "column": "cbse_exam_timetable_id",
+          "references_table": "cbse_exam_timetable",
+          "references_column": "id",
+          "constraint": "cbse_student_subject_marks_ibfk_1"
+        },
+        {
+          "column": "cbse_exam_student_id",
+          "references_table": "cbse_exam_students",
+          "references_column": "id",
+          "constraint": "cbse_student_subject_marks_ibfk_2"
+        },
+        {
+          "column": "cbse_exam_assessment_type_id",
+          "references_table": "cbse_exam_assessment_types",
+          "references_column": "id",
+          "constraint": "cbse_student_subject_marks_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "cbse_exam_assessment_types",
+        "cbse_exam_students",
+        "cbse_exam_timetable",
+        "cbse_exam_timetable_assessment_types"
+      ],
+      "create_sql": "CREATE TABLE `cbse_student_subject_marks` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_timetable_assessment_type_id` int(11) NOT NULL,\n  `cbse_exam_timetable_id` int(11) DEFAULT NULL,\n  `cbse_exam_student_id` int(11) DEFAULT NULL,\n  `cbse_exam_assessment_type_id` int(11) DEFAULT NULL,\n  `is_absent` int(1) NOT NULL DEFAULT 0,\n  `marks` float(10,2) DEFAULT 0.00,\n  `note` text DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `marks_grade` varchar(44) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `cbse_exam_timetable_id` (`cbse_exam_timetable_id`),\n  KEY `cbse_exam_student_id` (`cbse_exam_student_id`),\n  KEY `cbse_exam_assessment_type_id` (`cbse_exam_assessment_type_id`),\n  KEY `cbse_exam_timetable_assessment_type_ibfk_4` (`cbse_exam_timetable_assessment_type_id`),\n  CONSTRAINT `cbse_exam_timetable_assessment_type_ibfk_4` FOREIGN KEY (`cbse_exam_timetable_assessment_type_id`) REFERENCES `cbse_exam_timetable_assessment_types` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_student_subject_marks_ibfk_1` FOREIGN KEY (`cbse_exam_timetable_id`) REFERENCES `cbse_exam_timetable` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_student_subject_marks_ibfk_2` FOREIGN KEY (`cbse_exam_student_id`) REFERENCES `cbse_exam_students` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_student_subject_marks_ibfk_3` FOREIGN KEY (`cbse_exam_assessment_type_id`) REFERENCES `cbse_exam_assessment_types` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=1277649 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_student_subject_result",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_timetable_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cbse_student_subject_result` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_exam_timetable_id` int(11) DEFAULT NULL,\n  `cbse_exam_student_id` int(11) DEFAULT NULL,\n  `note` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_student_template_rank",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_template_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "rank",
+          "mysql_type": "int(20)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "rank_percentage",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "student_session_id",
+          "references_table": "student_session",
+          "references_column": "id",
+          "constraint": "cbse_student_template_rank_ibfk_1"
+        },
+        {
+          "column": "cbse_template_id",
+          "references_table": "cbse_template",
+          "references_column": "id",
+          "constraint": "cbse_student_template_rank_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "cbse_template",
+        "student_session"
+      ],
+      "create_sql": "CREATE TABLE `cbse_student_template_rank` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_template_id` int(11) DEFAULT NULL,\n  `student_session_id` int(11) DEFAULT NULL,\n  `rank` int(20) DEFAULT NULL,\n  `rank_percentage` float(10,2) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `student_session_id` (`student_session_id`),\n  KEY `cbse_template_id` (`cbse_template_id`),\n  KEY `idx_rank` (`rank`),\n  KEY `idx_rank_percentage` (`rank_percentage`),\n  CONSTRAINT `cbse_student_template_rank_ibfk_1` FOREIGN KEY (`student_session_id`) REFERENCES `student_session` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_student_template_rank_ibfk_2` FOREIGN KEY (`cbse_template_id`) REFERENCES `cbse_template` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_template",
+      "row_count": 25,
+      "primary_key": "id",
+      "column_count": 36,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "orientation",
+          "mysql_type": "varchar(1)",
+          "nullable": false,
+          "key": "",
+          "default": "P",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=1)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "gradeexam_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "remarkexam_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_weightage",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "marksheet_type",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "header_image",
+          "mysql_type": "varbinary(500)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "UNKNOWN(varbinary(500))"
+        },
+        {
+          "name": "title",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "left_logo",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "right_logo",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "exam_name",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "school_name",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "exam_center",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "left_sign",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "middle_sign",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "right_sign",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "background_img",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "content",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "content_footer",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "date",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "is_name",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_father_name",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_mother_name",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_session",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_admission_no",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_division",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_roll_no",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_photo",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_class",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_section",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_dob",
+          "mysql_type": "int(1)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_remark",
+          "mysql_type": "int(1)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "gradeexam_id",
+          "references_table": "cbse_exams",
+          "references_column": "id",
+          "constraint": "cbse_template_ibfk_1"
+        },
+        {
+          "column": "remarkexam_id",
+          "references_table": "cbse_exams",
+          "references_column": "id",
+          "constraint": "cbse_template_ibfk_2"
+        },
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "cbse_template_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "cbse_exams",
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `cbse_template` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(200) DEFAULT NULL,\n  `orientation` varchar(1) NOT NULL DEFAULT 'P',\n  `description` varchar(255) NOT NULL,\n  `gradeexam_id` int(11) DEFAULT NULL,\n  `remarkexam_id` int(11) DEFAULT NULL,\n  `is_weightage` varchar(10) NOT NULL,\n  `marksheet_type` varchar(50) NOT NULL,\n  `created_by` int(11) NOT NULL,\n  `header_image` varbinary(500) DEFAULT NULL,\n  `title` text DEFAULT NULL,\n  `left_logo` varchar(200) DEFAULT NULL,\n  `right_logo` varchar(200) DEFAULT NULL,\n  `exam_name` varchar(200) DEFAULT NULL,\n  `school_name` varchar(200) DEFAULT NULL,\n  `exam_center` varchar(200) DEFAULT NULL,\n  `session_id` int(11) NOT NULL,\n  `left_sign` varchar(200) DEFAULT NULL,\n  `middle_sign` varchar(200) DEFAULT NULL,\n  `right_sign` varchar(200) DEFAULT NULL,\n  `background_img` varchar(200) DEFAULT NULL,\n  `content` text DEFAULT NULL,\n  `content_footer` text DEFAULT NULL,\n  `date` date DEFAULT NULL,\n  `is_name` int(1) DEFAULT 1,\n  `is_father_name` int(1) DEFAULT 1,\n  `is_mother_name` int(1) DEFAULT 1,\n  `exam_session` int(1) DEFAULT 1,\n  `is_admission_no` int(1) DEFAULT 1,\n  `is_division` int(1) NOT NULL DEFAULT 1,\n  `is_roll_no` int(1) DEFAULT 1,\n  `is_photo` int(1) DEFAULT 1,\n  `is_class` int(1) NOT NULL DEFAULT 0,\n  `is_section` int(1) NOT NULL DEFAULT 0,\n  `is_dob` int(1) DEFAULT 1,\n  `is_remark` int(1) NOT NULL DEFAULT 1,\n  PRIMARY KEY (`id`),\n  KEY `cbse_template_ibfk_3` (`session_id`),\n  KEY `cbse_template_ibfk_1` (`gradeexam_id`),\n  KEY `cbse_template_ibfk_2` (`remarkexam_id`),\n  KEY `idx_name` (`name`),\n  KEY `idx_marksheet_type` (`marksheet_type`),\n  KEY `idx_exam_name` (`exam_name`),\n  KEY `idx_school_name` (`school_name`),\n  CONSTRAINT `cbse_template_ibfk_1` FOREIGN KEY (`gradeexam_id`) REFERENCES `cbse_exams` (`id`) ON DELETE SET NULL,\n  CONSTRAINT `cbse_template_ibfk_2` FOREIGN KEY (`remarkexam_id`) REFERENCES `cbse_exams` (`id`) ON DELETE SET NULL,\n  CONSTRAINT `cbse_template_ibfk_3` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_exam_student_subject_rank",
+          "column": "cbse_template_id"
+        },
+        {
+          "table": "cbse_student_template_rank",
+          "column": "cbse_template_id"
+        },
+        {
+          "table": "cbse_template_class_sections",
+          "column": "cbse_template_id"
+        },
+        {
+          "table": "cbse_template_term_exams",
+          "column": "cbse_template_id"
+        },
+        {
+          "table": "cbse_template_terms",
+          "column": "cbse_template_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_template_class_sections",
+      "row_count": 142,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_template_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_section_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_template_id",
+          "references_table": "cbse_template",
+          "references_column": "id",
+          "constraint": "cbse_template_class_sections_ibfk_1"
+        },
+        {
+          "column": "class_section_id",
+          "references_table": "class_sections",
+          "references_column": "id",
+          "constraint": "cbse_template_class_sections_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "cbse_template",
+        "class_sections"
+      ],
+      "create_sql": "CREATE TABLE `cbse_template_class_sections` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_template_id` int(11) NOT NULL,\n  `class_section_id` int(11) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cbse_template_id` (`cbse_template_id`),\n  KEY `class_section_id` (`class_section_id`),\n  CONSTRAINT `cbse_template_class_sections_ibfk_1` FOREIGN KEY (`cbse_template_id`) REFERENCES `cbse_template` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_template_class_sections_ibfk_2` FOREIGN KEY (`class_section_id`) REFERENCES `class_sections` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=660 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_template_term_exams",
+      "row_count": 68,
+      "primary_key": "id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_template_term_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_exam_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_template_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "weightage",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "MUL",
+          "default": "100",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "combined_weightage",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exclude_total",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_exam_id",
+          "references_table": "cbse_exams",
+          "references_column": "id",
+          "constraint": "cbse_template_term_exams_ibfk_1"
+        },
+        {
+          "column": "cbse_template_term_id",
+          "references_table": "cbse_template_terms",
+          "references_column": "id",
+          "constraint": "cbse_template_term_exams_ibfk_2"
+        },
+        {
+          "column": "cbse_template_id",
+          "references_table": "cbse_template",
+          "references_column": "id",
+          "constraint": "cbse_template_term_exams_ibfk_4"
+        }
+      ],
+      "depends_on": [
+        "cbse_exams",
+        "cbse_template",
+        "cbse_template_terms"
+      ],
+      "create_sql": "CREATE TABLE `cbse_template_term_exams` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_template_term_id` int(11) DEFAULT NULL,\n  `cbse_exam_id` int(11) NOT NULL,\n  `cbse_template_id` int(11) NOT NULL,\n  `weightage` float NOT NULL DEFAULT 100,\n  `combined_weightage` int(11) DEFAULT NULL,\n  `exclude_total` int(11) NOT NULL DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cbse_template_term_id` (`cbse_template_term_id`),\n  KEY `cbse_template_term_exams_ibfk_3` (`cbse_exam_id`),\n  KEY `cbse_template_term_exams_ibfk_4` (`cbse_template_id`),\n  KEY `idx_weightage` (`weightage`),\n  CONSTRAINT `cbse_template_term_exams_ibfk_1` FOREIGN KEY (`cbse_exam_id`) REFERENCES `cbse_exams` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_template_term_exams_ibfk_2` FOREIGN KEY (`cbse_template_term_id`) REFERENCES `cbse_template_terms` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_template_term_exams_ibfk_4` FOREIGN KEY (`cbse_template_id`) REFERENCES `cbse_template` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "cbse_template_terms",
+      "row_count": 24,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_template_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cbse_term_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "weightage",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "cbse_template_id",
+          "references_table": "cbse_template",
+          "references_column": "id",
+          "constraint": "cbse_template_terms_ibfk_1"
+        },
+        {
+          "column": "cbse_term_id",
+          "references_table": "cbse_terms",
+          "references_column": "id",
+          "constraint": "cbse_template_terms_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "cbse_template",
+        "cbse_terms"
+      ],
+      "create_sql": "CREATE TABLE `cbse_template_terms` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `cbse_template_id` int(11) NOT NULL,\n  `cbse_term_id` int(11) NOT NULL,\n  `weightage` float NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `cbse_template_id` (`cbse_template_id`),\n  KEY `cbse_term_id` (`cbse_term_id`),\n  KEY `idx_weightage` (`weightage`),\n  CONSTRAINT `cbse_template_terms_ibfk_1` FOREIGN KEY (`cbse_template_id`) REFERENCES `cbse_template` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `cbse_template_terms_ibfk_2` FOREIGN KEY (`cbse_term_id`) REFERENCES `cbse_terms` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_template_term_exams",
+          "column": "cbse_template_term_id"
+        }
+      ]
+    },
+    {
+      "table": "cbse_terms",
+      "row_count": 13,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "term_code",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "mediumtext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `cbse_terms` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) NOT NULL,\n  `term_code` varchar(100) NOT NULL,\n  `description` mediumtext NOT NULL,\n  `created_by` int(11) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `idx_name` (`name`),\n  KEY `idx_term_code` (`term_code`)\n) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "cbse_exams",
+          "column": "cbse_term_id"
+        },
+        {
+          "table": "cbse_observation_terms",
+          "column": "cbse_term_id"
+        },
+        {
+          "table": "cbse_template_terms",
+          "column": "cbse_term_id"
+        }
+      ]
+    },
+    {
+      "table": "exam_group_class_batch_exam_students",
+      "row_count": 111,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_group_class_batch_exam_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "roll_no",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "teacher_remark",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "rank",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "exam_group_class_batch_exam_id",
+          "references_table": "exam_group_class_batch_exams",
+          "references_column": "id",
+          "constraint": "exam_group_class_batch_exam_students_ibfk_1"
+        },
+        {
+          "column": "student_id",
+          "references_table": "students",
+          "references_column": "id",
+          "constraint": "exam_group_class_batch_exam_students_ibfk_2"
+        },
+        {
+          "column": "student_session_id",
+          "references_table": "student_session",
+          "references_column": "id",
+          "constraint": "exam_group_class_batch_exam_students_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "exam_group_class_batch_exams",
+        "student_session",
+        "students"
+      ],
+      "create_sql": "CREATE TABLE `exam_group_class_batch_exam_students` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `exam_group_class_batch_exam_id` int(11) NOT NULL,\n  `student_id` int(11) NOT NULL,\n  `student_session_id` int(11) NOT NULL,\n  `roll_no` int(11) DEFAULT NULL,\n  `teacher_remark` text DEFAULT NULL,\n  `rank` int(11) NOT NULL DEFAULT 0,\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `exam_group_class_batch_exam_id` (`exam_group_class_batch_exam_id`),\n  KEY `student_id` (`student_id`),\n  KEY `student_session_id` (`student_session_id`),\n  CONSTRAINT `exam_group_class_batch_exam_students_ibfk_1` FOREIGN KEY (`exam_group_class_batch_exam_id`) REFERENCES `exam_group_class_batch_exams` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_group_class_batch_exam_students_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_group_class_batch_exam_students_ibfk_3` FOREIGN KEY (`student_session_id`) REFERENCES `student_session` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "exam_group_exam_results",
+          "column": "exam_group_class_batch_exam_student_id"
+        }
+      ]
+    },
+    {
+      "table": "exam_group_class_batch_exam_subjects",
+      "row_count": 2,
+      "primary_key": "id",
+      "column_count": 14,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_group_class_batch_exams_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "subject_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "date_from",
+          "mysql_type": "date",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "time_from",
+          "mysql_type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "duration",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "room_no",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "max_marks",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "min_marks",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "credit_hours",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "date_to",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "exam_group_class_batch_exams_id",
+          "references_table": "exam_group_class_batch_exams",
+          "references_column": "id",
+          "constraint": "exam_group_class_batch_exam_subjects_ibfk_1"
+        },
+        {
+          "column": "subject_id",
+          "references_table": "subjects",
+          "references_column": "id",
+          "constraint": "exam_group_class_batch_exam_subjects_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "exam_group_class_batch_exams",
+        "subjects"
+      ],
+      "create_sql": "CREATE TABLE `exam_group_class_batch_exam_subjects` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `exam_group_class_batch_exams_id` int(11) DEFAULT NULL,\n  `subject_id` int(11) NOT NULL,\n  `date_from` date NOT NULL,\n  `time_from` time NOT NULL,\n  `duration` varchar(50) NOT NULL,\n  `room_no` varchar(100) DEFAULT NULL,\n  `max_marks` float(10,2) DEFAULT NULL,\n  `min_marks` float(10,2) DEFAULT NULL,\n  `credit_hours` float(10,2) DEFAULT 0.00,\n  `date_to` datetime DEFAULT NULL,\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `exam_group_class_batch_exams_id` (`exam_group_class_batch_exams_id`),\n  KEY `subject_id` (`subject_id`),\n  CONSTRAINT `exam_group_class_batch_exam_subjects_ibfk_1` FOREIGN KEY (`exam_group_class_batch_exams_id`) REFERENCES `exam_group_class_batch_exams` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_group_class_batch_exam_subjects_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "exam_group_exam_results",
+          "column": "exam_group_class_batch_exam_subject_id"
+        }
+      ]
+    },
+    {
+      "table": "exam_group_class_batch_exams",
+      "row_count": 2,
+      "primary_key": "id",
+      "column_count": 14,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "passing_percentage",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "date_from",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "date_to",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "exam_group_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "use_exam_roll_no",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_publish",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_rank_generated",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "exam_group_id",
+          "references_table": "exam_groups",
+          "references_column": "id",
+          "constraint": "exam_group_class_batch_exams_ibfk_1"
+        },
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "exam_group_class_batch_exams_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "exam_groups",
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `exam_group_class_batch_exams` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `exam` varchar(250) DEFAULT NULL,\n  `passing_percentage` float(10,2) DEFAULT NULL,\n  `session_id` int(11) NOT NULL,\n  `date_from` date DEFAULT NULL,\n  `date_to` date DEFAULT NULL,\n  `exam_group_id` int(11) DEFAULT NULL,\n  `use_exam_roll_no` int(11) NOT NULL DEFAULT 1,\n  `is_publish` int(11) DEFAULT 0,\n  `is_rank_generated` int(11) NOT NULL DEFAULT 0,\n  `description` text DEFAULT NULL,\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `exam_group_id` (`exam_group_id`),\n  KEY `exam_group_class_batch_exams_ibfk_2` (`session_id`),\n  CONSTRAINT `exam_group_class_batch_exams_ibfk_1` FOREIGN KEY (`exam_group_id`) REFERENCES `exam_groups` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_group_class_batch_exams_ibfk_2` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "exam_group_class_batch_exam_students",
+          "column": "exam_group_class_batch_exam_id"
+        },
+        {
+          "table": "exam_group_class_batch_exam_subjects",
+          "column": "exam_group_class_batch_exams_id"
+        },
+        {
+          "table": "exam_group_exam_connections",
+          "column": "exam_group_class_batch_exams_id"
+        }
+      ]
+    },
+    {
+      "table": "exam_group_exam_connections",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_group_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_group_class_batch_exams_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_weightage",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "exam_group_id",
+          "references_table": "exam_groups",
+          "references_column": "id",
+          "constraint": "exam_group_exam_connections_ibfk_1"
+        },
+        {
+          "column": "exam_group_class_batch_exams_id",
+          "references_table": "exam_group_class_batch_exams",
+          "references_column": "id",
+          "constraint": "exam_group_exam_connections_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "exam_group_class_batch_exams",
+        "exam_groups"
+      ],
+      "create_sql": "CREATE TABLE `exam_group_exam_connections` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `exam_group_id` int(11) DEFAULT NULL,\n  `exam_group_class_batch_exams_id` int(11) DEFAULT NULL,\n  `exam_weightage` float(10,2) DEFAULT 0.00,\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `exam_group_id` (`exam_group_id`),\n  KEY `exam_group_class_batch_exams_id` (`exam_group_class_batch_exams_id`),\n  CONSTRAINT `exam_group_exam_connections_ibfk_1` FOREIGN KEY (`exam_group_id`) REFERENCES `exam_groups` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_group_exam_connections_ibfk_2` FOREIGN KEY (`exam_group_class_batch_exams_id`) REFERENCES `exam_group_class_batch_exams` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "exam_group_exam_results",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_group_class_batch_exam_student_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_group_class_batch_exam_subject_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_group_student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "attendence",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "get_marks",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "exam_group_class_batch_exam_subject_id",
+          "references_table": "exam_group_class_batch_exam_subjects",
+          "references_column": "id",
+          "constraint": "exam_group_exam_results_ibfk_1"
+        },
+        {
+          "column": "exam_group_student_id",
+          "references_table": "exam_group_students",
+          "references_column": "id",
+          "constraint": "exam_group_exam_results_ibfk_2"
+        },
+        {
+          "column": "exam_group_class_batch_exam_student_id",
+          "references_table": "exam_group_class_batch_exam_students",
+          "references_column": "id",
+          "constraint": "exam_group_exam_results_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "exam_group_class_batch_exam_students",
+        "exam_group_class_batch_exam_subjects",
+        "exam_group_students"
+      ],
+      "create_sql": "CREATE TABLE `exam_group_exam_results` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `exam_group_class_batch_exam_student_id` int(11) NOT NULL,\n  `exam_group_class_batch_exam_subject_id` int(11) DEFAULT NULL,\n  `exam_group_student_id` int(11) DEFAULT NULL,\n  `attendence` varchar(10) DEFAULT NULL,\n  `get_marks` float(10,2) DEFAULT 0.00,\n  `note` text DEFAULT NULL,\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `exam_group_class_batch_exam_subject_id` (`exam_group_class_batch_exam_subject_id`),\n  KEY `exam_group_student_id` (`exam_group_student_id`),\n  KEY `exam_group_class_batch_exam_student_id` (`exam_group_class_batch_exam_student_id`),\n  CONSTRAINT `exam_group_exam_results_ibfk_1` FOREIGN KEY (`exam_group_class_batch_exam_subject_id`) REFERENCES `exam_group_class_batch_exam_subjects` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_group_exam_results_ibfk_2` FOREIGN KEY (`exam_group_student_id`) REFERENCES `exam_group_students` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_group_exam_results_ibfk_3` FOREIGN KEY (`exam_group_class_batch_exam_student_id`) REFERENCES `exam_group_class_batch_exam_students` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "exam_group_students",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_group_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "exam_group_id",
+          "references_table": "exam_groups",
+          "references_column": "id",
+          "constraint": "exam_group_students_ibfk_1"
+        },
+        {
+          "column": "student_id",
+          "references_table": "students",
+          "references_column": "id",
+          "constraint": "exam_group_students_ibfk_2"
+        },
+        {
+          "column": "student_session_id",
+          "references_table": "student_session",
+          "references_column": "id",
+          "constraint": "exam_group_students_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "exam_groups",
+        "student_session",
+        "students"
+      ],
+      "create_sql": "CREATE TABLE `exam_group_students` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `exam_group_id` int(11) DEFAULT NULL,\n  `student_id` int(11) DEFAULT NULL,\n  `student_session_id` int(11) DEFAULT NULL,\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `exam_group_id` (`exam_group_id`),\n  KEY `student_id` (`student_id`),\n  KEY `student_session_id` (`student_session_id`),\n  CONSTRAINT `exam_group_students_ibfk_1` FOREIGN KEY (`exam_group_id`) REFERENCES `exam_groups` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_group_students_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_group_students_ibfk_3` FOREIGN KEY (`student_session_id`) REFERENCES `student_session` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "exam_group_exam_results",
+          "column": "exam_group_student_id"
+        }
+      ]
+    },
+    {
+      "table": "exam_groups",
+      "row_count": 3,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "exam_type",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `exam_groups` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(250) DEFAULT NULL,\n  `exam_type` varchar(250) DEFAULT NULL,\n  `description` text DEFAULT NULL,\n  `is_active` int(11) DEFAULT 1,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "exam_group_class_batch_exams",
+          "column": "exam_group_id"
+        },
+        {
+          "table": "exam_group_exam_connections",
+          "column": "exam_group_id"
+        },
+        {
+          "table": "exam_group_students",
+          "column": "exam_group_id"
+        }
+      ]
+    },
+    {
+      "table": "exam_schedules",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 14,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "teacher_subject_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "date_of_exam",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "start_to",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "end_from",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "room_no",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "full_marks",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "passing_marks",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "exam_schedules_ibfk_1"
+        },
+        {
+          "column": "exam_id",
+          "references_table": "exams",
+          "references_column": "id",
+          "constraint": "exam_schedules_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "exams",
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `exam_schedules` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `session_id` int(11) NOT NULL,\n  `exam_id` int(11) DEFAULT NULL,\n  `teacher_subject_id` int(11) DEFAULT NULL,\n  `date_of_exam` date DEFAULT NULL,\n  `start_to` varchar(50) DEFAULT NULL,\n  `end_from` varchar(50) DEFAULT NULL,\n  `room_no` varchar(50) DEFAULT NULL,\n  `full_marks` int(11) DEFAULT NULL,\n  `passing_marks` int(11) DEFAULT NULL,\n  `note` text DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `teacher_subject_id` (`teacher_subject_id`),\n  KEY `session_id` (`session_id`),\n  KEY `exam_id` (`exam_id`),\n  CONSTRAINT `exam_schedules_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `exam_schedules_ibfk_2` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "exams",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "sesion_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "note",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "sesion_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "exams_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `exams` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(200) DEFAULT NULL,\n  `sesion_id` int(11) NOT NULL,\n  `note` text DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `sesion_id` (`sesion_id`),\n  CONSTRAINT `exams_ibfk_1` FOREIGN KEY (`sesion_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "exam_schedules",
+          "column": "exam_id"
+        }
+      ]
+    },
+    {
+      "table": "grades",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_type",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "point",
+          "mysql_type": "float(10,1)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "mark_from",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "mark_upto",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `grades` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `exam_type` varchar(250) DEFAULT NULL,\n  `name` varchar(100) DEFAULT NULL,\n  `point` float(10,1) DEFAULT NULL,\n  `mark_from` float(10,2) DEFAULT NULL,\n  `mark_upto` float(10,2) DEFAULT NULL,\n  `description` text DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "mark_divisions",
+      "row_count": 3,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "percentage_from",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "percentage_to",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `mark_divisions` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(200) DEFAULT NULL,\n  `percentage_from` float(10,2) DEFAULT NULL,\n  `percentage_to` float(10,2) DEFAULT NULL,\n  `is_active` int(11) DEFAULT 1,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "onlineexam",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 24,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "attempt",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "exam_from",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "exam_to",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "is_quiz",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "auto_publish_date",
+          "mysql_type": "datetime",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "time_from",
+          "mysql_type": "time",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "time_to",
+          "mysql_type": "time",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "duration",
+          "mysql_type": "time",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TimeField"
+        },
+        {
+          "name": "passing_percentage",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "publish_result",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "answer_word_count",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "-1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(1)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=1)"
+        },
+        {
+          "name": "is_marks_display",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_neg_marking",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_random_question",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_rank_generated",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "publish_exam_notification",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "publish_result_notification",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "onlineexam_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `onlineexam` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `session_id` int(11) DEFAULT NULL,\n  `exam` text DEFAULT NULL,\n  `attempt` int(11) NOT NULL,\n  `exam_from` datetime DEFAULT NULL,\n  `exam_to` datetime DEFAULT NULL,\n  `is_quiz` int(11) NOT NULL DEFAULT 0,\n  `auto_publish_date` datetime DEFAULT NULL,\n  `time_from` time DEFAULT NULL,\n  `time_to` time DEFAULT NULL,\n  `duration` time NOT NULL,\n  `passing_percentage` float NOT NULL DEFAULT 0,\n  `description` text DEFAULT NULL,\n  `publish_result` int(11) NOT NULL DEFAULT 0,\n  `answer_word_count` int(11) NOT NULL DEFAULT -1,\n  `is_active` varchar(1) DEFAULT '0',\n  `is_marks_display` int(11) NOT NULL DEFAULT 0,\n  `is_neg_marking` int(11) NOT NULL DEFAULT 0,\n  `is_random_question` int(11) NOT NULL DEFAULT 0,\n  `is_rank_generated` int(11) NOT NULL DEFAULT 0,\n  `publish_exam_notification` int(11) NOT NULL,\n  `publish_result_notification` int(11) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `session_id` (`session_id`),\n  CONSTRAINT `onlineexam_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "onlineexam_questions",
+          "column": "onlineexam_id"
+        },
+        {
+          "table": "onlineexam_students",
+          "column": "onlineexam_id"
+        }
+      ]
+    },
+    {
+      "table": "onlineexam_attempts",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "onlineexam_student_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "onlineexam_student_id",
+          "references_table": "onlineexam_students",
+          "references_column": "id",
+          "constraint": "onlineexam_attempts_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "onlineexam_students"
+      ],
+      "create_sql": "CREATE TABLE `onlineexam_attempts` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `onlineexam_student_id` int(11) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `onlineexam_student_id` (`onlineexam_student_id`),\n  CONSTRAINT `onlineexam_attempts_ibfk_1` FOREIGN KEY (`onlineexam_student_id`) REFERENCES `onlineexam_students` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "onlineexam_questions",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "question_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "onlineexam_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "marks",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "neg_marks",
+          "mysql_type": "float(10,2)",
+          "nullable": true,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(1)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=1)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "onlineexam_id",
+          "references_table": "onlineexam",
+          "references_column": "id",
+          "constraint": "onlineexam_questions_ibfk_1"
+        },
+        {
+          "column": "question_id",
+          "references_table": "questions",
+          "references_column": "id",
+          "constraint": "onlineexam_questions_ibfk_2"
+        },
+        {
+          "column": "session_id",
+          "references_table": "sessions",
+          "references_column": "id",
+          "constraint": "onlineexam_questions_ibfk_3"
+        }
+      ],
+      "depends_on": [
+        "onlineexam",
+        "questions",
+        "sessions"
+      ],
+      "create_sql": "CREATE TABLE `onlineexam_questions` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `question_id` int(11) DEFAULT NULL,\n  `onlineexam_id` int(11) DEFAULT NULL,\n  `session_id` int(11) DEFAULT NULL,\n  `marks` float(10,2) NOT NULL DEFAULT 0.00,\n  `neg_marks` float(10,2) DEFAULT 0.00,\n  `is_active` varchar(1) DEFAULT '0',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `onlineexam_id` (`onlineexam_id`),\n  KEY `question_id` (`question_id`),\n  KEY `session_id` (`session_id`),\n  CONSTRAINT `onlineexam_questions_ibfk_1` FOREIGN KEY (`onlineexam_id`) REFERENCES `onlineexam` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `onlineexam_questions_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `onlineexam_questions_ibfk_3` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "onlineexam_student_results",
+          "column": "onlineexam_question_id"
+        }
+      ]
+    },
+    {
+      "table": "onlineexam_student_results",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 10,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "onlineexam_student_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "onlineexam_question_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "select_option",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "marks",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": "0.00",
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "remark",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "attachment_name",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "attachment_upload_name",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "onlineexam_student_id",
+          "references_table": "onlineexam_students",
+          "references_column": "id",
+          "constraint": "onlineexam_student_results_ibfk_1"
+        },
+        {
+          "column": "onlineexam_question_id",
+          "references_table": "onlineexam_questions",
+          "references_column": "id",
+          "constraint": "onlineexam_student_results_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "onlineexam_questions",
+        "onlineexam_students"
+      ],
+      "create_sql": "CREATE TABLE `onlineexam_student_results` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `onlineexam_student_id` int(11) NOT NULL,\n  `onlineexam_question_id` int(11) NOT NULL,\n  `select_option` longtext DEFAULT NULL,\n  `marks` float(10,2) NOT NULL DEFAULT 0.00,\n  `remark` text DEFAULT NULL,\n  `attachment_name` text DEFAULT NULL,\n  `attachment_upload_name` varchar(250) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `onlineexam_student_id` (`onlineexam_student_id`),\n  KEY `onlineexam_question_id` (`onlineexam_question_id`),\n  CONSTRAINT `onlineexam_student_results_ibfk_1` FOREIGN KEY (`onlineexam_student_id`) REFERENCES `onlineexam_students` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `onlineexam_student_results_ibfk_2` FOREIGN KEY (`onlineexam_question_id`) REFERENCES `onlineexam_questions` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "onlineexam_students",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "onlineexam_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_attempted",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "rank",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "quiz_attempted",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "onlineexam_id",
+          "references_table": "onlineexam",
+          "references_column": "id",
+          "constraint": "onlineexam_students_ibfk_1"
+        },
+        {
+          "column": "student_session_id",
+          "references_table": "student_session",
+          "references_column": "id",
+          "constraint": "onlineexam_students_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "onlineexam",
+        "student_session"
+      ],
+      "create_sql": "CREATE TABLE `onlineexam_students` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `onlineexam_id` int(11) DEFAULT NULL,\n  `student_session_id` int(11) DEFAULT NULL,\n  `is_attempted` int(11) NOT NULL DEFAULT 0,\n  `rank` int(11) DEFAULT 0,\n  `quiz_attempted` int(11) NOT NULL DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `onlineexam_id` (`onlineexam_id`),\n  KEY `student_session_id` (`student_session_id`),\n  CONSTRAINT `onlineexam_students_ibfk_1` FOREIGN KEY (`onlineexam_id`) REFERENCES `onlineexam` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `onlineexam_students_ibfk_2` FOREIGN KEY (`student_session_id`) REFERENCES `student_session` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "onlineexam_attempts",
+          "column": "onlineexam_student_id"
+        },
+        {
+          "table": "onlineexam_student_results",
+          "column": "onlineexam_student_id"
+        }
+      ]
+    },
+    {
+      "table": "questions",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 28,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "subject_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "lesson_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "lesson_name",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "question_type",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "level",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "class_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "class_section_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "question_parts",
+          "mysql_type": "longtext",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "question",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "opt_a",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "opt_b",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "opt_c",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "opt_d",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "opt_e",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "correct",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "qscore",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "descriptive_word_limit",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "qpart_1",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "qpart_2",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "qpart_3",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "qpart_4",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "qpart_5",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_it_offline",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "subject_id",
+          "references_table": "subjects",
+          "references_column": "id",
+          "constraint": "questions_ibfk_1"
+        },
+        {
+          "column": "staff_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "questions_ibfk_2"
+        },
+        {
+          "column": "subject_id",
+          "references_table": "subjects",
+          "references_column": "id",
+          "constraint": "questions_ibfk_3"
+        },
+        {
+          "column": "class_id",
+          "references_table": "classes",
+          "references_column": "id",
+          "constraint": "questions_ibfk_4"
+        },
+        {
+          "column": "section_id",
+          "references_table": "sections",
+          "references_column": "id",
+          "constraint": "questions_ibfk_5"
+        },
+        {
+          "column": "class_section_id",
+          "references_table": "class_sections",
+          "references_column": "id",
+          "constraint": "questions_ibfk_6"
+        }
+      ],
+      "depends_on": [
+        "class_sections",
+        "classes",
+        "sections",
+        "staff",
+        "subjects"
+      ],
+      "create_sql": "CREATE TABLE `questions` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `staff_id` int(11) DEFAULT NULL,\n  `subject_id` int(11) DEFAULT NULL,\n  `lesson_id` int(11) DEFAULT NULL,\n  `lesson_name` varchar(255) DEFAULT NULL,\n  `question_type` varchar(100) NOT NULL,\n  `level` varchar(10) NOT NULL,\n  `class_id` int(11) NOT NULL,\n  `section_id` int(11) DEFAULT NULL,\n  `class_section_id` int(11) DEFAULT NULL,\n  `question_parts` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`question_parts`)),\n  `question` text DEFAULT NULL,\n  `opt_a` text DEFAULT NULL,\n  `opt_b` text DEFAULT NULL,\n  `opt_c` text DEFAULT NULL,\n  `opt_d` text DEFAULT NULL,\n  `opt_e` text DEFAULT NULL,\n  `correct` text DEFAULT NULL,\n  `qscore` int(11) DEFAULT NULL,\n  `descriptive_word_limit` int(11) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  `qpart_1` int(11) NOT NULL,\n  `qpart_2` int(11) NOT NULL,\n  `qpart_3` int(11) NOT NULL,\n  `qpart_4` int(11) NOT NULL,\n  `qpart_5` int(11) NOT NULL,\n  `is_it_offline` int(11) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `subject_id` (`subject_id`),\n  KEY `staff_id` (`staff_id`),\n  KEY `class_id` (`class_id`),\n  KEY `section_id` (`section_id`),\n  KEY `class_section_id` (`class_section_id`),\n  CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `questions_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `questions_ibfk_4` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `questions_ibfk_5` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `questions_ibfk_6` FOREIGN KEY (`class_section_id`) REFERENCES `class_sections` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "onlineexam_questions",
+          "column": "question_id"
+        }
+      ]
+    },
+    {
+      "table": "template_marksheets",
+      "row_count": 2,
+      "primary_key": "id",
+      "column_count": 33,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "header_image",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "template",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "heading",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "title",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "left_logo",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "right_logo",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "exam_name",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "school_name",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "exam_center",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "left_sign",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "middle_sign",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "right_sign",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "exam_session",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_name",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_father_name",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_mother_name",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_dob",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_admission_no",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_roll_no",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_photo",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_division",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_rank",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_customfield",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "background_img",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "date",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "is_class",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_teacher_remark",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_section",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "content",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "content_footer",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `template_marksheets` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `header_image` varchar(200) DEFAULT NULL,\n  `template` varchar(200) DEFAULT NULL,\n  `heading` text DEFAULT NULL,\n  `title` text DEFAULT NULL,\n  `left_logo` varchar(200) DEFAULT NULL,\n  `right_logo` varchar(200) DEFAULT NULL,\n  `exam_name` varchar(200) DEFAULT NULL,\n  `school_name` varchar(200) DEFAULT NULL,\n  `exam_center` varchar(200) DEFAULT NULL,\n  `left_sign` varchar(200) DEFAULT NULL,\n  `middle_sign` varchar(200) DEFAULT NULL,\n  `right_sign` varchar(200) DEFAULT NULL,\n  `exam_session` int(11) DEFAULT 1,\n  `is_name` int(11) DEFAULT 1,\n  `is_father_name` int(11) DEFAULT 1,\n  `is_mother_name` int(11) DEFAULT 1,\n  `is_dob` int(11) DEFAULT 1,\n  `is_admission_no` int(11) DEFAULT 1,\n  `is_roll_no` int(11) DEFAULT 1,\n  `is_photo` int(11) DEFAULT 1,\n  `is_division` int(11) NOT NULL DEFAULT 1,\n  `is_rank` int(11) NOT NULL DEFAULT 0,\n  `is_customfield` int(11) NOT NULL,\n  `background_img` varchar(200) DEFAULT NULL,\n  `date` varchar(20) DEFAULT NULL,\n  `is_class` int(11) NOT NULL DEFAULT 0,\n  `is_teacher_remark` int(11) NOT NULL DEFAULT 1,\n  `is_section` int(11) NOT NULL DEFAULT 0,\n  `content` text DEFAULT NULL,\n  `content_footer` text DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    }
+  ]
+}

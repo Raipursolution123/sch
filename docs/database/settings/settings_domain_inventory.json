@@ -1,0 +1,2869 @@
+{
+  "domain": "settings",
+  "app": "settings",
+  "table_count": 18,
+  "tables": [
+    {
+      "table": "aws_s3_settings",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "api_key",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "api_secret",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "bucket_name",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "region",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `aws_s3_settings` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `api_key` varchar(250) DEFAULT NULL,\n  `api_secret` varchar(250) DEFAULT NULL,\n  `bucket_name` varchar(250) DEFAULT NULL,\n  `region` varchar(250) DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "behaviour_settings",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "comment_option",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `behaviour_settings` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `comment_option` varchar(100) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "categories",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "category",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `categories` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `category` varchar(100) DEFAULT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "online_admissions",
+          "column": "category_id"
+        }
+      ]
+    },
+    {
+      "table": "currencies",
+      "row_count": 179,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "short_name",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "symbol",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "base_price",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `currencies` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(100) DEFAULT NULL,\n  `short_name` varchar(100) DEFAULT NULL,\n  `symbol` varchar(10) DEFAULT NULL,\n  `base_price` varchar(10) NOT NULL DEFAULT '1',\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=180 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "custom_field_values",
+      "row_count": 13320,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "belong_table_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "custom_field_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "field_value",
+          "mysql_type": "varchar(500)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "custom_field_id",
+          "references_table": "custom_fields",
+          "references_column": "id",
+          "constraint": "custom_field_values_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "custom_fields"
+      ],
+      "create_sql": "CREATE TABLE `custom_field_values` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `belong_table_id` int(11) DEFAULT NULL,\n  `custom_field_id` int(11) DEFAULT NULL,\n  `field_value` varchar(500) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `custom_field_id` (`custom_field_id`),\n  KEY `idx_belong_table_id` (`belong_table_id`),\n  KEY `idx_field_value` (`field_value`),\n  CONSTRAINT `custom_field_values_ibfk_1` FOREIGN KEY (`custom_field_id`) REFERENCES `custom_fields` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=14070 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "custom_fields",
+      "row_count": 9,
+      "primary_key": "id",
+      "column_count": 13,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "belong_to",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "bs_column",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "validation",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "field_values",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "show_table",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "visible_on_table",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "weight",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `custom_fields` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(100) DEFAULT NULL,\n  `belong_to` varchar(100) DEFAULT NULL,\n  `type` varchar(100) DEFAULT NULL,\n  `bs_column` int(11) DEFAULT NULL,\n  `validation` int(11) DEFAULT 0,\n  `field_values` text DEFAULT NULL,\n  `show_table` varchar(100) DEFAULT NULL,\n  `visible_on_table` int(11) NOT NULL,\n  `weight` int(11) DEFAULT NULL,\n  `is_active` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `idx_name` (`name`),\n  KEY `idx_belong_to` (`belong_to`),\n  KEY `idx_type` (`type`),\n  KEY `idx_visible_on_table` (`visible_on_table`),\n  KEY `idx_weight` (`weight`),\n  FULLTEXT KEY `idx_field_values` (`field_values`)\n) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "custom_field_values",
+          "column": "custom_field_id"
+        },
+        {
+          "table": "online_admission_custom_field_value",
+          "column": "custom_field_id"
+        }
+      ]
+    },
+    {
+      "table": "filetypes",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 8,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "file_extension",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "file_mime",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "file_size",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "image_extension",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "image_mime",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "image_size",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `filetypes` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `file_extension` text DEFAULT NULL,\n  `file_mime` text DEFAULT NULL,\n  `file_size` int(11) NOT NULL,\n  `image_extension` text DEFAULT NULL,\n  `image_mime` text DEFAULT NULL,\n  `image_size` int(11) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "languages",
+      "row_count": 77,
+      "primary_key": "id",
+      "column_count": 9,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "language",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "short_code",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "country_code",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "is_rtl",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_deleted",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": "yes",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `languages` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `language` varchar(50) DEFAULT NULL,\n  `short_code` varchar(255) NOT NULL,\n  `country_code` varchar(255) NOT NULL,\n  `is_rtl` int(11) NOT NULL,\n  `is_deleted` varchar(10) NOT NULL DEFAULT 'yes',\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "positions",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 16,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "time",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "v_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "latitude",
+          "mysql_type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "longitude",
+          "mysql_type": "double",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "altitude",
+          "mysql_type": "double",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "speed",
+          "mysql_type": "double",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "bearing",
+          "mysql_type": "double",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "accuracy",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "provider",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "comment",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_date",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "traccar_pos_id",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "battery_level",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "motion",
+          "mysql_type": "varchar(256)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=256)"
+        },
+        {
+          "name": "address",
+          "mysql_type": "varchar(256)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=256)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `positions` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `time` timestamp NOT NULL DEFAULT current_timestamp(),\n  `v_id` int(11) NOT NULL,\n  `latitude` double NOT NULL,\n  `longitude` double NOT NULL,\n  `altitude` double DEFAULT NULL,\n  `speed` double DEFAULT NULL,\n  `bearing` double DEFAULT NULL,\n  `accuracy` int(11) DEFAULT NULL,\n  `provider` varchar(100) DEFAULT NULL,\n  `comment` varchar(255) DEFAULT NULL,\n  `created_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `traccar_pos_id` varchar(100) DEFAULT NULL,\n  `battery_level` varchar(100) DEFAULT NULL,\n  `motion` varchar(256) DEFAULT NULL,\n  `address` varchar(256) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `index_user_id` (`v_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "print_headerfooter",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 7,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "print_type",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "header_image",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "footer_content",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_by",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "entry_date",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `print_headerfooter` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `print_type` varchar(255) NOT NULL,\n  `header_image` varchar(255) NOT NULL,\n  `footer_content` text NOT NULL,\n  `created_by` int(11) NOT NULL,\n  `entry_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "qr_code_settings",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 4,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "camera_type",
+          "mysql_type": "varchar(15)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=15)"
+        },
+        {
+          "name": "auto_attendance",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `qr_code_settings` (\n  `id` int(11) NOT NULL,\n  `camera_type` varchar(15) DEFAULT NULL,\n  `auto_attendance` int(11) DEFAULT 0,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "reference",
+      "row_count": 6,
+      "primary_key": "id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "reference",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `reference` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `reference` varchar(100) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "room_types",
+      "row_count": 2,
+      "primary_key": "id",
+      "column_count": 5,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "room_type",
+          "mysql_type": "varchar(200)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `room_types` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `room_type` varchar(200) DEFAULT NULL,\n  `description` text DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "hostel_rooms",
+          "column": "room_type_id"
+        }
+      ]
+    },
+    {
+      "table": "sch_settings",
+      "row_count": 1,
+      "primary_key": "id",
+      "column_count": 161,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "base_url",
+          "mysql_type": "varchar(500)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        },
+        {
+          "name": "folder_path",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "name",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "biometric",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "biometric_device",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "email",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "phone",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "address",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "lang_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "languages",
+          "mysql_type": "varchar(500)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        },
+        {
+          "name": "dise_code",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "date_format",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "time_format",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "currency",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "currency_symbol",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "is_rtl",
+          "mysql_type": "varchar(10)",
+          "nullable": true,
+          "key": "",
+          "default": "disabled",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "is_duplicate_fees_invoice",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "collect_back_date_fees",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "single_page_print",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "timezone",
+          "mysql_type": "varchar(30)",
+          "nullable": true,
+          "key": "",
+          "default": "UTC",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=30)"
+        },
+        {
+          "name": "session_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cron_secret_key",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "currency_place",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": "before_number",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "currency_format",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "class_teacher",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "start_month",
+          "mysql_type": "varchar(40)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=40)"
+        },
+        {
+          "name": "attendence_type",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "low_attendance_limit",
+          "mysql_type": "float(10,2)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "image",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "admin_logo",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "admin_small_logo",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "admin_login_page_background",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "user_login_page_background",
+          "mysql_type": "varchar(255)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "theme",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": "default.jpg",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "fee_due_days",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "adm_auto_insert",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "adm_prefix",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": "ssadm19/20",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "adm_start_from",
+          "mysql_type": "varchar(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=11)"
+        },
+        {
+          "name": "adm_no_digit",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "6",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "adm_update_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staffid_auto_insert",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staffid_prefix",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": "staffss/19/20",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "staffid_start_from",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "staffid_no_digit",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "6",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staffid_update_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "online_admission",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "online_admission_payment",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "online_admission_amount",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "online_admission_instruction",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "online_admission_conditions",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "online_admission_application_form",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "exam_result",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_blood_group",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_student_house",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "roll_no",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "category",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "religion",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cast",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "mobile_no",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_email",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "admission_date",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "auto_roll_number",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "lastname",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "middlename",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_photo",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_height",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_weight",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "measurement_date",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "father_name",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "father_phone",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "father_occupation",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "father_pic",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "mother_name",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "mother_phone",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "mother_occupation",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "mother_pic",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guardian_name",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guardian_relation",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guardian_phone",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guardian_email",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guardian_pic",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guardian_occupation",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "guardian_address",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "current_address",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "permanent_address",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "route_list",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "hostel_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "bank_account_no",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "ifsc_code",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "bank_name",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "national_identification_no",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "local_identification_no",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "rte",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "previous_school_details",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_note",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "upload_documents",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "student_barcode",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_designation",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_department",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_last_name",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_father_name",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_mother_name",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_date_of_joining",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_phone",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_emergency_contact",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_marital_status",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_photo",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_current_address",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_permanent_address",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_qualification",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_work_experience",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_note",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_epf_no",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_basic_salary",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_contract_type",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_work_shift",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_work_location",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_leaves",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_account_details",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_social_media",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_upload_documents",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_barcode",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "staff_notification_email",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "mobile_api_url",
+          "mysql_type": "tinytext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "app_primary_color_code",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "app_secondary_color_code",
+          "mysql_type": "varchar(20)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "admin_mobile_api_url",
+          "mysql_type": "tinytext",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "admin_app_primary_color_code",
+          "mysql_type": "varchar(20)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "admin_app_secondary_color_code",
+          "mysql_type": "varchar(20)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "app_logo",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "zoom_api_key",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "zoom_api_secret",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "student_profile_edit",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "start_week",
+          "mysql_type": "varchar(10)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=10)"
+        },
+        {
+          "name": "day_off",
+          "mysql_type": "varchar(44)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "my_question",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "superadmin_restriction",
+          "mysql_type": "varchar(20)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "student_timeline",
+          "mysql_type": "varchar(20)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "calendar_event_reminder",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "event_reminder",
+          "mysql_type": "varchar(20)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=20)"
+        },
+        {
+          "name": "student_login",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "parent_login",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "student_panel_login",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "parent_panel_login",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_student_feature_lock",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "maintenance_mode",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "lock_grace_period",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_offline_fee_payment",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "google_map_api",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "scan_code_type",
+          "mysql_type": "varchar(44)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=44)"
+        },
+        {
+          "name": "offline_bank_payment_instruction",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        },
+        {
+          "name": "lat",
+          "mysql_type": "double",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "lng",
+          "mysql_type": "double",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "letter_head",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_online_payment_lock",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "online_payment_charges_percent",
+          "mysql_type": "float",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "test",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `sch_settings` (\n  `id` int(11) NOT NULL,\n  `base_url` varchar(500) DEFAULT NULL,\n  `folder_path` text DEFAULT NULL,\n  `name` varchar(100) DEFAULT NULL,\n  `biometric` int(11) DEFAULT 0,\n  `biometric_device` text DEFAULT NULL,\n  `email` varchar(100) DEFAULT NULL,\n  `phone` varchar(50) DEFAULT NULL,\n  `address` text DEFAULT NULL,\n  `lang_id` int(11) DEFAULT NULL,\n  `languages` varchar(500) NOT NULL,\n  `dise_code` varchar(50) DEFAULT NULL,\n  `date_format` varchar(50) NOT NULL,\n  `time_format` varchar(255) NOT NULL,\n  `currency` varchar(50) NOT NULL,\n  `currency_symbol` varchar(50) NOT NULL,\n  `is_rtl` varchar(10) DEFAULT 'disabled',\n  `is_duplicate_fees_invoice` varchar(100) DEFAULT '0',\n  `collect_back_date_fees` int(11) NOT NULL,\n  `single_page_print` int(11) DEFAULT 0,\n  `timezone` varchar(30) DEFAULT 'UTC',\n  `session_id` int(11) DEFAULT NULL,\n  `cron_secret_key` varchar(100) NOT NULL,\n  `currency_place` varchar(50) NOT NULL DEFAULT 'before_number',\n  `currency_format` varchar(20) DEFAULT NULL,\n  `class_teacher` varchar(100) NOT NULL,\n  `start_month` varchar(40) NOT NULL,\n  `attendence_type` int(11) NOT NULL DEFAULT 0,\n  `low_attendance_limit` float(10,2) NOT NULL,\n  `image` varchar(100) DEFAULT NULL,\n  `admin_logo` varchar(255) NOT NULL,\n  `admin_small_logo` varchar(255) NOT NULL,\n  `admin_login_page_background` varchar(255) NOT NULL,\n  `user_login_page_background` varchar(255) NOT NULL,\n  `theme` varchar(200) NOT NULL DEFAULT 'default.jpg',\n  `fee_due_days` int(11) DEFAULT 0,\n  `adm_auto_insert` int(11) NOT NULL DEFAULT 1,\n  `adm_prefix` varchar(50) NOT NULL DEFAULT 'ssadm19/20',\n  `adm_start_from` varchar(11) NOT NULL,\n  `adm_no_digit` int(11) NOT NULL DEFAULT 6,\n  `adm_update_status` int(11) NOT NULL DEFAULT 0,\n  `staffid_auto_insert` int(11) NOT NULL DEFAULT 1,\n  `staffid_prefix` varchar(100) NOT NULL DEFAULT 'staffss/19/20',\n  `staffid_start_from` varchar(50) NOT NULL,\n  `staffid_no_digit` int(11) NOT NULL DEFAULT 6,\n  `staffid_update_status` int(11) NOT NULL DEFAULT 0,\n  `is_active` varchar(255) DEFAULT 'no',\n  `online_admission` int(11) DEFAULT 0,\n  `online_admission_payment` varchar(50) NOT NULL,\n  `online_admission_amount` float NOT NULL,\n  `online_admission_instruction` text NOT NULL,\n  `online_admission_conditions` text NOT NULL,\n  `online_admission_application_form` varchar(255) DEFAULT NULL,\n  `exam_result` int(11) NOT NULL,\n  `is_blood_group` int(11) NOT NULL DEFAULT 1,\n  `is_student_house` int(11) NOT NULL DEFAULT 1,\n  `roll_no` int(11) NOT NULL DEFAULT 1,\n  `category` int(11) NOT NULL,\n  `religion` int(11) NOT NULL DEFAULT 1,\n  `cast` int(11) NOT NULL DEFAULT 1,\n  `mobile_no` int(11) NOT NULL DEFAULT 1,\n  `student_email` int(11) NOT NULL DEFAULT 1,\n  `admission_date` int(11) NOT NULL DEFAULT 1,\n  `auto_roll_number` varchar(100) DEFAULT NULL,\n  `lastname` int(11) NOT NULL,\n  `middlename` int(11) NOT NULL DEFAULT 1,\n  `student_photo` int(11) NOT NULL DEFAULT 1,\n  `student_height` int(11) NOT NULL DEFAULT 1,\n  `student_weight` int(11) NOT NULL DEFAULT 1,\n  `measurement_date` int(11) NOT NULL DEFAULT 1,\n  `father_name` int(11) NOT NULL DEFAULT 1,\n  `father_phone` int(11) NOT NULL DEFAULT 1,\n  `father_occupation` int(11) NOT NULL DEFAULT 1,\n  `father_pic` int(11) NOT NULL DEFAULT 1,\n  `mother_name` int(11) NOT NULL DEFAULT 1,\n  `mother_phone` int(11) NOT NULL DEFAULT 1,\n  `mother_occupation` int(11) NOT NULL DEFAULT 1,\n  `mother_pic` int(11) NOT NULL DEFAULT 1,\n  `guardian_name` int(11) NOT NULL,\n  `guardian_relation` int(11) NOT NULL DEFAULT 1,\n  `guardian_phone` int(11) NOT NULL,\n  `guardian_email` int(11) NOT NULL DEFAULT 1,\n  `guardian_pic` int(11) NOT NULL DEFAULT 1,\n  `guardian_occupation` int(11) NOT NULL,\n  `guardian_address` int(11) NOT NULL DEFAULT 1,\n  `current_address` int(11) NOT NULL DEFAULT 1,\n  `permanent_address` int(11) NOT NULL DEFAULT 1,\n  `route_list` int(11) NOT NULL DEFAULT 1,\n  `hostel_id` int(11) NOT NULL DEFAULT 1,\n  `bank_account_no` int(11) NOT NULL DEFAULT 1,\n  `ifsc_code` int(11) NOT NULL,\n  `bank_name` int(11) NOT NULL,\n  `national_identification_no` int(11) NOT NULL DEFAULT 1,\n  `local_identification_no` int(11) NOT NULL DEFAULT 1,\n  `rte` int(11) NOT NULL DEFAULT 1,\n  `previous_school_details` int(11) NOT NULL DEFAULT 1,\n  `student_note` int(11) NOT NULL DEFAULT 1,\n  `upload_documents` int(11) NOT NULL DEFAULT 1,\n  `student_barcode` int(11) NOT NULL DEFAULT 1,\n  `staff_designation` int(11) NOT NULL DEFAULT 1,\n  `staff_department` int(11) NOT NULL DEFAULT 1,\n  `staff_last_name` int(11) NOT NULL DEFAULT 1,\n  `staff_father_name` int(11) NOT NULL DEFAULT 1,\n  `staff_mother_name` int(11) NOT NULL DEFAULT 1,\n  `staff_date_of_joining` int(11) NOT NULL DEFAULT 1,\n  `staff_phone` int(11) NOT NULL DEFAULT 1,\n  `staff_emergency_contact` int(11) NOT NULL DEFAULT 1,\n  `staff_marital_status` int(11) NOT NULL DEFAULT 1,\n  `staff_photo` int(11) NOT NULL DEFAULT 1,\n  `staff_current_address` int(11) NOT NULL DEFAULT 1,\n  `staff_permanent_address` int(11) NOT NULL DEFAULT 1,\n  `staff_qualification` int(11) NOT NULL DEFAULT 1,\n  `staff_work_experience` int(11) NOT NULL DEFAULT 1,\n  `staff_note` int(11) NOT NULL DEFAULT 1,\n  `staff_epf_no` int(11) NOT NULL DEFAULT 1,\n  `staff_basic_salary` int(11) NOT NULL DEFAULT 1,\n  `staff_contract_type` int(11) NOT NULL DEFAULT 1,\n  `staff_work_shift` int(11) NOT NULL DEFAULT 1,\n  `staff_work_location` int(11) NOT NULL DEFAULT 1,\n  `staff_leaves` int(11) NOT NULL DEFAULT 1,\n  `staff_account_details` int(11) NOT NULL DEFAULT 1,\n  `staff_social_media` int(11) NOT NULL DEFAULT 1,\n  `staff_upload_documents` int(11) NOT NULL DEFAULT 1,\n  `staff_barcode` int(11) NOT NULL DEFAULT 1,\n  `staff_notification_email` varchar(50) NOT NULL,\n  `mobile_api_url` tinytext NOT NULL,\n  `app_primary_color_code` varchar(20) DEFAULT NULL,\n  `app_secondary_color_code` varchar(20) DEFAULT NULL,\n  `admin_mobile_api_url` tinytext NOT NULL,\n  `admin_app_primary_color_code` varchar(20) NOT NULL,\n  `admin_app_secondary_color_code` varchar(20) NOT NULL,\n  `app_logo` varchar(250) DEFAULT NULL,\n  `zoom_api_key` varchar(100) DEFAULT NULL,\n  `zoom_api_secret` varchar(100) DEFAULT NULL,\n  `student_profile_edit` int(11) NOT NULL DEFAULT 0,\n  `start_week` varchar(10) NOT NULL,\n  `day_off` varchar(44) DEFAULT NULL,\n  `my_question` int(11) NOT NULL,\n  `superadmin_restriction` varchar(20) NOT NULL,\n  `student_timeline` varchar(20) NOT NULL,\n  `calendar_event_reminder` int(11) DEFAULT NULL,\n  `event_reminder` varchar(20) NOT NULL,\n  `student_login` varchar(100) DEFAULT NULL,\n  `parent_login` varchar(100) DEFAULT NULL,\n  `student_panel_login` int(11) NOT NULL DEFAULT 1,\n  `parent_panel_login` int(11) NOT NULL DEFAULT 1,\n  `is_student_feature_lock` int(11) NOT NULL DEFAULT 0,\n  `maintenance_mode` int(11) NOT NULL DEFAULT 0,\n  `lock_grace_period` int(11) NOT NULL DEFAULT 0,\n  `is_offline_fee_payment` int(11) NOT NULL DEFAULT 0,\n  `google_map_api` text DEFAULT NULL,\n  `scan_code_type` varchar(44) NOT NULL,\n  `offline_bank_payment_instruction` text NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  `lat` double DEFAULT NULL,\n  `lng` double DEFAULT NULL,\n  `letter_head` text NOT NULL,\n  `is_online_payment_lock` int(11) DEFAULT NULL,\n  `online_payment_charges_percent` float DEFAULT NULL,\n  `test` varchar(100) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `lang_id` (`lang_id`),\n  KEY `session_id` (`session_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "school_houses",
+      "row_count": 4,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "house_name",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "varchar(400)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=400)"
+        },
+        {
+          "name": "house_incharge",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "house_president",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `school_houses` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `house_name` varchar(200) NOT NULL,\n  `description` varchar(400) NOT NULL,\n  `house_incharge` int(11) DEFAULT NULL,\n  `house_president` int(11) DEFAULT NULL,\n  `is_active` varchar(50) NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "online_admissions",
+          "column": "school_house_id"
+        }
+      ]
+    },
+    {
+      "table": "sidebar_menus",
+      "row_count": 33,
+      "primary_key": "id",
+      "column_count": 12,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "permission_group_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "icon",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "menu",
+          "mysql_type": "varchar(500)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        },
+        {
+          "name": "activate_menu",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "lang_key",
+          "mysql_type": "varchar(250)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "system_level",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "level",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "sidebar_display",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "0",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "access_permissions",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "permission_group_id",
+          "references_table": "permission_group",
+          "references_column": "id",
+          "constraint": "sidebar_menus_ibfk_1"
+        }
+      ],
+      "depends_on": [
+        "permission_group"
+      ],
+      "create_sql": "CREATE TABLE `sidebar_menus` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `permission_group_id` int(11) DEFAULT NULL,\n  `icon` varchar(100) DEFAULT NULL,\n  `menu` varchar(500) DEFAULT NULL,\n  `activate_menu` varchar(100) DEFAULT NULL,\n  `lang_key` varchar(250) NOT NULL,\n  `system_level` int(11) DEFAULT 0,\n  `level` int(11) DEFAULT NULL,\n  `sidebar_display` int(11) DEFAULT 0,\n  `access_permissions` text DEFAULT NULL,\n  `is_active` int(11) NOT NULL DEFAULT 1,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `permission_group_id` (`permission_group_id`),\n  CONSTRAINT `sidebar_menus_ibfk_1` FOREIGN KEY (`permission_group_id`) REFERENCES `permission_group` (`id`) ON DELETE SET NULL\n) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "sidebar_sub_menus",
+          "column": "sidebar_menu_id"
+        }
+      ]
+    },
+    {
+      "table": "sidebar_sub_menus",
+      "row_count": 208,
+      "primary_key": "id",
+      "column_count": 14,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "sidebar_menu_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "menu",
+          "mysql_type": "varchar(500)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        },
+        {
+          "name": "key",
+          "mysql_type": "varchar(500)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        },
+        {
+          "name": "lang_key",
+          "mysql_type": "varchar(250)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=250)"
+        },
+        {
+          "name": "url",
+          "mysql_type": "text",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        },
+        {
+          "name": "level",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "access_permissions",
+          "mysql_type": "varchar(1000)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=1000)"
+        },
+        {
+          "name": "permission_group_id",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "activate_controller",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "activate_methods",
+          "mysql_type": "varchar(500)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=500)"
+        },
+        {
+          "name": "addon_permission",
+          "mysql_type": "varchar(100)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "int(11)",
+          "nullable": true,
+          "key": "",
+          "default": "1",
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "sidebar_menu_id",
+          "references_table": "sidebar_menus",
+          "references_column": "id",
+          "constraint": "sidebar_sub_menus_ibfk_1"
+        },
+        {
+          "column": "permission_group_id",
+          "references_table": "permission_group",
+          "references_column": "id",
+          "constraint": "sidebar_sub_menus_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "permission_group",
+        "sidebar_menus"
+      ],
+      "create_sql": "CREATE TABLE `sidebar_sub_menus` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `sidebar_menu_id` int(11) DEFAULT NULL,\n  `menu` varchar(500) DEFAULT NULL,\n  `key` varchar(500) DEFAULT NULL,\n  `lang_key` varchar(250) DEFAULT NULL,\n  `url` text DEFAULT NULL,\n  `level` int(11) DEFAULT NULL,\n  `access_permissions` varchar(1000) DEFAULT NULL,\n  `permission_group_id` int(11) DEFAULT NULL,\n  `activate_controller` varchar(100) DEFAULT NULL COMMENT 'income',\n  `activate_methods` varchar(500) DEFAULT NULL COMMENT 'index,edit',\n  `addon_permission` varchar(100) DEFAULT NULL,\n  `is_active` int(11) DEFAULT 1,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  PRIMARY KEY (`id`),\n  KEY `sidebar_menu_id` (`sidebar_menu_id`),\n  KEY `permission_group_id` (`permission_group_id`),\n  CONSTRAINT `sidebar_sub_menus_ibfk_1` FOREIGN KEY (`sidebar_menu_id`) REFERENCES `sidebar_menus` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `sidebar_sub_menus_ibfk_2` FOREIGN KEY (`permission_group_id`) REFERENCES `permission_group` (`id`) ON DELETE SET NULL\n) ENGINE=InnoDB AUTO_INCREMENT=254 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    },
+    {
+      "table": "source",
+      "row_count": 6,
+      "primary_key": "id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "source",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        },
+        {
+          "name": "description",
+          "mysql_type": "text",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "TextField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `source` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `source` varchar(100) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    }
+  ]
+}

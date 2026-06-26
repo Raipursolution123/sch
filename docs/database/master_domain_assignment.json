@@ -1,0 +1,2014 @@
+{
+  "table_count": 280,
+  "domain_count": 23,
+  "tables": {
+    "alumni_events": {
+      "domain": "alumni",
+      "app": "alumni",
+      "row_count": 1,
+      "foreign_key_count": 2
+    },
+    "alumni_students": {
+      "domain": "alumni",
+      "app": "alumni",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "attendence_type": {
+      "domain": "attendance",
+      "app": "attendance",
+      "row_count": 6,
+      "foreign_key_count": 0
+    },
+    "aws_s3_settings": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "behaviour_settings": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "book_issues": {
+      "domain": "library",
+      "app": "library",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "books": {
+      "domain": "library",
+      "app": "library",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "captcha": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 6,
+      "foreign_key_count": 0
+    },
+    "categories": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "cbse_exam_assessment_types": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 15,
+      "foreign_key_count": 1
+    },
+    "cbse_exam_assessments": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 10,
+      "foreign_key_count": 0
+    },
+    "cbse_exam_class_sections": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 676,
+      "foreign_key_count": 2
+    },
+    "cbse_exam_grades": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "cbse_exam_grades_range": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 16,
+      "foreign_key_count": 1
+    },
+    "cbse_exam_observations": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 12,
+      "foreign_key_count": 0
+    },
+    "cbse_exam_student_subject_rank": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "cbse_exam_students": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 23305,
+      "foreign_key_count": 2
+    },
+    "cbse_exam_timetable": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 654,
+      "foreign_key_count": 2
+    },
+    "cbse_exam_timetable_assessment_types": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 816,
+      "foreign_key_count": 2
+    },
+    "cbse_exam_timetable_grade": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 4600,
+      "foreign_key_count": 0
+    },
+    "cbse_exams": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 108,
+      "foreign_key_count": 4
+    },
+    "cbse_marksheet_type": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "cbse_observation_class_section": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cbse_observation_parameters": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "cbse_observation_subparameter": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 33,
+      "foreign_key_count": 2
+    },
+    "cbse_observation_term_student_subparameter": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 17809,
+      "foreign_key_count": 3
+    },
+    "cbse_observation_terms": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 18,
+      "foreign_key_count": 3
+    },
+    "cbse_student_exam_ranks": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 240,
+      "foreign_key_count": 2
+    },
+    "cbse_student_subject_marks": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 169901,
+      "foreign_key_count": 4
+    },
+    "cbse_student_subject_result": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cbse_student_template_rank": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "cbse_template": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 25,
+      "foreign_key_count": 3
+    },
+    "cbse_template_class_sections": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 142,
+      "foreign_key_count": 2
+    },
+    "cbse_template_term_exams": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 68,
+      "foreign_key_count": 3
+    },
+    "cbse_template_terms": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 24,
+      "foreign_key_count": 2
+    },
+    "cbse_terms": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 13,
+      "foreign_key_count": 0
+    },
+    "certificates": {
+      "domain": "documents",
+      "app": "documents",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "chat_connections": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "chat_messages": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "chat_users": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 4
+    },
+    "class_section_times": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "class_sections": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 94,
+      "foreign_key_count": 2
+    },
+    "class_teacher": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 267,
+      "foreign_key_count": 4
+    },
+    "classes": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 17,
+      "foreign_key_count": 0
+    },
+    "complaint": {
+      "domain": "front_office",
+      "app": "front_office",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "complaint_type": {
+      "domain": "front_office",
+      "app": "front_office",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "conference_sections": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "conference_staff": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "conferences": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "conferences_history": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "content_for": {
+      "domain": "shared",
+      "app": "shared",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "content_types": {
+      "domain": "documents",
+      "app": "documents",
+      "row_count": 3,
+      "foreign_key_count": 0
+    },
+    "contents": {
+      "domain": "shared",
+      "app": "shared",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "course_category": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "course_lesson_quiz_order": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "course_progress": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "course_quiz_answer": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "course_quiz_question": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "course_rating": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "currencies": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 179,
+      "foreign_key_count": 0
+    },
+    "custom_field_values": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 13320,
+      "foreign_key_count": 1
+    },
+    "custom_fields": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 9,
+      "foreign_key_count": 0
+    },
+    "cy_ptm_time_slot": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cy_vehicle_ticket": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_additional_section_teacher": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "cyc_advance_exam_group": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 6,
+      "foreign_key_count": 0
+    },
+    "cyc_biometric_events": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_campaign": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "cyc_campaign_time": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 36,
+      "foreign_key_count": 0
+    },
+    "cyc_class_coordinator": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 10,
+      "foreign_key_count": 0
+    },
+    "cyc_classes_grouping": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_entries": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 2343,
+      "foreign_key_count": 2
+    },
+    "cyc_entryitems": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 4686,
+      "foreign_key_count": 2
+    },
+    "cyc_entrytypes": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "cyc_fee_head_ledger": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_fuel_refill": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_groups": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 38,
+      "foreign_key_count": 1
+    },
+    "cyc_holiday": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_hostel_room_bed": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 9,
+      "foreign_key_count": 0
+    },
+    "cyc_leads": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "cyc_leads_counsellor": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "cyc_leads_followup": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 14,
+      "foreign_key_count": 0
+    },
+    "cyc_leads_followup_status": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 6,
+      "foreign_key_count": 0
+    },
+    "cyc_ledgers": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 117,
+      "foreign_key_count": 0
+    },
+    "cyc_logs": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_ptm": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_ptm_attendance": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_ptm_schedule": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_scheme_and_scholarship": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 5,
+      "foreign_key_count": 0
+    },
+    "cyc_scheme_and_scholarship_feetype": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "cyc_scheme_and_scholarship_student": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 3,
+      "foreign_key_count": 0
+    },
+    "cyc_scheme_and_scholarship_value": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "cyc_staff_payroll": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "cyc_staff_payroll_increment": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 3,
+      "foreign_key_count": 0
+    },
+    "cyc_student_addon_fee": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "cyc_tags": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_vehicle_parts_info": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_vehicle_rto_info": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "cyc_vehicle_services": {
+      "domain": "cyc_extensions",
+      "app": "cyc_extensions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "daily_assignment": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 15,
+      "foreign_key_count": 3
+    },
+    "department": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 21,
+      "foreign_key_count": 0
+    },
+    "disable_reason": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 3,
+      "foreign_key_count": 0
+    },
+    "dispatch_receive": {
+      "domain": "front_office",
+      "app": "front_office",
+      "row_count": 5,
+      "foreign_key_count": 0
+    },
+    "email_attachments": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "email_config": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "email_template": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "email_template_attachment": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "enquiry": {
+      "domain": "front_office",
+      "app": "front_office",
+      "row_count": 1,
+      "foreign_key_count": 3
+    },
+    "enquiry_type": {
+      "domain": "front_office",
+      "app": "front_office",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "events": {
+      "domain": "cms",
+      "app": "cms",
+      "row_count": 22,
+      "foreign_key_count": 1
+    },
+    "exam_group_class_batch_exam_students": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 111,
+      "foreign_key_count": 3
+    },
+    "exam_group_class_batch_exam_subjects": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 2,
+      "foreign_key_count": 2
+    },
+    "exam_group_class_batch_exams": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 2,
+      "foreign_key_count": 2
+    },
+    "exam_group_exam_connections": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "exam_group_exam_results": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "exam_group_students": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "exam_groups": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 3,
+      "foreign_key_count": 0
+    },
+    "exam_schedules": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "exams": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "expense_head": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 3,
+      "foreign_key_count": 0
+    },
+    "expenses": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "face_authentication": {
+      "domain": "system",
+      "app": "system",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "fee_groups": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 11,
+      "foreign_key_count": 0
+    },
+    "fee_groups_feetype": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 65,
+      "foreign_key_count": 4
+    },
+    "fee_receipt_no": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "fee_session_groups": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 35,
+      "foreign_key_count": 2
+    },
+    "feemasters": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "fees_discounts": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 1,
+      "foreign_key_count": 1
+    },
+    "fees_reminder": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "feetype": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "filetypes": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "follow_up": {
+      "domain": "shared",
+      "app": "shared",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "front_cms_media_gallery": {
+      "domain": "cms",
+      "app": "cms",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "front_cms_menu_items": {
+      "domain": "cms",
+      "app": "cms",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "front_cms_menus": {
+      "domain": "cms",
+      "app": "cms",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "front_cms_page_contents": {
+      "domain": "cms",
+      "app": "cms",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "front_cms_pages": {
+      "domain": "cms",
+      "app": "cms",
+      "row_count": 29,
+      "foreign_key_count": 0
+    },
+    "front_cms_program_photos": {
+      "domain": "cms",
+      "app": "cms",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "front_cms_programs": {
+      "domain": "cms",
+      "app": "cms",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "front_cms_settings": {
+      "domain": "cms",
+      "app": "cms",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "gateway_ins": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "gateway_ins_response": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "general_calls": {
+      "domain": "system",
+      "app": "system",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "geofence_events": {
+      "domain": "system",
+      "app": "system",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "geofences": {
+      "domain": "system",
+      "app": "system",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "gmeet": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "gmeet_history": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "gmeet_sections": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "gmeet_settings": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "gmeet_staff": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "grades": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "guest": {
+      "domain": "system",
+      "app": "system",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "homework": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 3,
+      "foreign_key_count": 8
+    },
+    "homework_evaluation": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "hostel": {
+      "domain": "hostel",
+      "app": "hostel",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "hostel_rooms": {
+      "domain": "hostel",
+      "app": "hostel",
+      "row_count": 5,
+      "foreign_key_count": 2
+    },
+    "id_card": {
+      "domain": "documents",
+      "app": "documents",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "income": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "income_head": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "item": {
+      "domain": "inventory",
+      "app": "inventory",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "item_category": {
+      "domain": "inventory",
+      "app": "inventory",
+      "row_count": 3,
+      "foreign_key_count": 0
+    },
+    "item_issue": {
+      "domain": "inventory",
+      "app": "inventory",
+      "row_count": 0,
+      "foreign_key_count": 4
+    },
+    "item_stock": {
+      "domain": "inventory",
+      "app": "inventory",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "item_store": {
+      "domain": "inventory",
+      "app": "inventory",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "item_supplier": {
+      "domain": "inventory",
+      "app": "inventory",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "languages": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 77,
+      "foreign_key_count": 0
+    },
+    "leave_types": {
+      "domain": "hr",
+      "app": "staff",
+      "row_count": 3,
+      "foreign_key_count": 0
+    },
+    "lesson": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 42,
+      "foreign_key_count": 3
+    },
+    "lesson_plan_forum": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "libarary_members": {
+      "domain": "library",
+      "app": "library",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "logs": {
+      "domain": "system",
+      "app": "system",
+      "row_count": 132892,
+      "foreign_key_count": 0
+    },
+    "mark_divisions": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 3,
+      "foreign_key_count": 0
+    },
+    "messages": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 101,
+      "foreign_key_count": 0
+    },
+    "migrations": {
+      "domain": "system",
+      "app": "system",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "multi_branch": {
+      "domain": "system",
+      "app": "system",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "notification_roles": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 83,
+      "foreign_key_count": 2
+    },
+    "notification_setting": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 33,
+      "foreign_key_count": 0
+    },
+    "offline_fees_payments": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 60,
+      "foreign_key_count": 5
+    },
+    "online_admission_custom_field_value": {
+      "domain": "admissions",
+      "app": "admissions",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "online_admission_fields": {
+      "domain": "admissions",
+      "app": "admissions",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "online_admission_payment": {
+      "domain": "admissions",
+      "app": "admissions",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "online_admissions": {
+      "domain": "admissions",
+      "app": "admissions",
+      "row_count": 0,
+      "foreign_key_count": 4
+    },
+    "online_course_class_sections": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 4,
+      "foreign_key_count": 2
+    },
+    "online_course_lesson": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "online_course_payment": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "online_course_processing_payment": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "online_course_quiz": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "online_course_section": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "online_course_settings": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "online_courses": {
+      "domain": "lms",
+      "app": "lms",
+      "row_count": 1,
+      "foreign_key_count": 1
+    },
+    "onlineexam": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "onlineexam_attempts": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "onlineexam_questions": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "onlineexam_student_results": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "onlineexam_students": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "payment_settings": {
+      "domain": "fees",
+      "app": "fees",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "payslip_allowance": {
+      "domain": "hr",
+      "app": "staff",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "permission_category": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 301,
+      "foreign_key_count": 1
+    },
+    "permission_group": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 38,
+      "foreign_key_count": 0
+    },
+    "permission_student": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 25,
+      "foreign_key_count": 1
+    },
+    "pickup_point": {
+      "domain": "transport",
+      "app": "transport",
+      "row_count": 24,
+      "foreign_key_count": 0
+    },
+    "positions": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "print_headerfooter": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "qr_code_settings": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "questions": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 0,
+      "foreign_key_count": 6
+    },
+    "read_notification": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 1106,
+      "foreign_key_count": 3
+    },
+    "reference": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 6,
+      "foreign_key_count": 0
+    },
+    "roles": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 11,
+      "foreign_key_count": 0
+    },
+    "roles_permissions": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 935,
+      "foreign_key_count": 2
+    },
+    "room_types": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "route_pickup_point": {
+      "domain": "transport",
+      "app": "transport",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "sch_settings": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "school_houses": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "sections": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 15,
+      "foreign_key_count": 0
+    },
+    "send_notification": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 10,
+      "foreign_key_count": 1
+    },
+    "sessions": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 14,
+      "foreign_key_count": 0
+    },
+    "share_content_for": {
+      "domain": "shared",
+      "app": "shared",
+      "row_count": 0,
+      "foreign_key_count": 5
+    },
+    "share_contents": {
+      "domain": "shared",
+      "app": "shared",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "share_upload_contents": {
+      "domain": "shared",
+      "app": "shared",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "sidebar_menus": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 33,
+      "foreign_key_count": 1
+    },
+    "sidebar_sub_menus": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 208,
+      "foreign_key_count": 2
+    },
+    "sms_config": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "sms_template": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 31,
+      "foreign_key_count": 0
+    },
+    "source": {
+      "domain": "settings",
+      "app": "settings",
+      "row_count": 6,
+      "foreign_key_count": 0
+    },
+    "staff": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 289,
+      "foreign_key_count": 2
+    },
+    "staff_attendance": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "staff_attendance_type": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 5,
+      "foreign_key_count": 0
+    },
+    "staff_designation": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 19,
+      "foreign_key_count": 0
+    },
+    "staff_id_card": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "staff_leave_details": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 690,
+      "foreign_key_count": 2
+    },
+    "staff_leave_request": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 2,
+      "foreign_key_count": 3
+    },
+    "staff_payroll": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "staff_payslip": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "staff_rating": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 78,
+      "foreign_key_count": 1
+    },
+    "staff_roles": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 289,
+      "foreign_key_count": 2
+    },
+    "staff_timeline": {
+      "domain": "staff",
+      "app": "staff",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "student_applyleave": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 32,
+      "foreign_key_count": 2
+    },
+    "student_attendences": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 1028060,
+      "foreign_key_count": 2
+    },
+    "student_attendences_hostel": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 6,
+      "foreign_key_count": 2
+    },
+    "student_attendences_transport": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "student_behaviour": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "student_doc": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "student_edit_fields": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 16,
+      "foreign_key_count": 0
+    },
+    "student_fees": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "student_fees_deposite": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 2244,
+      "foreign_key_count": 3
+    },
+    "student_fees_discounts": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 5,
+      "foreign_key_count": 2
+    },
+    "student_fees_master": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 7476,
+      "foreign_key_count": 2
+    },
+    "student_fees_processing": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 0,
+      "foreign_key_count": 4
+    },
+    "student_incident_comments": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "student_incidents": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 321,
+      "foreign_key_count": 2
+    },
+    "student_quiz_status": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "student_session": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 8648,
+      "foreign_key_count": 7
+    },
+    "student_subject_attendances": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "student_timeline": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 4,
+      "foreign_key_count": 1
+    },
+    "student_transport_fees": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 0,
+      "foreign_key_count": 3
+    },
+    "students": {
+      "domain": "students",
+      "app": "students",
+      "row_count": 3605,
+      "foreign_key_count": 0
+    },
+    "subject_group_class_sections": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 202,
+      "foreign_key_count": 3
+    },
+    "subject_group_subjects": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 403,
+      "foreign_key_count": 3
+    },
+    "subject_groups": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 51,
+      "foreign_key_count": 1
+    },
+    "subject_groups1": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 0,
+      "foreign_key_count": 0
+    },
+    "subject_syllabus": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 4,
+      "foreign_key_count": 4
+    },
+    "subject_timetable": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 4953,
+      "foreign_key_count": 6
+    },
+    "subjects": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 30,
+      "foreign_key_count": 0
+    },
+    "submit_assignment": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "template_admitcards": {
+      "domain": "documents",
+      "app": "documents",
+      "row_count": 4,
+      "foreign_key_count": 0
+    },
+    "template_marksheets": {
+      "domain": "examinations",
+      "app": "examinations",
+      "row_count": 2,
+      "foreign_key_count": 0
+    },
+    "topic": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 57,
+      "foreign_key_count": 2
+    },
+    "transport_feemaster": {
+      "domain": "transport",
+      "app": "transport",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "transport_route": {
+      "domain": "transport",
+      "app": "transport",
+      "row_count": 24,
+      "foreign_key_count": 0
+    },
+    "upload_contents": {
+      "domain": "shared",
+      "app": "shared",
+      "row_count": 5,
+      "foreign_key_count": 2
+    },
+    "userlog": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 18553,
+      "foreign_key_count": 1
+    },
+    "users": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 7251,
+      "foreign_key_count": 0
+    },
+    "users_authentication": {
+      "domain": "accounts",
+      "app": "accounts",
+      "row_count": 665,
+      "foreign_key_count": 0
+    },
+    "vehicle_routes": {
+      "domain": "transport",
+      "app": "transport",
+      "row_count": 1,
+      "foreign_key_count": 2
+    },
+    "vehicles": {
+      "domain": "transport",
+      "app": "transport",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "video_tutorial": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 0,
+      "foreign_key_count": 1
+    },
+    "video_tutorial_class_sections": {
+      "domain": "academics",
+      "app": "academics",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "visitors_book": {
+      "domain": "front_office",
+      "app": "front_office",
+      "row_count": 0,
+      "foreign_key_count": 2
+    },
+    "visitors_purpose": {
+      "domain": "front_office",
+      "app": "front_office",
+      "row_count": 1,
+      "foreign_key_count": 0
+    },
+    "zoom_settings": {
+      "domain": "communications",
+      "app": "communications",
+      "row_count": 0,
+      "foreign_key_count": 0
+    }
+  },
+  "domains": {
+    "academics": [
+      "class_section_times",
+      "class_sections",
+      "class_teacher",
+      "classes",
+      "daily_assignment",
+      "homework",
+      "homework_evaluation",
+      "lesson",
+      "lesson_plan_forum",
+      "sections",
+      "sessions",
+      "subject_group_class_sections",
+      "subject_group_subjects",
+      "subject_groups",
+      "subject_groups1",
+      "subject_syllabus",
+      "subject_timetable",
+      "subjects",
+      "submit_assignment",
+      "topic",
+      "video_tutorial",
+      "video_tutorial_class_sections"
+    ],
+    "accounts": [
+      "captcha",
+      "notification_roles",
+      "permission_category",
+      "permission_group",
+      "permission_student",
+      "roles",
+      "roles_permissions",
+      "staff_roles",
+      "userlog",
+      "users",
+      "users_authentication"
+    ],
+    "admissions": [
+      "online_admission_custom_field_value",
+      "online_admission_fields",
+      "online_admission_payment",
+      "online_admissions"
+    ],
+    "alumni": [
+      "alumni_events",
+      "alumni_students"
+    ],
+    "attendance": [
+      "attendence_type"
+    ],
+    "cms": [
+      "events",
+      "front_cms_media_gallery",
+      "front_cms_menu_items",
+      "front_cms_menus",
+      "front_cms_page_contents",
+      "front_cms_pages",
+      "front_cms_program_photos",
+      "front_cms_programs",
+      "front_cms_settings"
+    ],
+    "communications": [
+      "chat_connections",
+      "chat_messages",
+      "chat_users",
+      "conference_sections",
+      "conferences",
+      "conferences_history",
+      "email_attachments",
+      "email_config",
+      "email_template",
+      "email_template_attachment",
+      "gmeet",
+      "gmeet_history",
+      "gmeet_sections",
+      "gmeet_settings",
+      "messages",
+      "notification_setting",
+      "read_notification",
+      "send_notification",
+      "sms_config",
+      "sms_template",
+      "zoom_settings"
+    ],
+    "cyc_extensions": [
+      "cy_ptm_time_slot",
+      "cy_vehicle_ticket",
+      "cyc_additional_section_teacher",
+      "cyc_advance_exam_group",
+      "cyc_biometric_events",
+      "cyc_campaign",
+      "cyc_campaign_time",
+      "cyc_class_coordinator",
+      "cyc_classes_grouping",
+      "cyc_entries",
+      "cyc_entryitems",
+      "cyc_entrytypes",
+      "cyc_fee_head_ledger",
+      "cyc_fuel_refill",
+      "cyc_groups",
+      "cyc_holiday",
+      "cyc_hostel_room_bed",
+      "cyc_leads",
+      "cyc_leads_counsellor",
+      "cyc_leads_followup",
+      "cyc_leads_followup_status",
+      "cyc_ledgers",
+      "cyc_logs",
+      "cyc_ptm",
+      "cyc_ptm_attendance",
+      "cyc_ptm_schedule",
+      "cyc_scheme_and_scholarship",
+      "cyc_scheme_and_scholarship_feetype",
+      "cyc_scheme_and_scholarship_student",
+      "cyc_scheme_and_scholarship_value",
+      "cyc_student_addon_fee",
+      "cyc_tags",
+      "cyc_vehicle_parts_info",
+      "cyc_vehicle_rto_info",
+      "cyc_vehicle_services"
+    ],
+    "documents": [
+      "certificates",
+      "content_types",
+      "id_card",
+      "template_admitcards"
+    ],
+    "examinations": [
+      "cbse_exam_assessment_types",
+      "cbse_exam_assessments",
+      "cbse_exam_class_sections",
+      "cbse_exam_grades",
+      "cbse_exam_grades_range",
+      "cbse_exam_observations",
+      "cbse_exam_student_subject_rank",
+      "cbse_exam_students",
+      "cbse_exam_timetable",
+      "cbse_exam_timetable_assessment_types",
+      "cbse_exam_timetable_grade",
+      "cbse_exams",
+      "cbse_marksheet_type",
+      "cbse_observation_class_section",
+      "cbse_observation_parameters",
+      "cbse_observation_subparameter",
+      "cbse_observation_term_student_subparameter",
+      "cbse_observation_terms",
+      "cbse_student_exam_ranks",
+      "cbse_student_subject_marks",
+      "cbse_student_subject_result",
+      "cbse_student_template_rank",
+      "cbse_template",
+      "cbse_template_class_sections",
+      "cbse_template_term_exams",
+      "cbse_template_terms",
+      "cbse_terms",
+      "exam_group_class_batch_exam_students",
+      "exam_group_class_batch_exam_subjects",
+      "exam_group_class_batch_exams",
+      "exam_group_exam_connections",
+      "exam_group_exam_results",
+      "exam_group_students",
+      "exam_groups",
+      "exam_schedules",
+      "exams",
+      "grades",
+      "mark_divisions",
+      "onlineexam",
+      "onlineexam_attempts",
+      "onlineexam_questions",
+      "onlineexam_student_results",
+      "onlineexam_students",
+      "questions",
+      "template_marksheets"
+    ],
+    "fees": [
+      "expense_head",
+      "expenses",
+      "fee_groups",
+      "fee_groups_feetype",
+      "fee_receipt_no",
+      "fee_session_groups",
+      "feemasters",
+      "fees_discounts",
+      "fees_reminder",
+      "feetype",
+      "gateway_ins",
+      "gateway_ins_response",
+      "income",
+      "income_head",
+      "offline_fees_payments",
+      "payment_settings"
+    ],
+    "front_office": [
+      "complaint",
+      "complaint_type",
+      "dispatch_receive",
+      "enquiry",
+      "enquiry_type",
+      "visitors_book",
+      "visitors_purpose"
+    ],
+    "hostel": [
+      "hostel",
+      "hostel_rooms"
+    ],
+    "hr": [
+      "leave_types",
+      "payslip_allowance"
+    ],
+    "inventory": [
+      "item",
+      "item_category",
+      "item_issue",
+      "item_stock",
+      "item_store",
+      "item_supplier"
+    ],
+    "library": [
+      "book_issues",
+      "books",
+      "libarary_members"
+    ],
+    "lms": [
+      "course_category",
+      "course_lesson_quiz_order",
+      "course_progress",
+      "course_quiz_answer",
+      "course_quiz_question",
+      "course_rating",
+      "online_course_class_sections",
+      "online_course_lesson",
+      "online_course_payment",
+      "online_course_processing_payment",
+      "online_course_quiz",
+      "online_course_section",
+      "online_course_settings",
+      "online_courses"
+    ],
+    "settings": [
+      "aws_s3_settings",
+      "behaviour_settings",
+      "categories",
+      "currencies",
+      "custom_field_values",
+      "custom_fields",
+      "filetypes",
+      "languages",
+      "positions",
+      "print_headerfooter",
+      "qr_code_settings",
+      "reference",
+      "room_types",
+      "sch_settings",
+      "school_houses",
+      "sidebar_menus",
+      "sidebar_sub_menus",
+      "source"
+    ],
+    "shared": [
+      "content_for",
+      "contents",
+      "follow_up",
+      "share_content_for",
+      "share_contents",
+      "share_upload_contents",
+      "upload_contents"
+    ],
+    "staff": [
+      "conference_staff",
+      "cyc_staff_payroll",
+      "cyc_staff_payroll_increment",
+      "department",
+      "gmeet_staff",
+      "staff",
+      "staff_attendance",
+      "staff_attendance_type",
+      "staff_designation",
+      "staff_id_card",
+      "staff_leave_details",
+      "staff_leave_request",
+      "staff_payroll",
+      "staff_payslip",
+      "staff_rating",
+      "staff_timeline"
+    ],
+    "students": [
+      "disable_reason",
+      "student_applyleave",
+      "student_attendences",
+      "student_attendences_hostel",
+      "student_attendences_transport",
+      "student_behaviour",
+      "student_doc",
+      "student_edit_fields",
+      "student_fees",
+      "student_fees_deposite",
+      "student_fees_discounts",
+      "student_fees_master",
+      "student_fees_processing",
+      "student_incident_comments",
+      "student_incidents",
+      "student_quiz_status",
+      "student_session",
+      "student_subject_attendances",
+      "student_timeline",
+      "student_transport_fees",
+      "students"
+    ],
+    "system": [
+      "face_authentication",
+      "general_calls",
+      "geofence_events",
+      "geofences",
+      "guest",
+      "logs",
+      "migrations",
+      "multi_branch"
+    ],
+    "transport": [
+      "pickup_point",
+      "route_pickup_point",
+      "transport_feemaster",
+      "transport_route",
+      "vehicle_routes",
+      "vehicles"
+    ]
+  }
+}

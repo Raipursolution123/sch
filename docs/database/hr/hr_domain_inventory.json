@@ -1,0 +1,137 @@
+{
+  "domain": "hr",
+  "app": "staff",
+  "table_count": 2,
+  "tables": [
+    {
+      "table": "leave_types",
+      "row_count": 3,
+      "primary_key": "id",
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "UNI",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `leave_types` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `type` varchar(200) NOT NULL,\n  `is_active` varchar(50) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `type` (`type`)\n) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "staff_leave_details",
+          "column": "leave_type_id"
+        },
+        {
+          "table": "staff_leave_request",
+          "column": "leave_type_id"
+        }
+      ]
+    },
+    {
+      "table": "payslip_allowance",
+      "row_count": 0,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "payslip_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "allowance_type",
+          "mysql_type": "varchar(200)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=200)"
+        },
+        {
+          "name": "amount",
+          "mysql_type": "float",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "FloatField"
+        },
+        {
+          "name": "staff_id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "MUL",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "cal_type",
+          "mysql_type": "varchar(100)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=100)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "staff_id",
+          "references_table": "staff",
+          "references_column": "id",
+          "constraint": "payslip_allowance_ibfk_1"
+        },
+        {
+          "column": "payslip_id",
+          "references_table": "staff_payslip",
+          "references_column": "id",
+          "constraint": "payslip_allowance_ibfk_2"
+        }
+      ],
+      "depends_on": [
+        "staff",
+        "staff_payslip"
+      ],
+      "create_sql": "CREATE TABLE `payslip_allowance` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `payslip_id` int(11) NOT NULL,\n  `allowance_type` varchar(200) NOT NULL,\n  `amount` float NOT NULL,\n  `staff_id` int(11) NOT NULL,\n  `cal_type` varchar(100) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `staff_id` (`staff_id`),\n  KEY `payslip_id` (`payslip_id`),\n  CONSTRAINT `payslip_allowance_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `payslip_allowance_ibfk_2` FOREIGN KEY (`payslip_id`) REFERENCES `staff_payslip` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": []
+    }
+  ]
+}

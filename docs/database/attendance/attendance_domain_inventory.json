@@ -1,0 +1,100 @@
+{
+  "table_count": 1,
+  "tables": [
+    {
+      "table": "attendence_type",
+      "row_count": 6,
+      "primary_key": "id",
+      "column_count": 6,
+      "columns": [
+        {
+          "name": "id",
+          "mysql_type": "int(11)",
+          "nullable": false,
+          "key": "PRI",
+          "default": null,
+          "extra": "auto_increment",
+          "suggested_django_field": "IntegerField"
+        },
+        {
+          "name": "type",
+          "mysql_type": "varchar(50)",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "key_value",
+          "mysql_type": "varchar(50)",
+          "nullable": false,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=50)"
+        },
+        {
+          "name": "is_active",
+          "mysql_type": "varchar(255)",
+          "nullable": true,
+          "key": "",
+          "default": "no",
+          "extra": "",
+          "suggested_django_field": "CharField(max_length=255)"
+        },
+        {
+          "name": "created_at",
+          "mysql_type": "timestamp",
+          "nullable": false,
+          "key": "",
+          "default": "current_timestamp()",
+          "extra": "on update current_timestamp()",
+          "suggested_django_field": "DateTimeField"
+        },
+        {
+          "name": "updated_at",
+          "mysql_type": "date",
+          "nullable": true,
+          "key": "",
+          "default": null,
+          "extra": "",
+          "suggested_django_field": "DateField"
+        }
+      ],
+      "foreign_keys": [],
+      "depends_on": [],
+      "create_sql": "CREATE TABLE `attendence_type` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `type` varchar(50) DEFAULT NULL,\n  `key_value` varchar(50) NOT NULL,\n  `is_active` varchar(255) DEFAULT 'no',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `updated_at` date DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci",
+      "referenced_by": [
+        {
+          "table": "student_attendences",
+          "column": "attendence_type_id"
+        },
+        {
+          "table": "student_attendences_hostel",
+          "column": "attendence_type_id"
+        },
+        {
+          "table": "student_attendences_transport",
+          "column": "attendence_type_id"
+        },
+        {
+          "table": "student_subject_attendances",
+          "column": "attendence_type_id"
+        }
+      ]
+    }
+  ],
+  "ownership": {
+    "attendence_type": "attendance"
+  },
+  "excluded": {
+    "student_attendences": "students app (student attendance records)",
+    "student_attendences_hostel": "students app",
+    "student_attendences_transport": "students app",
+    "student_subject_attendances": "students app",
+    "staff_attendance": "staff app",
+    "staff_attendance_type": "staff app",
+    "cyc_ptm_attendance": "cyc_extensions (unclassified; not attendance core)"
+  }
+}

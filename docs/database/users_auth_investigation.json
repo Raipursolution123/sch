@@ -1,0 +1,363 @@
+{
+  "total_users": 7251,
+  "distinct_usernames": 7215,
+  "duplicate_username_samples": [
+    {
+      "username": "std24",
+      "count": 2
+    },
+    {
+      "username": "std56",
+      "count": 2
+    },
+    {
+      "username": "std1",
+      "count": 2
+    },
+    {
+      "username": "std53",
+      "count": 2
+    },
+    {
+      "username": "std50",
+      "count": 2
+    },
+    {
+      "username": "std47",
+      "count": 2
+    },
+    {
+      "username": "std44",
+      "count": 2
+    },
+    {
+      "username": "std41",
+      "count": 2
+    },
+    {
+      "username": "std38",
+      "count": 2
+    },
+    {
+      "username": "std35",
+      "count": 2
+    },
+    {
+      "username": "std32",
+      "count": 2
+    },
+    {
+      "username": "std29",
+      "count": 2
+    },
+    {
+      "username": "std26",
+      "count": 2
+    },
+    {
+      "username": "std6",
+      "count": 2
+    },
+    {
+      "username": "std55",
+      "count": 2
+    },
+    {
+      "username": "std52",
+      "count": 2
+    },
+    {
+      "username": "std49",
+      "count": 2
+    },
+    {
+      "username": "std46",
+      "count": 2
+    },
+    {
+      "username": "std43",
+      "count": 2
+    },
+    {
+      "username": "std40",
+      "count": 2
+    },
+    {
+      "username": "std37",
+      "count": 2
+    },
+    {
+      "username": "std34",
+      "count": 2
+    },
+    {
+      "username": "std31",
+      "count": 2
+    },
+    {
+      "username": "std28",
+      "count": 2
+    },
+    {
+      "username": "std25",
+      "count": 2
+    }
+  ],
+  "usernames_with_duplicates": 36,
+  "user_rows_in_duplicate_groups": 72,
+  "duplicate_username_role_breakdown": [
+    {
+      "username": "std1",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std24",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std25",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std26",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std27",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std28",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std29",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std3",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std30",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std31",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std32",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std33",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std34",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std35",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std36",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std37",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std38",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std39",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std40",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std41",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std42",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std43",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std44",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std45",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std46",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std47",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std48",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std49",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std50",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std51",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std52",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std53",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std54",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std55",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std56",
+      "role": "student",
+      "count": 2
+    },
+    {
+      "username": "std6",
+      "role": "student",
+      "count": 2
+    }
+  ],
+  "duplicate_username_role_pairs": 36,
+  "duplicate_username_role_userid_triples": 36,
+  "user_id_entity_mapping_by_role": [
+    {
+      "role": "student",
+      "count": 3641,
+      "matches_student_id": 3641,
+      "matches_staff_id": 322
+    },
+    {
+      "role": "parent",
+      "count": 3610,
+      "matches_student_id": 92,
+      "matches_staff_id": 35
+    }
+  ],
+  "password_patterns": {
+    "short_plaintext_candidate": 7216,
+    "other": 4,
+    "numeric_plain": 31
+  },
+  "password_lengths": {
+    "1": 1,
+    "2": 1,
+    "3": 3,
+    "4": 10,
+    "5": 8,
+    "6": 7003,
+    "7": 32,
+    "8": 31,
+    "9": 39,
+    "10": 44,
+    "11": 26,
+    "12": 18,
+    "13": 8,
+    "14": 12,
+    "15": 3,
+    "16": 5,
+    "17": 2,
+    "20": 1,
+    "21": 1,
+    "23": 2,
+    "36": 1
+  },
+  "duplicate_sample_auth_analysis": {
+    "sample_username_redacted": "<duplicate#st...>",
+    "rows": [
+      {
+        "id": 43,
+        "user_id": 24,
+        "role": "student",
+        "is_active": "yes",
+        "password_pattern": "short_plaintext_candidate",
+        "test_algorithm_matches": null
+      },
+      {
+        "id": 153,
+        "user_id": 24,
+        "role": "student",
+        "is_active": "yes",
+        "password_pattern": "short_plaintext_candidate",
+        "test_algorithm_matches": null
+      }
+    ]
+  },
+  "users_authentication_linked_rows": 658,
+  "users_authentication_by_role": {
+    "parent": 98,
+    "student": 560
+  },
+  "is_active_distribution": {
+    "yes": 7251
+  }
+}
