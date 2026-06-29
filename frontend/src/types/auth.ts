@@ -16,21 +16,6 @@ export interface AuthTokens {
   refresh: string;
 }
 
-export interface ApiSuccessResponse<T> {
-  success: true;
-  message: string;
-  data: T;
-}
-
-export interface ApiErrorResponse {
-  success: false;
-  error: {
-    code?: number;
-    message: string;
-    details?: unknown;
-  };
-}
-
 export interface LoginPayload {
   username: string;
   password: string;

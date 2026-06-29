@@ -1,6 +1,7 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { env } from '@constants/env';
 import { API_ENDPOINTS, STORAGE_KEYS } from '@constants/index';
+import { useAuthStore } from '@store/index';
 
 export const apiClient = axios.create({
   baseURL: env.apiBaseUrl,
@@ -46,6 +47,7 @@ apiClient.interceptors.response.use(
       if (originalRequest.url?.includes(API_ENDPOINTS.auth.tokenRefresh)) {
         localStorage.removeItem(STORAGE_KEYS.accessToken);
         localStorage.removeItem(STORAGE_KEYS.refreshToken);
+        useAuthStore.getState().clearAuth();
         return Promise.reject(error);
       }
 
@@ -66,6 +68,7 @@ apiClient.interceptors.response.use(
       const refreshToken = localStorage.getItem(STORAGE_KEYS.refreshToken);
       if (!refreshToken) {
         isRefreshing = false;
+        useAuthStore.getState().clearAuth();
         return Promise.reject(error);
       }
 
@@ -85,6 +88,7 @@ apiClient.interceptors.response.use(
         processQueue(refreshError, null);
         localStorage.removeItem(STORAGE_KEYS.accessToken);
         localStorage.removeItem(STORAGE_KEYS.refreshToken);
+        useAuthStore.getState().clearAuth();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

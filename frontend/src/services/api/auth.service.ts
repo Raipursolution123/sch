@@ -6,7 +6,7 @@ import type {
   LoginPayload,
   RegisterPayload,
   User,
-} from '@app-types/auth';
+} from '@app-types/index';
 
 export const authService = {
   login: async (payload: LoginPayload) => {

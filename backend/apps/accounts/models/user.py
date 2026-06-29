@@ -67,7 +67,14 @@ class User(models.Model):
 
     @property
     def is_superadmin(self):
-        from apps.accounts.models.role import Role
+        from apps.accounts.models.role import Role, StaffRole
+
+        if self.role == "staff":
+            return StaffRole.objects.filter(
+                staff_id=self.user_id,
+                role__is_superadmin=1,
+                is_active=1,
+            ).exists()
 
         return Role.objects.filter(slug=self.role, is_superadmin=1).exists()
 

@@ -26,6 +26,9 @@ print("Database connection failed.")
 sys.exit(1)
 PYEOF
 
+echo "Checking onboarding prerequisites..."
+python manage.py check_onboarding || true
+
 echo "Running migrations..."
 python manage.py migrate --noinput || {
     echo "Full migrate failed; applying framework migrations only..."

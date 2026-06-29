@@ -4,7 +4,7 @@ from apps.accounts.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    is_superadmin = serializers.BooleanField(read_only=True)
+    is_superadmin = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -21,6 +21,9 @@ class UserSerializer(serializers.ModelSerializer):
             "updated_at",
         )
         read_only_fields = fields
+
+    def get_is_superadmin(self, obj: User) -> bool:
+        return obj.is_superadmin
 
 
 class LoginSerializer(serializers.Serializer):

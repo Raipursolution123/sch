@@ -1,16 +1,17 @@
 import { useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { Button } from '@components/ui/Button';
-import { Input } from '@components/ui/Input';
+import { Button } from '@components/ui/button';
+import { Input } from '@components/ui/input';
 import { ROUTES } from '@constants/index';
 import { authService } from '@services/api';
 import { useAuthStore } from '@store/index';
 
 export function RegisterPage() {
+  const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
   const [form, setForm] = useState({
-    email: '',
+    username: '',
     password: '',
     password_confirm: '',
     first_name: '',
@@ -22,7 +23,7 @@ export function RegisterPage() {
     mutationFn: authService.register,
     onSuccess: (data) => {
       setAuth(data.user, data.tokens.access, data.tokens.refresh);
-      window.location.href = ROUTES.dashboard;
+      navigate(ROUTES.dashboard, { replace: true });
     },
     onError: () => setError('Registration failed. Please check your details.'),
   });
@@ -42,9 +43,9 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
-      <h1 className="text-2xl font-bold text-gray-900">Create account</h1>
-      <p className="mt-1 text-sm text-gray-600">Register for School ERP</p>
+    <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
+      <h1 className="text-2xl font-bold text-foreground">Create account</h1>
+      <p className="mt-1 text-sm text-muted-foreground">Register for School ERP</p>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <div className="grid grid-cols-2 gap-4">
@@ -62,11 +63,11 @@ export function RegisterPage() {
           />
         </div>
         <Input
-          label="Email"
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={(e) => updateField('email', e.target.value)}
+          label="Username"
+          type="text"
+          name="username"
+          value={form.username}
+          onChange={(e) => updateField('username', e.target.value)}
           required
         />
         <Input
@@ -85,15 +86,15 @@ export function RegisterPage() {
           onChange={(e) => updateField('password_confirm', e.target.value)}
           required
         />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-destructive">{error}</p>}
         <Button type="submit" isLoading={registerMutation.isPending} className="w-full">
           Create account
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-gray-600">
+      <p className="mt-4 text-center text-sm text-muted-foreground">
         Already have an account?{' '}
-        <Link to={ROUTES.login} className="font-medium text-primary-600 hover:text-primary-700">
+        <Link to={ROUTES.login} className="font-medium text-primary hover:underline">
           Sign in
         </Link>
       </p>

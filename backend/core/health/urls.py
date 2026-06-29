@@ -1,25 +1,33 @@
 from django.http import JsonResponse
 from django.urls import path
 
+from core.provisioning.checks import check_onboarding
+
 
 def health_check(request):
     return JsonResponse({"status": "healthy", "service": "school-erp-backend"})
 
 
 def readiness_check(request):
-    from django.db import connection
+    status = check_onboarding()
 
-    try:
-        connection.ensure_connection()
-        db_status = "ok"
-    except Exception:
-        db_status = "error"
+    if not status.database_connected:
+        return JsonResponse(
+            {
+                "status": "not_ready",
+                "database": "error",
+                "onboarding": status.as_dict(),
+            },
+            status=503,
+        )
 
-    status_code = 200 if db_status == "ok" else 503
-    return JsonResponse(
-        {"status": "ready" if db_status == "ok" else "not_ready", "database": db_status},
-        status=status_code,
-    )
+    payload = {
+        "status": "ready" if status.ready_for_development else "not_ready",
+        "database": "ok",
+        "onboarding": status.as_dict(),
+    }
+    status_code = 200 if status.ready_for_development else 503
+    return JsonResponse(payload, status=status_code)
 
 
 urlpatterns = [

@@ -39,6 +39,10 @@ THIRD_PARTY_APPS = [
     "django_celery_results",
 ]
 
+INFRA_APPS = [
+    "core.apps.CoreConfig",
+]
+
 LOCAL_APPS = [
     "apps.accounts",
     "apps.students",
@@ -64,7 +68,7 @@ LOCAL_APPS = [
     "apps.system",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + INFRA_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

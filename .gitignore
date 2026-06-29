@@ -21,6 +21,9 @@ backend/media/*
 *.log
 backend/logs/
 
+# Local database dumps (too large for GitHub)
+docs/db_current.sql
+
 # IDE
 .idea/
 .vscode/

@@ -142,6 +142,11 @@ services:
     environment:
       VITE_API_BASE_URL: /api/v1
       VITE_API_PROXY_TARGET: http://backend:8000
+      # Bind mounts on Windows/macOS do not propagate inotify events; polling enables HMR.
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      VITE_HMR_HOST: localhost
+      VITE_HMR_PORT: ${FRONTEND_PORT:-5173}
     volumes:
       - ./frontend:/app
       - /app/node_modules

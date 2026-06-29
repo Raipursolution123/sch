@@ -1,33 +1,42 @@
-import { type InputHTMLAttributes, forwardRef } from 'react';
+import * as React from 'react';
+import { cn } from '@utils/cn';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className = '', id, ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, label, error, id, ...props }, ref) => {
     const inputId = id || props.name;
+
+    const inputElement = (
+      <input
+        type={type}
+        id={inputId}
+        className={cn(
+          'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+          error && 'border-destructive focus-visible:ring-destructive',
+          className,
+        )}
+        ref={ref}
+        {...props}
+      />
+    );
+
+    if (!label) return inputElement;
 
     return (
       <div className="space-y-1">
-        {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-gray-700">
-            {label}
-          </label>
-        )}
-        <input
-          ref={ref}
-          id={inputId}
-          className={`block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 ${
-            error ? 'border-red-500' : 'border-gray-300'
-          } ${className}`}
-          {...props}
-        />
-        {error && <p className="text-xs text-red-600">{error}</p>}
+        <label htmlFor={inputId} className="text-sm font-medium leading-none text-foreground">
+          {label}
+        </label>
+        {inputElement}
+        {error && <p className="text-xs text-destructive">{error}</p>}
       </div>
     );
   },
 );
-
 Input.displayName = 'Input';
+
+export { Input };

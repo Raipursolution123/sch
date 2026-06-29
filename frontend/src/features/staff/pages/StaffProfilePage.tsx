@@ -1,0 +1,135 @@
+import { useState } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Pencil } from 'lucide-react';
+import { Button } from '@components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
+import { LoadingState } from '@components/feedback/LoadingState';
+import { ErrorState } from '@components/feedback/ErrorState';
+import { StaffOverviewTab } from '@features/staff/components/StaffOverviewTab';
+import { StaffEmploymentTab } from '@features/staff/components/StaffEmploymentTab';
+import { StaffPayrollTab } from '@features/staff/components/StaffPayrollTab';
+import { StaffFormDialog } from '@features/staff/components/StaffFormDialog';
+import type { StaffFormValues } from '@features/staff/schemas/staff-form.schema';
+import { toStaffPayload } from '@features/staff/utils/staff-payload';
+import {
+  useStaffDepartments,
+  useStaffDesignations,
+  useStaffMember,
+  useUpdateStaff,
+} from '@hooks/useStaff';
+import { ROUTES } from '@constants/index';
+
+const PROFILE_TABS = [
+  { id: 'overview', label: 'Overview', enabled: true },
+  { id: 'employment', label: 'Employment', enabled: true },
+  { id: 'payroll', label: 'Payroll', enabled: true },
+  { id: 'documents', label: 'Documents', enabled: false },
+] as const;
+
+type ProfileTabId = (typeof PROFILE_TABS)[number]['id'];
+
+function isProfileTab(value: string | null): value is ProfileTabId {
+  return PROFILE_TABS.some((tab) => tab.id === value);
+}
+
+export function StaffProfilePage() {
+  const { staffId } = useParams<{ staffId: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [editOpen, setEditOpen] = useState(false);
+  const id = Number(staffId);
+  const { data: staff, isLoading, isError, error, refetch } = useStaffMember(id);
+  const { data: departments = [] } = useStaffDepartments();
+  const { data: designations = [] } = useStaffDesignations();
+  const updateMutation = useUpdateStaff(id);
+
+  const activeTab = searchParams.get('tab');
+  const currentTab = isProfileTab(activeTab) ? activeTab : 'overview';
+
+  const canEdit = departments.length > 0 && designations.length > 0;
+
+  const handleEditSubmit = (values: StaffFormValues) => {
+    updateMutation.mutate(toStaffPayload(values), {
+      onSuccess: () => setEditOpen(false),
+    });
+  };
+
+  if (isLoading) {
+    return <LoadingState message="Loading staff profile..." />;
+  }
+
+  if (isError || !staff) {
+    return (
+      <ErrorState
+        title="Staff member not found"
+        message={error instanceof Error ? error.message : 'Could not load staff profile'}
+        onRetry={() => void refetch()}
+      />
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Link
+          to={ROUTES.staff.root}
+          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+          Back to Staff
+        </Link>
+        <Button variant="outline" className="gap-1" onClick={() => setEditOpen(true)} disabled={!canEdit}>
+          <Pencil className="h-4 w-4" aria-hidden="true" />
+          Edit
+        </Button>
+      </div>
+
+      <Tabs
+        value={currentTab}
+        onValueChange={(value) => {
+          setSearchParams(value === 'overview' ? {} : { tab: value }, { replace: true });
+        }}
+      >
+        <TabsList className="w-full justify-start overflow-x-auto">
+          {PROFILE_TABS.map((tab) => (
+            <TabsTrigger key={tab.id} value={tab.id} disabled={!tab.enabled}>
+              {tab.label}
+              {!tab.enabled && <span className="sr-only"> (coming soon)</span>}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        <TabsContent value="overview" className="mt-6">
+          <StaffOverviewTab staff={staff} />
+        </TabsContent>
+
+        <TabsContent value="employment" className="mt-6">
+          <StaffEmploymentTab staff={staff} />
+        </TabsContent>
+
+        <TabsContent value="payroll" className="mt-6">
+          <StaffPayrollTab staff={staff} />
+        </TabsContent>
+
+        {PROFILE_TABS.filter(
+          (tab) => tab.id !== 'overview' && tab.id !== 'employment' && tab.id !== 'payroll',
+        ).map((tab) => (
+          <TabsContent key={tab.id} value={tab.id} className="mt-6">
+            <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
+              {tab.label} details coming soon.
+            </div>
+          </TabsContent>
+        ))}
+      </Tabs>
+
+      <StaffFormDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        departments={departments}
+        designations={designations}
+        staff={staff}
+        onSubmit={handleEditSubmit}
+        isLoading={updateMutation.isPending}
+      />
+    </div>
+  );
+}
