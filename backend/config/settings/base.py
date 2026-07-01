@@ -12,9 +12,9 @@ env = environ.Env(
     CORS_ALLOWED_ORIGINS=(list, []),
 )
 
-env_file = BASE_DIR / ".env"
+env_file = BASE_DIR.parent / ".env"
 if env_file.exists():
-    environ.Env.read_env(env_file)
+    environ.Env.read_env(str(env_file), overwrite=True)
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-change-me-in-production")
 
@@ -23,7 +23,7 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
 DJANGO_APPS = [
-    "django.contrib.admin",
+    # "django.contrib.admin",  # Disabled: LogEntry references AUTH_USER_MODEL but the legacy User is unmanaged
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -106,7 +106,7 @@ ASGI_APPLICATION = "config.asgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": env("DB_NAME", default="db_current"),
+        "NAME": env("DB_NAME", default="school_erp"),
         "USER": env("DB_USER", default="school_erp"),
         "PASSWORD": env("DB_PASSWORD", default="school_erp"),
         "HOST": env("DB_HOST", default="localhost"),
@@ -208,7 +208,7 @@ SIMPLE_JWT = {
     ),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
-    "UPDATE_LAST_LOGIN": True,
+    "UPDATE_LAST_LOGIN": False,  # Legacy `users` table has no last_login column
     "AUTH_HEADER_TYPES": ("Bearer",),
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
