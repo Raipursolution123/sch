@@ -18,40 +18,79 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 
 class RegisterView(APIView):
-    """Registration is managed by the legacy ERP schema/workflow."""
+    """Registration for admins via API."""
 
     permission_classes = [AllowAny]
 
     def post(self, request):
-        return APIResponse.error(
-            message="Registration is not available via this API. Use the legacy ERP workflow.",
-            status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        )
-
-
-class LoginView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
+        from apps.accounts.serializers import RegisterSerializer
+        serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        user = authenticate(
-            request,
-            username=serializer.validated_data["username"],
-            password=serializer.validated_data["password"],
-            role=serializer.validated_data.get("role") or None,
+        email = serializer.validated_data["username"]
+        password = serializer.validated_data["password"]
+        first_name = serializer.validated_data["first_name"]
+        last_name = serializer.validated_data.get("last_name", "")
+
+        from apps.staff.models import Staff
+        from apps.accounts.services.staff_auth import ensure_staff_user_bridge
+        from core.provisioning.school_setup import hash_staff_password
+        from django.utils import timezone
+
+        if Staff.objects.filter(email=email).exists():
+            return APIResponse.error(
+                message="User with this email already exists",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        now = timezone.now()
+        staff = Staff.objects.create(
+            employee_id="9000",
+            lang_id=4,
+            currency_id=1,
+            name=first_name,
+            surname=last_name,
+            email=email,
+            password=hash_staff_password(password),
+            dob="2000-01-01",
+            date_of_joining=now.date(),
+            gender="Other",
+            is_active=1,
+            user_id=0,
+            qualification="",
+            work_exp="",
+            father_name="",
+            mother_name="",
+            contact_no="",
+            emergency_contact_no="",
+            marital_status="",
+            local_address="",
+            permanent_address="",
+            note="",
+            image="",
+            account_title="",
+            bank_account_no="",
+            bank_name="",
+            ifsc_code="",
+            bank_branch="",
+            payscale="",
+            epf_no="",
+            contract_type="",
+            shift="",
+            location="",
+            facebook="",
+            twitter="",
+            linkedin="",
+            instagram="",
+            resume="",
+            joining_letter="",
+            resignation_letter="",
+            other_document_name="",
+            other_document_file="",
+            verification_code="",
         )
-        if not user:
-            return APIResponse.error(
-                message="Invalid credentials",
-                status_code=status.HTTP_401_UNAUTHORIZED,
-            )
-        if not user.is_active_user:
-            return APIResponse.error(
-                message="Account is inactive",
-                status_code=status.HTTP_403_FORBIDDEN,
-            )
+
+        user = ensure_staff_user_bridge(staff)
 
         refresh = RefreshToken.for_user(user)
         return APIResponse.success(
@@ -62,8 +101,52 @@ class LoginView(APIView):
                     "refresh": str(refresh),
                 },
             },
-            message="Login successful",
+            message="Registration successful",
+            status_code=status.HTTP_201_CREATED,
         )
+
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            serializer = LoginSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+
+            user = authenticate(
+                request,
+                username=serializer.validated_data["username"],
+                password=serializer.validated_data["password"],
+                role=serializer.validated_data.get("role") or None,
+            )
+            if not user:
+                return APIResponse.error(
+                    message="Invalid credentials",
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                )
+            
+            if not user.is_active_user:
+                return APIResponse.error(
+                    message="Account is inactive",
+                    status_code=status.HTTP_403_FORBIDDEN,
+                )
+
+            refresh = RefreshToken.for_user(user)
+            return APIResponse.success(
+                data={
+                    "user": UserSerializer(user).data,
+                    "tokens": {
+                        "access": str(refresh.access_token),
+                        "refresh": str(refresh),
+                    },
+                },
+                message="Login successful",
+            )
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            raise
 
 
 class MeView(APIView):
