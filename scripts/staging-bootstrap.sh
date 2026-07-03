@@ -30,13 +30,34 @@ should_skip_ssl() {
   case "${SHARED_VPS:-}" in
     1 | true | TRUE | yes | YES) return 0 ;;
   esac
-  # Shared hosts bind Docker nginx to 127.0.0.1:PORT; host Apache owns 80/443.
-  local http_port="${HTTP_PORT:-80}"
-  if [[ "$http_port" != "80" ]]; then
+  # Shared hosts bind Docker nginx to 127.0.0.1; host Apache owns public 80/443.
+  local publish_port="${HTTP_PUBLISH_PORT:-${HTTP_PORT:-80}}"
+  if [[ "$publish_port" != "80" ]]; then
+    return 0
+  fi
+  if [[ "${HTTP_BIND_IP:-0.0.0.0}" != "0.0.0.0" ]]; then
     return 0
   fi
   return 1
 }
+
+# Legacy .env used HTTP_PORT=127.0.0.1:8094 — split for compose long port syntax.
+normalize_port_env() {
+  if [[ -n "${HTTP_PORT:-}" && "$HTTP_PORT" == *:* ]]; then
+    export HTTP_BIND_IP="${HTTP_PORT%%:*}"
+    export HTTP_PUBLISH_PORT="${HTTP_PORT##*:}"
+  elif [[ -n "${HTTP_PORT:-}" && -z "${HTTP_PUBLISH_PORT:-}" ]]; then
+    export HTTP_PUBLISH_PORT="${HTTP_PORT}"
+  fi
+  if [[ -n "${HTTPS_PORT:-}" && "$HTTPS_PORT" == *:* ]]; then
+    export HTTPS_BIND_IP="${HTTPS_PORT%%:*}"
+    export HTTPS_PUBLISH_PORT="${HTTPS_PORT##*:}"
+  elif [[ -n "${HTTPS_PORT:-}" && -z "${HTTPS_PUBLISH_PORT:-}" ]]; then
+    export HTTPS_PUBLISH_PORT="${HTTPS_PORT}"
+  fi
+}
+
+normalize_port_env
 
 echo "==> Starting data services (MySQL + Redis)..."
 docker compose -f "$COMPOSE_FILE" up -d mysql redis
@@ -68,6 +89,10 @@ if should_skip_ssl; then
   if [[ -z "${NGINX_STAGING_CONF:-}" ]]; then
     export NGINX_STAGING_CONF=nginx.staging.http-only.conf
   fi
+  export HTTP_BIND_IP="${HTTP_BIND_IP:-127.0.0.1}"
+  export HTTP_PUBLISH_PORT="${HTTP_PUBLISH_PORT:-8094}"
+  export HTTPS_BIND_IP="${HTTPS_BIND_IP:-127.0.0.1}"
+  export HTTPS_PUBLISH_PORT="${HTTPS_PUBLISH_PORT:-18443}"
 else
   export NGINX_STAGING_CONF=nginx.staging.http-only.conf
 fi
@@ -85,13 +110,9 @@ docker compose -f "$COMPOSE_FILE" run --rm backend python manage.py initial_setu
   --base-url "https://${DOMAIN}" || true
 
 if should_skip_ssl; then
-  echo "==> Skipping Docker SSL bootstrap (shared VPS / SKIP_SSL_BOOTSTRAP / non-default HTTP_PORT)."
+  echo "==> Skipping Docker SSL bootstrap (shared VPS / SKIP_SSL_BOOTSTRAP / non-default HTTP_PUBLISH_PORT)."
   echo "    Host Apache/Nginx should terminate TLS and proxy to Docker nginx, e.g.:"
-  if [[ "${HTTP_PORT:-80}" == *:* ]]; then
-    echo "    ProxyPass / http://${HTTP_PORT}/"
-  else
-    echo "    ProxyPass / http://127.0.0.1:${HTTP_PORT}/"
-  fi
+  echo "    ProxyPass / http://${HTTP_BIND_IP:-127.0.0.1}:${HTTP_PUBLISH_PORT:-8094}/"
   FINAL_URL="${STAGING_URL:-https://${DOMAIN}}"
 else
   echo "==> Obtaining SSL certificate..."
