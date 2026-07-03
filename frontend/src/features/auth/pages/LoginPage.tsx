@@ -1,8 +1,8 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/Input';
+import { Input } from '@components/ui/input';
 import { ROUTES } from '@constants/index';
 import { authService } from '@services/api';
 import { useAuthStore } from '@store/index';
@@ -46,7 +46,7 @@ export function LoginPage() {
           type="text"
           name="username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
           required
           autoComplete="username"
         />
@@ -55,7 +55,7 @@ export function LoginPage() {
           type="password"
           name="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
           required
           autoComplete="current-password"
         />
