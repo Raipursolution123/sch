@@ -7,13 +7,14 @@ exclude = '''
   | \.venv
   | migrations
   | staticfiles
+  | scripts
 )/
 '''
 
 [tool.isort]
 profile = "black"
 line_length = 88
-skip = ["migrations", ".venv"]
+skip = ["migrations", ".venv", "scripts"]
 known_django = "django"
 known_first_party = ["apps", "api", "core", "common", "config"]
 sections = ["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]

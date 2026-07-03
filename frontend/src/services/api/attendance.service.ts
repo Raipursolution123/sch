@@ -186,7 +186,7 @@ export const attendanceService = {
         studentsService.list(),
       ]);
 
-      let rows: AttendanceReportRow[] = mockRecords
+      const rows: AttendanceReportRow[] = mockRecords
         .filter((r) => r.date >= filters.from_date && r.date <= filters.to_date)
         .filter((r) => (filters.class_id ? r.class_id === filters.class_id : true))
         .filter((r) => (filters.section_id ? r.section_id === filters.section_id : true))

@@ -4,7 +4,7 @@ import { Select } from '@components/ui/select';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { AttendanceStatusBadge } from '@features/attendance/components/AttendanceStatusBadge';
 
-export interface MarkAttendanceRow extends AttendanceRosterEntry {}
+export type MarkAttendanceRow = AttendanceRosterEntry;
 
 interface MarkAttendanceTableProps {
   entries: MarkAttendanceRow[];

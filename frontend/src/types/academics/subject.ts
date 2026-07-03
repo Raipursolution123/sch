@@ -21,4 +21,4 @@ export interface CreateSubjectPayload {
   linked_class_ids: number[];
 }
 
-export interface UpdateSubjectPayload extends CreateSubjectPayload {}
+export type UpdateSubjectPayload = CreateSubjectPayload;
