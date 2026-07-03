@@ -23,6 +23,21 @@ fi
 # shellcheck disable=SC1091
 set -a && source .env && set +a
 
+should_skip_ssl() {
+  case "${SKIP_SSL_BOOTSTRAP:-}" in
+    1 | true | TRUE | yes | YES) return 0 ;;
+  esac
+  case "${SHARED_VPS:-}" in
+    1 | true | TRUE | yes | YES) return 0 ;;
+  esac
+  # Shared hosts bind Docker nginx to 127.0.0.1:PORT; host Apache owns 80/443.
+  local http_port="${HTTP_PORT:-80}"
+  if [[ "$http_port" != "80" ]]; then
+    return 0
+  fi
+  return 1
+}
+
 echo "==> Starting data services (MySQL + Redis)..."
 docker compose -f "$COMPOSE_FILE" up -d mysql redis
 
@@ -49,19 +64,41 @@ else
   echo "==> Schema already present ($TABLE_COUNT tables), skipping seed SQL."
 fi
 
-export NGINX_STAGING_CONF=nginx.staging.http-only.conf
+if should_skip_ssl; then
+  if [[ -z "${NGINX_STAGING_CONF:-}" ]]; then
+    export NGINX_STAGING_CONF=nginx.staging.http-only.conf
+  fi
+else
+  export NGINX_STAGING_CONF=nginx.staging.http-only.conf
+fi
 export IMAGE_TAG="${IMAGE_TAG:-latest}"
 
-echo "==> Building and starting application stack (HTTP only for SSL bootstrap)..."
+if should_skip_ssl; then
+  echo "==> Building and starting application stack (shared VPS — host reverse proxy)..."
+else
+  echo "==> Building and starting application stack (HTTP only until SSL bootstrap)..."
+fi
 docker compose -f "$COMPOSE_FILE" up -d --build
 
 echo "==> Running school initialization (if not already done)..."
 docker compose -f "$COMPOSE_FILE" run --rm backend python manage.py initial_setup \
   --base-url "https://${DOMAIN}" || true
 
-echo "==> Obtaining SSL certificate..."
-"$ROOT_DIR/scripts/staging-init-ssl.sh"
+if should_skip_ssl; then
+  echo "==> Skipping Docker SSL bootstrap (shared VPS / SKIP_SSL_BOOTSTRAP / non-default HTTP_PORT)."
+  echo "    Host Apache/Nginx should terminate TLS and proxy to Docker nginx, e.g.:"
+  if [[ "${HTTP_PORT:-80}" == *:* ]]; then
+    echo "    ProxyPass / http://${HTTP_PORT}/"
+  else
+    echo "    ProxyPass / http://127.0.0.1:${HTTP_PORT}/"
+  fi
+  FINAL_URL="${STAGING_URL:-https://${DOMAIN}}"
+else
+  echo "==> Obtaining SSL certificate..."
+  "$ROOT_DIR/scripts/staging-init-ssl.sh"
+  FINAL_URL="https://${DOMAIN}"
+fi
 
 echo "==> Bootstrap complete."
-echo "    URL: https://${DOMAIN}"
+echo "    URL: ${FINAL_URL}"
 echo "    Default admin (if initial_setup just ran): admin@demo.com / Admin@123 — change immediately."

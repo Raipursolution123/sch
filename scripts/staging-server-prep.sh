@@ -48,7 +48,7 @@ else
   usermod -aG docker "$DEPLOY_USER" 2>/dev/null || true
 fi
 
-APP_PATH="${APP_PATH:-/opt/school-erp}"
+APP_PATH="${APP_PATH:-/home/raipu622/apps/school-erp}"
 mkdir -p "$APP_PATH"
 chown "$DEPLOY_USER:$DEPLOY_USER" "$APP_PATH"
 

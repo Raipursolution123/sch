@@ -48,6 +48,24 @@ GitHub (main) → CI workflow → Deploy Staging workflow
 
 ### 2. Clone repository
 
+**Raipur Solutions server (`web1`, user `raipu622`)** — deploy alongside existing apps:
+
+```bash
+mkdir -p ~/apps/school-erp
+git clone https://github.com/Raipursolution123/sch.git ~/apps/school-erp
+cd ~/apps/school-erp
+```
+
+Existing layout on this host:
+
+```
+~/apps/alumni-app
+~/apps/school-erp-admin    # separate project — do not overwrite
+~/apps/school-erp          # this staging stack (new)
+```
+
+**Dedicated VPS (optional):**
+
 ```bash
 sudo mkdir -p /opt/school-erp
 sudo chown "$USER":"$USER" /opt/school-erp
@@ -95,13 +113,15 @@ Add these in **Settings → Secrets and variables → Actions**:
 
 | Secret | Example | Purpose |
 |--------|---------|---------|
-| `STAGING_HOST` | `203.0.113.10` | Server IP or hostname |
-| `STAGING_USER` | `deploy` | SSH user |
+| `STAGING_HOST` | `web1` or server IP | Server hostname or IP |
+| `STAGING_USER` | `raipu622` | SSH user |
 | `STAGING_SSH_KEY` | private key PEM | Deploy key (no passphrase) |
-| `STAGING_APP_PATH` | `/opt/school-erp` | Repo path on server |
+| `STAGING_APP_PATH` | `/home/raipu622/apps/school-erp` | Repo path on server |
 | `STAGING_SSH_PORT` | `22` | Optional SSH port |
 
-Ensure the deploy user's SSH key is in `~/.ssh/authorized_keys` and has docker + git access to the app path.
+Ensure the deploy user's SSH key is in `~/.ssh/authorized_keys` and has `docker` + `git` access to the app path.
+
+> **Shared host note:** If `alumni-app` or `school-erp-admin` already bind ports 80/443, coordinate with your panel (`domains/`, `public_html/`) or map staging Nginx to alternate host ports in `.env` (`HTTP_PORT`, `HTTPS_PORT`) and reverse-proxy from the main web server.
 
 ## Continuous deployment flow
 
@@ -125,7 +145,7 @@ GitHub → Actions → **Deploy Staging** → Run workflow.
 Or on the server:
 
 ```bash
-cd /opt/school-erp
+cd /home/raipu622/apps/school-erp
 ./scripts/staging-deploy.sh latest
 ```
 

@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-APP_PATH="/opt/school-erp"
+APP_PATH="/home/raipu622/apps/school-erp"
 
 # Phase 1 — one-time VPS prep (as root)
 # sudo bash scripts/staging-server-prep.sh
