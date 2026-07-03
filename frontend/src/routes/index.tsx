@@ -146,6 +146,7 @@ export const router = createBrowserRouter([
     children: [
       { path: ROUTES.login, element: <LoginPage /> },
       { path: ROUTES.register, element: <RegisterPage /> },
+      { path: '/admin/login', element: <Navigate to={ROUTES.login} replace /> },
     ],
   },
   {

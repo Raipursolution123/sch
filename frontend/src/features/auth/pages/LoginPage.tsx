@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
+import { Input } from '@components/ui/Input';
 import { ROUTES } from '@constants/index';
 import { authService } from '@services/api';
 import { useAuthStore } from '@store/index';
@@ -23,10 +23,13 @@ export function LoginPage() {
     onError: () => setError('Invalid username or password'),
   });
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
-    loginMutation.mutate({ username, password });
+    const formData = new FormData(e.currentTarget);
+    const formUsername = formData.get('username') as string;
+    const formPassword = formData.get('password') as string;
+    loginMutation.mutate({ username: formUsername || username, password: formPassword || password });
   };
 
   return (
