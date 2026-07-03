@@ -109,4 +109,5 @@ jobs:
           port: ${{ secrets.STAGING_SSH_PORT || 22 }}
           script: |
             cd ${{ secrets.STAGING_APP_PATH }}
-            ./scripts/staging-healthcheck.sh
+            chmod +x scripts/staging-*.sh
+            bash scripts/staging-healthcheck.sh

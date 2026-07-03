@@ -27,6 +27,7 @@ echo "==> Deploying staging tag: ${IMAGE_TAG}"
 echo "==> Pulling latest compose config from git..."
 git fetch origin main
 git reset --hard "origin/main"
+chmod +x scripts/staging-*.sh
 
 echo "==> Pulling container images..."
 if ! docker compose -f "$COMPOSE_FILE" pull backend frontend celery_worker celery_beat 2>/dev/null; then
@@ -36,7 +37,7 @@ fi
 
 rollback() {
   echo "==> DEPLOY FAILED — rolling back..."
-  "$ROOT_DIR/scripts/staging-rollback.sh" || true
+  bash "$ROOT_DIR/scripts/staging-rollback.sh" || true
   exit 1
 }
 
@@ -51,7 +52,7 @@ docker compose -f "$COMPOSE_FILE" exec -T backend python manage.py migrate --noi
 }
 
 echo "==> Health check..."
-"$ROOT_DIR/scripts/staging-healthcheck.sh"
+bash "$ROOT_DIR/scripts/staging-healthcheck.sh"
 
 echo "$IMAGE_TAG" > "$DEPLOY_DIR/last-good"
 trap - ERR
