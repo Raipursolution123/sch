@@ -146,7 +146,7 @@ class LoginView(APIView):
                 },
                 message="Login successful",
             )
-        except Exception as e:
+        except Exception:
             import traceback
 
             traceback.print_exc()
