@@ -27,7 +27,7 @@ const columns: DataTableColumn<Language>[] = [
     id: 'locale',
     header: 'Locale',
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">{localeLabel(row)}</code>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{localeLabel(row)}</code>
     ),
   },
   {

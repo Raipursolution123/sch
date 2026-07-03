@@ -77,7 +77,12 @@ export function StaffProfilePage() {
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to Staff
         </Link>
-        <Button variant="outline" className="gap-1" onClick={() => setEditOpen(true)} disabled={!canEdit}>
+        <Button
+          variant="outline"
+          className="gap-1"
+          onClick={() => setEditOpen(true)}
+          disabled={!canEdit}
+        >
           <Pencil className="h-4 w-4" aria-hidden="true" />
           Edit
         </Button>

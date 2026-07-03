@@ -68,6 +68,7 @@ class User(models.Model):
     @property
     def is_superadmin(self):
         from django.db.models import Q
+
         from apps.accounts.models.role import Role, StaffRole
 
         if self.role == "staff":
@@ -78,8 +79,7 @@ class User(models.Model):
             ).exists()
 
         return Role.objects.filter(
-            Q(slug=self.role) | Q(name=self.role),
-            is_superadmin=1
+            Q(slug=self.role) | Q(name=self.role), is_superadmin=1
         ).exists()
 
     @property

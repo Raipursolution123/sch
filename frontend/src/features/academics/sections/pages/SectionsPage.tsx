@@ -45,10 +45,7 @@ export function SectionsPage() {
   const handleFormSubmit = (values: SectionFormValues) => {
     const payload = toPayload(values);
     if (dialogMode === 'edit' && selectedSection) {
-      updateMutation.mutate(
-        { id: selectedSection.id, payload },
-        { onSuccess: closeFormDialog },
-      );
+      updateMutation.mutate({ id: selectedSection.id, payload }, { onSuccess: closeFormDialog });
       return;
     }
     createMutation.mutate(payload, { onSuccess: closeFormDialog });

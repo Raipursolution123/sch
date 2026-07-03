@@ -8,7 +8,9 @@ class CoreConfig(AppConfig):
     name = "core"
 
     def ready(self):
-        if any(arg in sys.argv for arg in ("migrate", "makemigrations", "test", "shell")):
+        if any(
+            arg in sys.argv for arg in ("migrate", "makemigrations", "test", "shell")
+        ):
             return
         if "runserver" not in sys.argv and "gunicorn" not in " ".join(sys.argv):
             return

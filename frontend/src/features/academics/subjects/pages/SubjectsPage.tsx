@@ -50,10 +50,7 @@ export function SubjectsPage() {
   const handleFormSubmit = (values: SubjectFormValues) => {
     const payload = toPayload(values);
     if (dialogMode === 'edit' && selectedSubject) {
-      updateMutation.mutate(
-        { id: selectedSubject.id, payload },
-        { onSuccess: closeFormDialog },
-      );
+      updateMutation.mutate({ id: selectedSubject.id, payload }, { onSuccess: closeFormDialog });
       return;
     }
     createMutation.mutate(payload, { onSuccess: closeFormDialog });

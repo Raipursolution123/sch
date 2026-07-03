@@ -20,10 +20,38 @@ interface ClassSectionRecord {
 
 // TODO: Remove mock store when GET /api/v1/academics/class-sections/ is available
 let mockClassSections: ClassSectionRecord[] = [
-  { id: 1, class_id: 4, section_id: 1, is_active: 'yes', created_at: '2024-01-01T00:00:00Z', updated_at: null },
-  { id: 2, class_id: 4, section_id: 2, is_active: 'yes', created_at: '2024-01-01T00:00:00Z', updated_at: null },
-  { id: 3, class_id: 5, section_id: 1, is_active: 'yes', created_at: '2024-01-01T00:00:00Z', updated_at: null },
-  { id: 4, class_id: 5, section_id: 2, is_active: 'no', created_at: '2024-01-01T00:00:00Z', updated_at: null },
+  {
+    id: 1,
+    class_id: 4,
+    section_id: 1,
+    is_active: 'yes',
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: null,
+  },
+  {
+    id: 2,
+    class_id: 4,
+    section_id: 2,
+    is_active: 'yes',
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: null,
+  },
+  {
+    id: 3,
+    class_id: 5,
+    section_id: 1,
+    is_active: 'yes',
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: null,
+  },
+  {
+    id: 4,
+    class_id: 5,
+    section_id: 2,
+    is_active: 'no',
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: null,
+  },
 ];
 let nextMockId = 5;
 
@@ -78,7 +106,8 @@ export const classSectionsService = {
       return delay(
         enriched.sort(
           (a, b) =>
-            a.class_name.localeCompare(b.class_name) || a.section_name.localeCompare(b.section_name),
+            a.class_name.localeCompare(b.class_name) ||
+            a.section_name.localeCompare(b.section_name),
         ),
       );
     }

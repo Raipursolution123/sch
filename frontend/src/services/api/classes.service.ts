@@ -82,7 +82,9 @@ function delay<T>(value: T, ms = 300): Promise<T> {
 }
 
 function mockList(): SchoolClass[] {
-  return [...mockClasses].sort((a, b) => a.sort_order - b.sort_order || a.class_name.localeCompare(b.class_name));
+  return [...mockClasses].sort(
+    (a, b) => a.sort_order - b.sort_order || a.class_name.localeCompare(b.class_name),
+  );
 }
 
 function nextSortOrder(): number {

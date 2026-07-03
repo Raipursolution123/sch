@@ -16,7 +16,7 @@ const columns: DataTableColumn<FeeType>[] = [
     id: 'code',
     header: 'Code',
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">{row.code}</code>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.code}</code>
     ),
   },
   {

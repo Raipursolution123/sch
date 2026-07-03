@@ -32,8 +32,8 @@ export function StudentAcademicTab({ student }: StudentAcademicTabProps) {
     <div className="space-y-6">
       <p className="text-sm text-muted-foreground">
         Current enrollment for{' '}
-        <span className="font-medium text-foreground">{activeSession?.session ?? '—'}</span>.
-        Class history and promotions will appear here when the academics module is extended.
+        <span className="font-medium text-foreground">{activeSession?.session ?? '—'}</span>. Class
+        history and promotions will appear here when the academics module is extended.
       </p>
 
       <SettingsCard title="Current enrollment">
@@ -53,12 +53,18 @@ export function StudentAcademicTab({ student }: StudentAcademicTabProps) {
       <SettingsCard title="Quick links">
         <ul className="space-y-2 text-sm">
           <li>
-            <Link to={ROUTES.academics.classes} className="font-medium text-primary hover:underline">
+            <Link
+              to={ROUTES.academics.classes}
+              className="font-medium text-primary hover:underline"
+            >
               Manage classes
             </Link>
           </li>
           <li>
-            <Link to={ROUTES.academics.sections} className="font-medium text-primary hover:underline">
+            <Link
+              to={ROUTES.academics.sections}
+              className="font-medium text-primary hover:underline"
+            >
               Manage sections
             </Link>
           </li>

@@ -34,9 +34,7 @@ const columns: DataTableColumn<AttendanceReportRow>[] = [
   {
     id: 'status',
     header: 'Status',
-    cell: (row) => (
-      <AttendanceStatusBadge label={row.status_label} statusKey={row.status_key} />
-    ),
+    cell: (row) => <AttendanceStatusBadge label={row.status_label} statusKey={row.status_key} />,
   },
   {
     id: 'remark',
@@ -47,7 +45,5 @@ const columns: DataTableColumn<AttendanceReportRow>[] = [
 ];
 
 export function AttendanceReportTable({ rows }: AttendanceReportTableProps) {
-  return (
-    <DataTable data={rows} columns={columns} getRowKey={(row) => row.id} />
-  );
+  return <DataTable data={rows} columns={columns} getRowKey={(row) => row.id} />;
 }

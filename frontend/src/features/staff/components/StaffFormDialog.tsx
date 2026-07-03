@@ -42,9 +42,7 @@ function toSelectOptions<T extends { id: number; name: string }>(
 }
 
 function SectionHeading({ children }: { children: string }) {
-  return (
-    <h3 className="border-b pb-2 text-sm font-semibold text-foreground">{children}</h3>
-  );
+  return <h3 className="border-b pb-2 text-sm font-semibold text-foreground">{children}</h3>;
 }
 
 const defaultValues: StaffFormValues = {
@@ -243,7 +241,12 @@ export function StaffFormDialog({
                 <FormField label="First name" htmlFor="name" error={errors.name?.message} required>
                   <Input id="name" {...register('name')} />
                 </FormField>
-                <FormField label="Last name" htmlFor="surname" error={errors.surname?.message} required>
+                <FormField
+                  label="Last name"
+                  htmlFor="surname"
+                  error={errors.surname?.message}
+                  required
+                >
                   <Input id="surname" {...register('surname')} />
                 </FormField>
               </div>
@@ -339,10 +342,18 @@ export function StaffFormDialog({
                 </FormField>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <FormField label="Father's name" htmlFor="father_name" error={errors.father_name?.message}>
+                <FormField
+                  label="Father's name"
+                  htmlFor="father_name"
+                  error={errors.father_name?.message}
+                >
                   <Input id="father_name" {...register('father_name')} />
                 </FormField>
-                <FormField label="Mother's name" htmlFor="mother_name" error={errors.mother_name?.message}>
+                <FormField
+                  label="Mother's name"
+                  htmlFor="mother_name"
+                  error={errors.mother_name?.message}
+                >
                   <Input id="mother_name" {...register('mother_name')} />
                 </FormField>
               </div>

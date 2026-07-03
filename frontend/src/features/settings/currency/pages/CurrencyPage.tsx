@@ -50,10 +50,7 @@ export function CurrencyPage() {
   const handleFormSubmit = (values: CurrencyFormValues) => {
     const payload = toPayload(values);
     if (dialogMode === 'edit' && selectedCurrency) {
-      updateMutation.mutate(
-        { id: selectedCurrency.id, payload },
-        { onSuccess: closeFormDialog },
-      );
+      updateMutation.mutate({ id: selectedCurrency.id, payload }, { onSuccess: closeFormDialog });
       return;
     }
     createMutation.mutate(payload, { onSuccess: closeFormDialog });

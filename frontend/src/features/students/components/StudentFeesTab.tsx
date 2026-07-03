@@ -128,14 +128,10 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-sm text-muted-foreground">
-            {fees.session_name} ·{' '}
-            {formatClassSection(fees.class_name, fees.section_name)}
+            {fees.session_name} · {formatClassSection(fees.class_name, fees.section_name)}
           </p>
         </div>
-        <Link
-          to={ROUTES.fees.assign}
-          className="text-sm font-medium text-primary hover:underline"
-        >
+        <Link to={ROUTES.fees.assign} className="text-sm font-medium text-primary hover:underline">
           Manage fee assignments
         </Link>
       </div>
@@ -156,11 +152,7 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
             to get started.
           </p>
         ) : (
-          <DataTable
-            data={fees.lines}
-            columns={lineColumns}
-            getRowKey={(line) => line.id}
-          />
+          <DataTable data={fees.lines} columns={lineColumns} getRowKey={(line) => line.id} />
         )}
       </SettingsCard>
 

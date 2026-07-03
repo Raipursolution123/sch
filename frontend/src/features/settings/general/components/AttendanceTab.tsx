@@ -60,7 +60,12 @@ export function AttendanceTab({ settings, onSave, isSaving }: AttendanceTabProps
             error={errors.attendence_type?.message}
             hint="Maps to legacy attendance type configuration."
           >
-            <Input id="attendence_type" type="number" min={0} {...register('attendence_type', { valueAsNumber: true })} />
+            <Input
+              id="attendence_type"
+              type="number"
+              min={0}
+              {...register('attendence_type', { valueAsNumber: true })}
+            />
           </FormField>
           <FormField
             label="Low attendance limit (%)"

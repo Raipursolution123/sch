@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
@@ -24,6 +25,7 @@ class RegisterView(APIView):
 
     def post(self, request):
         from apps.accounts.serializers import RegisterSerializer
+
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -32,10 +34,11 @@ class RegisterView(APIView):
         first_name = serializer.validated_data["first_name"]
         last_name = serializer.validated_data.get("last_name", "")
 
-        from apps.staff.models import Staff
-        from apps.accounts.services.staff_auth import ensure_staff_user_bridge
-        from core.provisioning.school_setup import hash_staff_password
         from django.utils import timezone
+
+        from apps.accounts.services.staff_auth import ensure_staff_user_bridge
+        from apps.staff.models import Staff
+        from core.provisioning.school_setup import hash_staff_password
 
         if Staff.objects.filter(email=email).exists():
             return APIResponse.error(
@@ -125,7 +128,7 @@ class LoginView(APIView):
                     message="Invalid credentials",
                     status_code=status.HTTP_401_UNAUTHORIZED,
                 )
-            
+
             if not user.is_active_user:
                 return APIResponse.error(
                     message="Account is inactive",
@@ -145,6 +148,7 @@ class LoginView(APIView):
             )
         except Exception as e:
             import traceback
+
             traceback.print_exc()
             raise
 

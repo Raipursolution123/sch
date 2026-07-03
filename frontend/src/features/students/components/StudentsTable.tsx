@@ -16,7 +16,7 @@ const columns: DataTableColumn<StudentListItem>[] = [
     id: 'admission_no',
     header: 'Admission No.',
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">{row.admission_no}</code>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.admission_no}</code>
     ),
   },
   {

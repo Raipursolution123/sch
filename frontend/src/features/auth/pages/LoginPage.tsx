@@ -29,7 +29,10 @@ export function LoginPage() {
     const formData = new FormData(e.currentTarget);
     const formUsername = formData.get('username') as string;
     const formPassword = formData.get('password') as string;
-    loginMutation.mutate({ username: formUsername || username, password: formPassword || password });
+    loginMutation.mutate({
+      username: formUsername || username,
+      password: formPassword || password,
+    });
   };
 
   return (

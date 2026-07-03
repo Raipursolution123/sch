@@ -23,7 +23,7 @@ const columns: DataTableColumn<Currency>[] = [
     id: 'short_name',
     header: 'Code',
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">{row.short_name}</code>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.short_name}</code>
     ),
   },
   {

@@ -87,7 +87,9 @@ export function FeeAssignPage() {
             onClick={() => setDialogMode('create')}
             className="gap-1"
             disabled={!canAssign}
-            title={canAssign ? undefined : 'Configure classes, fee types, groups, and sessions first'}
+            title={
+              canAssign ? undefined : 'Configure classes, fee types, groups, and sessions first'
+            }
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
             Assign Fees

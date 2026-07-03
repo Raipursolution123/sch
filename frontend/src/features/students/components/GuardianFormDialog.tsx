@@ -66,10 +66,18 @@ export function GuardianFormDialog({
           </DialogHeader>
 
           <div className="space-y-4 py-4">
-            <FormField label="Father's name" htmlFor="father_name" error={errors.father_name?.message}>
+            <FormField
+              label="Father's name"
+              htmlFor="father_name"
+              error={errors.father_name?.message}
+            >
               <Input id="father_name" {...register('father_name')} />
             </FormField>
-            <FormField label="Mother's name" htmlFor="mother_name" error={errors.mother_name?.message}>
+            <FormField
+              label="Mother's name"
+              htmlFor="mother_name"
+              error={errors.mother_name?.message}
+            >
               <Input id="mother_name" {...register('mother_name')} />
             </FormField>
             <FormField
@@ -84,7 +92,12 @@ export function GuardianFormDialog({
               htmlFor="guardian_phone"
               error={errors.guardian_phone?.message}
             >
-              <Input id="guardian_phone" type="tel" autoComplete="tel" {...register('guardian_phone')} />
+              <Input
+                id="guardian_phone"
+                type="tel"
+                autoComplete="tel"
+                {...register('guardian_phone')}
+              />
             </FormField>
           </div>
 

@@ -69,11 +69,7 @@ export function ClassSectionsPage() {
         title="Class Sections"
         description="Link classes with sections to define teachable groups (e.g. Class 1 — Section A)."
         actions={
-          <Button
-            onClick={() => setDialogMode('create')}
-            className="gap-1"
-            disabled={!canCreate}
-          >
+          <Button onClick={() => setDialogMode('create')} className="gap-1" disabled={!canCreate}>
             <Plus className="h-4 w-4" aria-hidden="true" />
             Add Class Section
           </Button>

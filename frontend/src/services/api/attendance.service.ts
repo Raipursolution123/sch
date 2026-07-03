@@ -102,8 +102,7 @@ export const attendanceService = {
 
       const rosterStudents = students
         .filter(
-          (s) =>
-            s.is_active === 'yes' && s.class_id === classId && s.section_id === sectionId,
+          (s) => s.is_active === 'yes' && s.class_id === classId && s.section_id === sectionId,
         )
         .sort((a, b) => (a.roll_no ?? 999) - (b.roll_no ?? 999));
 

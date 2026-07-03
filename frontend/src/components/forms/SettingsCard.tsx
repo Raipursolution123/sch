@@ -9,7 +9,13 @@ interface SettingsCardProps {
   className?: string;
 }
 
-export function SettingsCard({ title, description, children, footer, className }: SettingsCardProps) {
+export function SettingsCard({
+  title,
+  description,
+  children,
+  footer,
+  className,
+}: SettingsCardProps) {
   return (
     <section
       className={cn('rounded-lg border bg-card shadow-sm', className)}

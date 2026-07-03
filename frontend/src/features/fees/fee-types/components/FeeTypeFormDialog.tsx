@@ -127,7 +127,11 @@ export function FeeTypeFormDialog({
                 )}
               />
             </FormField>
-            <FormField label="Description" htmlFor="description" error={errors.description?.message}>
+            <FormField
+              label="Description"
+              htmlFor="description"
+              error={errors.description?.message}
+            >
               <Textarea id="description" rows={2} {...register('description')} />
             </FormField>
             <FormField label="Active">
@@ -135,7 +139,9 @@ export function FeeTypeFormDialog({
                 <Switch
                   id="is_active"
                   checked={isActive}
-                  onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                  onCheckedChange={(checked) =>
+                    setValue('is_active', checked, { shouldDirty: true })
+                  }
                 />
                 <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
               </div>

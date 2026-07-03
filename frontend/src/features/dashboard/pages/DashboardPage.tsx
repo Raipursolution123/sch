@@ -1,11 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-  ArrowRight,
-  Briefcase,
-  CalendarCheck,
-  IndianRupee,
-  Users,
-} from 'lucide-react';
+import { ArrowRight, Briefcase, CalendarCheck, IndianRupee, Users } from 'lucide-react';
 import { buttonVariants } from '@components/ui/button';
 import {
   ActivityFeed,
@@ -29,8 +23,7 @@ import { cn } from '@utils/cn';
 
 function getGreeting(name: string): string {
   const hour = new Date().getHours();
-  const timeGreeting =
-    hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
   return `${timeGreeting}, ${name}`;
 }
 

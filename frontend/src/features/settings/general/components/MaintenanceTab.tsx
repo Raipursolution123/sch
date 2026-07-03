@@ -84,7 +84,12 @@ export function MaintenanceTab({ settings, onSave, isSaving }: MaintenanceTabPro
             error={errors.lock_grace_period?.message}
             hint="Days before locked features become unavailable after expiry."
           >
-            <Input id="lock_grace_period" type="number" min={0} {...register('lock_grace_period', { valueAsNumber: true })} />
+            <Input
+              id="lock_grace_period"
+              type="number"
+              min={0}
+              {...register('lock_grace_period', { valueAsNumber: true })}
+            />
           </FormField>
           <FormField label="Student panel login">
             <Controller

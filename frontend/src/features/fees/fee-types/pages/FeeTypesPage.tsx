@@ -65,7 +65,11 @@ export function FeeTypesPage() {
         title="Fee Types"
         description="Define fee types and categories used when building fee packages."
         actions={
-          <Button onClick={() => setDialogMode('create')} className="gap-1" disabled={categories.length === 0}>
+          <Button
+            onClick={() => setDialogMode('create')}
+            className="gap-1"
+            disabled={categories.length === 0}
+          >
             <Plus className="h-4 w-4" aria-hidden="true" />
             Add Fee Type
           </Button>
@@ -124,9 +128,7 @@ export function FeeTypesPage() {
           if (!open) setDeleteTarget(null);
         }}
         title="Delete fee type"
-        description={
-          deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''
-        }
+        description={deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''}
         confirmLabel="Delete"
         destructive
         isLoading={deleteMutation.isPending}

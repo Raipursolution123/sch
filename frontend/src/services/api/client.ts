@@ -73,10 +73,9 @@ apiClient.interceptors.response.use(
       }
 
       try {
-        const { data } = await axios.post(
-          `${env.apiBaseUrl}${API_ENDPOINTS.auth.tokenRefresh}`,
-          { refresh: refreshToken },
-        );
+        const { data } = await axios.post(`${env.apiBaseUrl}${API_ENDPOINTS.auth.tokenRefresh}`, {
+          refresh: refreshToken,
+        });
         const newAccessToken = data.access as string;
         localStorage.setItem(STORAGE_KEYS.accessToken, newAccessToken);
         processQueue(null, newAccessToken);

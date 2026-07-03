@@ -22,7 +22,7 @@ const columns: DataTableColumn<ClassSection>[] = [
     id: 'section_name',
     header: 'Section',
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{row.section_name}</code>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">{row.section_name}</code>
     ),
   },
   {
@@ -47,11 +47,7 @@ const columns: DataTableColumn<ClassSection>[] = [
   },
 ];
 
-export function ClassSectionsTable({
-  classSections,
-  onEdit,
-  onDelete,
-}: ClassSectionsTableProps) {
+export function ClassSectionsTable({ classSections, onEdit, onDelete }: ClassSectionsTableProps) {
   return (
     <DataTable
       data={classSections}

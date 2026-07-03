@@ -48,10 +48,7 @@ export function LanguagesPage() {
   const handleFormSubmit = (values: LanguageFormValues) => {
     const payload = toPayload(values);
     if (dialogMode === 'edit' && selectedLanguage) {
-      updateMutation.mutate(
-        { id: selectedLanguage.id, payload },
-        { onSuccess: closeFormDialog },
-      );
+      updateMutation.mutate({ id: selectedLanguage.id, payload }, { onSuccess: closeFormDialog });
       return;
     }
     createMutation.mutate(payload, { onSuccess: closeFormDialog });

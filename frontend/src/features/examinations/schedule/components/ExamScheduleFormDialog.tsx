@@ -74,7 +74,8 @@ export function ExamScheduleFormDialog({
     [exams],
   );
   const activeSubjects = useMemo(
-    () => subjects.filter((s) => s.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
+    () =>
+      subjects.filter((s) => s.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
     [subjects],
   );
 
@@ -88,13 +89,10 @@ export function ExamScheduleFormDialog({
     [sessions],
   );
 
-  const defaultSessionId =
-    sessions.find((s) => s.is_active === 'yes')?.id ?? sessions[0]?.id ?? 0;
+  const defaultSessionId = sessions.find((s) => s.is_active === 'yes')?.id ?? sessions[0]?.id ?? 0;
 
   const hasOptions =
-    examOptions.length > 0 &&
-    subjectOptions.length > 0 &&
-    sessionOptions.length > 0;
+    examOptions.length > 0 && subjectOptions.length > 0 && sessionOptions.length > 0;
 
   const {
     control,
@@ -245,18 +243,18 @@ export function ExamScheduleFormDialog({
                 />
               </FormField>
               <FormField label="End time" htmlFor="end_time" error={errors.end_time?.message}>
-                <Input
-                  id="end_time"
-                  type="time"
-                  {...register('end_time')}
-                  disabled={!hasOptions}
-                />
+                <Input id="end_time" type="time" {...register('end_time')} disabled={!hasOptions} />
               </FormField>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
               <FormField label="Room no." htmlFor="room_no" error={errors.room_no?.message}>
-                <Input id="room_no" placeholder="101" {...register('room_no')} disabled={!hasOptions} />
+                <Input
+                  id="room_no"
+                  placeholder="101"
+                  {...register('room_no')}
+                  disabled={!hasOptions}
+                />
               </FormField>
               <FormField label="Full marks" htmlFor="full_marks" error={errors.full_marks?.message}>
                 <Input
@@ -293,7 +291,9 @@ export function ExamScheduleFormDialog({
                 <Switch
                   id="is_active"
                   checked={isActive}
-                  onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                  onCheckedChange={(checked) =>
+                    setValue('is_active', checked, { shouldDirty: true })
+                  }
                   disabled={!hasOptions}
                 />
                 <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>

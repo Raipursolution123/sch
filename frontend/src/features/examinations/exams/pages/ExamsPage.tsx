@@ -9,12 +9,7 @@ import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { ExamFormDialog } from '@features/examinations/exams/components/ExamFormDialog';
 import { ExamsTable } from '@features/examinations/exams/components/ExamsTable';
 import type { ExamFormValues } from '@features/examinations/exams/schemas/exam.schema';
-import {
-  useCreateExam,
-  useDeleteExam,
-  useExams,
-  useUpdateExam,
-} from '@hooks/useExams';
+import { useCreateExam, useDeleteExam, useExams, useUpdateExam } from '@hooks/useExams';
 import { useExamGroups } from '@hooks/useExamGroups';
 import { useSessions } from '@hooks/useSessions';
 import type { Exam } from '@app-types/examinations/exam';

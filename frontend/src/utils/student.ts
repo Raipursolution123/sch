@@ -8,10 +8,7 @@ export function formatStudentName(
   return [firstname, middlename, lastname].filter(Boolean).join(' ').trim();
 }
 
-export function formatClassSection(
-  className: string | null,
-  sectionName: string | null,
-): string {
+export function formatClassSection(className: string | null, sectionName: string | null): string {
   if (!className && !sectionName) return '—';
   if (!sectionName) return className ?? '—';
   if (!className) return sectionName;

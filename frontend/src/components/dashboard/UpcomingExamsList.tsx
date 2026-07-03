@@ -21,9 +21,7 @@ export function UpcomingExamsList({ items, className }: UpcomingExamsListProps) 
             <span className="text-xs font-semibold uppercase">
               {new Date(exam.date).toLocaleDateString(undefined, { month: 'short' })}
             </span>
-            <span className="text-lg font-bold leading-none">
-              {new Date(exam.date).getDate()}
-            </span>
+            <span className="text-lg font-bold leading-none">{new Date(exam.date).getDate()}</span>
           </div>
 
           <div className="min-w-0 flex-1">

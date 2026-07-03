@@ -48,10 +48,13 @@ export function AttendanceReportPage() {
     [fromDate, toDate, classId, sectionId],
   );
 
-  const { data: report, isLoading, isError, error, refetch } = useAttendanceReport(
-    filters,
-    submitted,
-  );
+  const {
+    data: report,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useAttendanceReport(filters, submitted);
 
   const classOptions = [
     { value: '', label: 'All classes' },

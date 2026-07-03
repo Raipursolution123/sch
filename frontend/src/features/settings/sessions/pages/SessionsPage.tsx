@@ -134,9 +134,7 @@ export function SessionsPage() {
         }}
         title="Delete academic session?"
         description={
-          deleteTarget
-            ? `Permanently delete "${deleteTarget.session}"? This cannot be undone.`
-            : ''
+          deleteTarget ? `Permanently delete "${deleteTarget.session}"? This cannot be undone.` : ''
         }
         confirmLabel="Delete"
         destructive

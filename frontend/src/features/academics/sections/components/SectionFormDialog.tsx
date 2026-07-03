@@ -97,12 +97,17 @@ export function SectionFormDialog({
               />
             </FormField>
 
-            <FormField label="Active" hint="Inactive sections are hidden from class-section assignment.">
+            <FormField
+              label="Active"
+              hint="Inactive sections are hidden from class-section assignment."
+            >
               <div className="flex items-center gap-2 pt-1">
                 <Switch
                   id="is_active"
                   checked={isActive}
-                  onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                  onCheckedChange={(checked) =>
+                    setValue('is_active', checked, { shouldDirty: true })
+                  }
                 />
                 <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
               </div>

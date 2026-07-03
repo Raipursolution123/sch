@@ -240,10 +240,11 @@ export const studentsService = {
     if (USE_MOCK) {
       const enriched = await enrichList([...mockStudents]);
       return delay(
-        enriched.sort((a, b) =>
-          (a.class_name ?? '').localeCompare(b.class_name ?? '') ||
-          (a.roll_no ?? 999) - (b.roll_no ?? 999) ||
-          a.full_name.localeCompare(b.full_name),
+        enriched.sort(
+          (a, b) =>
+            (a.class_name ?? '').localeCompare(b.class_name ?? '') ||
+            (a.roll_no ?? 999) - (b.roll_no ?? 999) ||
+            a.full_name.localeCompare(b.full_name),
         ),
       );
     }
@@ -346,11 +347,7 @@ export const studentsService = {
       if (index === -1) throw new Error('Student not found');
 
       const admissionNo = payload.admission_no.trim().toUpperCase();
-      if (
-        mockStudents.some(
-          (s) => s.id !== id && s.admission_no.toUpperCase() === admissionNo,
-        )
-      ) {
+      if (mockStudents.some((s) => s.id !== id && s.admission_no.toUpperCase() === admissionNo)) {
         throw new Error('A student with this admission number already exists');
       }
 

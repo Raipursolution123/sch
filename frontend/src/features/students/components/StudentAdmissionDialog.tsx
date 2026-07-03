@@ -53,9 +53,7 @@ function toSelectOptions<T extends { id: number }>(
 }
 
 function SectionHeading({ children }: { children: string }) {
-  return (
-    <h3 className="text-sm font-semibold text-foreground border-b pb-2">{children}</h3>
-  );
+  return <h3 className="border-b pb-2 text-sm font-semibold text-foreground">{children}</h3>;
 }
 
 export function StudentAdmissionDialog({
@@ -207,13 +205,27 @@ export function StudentAdmissionDialog({
             <section className="space-y-4">
               <SectionHeading>Personal details</SectionHeading>
               <div className="grid gap-4 sm:grid-cols-3">
-                <FormField label="First name" htmlFor="firstname" error={errors.firstname?.message} required>
+                <FormField
+                  label="First name"
+                  htmlFor="firstname"
+                  error={errors.firstname?.message}
+                  required
+                >
                   <Input id="firstname" {...register('firstname')} />
                 </FormField>
-                <FormField label="Middle name" htmlFor="middlename" error={errors.middlename?.message}>
+                <FormField
+                  label="Middle name"
+                  htmlFor="middlename"
+                  error={errors.middlename?.message}
+                >
                   <Input id="middlename" {...register('middlename')} />
                 </FormField>
-                <FormField label="Last name" htmlFor="lastname" error={errors.lastname?.message} required>
+                <FormField
+                  label="Last name"
+                  htmlFor="lastname"
+                  error={errors.lastname?.message}
+                  required
+                >
                   <Input id="lastname" {...register('lastname')} />
                 </FormField>
               </div>
@@ -247,7 +259,12 @@ export function StudentAdmissionDialog({
             <section className="space-y-4">
               <SectionHeading>Academic assignment</SectionHeading>
               <div className="grid gap-4 sm:grid-cols-3">
-                <FormField label="Class" htmlFor="class_id" error={errors.class_id?.message} required>
+                <FormField
+                  label="Class"
+                  htmlFor="class_id"
+                  error={errors.class_id?.message}
+                  required
+                >
                   <Controller
                     name="class_id"
                     control={control}
@@ -263,7 +280,12 @@ export function StudentAdmissionDialog({
                     )}
                   />
                 </FormField>
-                <FormField label="Section" htmlFor="section_id" error={errors.section_id?.message} required>
+                <FormField
+                  label="Section"
+                  htmlFor="section_id"
+                  error={errors.section_id?.message}
+                  required
+                >
                   <Controller
                     name="section_id"
                     control={control}
@@ -288,10 +310,18 @@ export function StudentAdmissionDialog({
             <section className="space-y-4">
               <SectionHeading>Guardian</SectionHeading>
               <div className="grid gap-4 sm:grid-cols-2">
-                <FormField label="Father's name" htmlFor="father_name" error={errors.father_name?.message}>
+                <FormField
+                  label="Father's name"
+                  htmlFor="father_name"
+                  error={errors.father_name?.message}
+                >
                   <Input id="father_name" {...register('father_name')} />
                 </FormField>
-                <FormField label="Mother's name" htmlFor="mother_name" error={errors.mother_name?.message}>
+                <FormField
+                  label="Mother's name"
+                  htmlFor="mother_name"
+                  error={errors.mother_name?.message}
+                >
                   <Input id="mother_name" {...register('mother_name')} />
                 </FormField>
                 <FormField
@@ -307,7 +337,11 @@ export function StudentAdmissionDialog({
             <section className="space-y-4">
               <SectionHeading>Additional</SectionHeading>
               <div className="grid gap-4 sm:grid-cols-3">
-                <FormField label="Blood group" htmlFor="blood_group" error={errors.blood_group?.message}>
+                <FormField
+                  label="Blood group"
+                  htmlFor="blood_group"
+                  error={errors.blood_group?.message}
+                >
                   <Controller
                     name="blood_group"
                     control={control}
@@ -325,7 +359,11 @@ export function StudentAdmissionDialog({
                     )}
                   />
                 </FormField>
-                <FormField label="Category" htmlFor="category_id" error={errors.category_id?.message}>
+                <FormField
+                  label="Category"
+                  htmlFor="category_id"
+                  error={errors.category_id?.message}
+                >
                   <Controller
                     name="category_id"
                     control={control}
@@ -357,7 +395,11 @@ export function StudentAdmissionDialog({
               <FormField label="Religion" htmlFor="religion" error={errors.religion?.message}>
                 <Input id="religion" {...register('religion')} />
               </FormField>
-              <FormField label="Current address" htmlFor="current_address" error={errors.current_address?.message}>
+              <FormField
+                label="Current address"
+                htmlFor="current_address"
+                error={errors.current_address?.message}
+              >
                 <Textarea id="current_address" rows={2} {...register('current_address')} />
               </FormField>
               <FormField label="Active enrollment">
@@ -365,7 +407,9 @@ export function StudentAdmissionDialog({
                   <Switch
                     id="is_active"
                     checked={isActive}
-                    onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                    onCheckedChange={(checked) =>
+                      setValue('is_active', checked, { shouldDirty: true })
+                    }
                   />
                   <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
                 </div>

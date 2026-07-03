@@ -23,7 +23,10 @@ class UsernameBackend(ModelBackend):
         if role not in (None, "", "staff"):
             qs = User.objects.filter(username=username, role=role)
             for user in qs:
-                if verify_legacy_password(password, user.password) and user.is_active_user:
+                if (
+                    verify_legacy_password(password, user.password)
+                    and user.is_active_user
+                ):
                     return user
             return None
 

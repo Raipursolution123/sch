@@ -17,7 +17,7 @@ const columns: DataTableColumn<Section>[] = [
     header: 'Section',
     cellClassName: 'font-medium',
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{row.section_name}</code>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">{row.section_name}</code>
     ),
   },
   {

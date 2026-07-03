@@ -10,11 +10,7 @@ import { StudentsTable } from '@features/students/components/StudentsTable';
 import { StudentAdmissionDialog } from '@features/students/components/StudentAdmissionDialog';
 import type { StudentAdmissionFormValues } from '@features/students/schemas/student-admission.schema';
 import { toStudentPayload } from '@features/students/utils/student-payload';
-import {
-  useCreateStudent,
-  useStudents,
-  useSuggestedAdmissionNo,
-} from '@hooks/useStudents';
+import { useCreateStudent, useStudents, useSuggestedAdmissionNo } from '@hooks/useStudents';
 import { useClasses } from '@hooks/useClasses';
 import { useSections } from '@hooks/useSections';
 import { matchesSearch } from '@utils/search';

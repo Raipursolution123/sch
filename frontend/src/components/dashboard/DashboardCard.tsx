@@ -36,20 +36,11 @@ export function DashboardCard({
           <h2 id={headingId} className="text-base font-semibold tracking-tight text-foreground">
             {title}
           </h2>
-          {description && (
-            <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>
-          )}
+          {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
         </div>
         {action && <div className="shrink-0">{action}</div>}
       </div>
-      <div
-        className={cn(
-          padding === 'default' && 'p-5 sm:p-6',
-          contentClassName,
-        )}
-      >
-        {children}
-      </div>
+      <div className={cn(padding === 'default' && 'p-5 sm:p-6', contentClassName)}>{children}</div>
     </section>
   );
 }

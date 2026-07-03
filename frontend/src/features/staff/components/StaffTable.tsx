@@ -18,7 +18,7 @@ const columns: DataTableColumn<StaffListItem>[] = [
     id: 'employee_id',
     header: 'Employee ID',
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">{row.employee_id}</code>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.employee_id}</code>
     ),
   },
   {

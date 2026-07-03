@@ -89,7 +89,12 @@ export function LanguageFormDialog({
           </DialogHeader>
 
           <div className="space-y-4 py-4">
-            <FormField label="Language name" htmlFor="language" error={errors.language?.message} required>
+            <FormField
+              label="Language name"
+              htmlFor="language"
+              error={errors.language?.message}
+              required
+            >
               <Input
                 id="language"
                 placeholder="English"
@@ -99,7 +104,12 @@ export function LanguageFormDialog({
             </FormField>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <FormField label="Short code" htmlFor="short_code" error={errors.short_code?.message} required>
+              <FormField
+                label="Short code"
+                htmlFor="short_code"
+                error={errors.short_code?.message}
+                required
+              >
                 <Input
                   id="short_code"
                   placeholder="en"
@@ -122,7 +132,10 @@ export function LanguageFormDialog({
               </FormField>
             </div>
 
-            <FormField label="Right-to-left (RTL)" hint="Enable for languages such as Arabic or Hebrew.">
+            <FormField
+              label="Right-to-left (RTL)"
+              hint="Enable for languages such as Arabic or Hebrew."
+            >
               <div className="flex items-center gap-2 pt-1">
                 <Switch
                   id="is_rtl"
@@ -138,7 +151,9 @@ export function LanguageFormDialog({
                 <Switch
                   id="is_active"
                   checked={isActive}
-                  onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                  onCheckedChange={(checked) =>
+                    setValue('is_active', checked, { shouldDirty: true })
+                  }
                 />
                 <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
               </div>

@@ -65,10 +65,7 @@ export type FeesSettingsPayload = Pick<
 
 export type MaintenancePayload = Pick<
   GeneralSettings,
-  | 'maintenance_mode'
-  | 'lock_grace_period'
-  | 'student_panel_login'
-  | 'parent_panel_login'
+  'maintenance_mode' | 'lock_grace_period' | 'student_panel_login' | 'parent_panel_login'
 >;
 
 export type GeneralSettingsUpdatePayload =

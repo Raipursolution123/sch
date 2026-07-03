@@ -11,7 +11,9 @@ from core.provisioning.school_setup import (
 
 
 class Command(BaseCommand):
-    help = "Create school-specific records after schema.sql and basic_seed.sql are loaded."
+    help = (
+        "Create school-specific records after schema.sql and basic_seed.sql are loaded."
+    )
 
     def add_arguments(self, parser):
         parser.add_argument("--school-name", default="Demo Public School")
@@ -76,9 +78,13 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("School initialized successfully."))
         self.stdout.write(f"  School     : {result['school_name']}")
-        self.stdout.write(f"  Session    : {result['session_name']} (id={result['session_id']})")
+        self.stdout.write(
+            f"  Session    : {result['session_name']} (id={result['session_id']})"
+        )
         self.stdout.write(f"  Admin email: {result['admin_email']}")
         self.stdout.write(f"  Language id: {result['language_id']}")
         self.stdout.write(f"  Currency id: {result['currency_id']}")
         self.stdout.write("")
-        self.stdout.write("Super Admin login: staff email + password (API issues JWT via users bridge).")
+        self.stdout.write(
+            "Super Admin login: staff email + password (API issues JWT via users bridge)."
+        )

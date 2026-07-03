@@ -340,9 +340,7 @@ export const staffService = {
       if (index === -1) throw new Error('Staff member not found');
 
       const employeeId = payload.employee_id.trim().toUpperCase();
-      if (
-        mockStaff.some((s) => s.id !== id && s.employee_id.toUpperCase() === employeeId)
-      ) {
+      if (mockStaff.some((s) => s.id !== id && s.employee_id.toUpperCase() === employeeId)) {
         throw new Error('A staff member with this employee ID already exists');
       }
       if (!MOCK_DEPARTMENTS.some((d) => d.id === payload.department_id)) {
