@@ -10,6 +10,7 @@ env = environ.Env(
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, []),
     CORS_ALLOWED_ORIGINS=(list, []),
+    CSRF_TRUSTED_ORIGINS=(list, []),
 )
 
 env_file = BASE_DIR / ".env"
@@ -217,6 +218,9 @@ SIMPLE_JWT = {
 # CORS
 CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
 CORS_ALLOW_CREDENTIALS = True
+
+# CSRF (required for Django admin and HTTPS forms behind a reverse proxy)
+CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS")
 
 # Logging
 LOG_LEVEL = env("LOG_LEVEL", default="INFO")

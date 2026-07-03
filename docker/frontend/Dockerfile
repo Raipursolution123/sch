@@ -25,6 +25,11 @@ CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 # --- Build ---
 FROM deps AS build
 
+ARG VITE_API_BASE_URL=/api/v1
+ARG VITE_APP_NAME=School ERP
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+ENV VITE_APP_NAME=$VITE_APP_NAME
+
 COPY frontend/ .
 RUN npm run build
 

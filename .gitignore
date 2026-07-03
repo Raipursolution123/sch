@@ -10,6 +10,10 @@ __pycache__/
 .env
 .env.local
 .env.*.local
+.env.staging
+
+# Staging deploy state (server-only)
+.deploy/
 
 # Build outputs
 frontend/dist/
