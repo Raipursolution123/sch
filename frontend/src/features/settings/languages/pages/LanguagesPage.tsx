@@ -31,7 +31,10 @@ function toPayload(values: LanguageFormValues) {
 }
 
 export function LanguagesPage() {
-  const { data: languages, isLoading, isError, error, refetch } = useLanguages();
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError, error, refetch } = useLanguages(page);
+  const languages = data?.results;
+  const totalCount = data?.count || 0;
   const createMutation = useCreateLanguage();
   const updateMutation = useUpdateLanguage();
   const deleteMutation = useDeleteLanguage();
@@ -94,6 +97,9 @@ export function LanguagesPage() {
       {!isLoading && !isError && languages && languages.length > 0 && (
         <LanguagesTable
           languages={languages}
+          totalCount={totalCount}
+          page={page}
+          onPageChange={setPage}
           onEdit={(language) => {
             setSelectedLanguage(language);
             setDialogMode('edit');
