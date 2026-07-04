@@ -5,10 +5,10 @@ import { subjectsService } from '@services/api';
 import type { CreateSubjectPayload, UpdateSubjectPayload } from '@app-types/academics/subject';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useSubjects() {
+export function useSubjects(page: number = 1) {
   return useQuery({
-    queryKey: queryKeys.academics.subjects.list(),
-    queryFn: subjectsService.list,
+    queryKey: [...queryKeys.academics.subjects.list(), page],
+    queryFn: () => subjectsService.list(page),
   });
 }
 

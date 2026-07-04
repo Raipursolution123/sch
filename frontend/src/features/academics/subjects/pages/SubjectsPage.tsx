@@ -8,6 +8,7 @@ import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { SubjectFormDialog } from '@features/academics/subjects/components/SubjectFormDialog';
 import { SubjectsTable } from '@features/academics/subjects/components/SubjectsTable';
+import { Pagination } from '@components/ui/Pagination';
 import type { SubjectFormValues } from '@features/academics/subjects/schemas/subject.schema';
 import {
   useCreateSubject,
@@ -32,8 +33,14 @@ function toPayload(values: SubjectFormValues) {
 }
 
 export function SubjectsPage() {
-  const { data: subjects, isLoading, isError, error, refetch } = useSubjects();
-  const { data: classes = [] } = useClasses();
+  const [page, setPage] = useState(1);
+  const { data: subjectsData, isLoading, isError, error, refetch } = useSubjects(page);
+  const subjects = subjectsData?.results;
+  const count = subjectsData?.count || 0;
+  const totalPages = Math.ceil(count / 10); // StandardResultsSetPagination PAGE_SIZE is 10
+
+  const { data: classesData } = useClasses();
+  const classes = classesData?.results || [];
   const createMutation = useCreateSubject();
   const updateMutation = useUpdateSubject();
   const deleteMutation = useDeleteSubject();
@@ -94,14 +101,21 @@ export function SubjectsPage() {
       )}
 
       {!isLoading && !isError && subjects && subjects.length > 0 && (
-        <SubjectsTable
-          subjects={subjects}
-          onEdit={(subject) => {
-            setSelectedSubject(subject);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
+        <div className="space-y-4">
+          <SubjectsTable
+            subjects={subjects}
+            onEdit={(subject) => {
+              setSelectedSubject(subject);
+              setDialogMode('edit');
+            }}
+            onDelete={setDeleteTarget}
+          />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
       )}
 
       <SubjectFormDialog
