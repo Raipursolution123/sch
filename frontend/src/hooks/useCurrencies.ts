@@ -5,10 +5,10 @@ import { currenciesService } from '@services/api';
 import type { CreateCurrencyPayload, UpdateCurrencyPayload } from '@app-types/settings/currency';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useCurrencies() {
+export function useCurrencies(page: number = 1) {
   return useQuery({
-    queryKey: queryKeys.settings.currencies.list(),
-    queryFn: currenciesService.list,
+    queryKey: queryKeys.settings.currencies.list(page),
+    queryFn: () => currenciesService.list(page),
   });
 }
 
