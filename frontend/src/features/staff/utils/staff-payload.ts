@@ -22,17 +22,21 @@ export function staffToFormValues(staff: StaffDetail): StaffFormValues {
     qualification: staff.qualification,
     work_exp: staff.work_exp,
     date_of_joining: staff.date_of_joining ?? '',
+    date_of_leaving: staff.date_of_leaving ?? '',
     father_name: staff.father_name ?? '',
     mother_name: staff.mother_name ?? '',
     local_address: staff.local_address,
+    permanent_address: staff.permanent_address,
     marital_status: staff.marital_status,
     contract_type: staff.contract_type,
+    basic_salary: staff.basic_salary ?? null,
     is_active: staff.is_active === 'yes',
   };
 }
 
 export function toStaffPayload(values: StaffFormValues): CreateStaffPayload {
   const joining = values.date_of_joining?.trim();
+  const leaving = values.date_of_leaving?.trim();
   return {
     employee_id: values.employee_id.trim(),
     name: values.name.trim(),
@@ -47,11 +51,14 @@ export function toStaffPayload(values: StaffFormValues): CreateStaffPayload {
     qualification: values.qualification.trim(),
     work_exp: values.work_exp.trim(),
     date_of_joining: joining ? joining : null,
+    date_of_leaving: leaving ? leaving : null,
     father_name: emptyToNull(values.father_name),
     mother_name: emptyToNull(values.mother_name),
     local_address: values.local_address.trim(),
+    permanent_address: values.permanent_address.trim(),
     marital_status: values.marital_status,
     contract_type: values.contract_type,
+    basic_salary: values.basic_salary ?? null,
     is_active: (values.is_active ? 'yes' : 'no') as ActiveFlag,
   };
 }

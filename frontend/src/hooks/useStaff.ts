@@ -7,10 +7,10 @@ import { staffService } from '@services/api';
 import type { CreateStaffPayload, UpdateStaffPayload } from '@app-types/staff/staff';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useStaff() {
+export function useStaff(page: number = 1) {
   return useQuery({
-    queryKey: queryKeys.staff.list(),
-    queryFn: staffService.list,
+    queryKey: queryKeys.staff.list(page),
+    queryFn: () => staffService.list(page),
   });
 }
 
@@ -69,5 +69,44 @@ export function useUpdateStaff(id: number) {
       toast.success(`${staff.full_name} updated successfully`);
     },
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update staff member')),
+  });
+}
+
+export function useUploadStaffDocument(id: number) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: FormData) => staffService.uploadDocument(id, data),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.all });
+      toast.success('Document uploaded successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to upload document')),
+  });
+}
+
+export function useDeleteStaff() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => staffService.delete(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.all });
+      toast.success('Staff member deleted successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete staff member')),
+  });
+}
+
+export function useDeleteStaffDocument(id: number) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { document_type: string; document_id?: number }) => staffService.deleteDocument(id, data),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.all });
+      toast.success('Document deleted successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete document')),
   });
 }

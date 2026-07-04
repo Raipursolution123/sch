@@ -22,6 +22,8 @@ urlpatterns = [
     path("settings/", include("apps.settings.urls")),
     # academics
     path("academics/", include("apps.academics.urls")),
+    # staff
+    path("staff/", include("apps.staff.urls")),
 ]
 
 

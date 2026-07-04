@@ -54,6 +54,8 @@ export const API_ENDPOINTS = {
     detail: (id: number) => `/staff/${id}/`,
     departments: '/staff/departments/',
     designations: '/staff/designations/',
+    documentUpload: (id: number) => `/staff/${id}/documents/upload/`,
+    documentDelete: (id: number) => `/staff/${id}/documents/delete/`,
   },
   fees: {
     // TODO: Wire when backend exposes fees endpoints

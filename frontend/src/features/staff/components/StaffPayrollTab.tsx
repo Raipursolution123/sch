@@ -27,9 +27,7 @@ export function StaffPayrollTab({ staff }: StaffPayrollTabProps) {
             value={staff.basic_salary != null ? 'Configured' : 'Not configured'}
           />
         </dl>
-        <p className="mt-4 text-sm text-muted-foreground">
-          Payslips, allowances, and deductions will appear here when the payroll module is added.
-        </p>
+
       </SettingsCard>
     </div>
   );

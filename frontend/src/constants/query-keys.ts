@@ -56,7 +56,7 @@ export const queryKeys = {
   },
   staff: {
     all: ['staff'] as const,
-    list: () => [...queryKeys.staff.all, 'list'] as const,
+    list: (page?: number) => [...queryKeys.staff.all, 'list', ...(page ? [page] : [])] as const,
     detail: (id: number) => [...queryKeys.staff.all, 'detail', id] as const,
     departments: () => [...queryKeys.staff.all, 'departments'] as const,
     designations: () => [...queryKeys.staff.all, 'designations'] as const,

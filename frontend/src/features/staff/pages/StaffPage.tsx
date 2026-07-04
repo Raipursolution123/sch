@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { PageHeader } from '@components/layout/PageHeader';
+import { Pagination } from '@components/ui/Pagination';
 import { ListSearch } from '@components/forms/ListSearch';
 import { EmptyState } from '@components/feedback/EmptyState';
 import { LoadingState } from '@components/feedback/LoadingState';
@@ -21,7 +23,13 @@ import { matchesSearch } from '@utils/search';
 import { formatDepartmentDesignation } from '@utils/staff';
 
 export function StaffPage() {
-  const { data: staff, isLoading, isError, error, refetch } = useStaff();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get('page')) || 1;
+
+  const { data: staffData, isLoading, isError, error, refetch } = useStaff(page);
+  const staff = staffData?.results;
+  const count = staffData?.count || 0;
+  const totalPages = Math.ceil(count / 10); // StandardResultsSetPagination PAGE_SIZE is 10
   const { data: departments = [] } = useStaffDepartments();
   const { data: designations = [] } = useStaffDesignations();
   const createMutation = useCreateStaff();
@@ -44,7 +52,7 @@ export function StaffPage() {
     );
   }, [staff, search]);
 
-  const canAdd = departments.length > 0 && designations.length > 0;
+  const canAdd = true;
 
   const handleSubmit = (values: StaffFormValues) => {
     createMutation.mutate(toStaffPayload(values), {
@@ -58,7 +66,7 @@ export function StaffPage() {
         title="Staff"
         description="Browse staff members and open profiles for details."
         actions={
-          <Button onClick={() => setFormOpen(true)} className="gap-1" disabled={!canAdd}>
+          <Button onClick={() => setFormOpen(true)} className="gap-1">
             <Plus className="h-4 w-4" aria-hidden="true" />
             Add Staff
           </Button>
@@ -99,7 +107,18 @@ export function StaffPage() {
           {filteredStaff.length === 0 ? (
             <p className="text-sm text-muted-foreground">No staff match your search.</p>
           ) : (
-            <StaffTable staff={filteredStaff} />
+            <>
+              <StaffTable staff={filteredStaff} />
+              {totalPages > 1 && (
+                <div className="mt-4 flex justify-center">
+                  <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={(p) => setSearchParams({ page: p.toString() })}
+                  />
+                </div>
+              )}
+            </>
           )}
         </>
       )}
