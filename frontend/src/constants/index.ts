@@ -15,9 +15,9 @@ export const API_ENDPOINTS = {
   },
   settings: {
     // TODO: Wire when backend exposes academic session endpoints
-    sessions: '/settings/sessions/',
-    sessionDetail: (id: number) => `/settings/sessions/${id}/`,
-    sessionActivate: (id: number) => `/settings/sessions/${id}/activate/`,
+    sessions: '/academics/sessions/',
+    sessionDetail: (id: number) => `/academics/sessions/${id}/`,
+    sessionActivate: (id: number) => `/academics/sessions/${id}/activate/`,
     // TODO: Wire when backend exposes general settings endpoints
     general: '/settings/general/',
     // TODO: Wire when backend exposes languages endpoints

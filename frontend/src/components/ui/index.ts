@@ -33,3 +33,5 @@ export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Textarea } from './textarea';
 export type { TextareaProps } from './textarea';
+export { Pagination } from './Pagination';
+export type { PaginationProps } from './Pagination';
