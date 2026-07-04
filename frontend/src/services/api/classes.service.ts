@@ -75,7 +75,7 @@ let mockClasses: SchoolClass[] = [
 ];
 let nextMockId = 8;
 
-const USE_MOCK = true; // TODO: Set to false when backend classes API is deployed
+const USE_MOCK = false; // TODO: Set to false when backend classes API is deployed
 
 function delay<T>(value: T, ms = 300): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
@@ -93,15 +93,24 @@ function nextSortOrder(): number {
 }
 
 export const classesService = {
-  list: async (): Promise<SchoolClass[]> => {
+  list: async (page = 1): Promise<{ results: SchoolClass[]; count: number }> => {
     if (USE_MOCK) {
-      return delay(mockList());
+      const allData = await delay(mockList());
+      return { results: allData, count: allData.length };
     }
     // TODO: Wire when backend exposes GET /api/v1/academics/classes/
-    const { data } = await apiClient.get<ApiSuccessResponse<SchoolClass[]>>(
-      API_ENDPOINTS.academics.classes,
+    const { data } = await apiClient.get<any>(
+      `${API_ENDPOINTS.academics.classes}?page=${page}`,
     );
-    return data.data;
+    let results: SchoolClass[] = [];
+    if (data?.results?.classes && Array.isArray(data.results.classes)) results = data.results.classes;
+    else if (data?.data?.classes && Array.isArray(data.data.classes)) results = data.data.classes;
+    else if (data?.classes && Array.isArray(data.classes)) results = data.classes;
+    else if (data?.data && Array.isArray(data.data)) results = data.data;
+    else if (data?.results && Array.isArray(data.results)) results = data.results;
+
+    const count = data?.count || data?.data?.count || results.length;
+    return { results, count };
   },
 
   create: async (payload: CreateClassPayload): Promise<SchoolClass> => {
@@ -179,7 +188,8 @@ export const classesService = {
     if (USE_MOCK) {
       return delay(nextSortOrder());
     }
-    const classes = await classesService.list();
+    const response = await classesService.list();
+    const classes = response.results;
     if (classes.length === 0) return 1;
     return Math.max(...classes.map((c) => c.sort_order)) + 1;
   },

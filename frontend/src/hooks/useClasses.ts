@@ -5,10 +5,10 @@ import { classesService } from '@services/api';
 import type { CreateClassPayload, UpdateClassPayload } from '@app-types/academics/class';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useClasses() {
+export function useClasses(page: number = 1) {
   return useQuery({
-    queryKey: queryKeys.academics.classes.list(),
-    queryFn: classesService.list,
+    queryKey: [...queryKeys.academics.classes.list(), page],
+    queryFn: () => classesService.list(page),
   });
 }
 

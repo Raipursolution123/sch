@@ -8,6 +8,7 @@ import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { ClassFormDialog } from '@features/academics/classes/components/ClassFormDialog';
 import { ClassesTable } from '@features/academics/classes/components/ClassesTable';
+import { Pagination } from '@components/ui/Pagination';
 import type { ClassFormValues } from '@features/academics/classes/schemas/class.schema';
 import {
   useClasses,
@@ -31,7 +32,12 @@ function toPayload(values: ClassFormValues) {
 }
 
 export function ClassesPage() {
-  const { data: classes, isLoading, isError, error, refetch } = useClasses();
+  const [page, setPage] = useState(1);
+  const { data: classesData, isLoading, isError, error, refetch } = useClasses(page);
+  const classes = classesData?.results;
+  const count = classesData?.count || 0;
+  const totalPages = Math.ceil(count / 10); // StandardResultsSetPagination PAGE_SIZE is 10
+
   const createMutation = useCreateClass();
   const updateMutation = useUpdateClass();
   const deleteMutation = useDeleteClass();
@@ -94,14 +100,21 @@ export function ClassesPage() {
       )}
 
       {!isLoading && !isError && classes && classes.length > 0 && (
-        <ClassesTable
-          classes={classes}
-          onEdit={(schoolClass) => {
-            setSelectedClass(schoolClass);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
+        <div className="space-y-4">
+          <ClassesTable
+            classes={classes}
+            onEdit={(schoolClass) => {
+              setSelectedClass(schoolClass);
+              setDialogMode('edit');
+            }}
+            onDelete={setDeleteTarget}
+          />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
       )}
 
       <ClassFormDialog
