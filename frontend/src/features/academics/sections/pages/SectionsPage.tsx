@@ -8,6 +8,7 @@ import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { SectionFormDialog } from '@features/academics/sections/components/SectionFormDialog';
 import { SectionsTable } from '@features/academics/sections/components/SectionsTable';
+import { Pagination } from '@components/ui/Pagination';
 import type { SectionFormValues } from '@features/academics/sections/schemas/section.schema';
 import {
   useCreateSection,
@@ -28,7 +29,12 @@ function toPayload(values: SectionFormValues) {
 }
 
 export function SectionsPage() {
-  const { data: sections, isLoading, isError, error, refetch } = useSections();
+  const [page, setPage] = useState(1);
+  const { data: sectionsData, isLoading, isError, error, refetch } = useSections(page);
+  const sections = sectionsData?.results;
+  const count = sectionsData?.count || 0;
+  const totalPages = Math.ceil(count / 10); // StandardResultsSetPagination PAGE_SIZE is 10
+
   const createMutation = useCreateSection();
   const updateMutation = useUpdateSection();
   const deleteMutation = useDeleteSection();
@@ -89,14 +95,21 @@ export function SectionsPage() {
       )}
 
       {!isLoading && !isError && sections && sections.length > 0 && (
-        <SectionsTable
-          sections={sections}
-          onEdit={(section) => {
-            setSelectedSection(section);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
+        <div className="space-y-4">
+          <SectionsTable
+            sections={sections}
+            onEdit={(section) => {
+              setSelectedSection(section);
+              setDialogMode('edit');
+            }}
+            onDelete={setDeleteTarget}
+          />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
       )}
 
       <SectionFormDialog

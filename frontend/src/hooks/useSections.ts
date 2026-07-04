@@ -5,10 +5,10 @@ import { sectionsService } from '@services/api';
 import type { CreateSectionPayload, UpdateSectionPayload } from '@app-types/academics/section';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useSections() {
+export function useSections(page: number = 1) {
   return useQuery({
-    queryKey: queryKeys.academics.sections.list(),
-    queryFn: sectionsService.list,
+    queryKey: [...queryKeys.academics.sections.list(), page],
+    queryFn: () => sectionsService.list(page),
   });
 }
 
