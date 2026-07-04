@@ -18,8 +18,10 @@ import { useSections } from '@hooks/useSections';
 import { todayIsoDate } from '@utils/student';
 
 export function MarkAttendancePage() {
-  const { data: classes = [] } = useClasses();
-  const { data: sections = [] } = useSections();
+  const { data: classesData } = useClasses();
+  const classes = classesData?.results || [];
+  const { data: sectionsData } = useSections();
+  const sections = sectionsData?.results || [];
   const { data: types = [] } = useAttendanceTypes();
 
   const [date, setDate] = useState(todayIsoDate());

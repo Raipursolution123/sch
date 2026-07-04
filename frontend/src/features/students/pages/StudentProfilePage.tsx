@@ -36,8 +36,11 @@ export function StudentProfilePage() {
   const [editOpen, setEditOpen] = useState(false);
   const id = Number(studentId);
   const { data: student, isLoading, isError, error, refetch } = useStudent(id);
-  const { data: classes = [] } = useClasses();
-  const { data: sections = [] } = useSections();
+  const { data: classesData } = useClasses();
+  const classes = classesData?.results || [];
+  
+  const { data: sectionsData } = useSections();
+  const sections = sectionsData?.results || [];
   const updateMutation = useUpdateStudent(id);
 
   const activeTab = searchParams.get('tab');

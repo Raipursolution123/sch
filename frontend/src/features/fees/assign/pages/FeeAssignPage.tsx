@@ -40,7 +40,11 @@ function toPayload(values: FeeAssignmentFormValues) {
 
 export function FeeAssignPage() {
   const { data: assignments, isLoading, isError, error, refetch } = useFeeAssignments();
-  const { data: classes = [] } = useClasses();
+  const { data: classesData } = useClasses();
+  const classes = classesData?.results || [];
+  
+  const { data: sectionsData } = useSections();
+  const sections = sectionsData?.results || [];
   const { data: feeGroups = [] } = useFeeGroups();
   const { data: feeTypes = [] } = useFeeTypes();
   const { data: sessions = [] } = useSessions();
