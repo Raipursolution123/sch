@@ -2,11 +2,15 @@ import { Pencil, Trash2, Zap } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
+import { Pagination } from '@components/ui';
 import type { AcademicSession } from '@app-types/settings/session';
 import { formatDate } from '@utils/format';
 
 interface SessionsTableProps {
   sessions: AcademicSession[];
+  totalCount: number;
+  page: number;
+  onPageChange: (page: number) => void;
   onEdit: (session: AcademicSession) => void;
   onActivate: (session: AcademicSession) => void;
   onDelete: (session: AcademicSession) => void;
@@ -32,46 +36,60 @@ const columns: DataTableColumn<AcademicSession>[] = [
   },
 ];
 
-export function SessionsTable({ sessions, onEdit, onActivate, onDelete }: SessionsTableProps) {
+export function SessionsTable({ 
+  sessions, 
+  totalCount,
+  page,
+  onPageChange,
+  onEdit, 
+  onActivate, 
+  onDelete 
+}: SessionsTableProps) {
   return (
-    <DataTable
-      data={sessions}
-      columns={columns}
-      getRowKey={(session) => session.id}
-      actions={(session) => {
-        const isActive = session.is_active === 'yes';
-        return (
-          <>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onEdit(session)}
-              aria-label={`Edit ${session.session}`}
-            >
-              <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={isActive}
-              onClick={() => onActivate(session)}
-              aria-label={`Activate ${session.session}`}
-            >
-              <Zap className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={isActive}
-              onClick={() => onDelete(session)}
-              aria-label={`Delete ${session.session}`}
-              className="text-destructive hover:text-destructive"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </>
-        );
-      }}
-    />
+    <div className="space-y-4">
+      <DataTable
+        data={sessions}
+        columns={columns}
+        getRowKey={(session) => session.id}
+        actions={(session) => {
+          const isActive = session.is_active === 'yes';
+          return (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onEdit(session)}
+                aria-label={`Edit ${session.session}`}
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={isActive}
+                onClick={() => onActivate(session)}
+                aria-label={`Activate ${session.session}`}
+              >
+                <Zap className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onDelete(session)}
+                aria-label={`Delete ${session.session}`}
+                className="text-destructive hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </>
+          );
+        }}
+      />
+      <Pagination
+        currentPage={page}
+        totalPages={Math.ceil(totalCount / 20)}
+        onPageChange={onPageChange}
+      />
+    </div>
   );
 }
