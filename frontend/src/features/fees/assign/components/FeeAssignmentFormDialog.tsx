@@ -72,11 +72,13 @@ export function FeeAssignmentFormDialog({
     [classes],
   );
   const activeGroups = useMemo(
-    () => feeGroups.filter((g) => g.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
+    () =>
+      feeGroups.filter((g) => g.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
     [feeGroups],
   );
   const activeFeeTypes = useMemo(
-    () => feeTypes.filter((f) => f.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
+    () =>
+      feeTypes.filter((f) => f.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
     [feeTypes],
   );
   const sessionOptions = useMemo(
@@ -97,8 +99,7 @@ export function FeeAssignmentFormDialog({
     feeTypeOptions.length > 0 &&
     sessionOptions.length > 0;
 
-  const defaultSessionId =
-    sessions.find((s) => s.is_active === 'yes')?.id ?? sessions[0]?.id ?? 0;
+  const defaultSessionId = sessions.find((s) => s.is_active === 'yes')?.id ?? sessions[0]?.id ?? 0;
 
   const {
     control,
@@ -336,7 +337,9 @@ export function FeeAssignmentFormDialog({
                 <Switch
                   id="is_active"
                   checked={isActive}
-                  onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                  onCheckedChange={(checked) =>
+                    setValue('is_active', checked, { shouldDirty: true })
+                  }
                 />
                 <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
               </div>

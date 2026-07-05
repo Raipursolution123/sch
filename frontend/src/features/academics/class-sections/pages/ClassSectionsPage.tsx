@@ -8,6 +8,7 @@ import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { ClassSectionFormDialog } from '@features/academics/class-sections/components/ClassSectionFormDialog';
 import { ClassSectionsTable } from '@features/academics/class-sections/components/ClassSectionsTable';
+import { Pagination } from '@components/ui/Pagination';
 import type { ClassSectionFormValues } from '@features/academics/class-sections/schemas/class-section.schema';
 import {
   useClassSections,
@@ -31,9 +32,17 @@ function toPayload(values: ClassSectionFormValues) {
 }
 
 export function ClassSectionsPage() {
-  const { data: classSections, isLoading, isError, error, refetch } = useClassSections();
-  const { data: classes = [] } = useClasses();
-  const { data: sections = [] } = useSections();
+  const [page, setPage] = useState(1);
+  const { data: mappingsData, isLoading, isError, error, refetch } = useClassSections(page);
+  const mappings = mappingsData?.results;
+  const count = mappingsData?.count || 0;
+  const totalPages = Math.ceil(count / 10); // StandardResultsSetPagination PAGE_SIZE is 10
+
+  const { data: classesData } = useClasses();
+  const classes = classesData?.results || [];
+  
+  const { data: sectionsData } = useSections();
+  const sections = sectionsData?.results || [];
   const createMutation = useCreateClassSection();
   const updateMutation = useUpdateClassSection();
   const deleteMutation = useDeleteClassSection();
@@ -69,11 +78,7 @@ export function ClassSectionsPage() {
         title="Class Sections"
         description="Link classes with sections to define teachable groups (e.g. Class 1 — Section A)."
         actions={
-          <Button
-            onClick={() => setDialogMode('create')}
-            className="gap-1"
-            disabled={!canCreate}
-          >
+          <Button onClick={() => setDialogMode('create')} className="gap-1" disabled={!canCreate}>
             <Plus className="h-4 w-4" aria-hidden="true" />
             Add Class Section
           </Button>
@@ -95,7 +100,7 @@ export function ClassSectionsPage() {
         />
       )}
 
-      {!isLoading && !isError && classSections?.length === 0 && (
+      {!isLoading && !isError && mappings?.length === 0 && (
         <EmptyState
           title="No class sections configured"
           description="Link a class with a section to enable student enrollment per group."
@@ -110,15 +115,22 @@ export function ClassSectionsPage() {
         />
       )}
 
-      {!isLoading && !isError && classSections && classSections.length > 0 && (
-        <ClassSectionsTable
-          classSections={classSections}
-          onEdit={(classSection) => {
-            setSelectedClassSection(classSection);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
+      {!isLoading && !isError && mappings && mappings.length > 0 && (
+        <div className="space-y-4">
+          <ClassSectionsTable
+            classSections={mappings}
+            onEdit={(classSection) => {
+              setSelectedClassSection(classSection);
+              setDialogMode('edit');
+            }}
+            onDelete={setDeleteTarget}
+          />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
       )}
 
       <ClassSectionFormDialog

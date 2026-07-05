@@ -22,7 +22,7 @@ interface PaymentRecord {
 }
 
 // TODO: Remove mock store when GET /api/v1/students/{id}/fees/ is available
-let mockPayments: PaymentRecord[] = [
+const mockPayments: PaymentRecord[] = [
   {
     id: 1,
     student_id: 1,

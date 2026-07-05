@@ -28,7 +28,7 @@ const columns: DataTableColumn<Subject>[] = [
     id: 'code',
     header: 'Code',
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">{row.code}</code>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.code}</code>
     ),
   },
   {
@@ -70,7 +70,6 @@ export function SubjectsTable({ subjects, onEdit, onDelete }: SubjectsTableProps
       columns={columns}
       getRowKey={(subject) => subject.id}
       actions={(subject) => {
-        const isActive = subject.is_active === 'yes';
         return (
           <>
             <Button
@@ -84,7 +83,6 @@ export function SubjectsTable({ subjects, onEdit, onDelete }: SubjectsTableProps
             <Button
               variant="ghost"
               size="sm"
-              disabled={isActive}
               onClick={() => onDelete(subject)}
               aria-label={`Delete ${subject.name}`}
               className="text-destructive hover:text-destructive"

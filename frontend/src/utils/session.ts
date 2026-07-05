@@ -21,7 +21,10 @@ export function formatSessionDate(iso: string | null): string {
 }
 
 export function getApiErrorMessage(error: unknown, fallback = 'Something went wrong'): string {
-  if (error instanceof Error && error.message) return error.message;
   const axiosError = error as AxiosError<ApiErrorResponse>;
-  return axiosError.response?.data?.error?.message ?? fallback;
+  if (axiosError.isAxiosError && axiosError.response?.data?.error?.message) {
+    return axiosError.response.data.error.message;
+  }
+  if (error instanceof Error && error.message) return error.message;
+  return fallback;
 }

@@ -13,4 +13,4 @@ export interface CreateSectionPayload {
   is_active: ActiveFlag;
 }
 
-export interface UpdateSectionPayload extends CreateSectionPayload {}
+export type UpdateSectionPayload = CreateSectionPayload;

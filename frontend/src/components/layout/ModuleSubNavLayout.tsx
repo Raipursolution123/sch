@@ -14,7 +14,11 @@ interface ModuleSubNavLayoutProps {
 }
 
 /** Reusable side sub-navigation for module areas (Settings, Academics, etc.). */
-export function ModuleSubNavLayout({ title, nav, 'aria-label': ariaLabel }: ModuleSubNavLayoutProps) {
+export function ModuleSubNavLayout({
+  title,
+  nav,
+  'aria-label': ariaLabel,
+}: ModuleSubNavLayoutProps) {
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
       <nav className="w-full shrink-0 lg:w-52" aria-label={ariaLabel ?? `${title} navigation`}>

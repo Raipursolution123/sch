@@ -31,7 +31,10 @@ function toPayload(values: CurrencyFormValues) {
 }
 
 export function CurrencyPage() {
-  const { data: currencies, isLoading, isError, error, refetch } = useCurrencies();
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError, error, refetch } = useCurrencies(page);
+  const currencies = data?.results;
+  const totalCount = data?.count || 0;
   const createMutation = useCreateCurrency();
   const updateMutation = useUpdateCurrency();
   const activateMutation = useActivateCurrency();
@@ -50,10 +53,7 @@ export function CurrencyPage() {
   const handleFormSubmit = (values: CurrencyFormValues) => {
     const payload = toPayload(values);
     if (dialogMode === 'edit' && selectedCurrency) {
-      updateMutation.mutate(
-        { id: selectedCurrency.id, payload },
-        { onSuccess: closeFormDialog },
-      );
+      updateMutation.mutate({ id: selectedCurrency.id, payload }, { onSuccess: closeFormDialog });
       return;
     }
     createMutation.mutate(payload, { onSuccess: closeFormDialog });
@@ -99,6 +99,9 @@ export function CurrencyPage() {
       {!isLoading && !isError && currencies && currencies.length > 0 && (
         <CurrenciesTable
           currencies={currencies}
+          totalCount={totalCount}
+          page={page}
+          onPageChange={setPage}
           onEdit={(currency) => {
             setSelectedCurrency(currency);
             setDialogMode('edit');

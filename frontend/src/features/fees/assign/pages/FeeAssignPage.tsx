@@ -40,7 +40,11 @@ function toPayload(values: FeeAssignmentFormValues) {
 
 export function FeeAssignPage() {
   const { data: assignments, isLoading, isError, error, refetch } = useFeeAssignments();
-  const { data: classes = [] } = useClasses();
+  const { data: classesData } = useClasses();
+  const classes = classesData?.results || [];
+  
+  const { data: sectionsData } = useSections();
+  const sections = sectionsData?.results || [];
   const { data: feeGroups = [] } = useFeeGroups();
   const { data: feeTypes = [] } = useFeeTypes();
   const { data: sessions = [] } = useSessions();
@@ -87,7 +91,9 @@ export function FeeAssignPage() {
             onClick={() => setDialogMode('create')}
             className="gap-1"
             disabled={!canAssign}
-            title={canAssign ? undefined : 'Configure classes, fee types, groups, and sessions first'}
+            title={
+              canAssign ? undefined : 'Configure classes, fee types, groups, and sessions first'
+            }
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
             Assign Fees

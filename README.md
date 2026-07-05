@@ -24,6 +24,14 @@ docker compose -f docker-compose.dev.yml up --build
 | Backend  | http://localhost:8000        |
 | API      | http://localhost:8000/api/v1/ |
 
+## Staging (shared dev server)
+
+Deploy to **school.raipursolutions.com** — see [docs/staging-deployment.md](docs/staging-deployment.md).
+
+- `docker compose -f docker-compose.staging.yml`
+- Auto-deploy: push to `main` → CI → Deploy Staging workflow
+- Scripts: `scripts/staging-bootstrap.sh`, `scripts/staging-deploy.sh`
+
 ```bash
 docker compose -f docker-compose.dev.yml exec backend python manage.py createsuperuser
 ```

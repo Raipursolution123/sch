@@ -12,18 +12,16 @@ import {
   MarkAttendanceTable,
   type MarkAttendanceRow,
 } from '@features/attendance/mark/components/MarkAttendanceTable';
-import {
-  useAttendanceRoster,
-  useAttendanceTypes,
-  useSaveAttendance,
-} from '@hooks/useAttendance';
+import { useAttendanceRoster, useAttendanceTypes, useSaveAttendance } from '@hooks/useAttendance';
 import { useClasses } from '@hooks/useClasses';
 import { useSections } from '@hooks/useSections';
 import { todayIsoDate } from '@utils/student';
 
 export function MarkAttendancePage() {
-  const { data: classes = [] } = useClasses();
-  const { data: sections = [] } = useSections();
+  const { data: classesData } = useClasses();
+  const classes = classesData?.results || [];
+  const { data: sectionsData } = useSections();
+  const sections = sectionsData?.results || [];
   const { data: types = [] } = useAttendanceTypes();
 
   const [date, setDate] = useState(todayIsoDate());
@@ -89,9 +87,7 @@ export function MarkAttendancePage() {
   };
 
   const handleRemarkChange = (studentId: number, remark: string) => {
-    setRows((prev) =>
-      prev.map((row) => (row.student_id === studentId ? { ...row, remark } : row)),
-    );
+    setRows((prev) => prev.map((row) => (row.student_id === studentId ? { ...row, remark } : row)));
   };
 
   const handleSave = () => {
@@ -108,8 +104,7 @@ export function MarkAttendancePage() {
     });
   };
 
-  const canMark =
-    activeClasses.length > 0 && activeSections.length > 0 && types.length > 0;
+  const canMark = activeClasses.length > 0 && activeSections.length > 0 && types.length > 0;
 
   return (
     <div className="space-y-6">

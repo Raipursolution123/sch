@@ -144,7 +144,8 @@ export function ClassSectionFormDialog({
           <div className="space-y-4 py-4">
             {!hasOptions && (
               <p className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
-                Add at least one active class and one active section before creating a class section.
+                Add at least one active class and one active section before creating a class
+                section.
               </p>
             )}
 
@@ -166,7 +167,12 @@ export function ClassSectionFormDialog({
               />
             </FormField>
 
-            <FormField label="Section" htmlFor="section_id" error={errors.section_id?.message} required>
+            <FormField
+              label="Section"
+              htmlFor="section_id"
+              error={errors.section_id?.message}
+              required
+            >
               <Controller
                 name="section_id"
                 control={control}
@@ -184,12 +190,17 @@ export function ClassSectionFormDialog({
               />
             </FormField>
 
-            <FormField label="Active" hint="Inactive links are hidden from student assignment flows.">
+            <FormField
+              label="Active"
+              hint="Inactive links are hidden from student assignment flows."
+            >
               <div className="flex items-center gap-2 pt-1">
                 <Switch
                   id="is_active"
                   checked={isActive}
-                  onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                  onCheckedChange={(checked) =>
+                    setValue('is_active', checked, { shouldDirty: true })
+                  }
                 />
                 <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
               </div>

@@ -5,10 +5,10 @@ import { sessionsService } from '@services/api';
 import type { CreateSessionPayload, UpdateSessionPayload } from '@app-types/settings/session';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useSessions() {
+export function useSessions(page: number = 1) {
   return useQuery({
-    queryKey: queryKeys.settings.sessions.list(),
-    queryFn: sessionsService.list,
+    queryKey: queryKeys.settings.sessions.list(page),
+    queryFn: () => sessionsService.list(page),
   });
 }
 

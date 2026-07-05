@@ -8,10 +8,10 @@ import type {
 } from '@app-types/academics/class-section';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useClassSections() {
+export function useClassSections(page: number = 1) {
   return useQuery({
-    queryKey: queryKeys.academics.classSections.list(),
-    queryFn: classSectionsService.list,
+    queryKey: [...queryKeys.academics.classSections.list(), page],
+    queryFn: () => classSectionsService.list(page),
   });
 }
 

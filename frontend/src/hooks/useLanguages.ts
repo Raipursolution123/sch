@@ -5,10 +5,10 @@ import { languagesService } from '@services/api';
 import type { CreateLanguagePayload, UpdateLanguagePayload } from '@app-types/settings/language';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useLanguages() {
+export function useLanguages(page: number = 1) {
   return useQuery({
-    queryKey: queryKeys.settings.languages.list(),
-    queryFn: languagesService.list,
+    queryKey: queryKeys.settings.languages.list(page),
+    queryFn: () => languagesService.list(page),
   });
 }
 

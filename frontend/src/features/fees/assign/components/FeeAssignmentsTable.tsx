@@ -54,11 +54,7 @@ const columns: DataTableColumn<FeeAssignment>[] = [
   },
 ];
 
-export function FeeAssignmentsTable({
-  assignments,
-  onEdit,
-  onDelete,
-}: FeeAssignmentsTableProps) {
+export function FeeAssignmentsTable({ assignments, onEdit, onDelete }: FeeAssignmentsTableProps) {
   return (
     <DataTable
       data={assignments}

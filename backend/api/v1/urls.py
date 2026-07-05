@@ -18,4 +18,14 @@ urlpatterns = [
     path("auth/me/", MeView.as_view(), name="me"),
     path("auth/token/", CustomTokenObtainPairView.as_view(), name="token_obtain"),
     path("auth/token/refresh/", CustomTokenRefreshView.as_view(), name="token_refresh"),
+    # settings
+    path("settings/", include("apps.settings.urls")),
+    # academics
+    path("academics/", include("apps.academics.urls")),
+    # staff
+    path("staff/", include("apps.staff.urls")),
 ]
+
+
+
+

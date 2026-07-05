@@ -48,7 +48,7 @@ export function QuickActionTile({ item, className }: QuickActionTileProps) {
         <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{item.description}</p>
       </div>
       <ArrowUpRight
-        className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+        className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100"
         aria-hidden="true"
       />
     </Link>

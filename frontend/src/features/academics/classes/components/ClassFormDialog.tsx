@@ -96,7 +96,12 @@ export function ClassFormDialog({
           </DialogHeader>
 
           <div className="space-y-4 py-4">
-            <FormField label="Class name" htmlFor="class_name" error={errors.class_name?.message} required>
+            <FormField
+              label="Class name"
+              htmlFor="class_name"
+              error={errors.class_name?.message}
+              required
+            >
               <Input
                 id="class_name"
                 placeholder="Class 5"
@@ -137,12 +142,17 @@ export function ClassFormDialog({
               </div>
             </FormField>
 
-            <FormField label="Active" hint="Inactive classes are hidden from enrollment and assignment flows.">
+            <FormField
+              label="Active"
+              hint="Inactive classes are hidden from enrollment and assignment flows."
+            >
               <div className="flex items-center gap-2 pt-1">
                 <Switch
                   id="is_active"
                   checked={isActive}
-                  onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                  onCheckedChange={(checked) =>
+                    setValue('is_active', checked, { shouldDirty: true })
+                  }
                 />
                 <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
               </div>

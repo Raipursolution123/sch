@@ -5,7 +5,7 @@ export const queryKeys = {
   settings: {
     sessions: {
       all: ['settings', 'sessions'] as const,
-      list: () => [...queryKeys.settings.sessions.all, 'list'] as const,
+      list: (page: number) => [...queryKeys.settings.sessions.all, 'list', page] as const,
       active: () => [...queryKeys.settings.sessions.all, 'active'] as const,
       detail: (id: number) => [...queryKeys.settings.sessions.all, 'detail', id] as const,
     },
@@ -15,12 +15,12 @@ export const queryKeys = {
     },
     languages: {
       all: ['settings', 'languages'] as const,
-      list: () => [...queryKeys.settings.languages.all, 'list'] as const,
+      list: (page: number) => [...queryKeys.settings.languages.all, 'list', page] as const,
       detail: (id: number) => [...queryKeys.settings.languages.all, 'detail', id] as const,
     },
     currencies: {
       all: ['settings', 'currencies'] as const,
-      list: () => [...queryKeys.settings.currencies.all, 'list'] as const,
+      list: (page: number) => [...queryKeys.settings.currencies.all, 'list', page] as const,
       detail: (id: number) => [...queryKeys.settings.currencies.all, 'detail', id] as const,
     },
   },
@@ -56,7 +56,7 @@ export const queryKeys = {
   },
   staff: {
     all: ['staff'] as const,
-    list: () => [...queryKeys.staff.all, 'list'] as const,
+    list: (page?: number) => [...queryKeys.staff.all, 'list', ...(page ? [page] : [])] as const,
     detail: (id: number) => [...queryKeys.staff.all, 'detail', id] as const,
     departments: () => [...queryKeys.staff.all, 'departments'] as const,
     designations: () => [...queryKeys.staff.all, 'designations'] as const,

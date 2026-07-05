@@ -24,6 +24,8 @@ import {
 import { staffFormSchema, type StaffFormValues } from '@features/staff/schemas/staff-form.schema';
 import { staffToFormValues } from '@features/staff/utils/staff-payload';
 
+export type StaffFormSection = 'all' | 'employment' | 'personal' | 'professional' | 'payroll';
+
 interface StaffFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -33,6 +35,7 @@ interface StaffFormDialogProps {
   staff?: StaffDetail | null;
   onSubmit: (values: StaffFormValues) => void;
   isLoading?: boolean;
+  section?: StaffFormSection;
 }
 
 function toSelectOptions<T extends { id: number; name: string }>(
@@ -42,9 +45,7 @@ function toSelectOptions<T extends { id: number; name: string }>(
 }
 
 function SectionHeading({ children }: { children: string }) {
-  return (
-    <h3 className="border-b pb-2 text-sm font-semibold text-foreground">{children}</h3>
-  );
+  return <h3 className="border-b pb-2 text-sm font-semibold text-foreground">{children}</h3>;
 }
 
 const defaultValues: StaffFormValues = {
@@ -61,11 +62,13 @@ const defaultValues: StaffFormValues = {
   qualification: '',
   work_exp: '',
   date_of_joining: '',
+  date_of_leaving: '',
   father_name: '',
   mother_name: '',
   local_address: '',
   marital_status: 'Single',
   contract_type: 'Permanent',
+  basic_salary: null,
   is_active: true,
 };
 
@@ -78,12 +81,12 @@ export function StaffFormDialog({
   staff = null,
   onSubmit,
   isLoading,
+  section = 'all',
 }: StaffFormDialogProps) {
   const isEdit = staff != null;
 
   const departmentOptions = useMemo(() => toSelectOptions(departments), [departments]);
   const designationOptions = useMemo(() => toSelectOptions(designations), [designations]);
-  const hasLookupOptions = departmentOptions.length > 0 && designationOptions.length > 0;
 
   const {
     control,
@@ -92,6 +95,7 @@ export function StaffFormDialog({
     reset,
     watch,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<StaffFormValues>({
     resolver: zodResolver(staffFormSchema),
@@ -108,11 +112,19 @@ export function StaffFormDialog({
 
     reset({
       ...defaultValues,
-      employee_id: suggestedEmployeeId,
-      department_id: departments[0]?.id ?? 0,
-      designation_id: designations[0]?.id ?? 0,
+      department_id: undefined,
+      designation_id: undefined,
     });
-  }, [open, isEdit, staff, suggestedEmployeeId, departments, designations, reset]);
+  }, [open, isEdit, staff, reset]);
+
+  useEffect(() => {
+    if (open && !isEdit && suggestedEmployeeId) {
+      const currentId = getValues('employee_id');
+      if (!currentId || currentId === '') {
+        setValue('employee_id', suggestedEmployeeId, { shouldValidate: true, shouldDirty: true });
+      }
+    }
+  }, [open, isEdit, suggestedEmployeeId, getValues, setValue]);
 
   const isActive = watch('is_active');
 
@@ -121,7 +133,13 @@ export function StaffFormDialog({
       <DialogContent className="flex max-h-[90vh] flex-col sm:max-w-2xl">
         <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-0 flex-1 flex-col">
           <DialogHeader>
-            <DialogTitle>{isEdit ? 'Edit staff member' : 'Add staff member'}</DialogTitle>
+            <DialogTitle>
+              {isEdit
+                ? section === 'all'
+                  ? 'Edit staff member'
+                  : `Edit ${section} details`
+                : 'Add staff member'}
+            </DialogTitle>
             <DialogDescription>
               {isEdit
                 ? 'Update staff details. Required fields are marked with an asterisk.'
@@ -130,12 +148,7 @@ export function StaffFormDialog({
           </DialogHeader>
 
           <div className="min-h-0 flex-1 space-y-6 overflow-y-auto py-4 pr-1">
-            {!hasLookupOptions && (
-              <p className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
-                Department and designation options are not available yet.
-              </p>
-            )}
-
+            {(section === 'all' || section === 'employment') && (
             <section className="space-y-4">
               <SectionHeading>Employment</SectionHeading>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -145,7 +158,7 @@ export function StaffFormDialog({
                   error={errors.employee_id?.message}
                   required
                 >
-                  <Input id="employee_id" readOnly={isEdit} {...register('employee_id')} />
+                  <Input id="employee_id" {...register('employee_id')} />
                 </FormField>
                 <FormField
                   label="Date of joining"
@@ -153,6 +166,13 @@ export function StaffFormDialog({
                   error={errors.date_of_joining?.message}
                 >
                   <Input id="date_of_joining" type="date" {...register('date_of_joining')} />
+                </FormField>
+                <FormField
+                  label="Date of leaving"
+                  htmlFor="date_of_leaving"
+                  error={errors.date_of_leaving?.message}
+                >
+                  <Input id="date_of_leaving" type="date" {...register('date_of_leaving')} />
                 </FormField>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -172,7 +192,6 @@ export function StaffFormDialog({
                         options={departmentOptions}
                         value={field.value ? String(field.value) : ''}
                         onChange={(e) => field.onChange(Number(e.target.value))}
-                        disabled={!hasLookupOptions}
                       />
                     )}
                   />
@@ -193,7 +212,6 @@ export function StaffFormDialog({
                         options={designationOptions}
                         value={field.value ? String(field.value) : ''}
                         onChange={(e) => field.onChange(Number(e.target.value))}
-                        disabled={!hasLookupOptions}
                       />
                     )}
                   />
@@ -236,14 +254,21 @@ export function StaffFormDialog({
                 </FormField>
               </div>
             </section>
+            )}
 
+            {(section === 'all' || section === 'personal') && (
             <section className="space-y-4">
               <SectionHeading>Personal details</SectionHeading>
               <div className="grid gap-4 sm:grid-cols-2">
                 <FormField label="First name" htmlFor="name" error={errors.name?.message} required>
                   <Input id="name" {...register('name')} />
                 </FormField>
-                <FormField label="Last name" htmlFor="surname" error={errors.surname?.message} required>
+                <FormField
+                  label="Last name"
+                  htmlFor="surname"
+                  error={errors.surname?.message}
+                  required
+                >
                   <Input id="surname" {...register('surname')} />
                 </FormField>
               </div>
@@ -317,7 +342,9 @@ export function StaffFormDialog({
                 </FormField>
               </div>
             </section>
+            )}
 
+            {(section === 'all' || section === 'professional' || section === 'employment') && (
             <section className="space-y-4">
               <SectionHeading>Professional</SectionHeading>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -339,29 +366,90 @@ export function StaffFormDialog({
                 </FormField>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <FormField label="Father's name" htmlFor="father_name" error={errors.father_name?.message}>
+                <FormField
+                  label="Father's name"
+                  htmlFor="father_name"
+                  error={errors.father_name?.message}
+                >
                   <Input id="father_name" {...register('father_name')} />
                 </FormField>
-                <FormField label="Mother's name" htmlFor="mother_name" error={errors.mother_name?.message}>
+                <FormField
+                  label="Mother's name"
+                  htmlFor="mother_name"
+                  error={errors.mother_name?.message}
+                >
                   <Input id="mother_name" {...register('mother_name')} />
                 </FormField>
               </div>
-              <FormField
-                label="Local address"
-                htmlFor="local_address"
-                error={errors.local_address?.message}
-                required
-              >
-                <Textarea id="local_address" rows={2} {...register('local_address')} />
-              </FormField>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  label="Local address"
+                  htmlFor="local_address"
+                  error={errors.local_address?.message}
+                  required
+                >
+                  <Textarea id="local_address" rows={2} {...register('local_address')} />
+                </FormField>
+                <FormField
+                  label="Permanent address"
+                  htmlFor="permanent_address"
+                  error={errors.permanent_address?.message}
+                  required
+                >
+                  <Textarea id="permanent_address" rows={2} {...register('permanent_address')} />
+                </FormField>
+              </div>
             </section>
+            )}
+
+            {(section === 'all' || section === 'payroll') && (
+            <section className="space-y-4">
+              <SectionHeading>Payroll</SectionHeading>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  label="Basic salary"
+                  htmlFor="basic_salary"
+                  error={errors.basic_salary?.message}
+                >
+                  <Input
+                    id="basic_salary"
+                    type="number"
+                    placeholder="e.g. 25000"
+                    {...register('basic_salary')}
+                  />
+                </FormField>
+                <FormField
+                  label="Contract type"
+                  htmlFor="contract_type_payroll"
+                  error={errors.contract_type?.message}
+                  required
+                >
+                  <Controller
+                    name="contract_type"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        id="contract_type_payroll"
+                        options={CONTRACT_TYPE_OPTIONS.map((o) => ({
+                          value: o.value,
+                          label: o.label,
+                        }))}
+                        value={field.value}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    )}
+                  />
+                </FormField>
+              </div>
+            </section>
+            )}
           </div>
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" isLoading={isLoading} disabled={!hasLookupOptions}>
+            <Button type="submit" isLoading={isLoading}>
               {isEdit ? 'Save changes' : 'Add staff member'}
             </Button>
           </DialogFooter>

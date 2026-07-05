@@ -74,10 +74,7 @@ function delay<T>(value: T, ms = 300): Promise<T> {
 }
 
 async function enrich(record: ExamRecord): Promise<Exam> {
-  const [groups, sessions] = await Promise.all([
-    examGroupsService.list(),
-    sessionsService.list(),
-  ]);
+  const [groups, sessions] = await Promise.all([examGroupsService.list(), sessionsService.list()]);
   const group = groups.find((g) => g.id === record.exam_group_id);
   const session = sessions.find((s) => s.id === record.session_id);
   return {

@@ -20,7 +20,10 @@ import type { AcademicSession } from '@app-types/settings/session';
 type DialogMode = 'create' | 'edit' | null;
 
 export function SessionsPage() {
-  const { data: sessions, isLoading, isError, error, refetch } = useSessions();
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError, error, refetch } = useSessions(page);
+  const sessions = data?.results;
+  const totalCount = data?.count || 0;
   const createMutation = useCreateSession();
   const updateMutation = useUpdateSession();
   const activateMutation = useActivateSession();
@@ -87,6 +90,9 @@ export function SessionsPage() {
       {!isLoading && !isError && sessions && sessions.length > 0 && (
         <SessionsTable
           sessions={sessions}
+          totalCount={totalCount}
+          page={page}
+          onPageChange={setPage}
           onEdit={(session) => {
             setSelectedSession(session);
             setDialogMode('edit');
@@ -134,9 +140,7 @@ export function SessionsPage() {
         }}
         title="Delete academic session?"
         description={
-          deleteTarget
-            ? `Permanently delete "${deleteTarget.session}"? This cannot be undone.`
-            : ''
+          deleteTarget ? `Permanently delete "${deleteTarget.session}"? This cannot be undone.` : ''
         }
         confirmLabel="Delete"
         destructive

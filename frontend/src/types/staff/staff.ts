@@ -41,6 +41,15 @@ export interface StaffDetail extends StaffListItem {
   contract_type: string;
   basic_salary: number | null;
   note: string;
+  resume: Array<{ id: number; name: string; file_path: string }>;
+  joining_letter: Array<{ id: number; name: string; file_path: string }>;
+  resignation_letter: Array<{ id: number; name: string; file_path: string }>;
+  other_documents: Array<{
+    id: number;
+    name: string;
+    file_path: string;
+    created_at?: string;
+  }>;
   updated_at: string | null;
 }
 
@@ -58,11 +67,14 @@ export interface CreateStaffPayload {
   qualification: string;
   work_exp: string;
   date_of_joining: string | null;
+  date_of_leaving: string | null;
   father_name: string | null;
   mother_name: string | null;
   local_address: string;
+  permanent_address: string;
   marital_status: string;
   contract_type: string;
+  basic_salary: number | null;
   is_active: ActiveFlag;
 }
 

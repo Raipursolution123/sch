@@ -16,4 +16,4 @@ export interface CreateCurrencyPayload {
   is_active: boolean;
 }
 
-export interface UpdateCurrencyPayload extends CreateCurrencyPayload {}
+export type UpdateCurrencyPayload = CreateCurrencyPayload;

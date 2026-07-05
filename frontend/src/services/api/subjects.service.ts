@@ -74,7 +74,7 @@ let mockSubjects: SubjectRecord[] = [
 ];
 let nextMockId = 6;
 
-const USE_MOCK = true; // TODO: Set to false when backend subjects API is deployed
+const USE_MOCK = false; // TODO: Set to false when backend subjects API is deployed
 
 function delay<T>(value: T, ms = 300): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
@@ -98,7 +98,7 @@ function normalizeCode(value: string): string {
 }
 
 async function enrich(records: SubjectRecord[]): Promise<Subject[]> {
-  const classes = await classesService.list();
+  const { results: classes } = await classesService.list();
   const classMap = new Map(classes.map((c) => [c.id, c.class_name]));
 
   return records.map((record) => {
@@ -116,16 +116,30 @@ function mockList(): SubjectRecord[] {
 }
 
 export const subjectsService = {
-  list: async (): Promise<Subject[]> => {
+  list: async (page = 1): Promise<{ results: Subject[]; count: number }> => {
     if (USE_MOCK) {
       const enriched = await enrich(mockList());
-      return delay(enriched.sort((a, b) => a.name.localeCompare(b.name)));
+      const sorted = enriched.sort((a, b) => a.name.localeCompare(b.name));
+      return delay({ results: sorted, count: sorted.length });
     }
     // TODO: Wire when backend exposes GET /api/v1/academics/subjects/
-    const { data } = await apiClient.get<ApiSuccessResponse<Subject[]>>(
-      API_ENDPOINTS.academics.subjects,
+    const { data } = await apiClient.get<any>(
+      `${API_ENDPOINTS.academics.subjects}?page=${page}`,
     );
-    return data.data;
+    let results: Subject[] = [];
+    if (data?.results?.subjects && Array.isArray(data.results.subjects)) results = data.results.subjects;
+    else if (data?.data?.subjects && Array.isArray(data.data.subjects)) results = data.data.subjects;
+    else if (data?.subjects && Array.isArray(data.subjects)) results = data.subjects;
+    else if (data?.data && Array.isArray(data.data)) results = data.data;
+    else if (data?.results && Array.isArray(data.results)) results = data.results;
+
+    // We must ensure the linked_class string from the backend is parsed properly
+    // backend sends `linked_class`, frontend uses `linked_class_ids` and `linked_class_labels`.
+    // Instead of doing it here, we will just use `enrich` function if we needed to, but `enrich` was defined up top.
+    const finalResults = await enrich(results as unknown as SubjectRecord[]);
+
+    const count = data?.count || data?.data?.count || finalResults.length;
+    return { results: finalResults, count };
   },
 
   create: async (payload: CreateSubjectPayload): Promise<Subject> => {
@@ -149,9 +163,13 @@ export const subjectsService = {
       return delay(enriched);
     }
     // TODO: Wire when backend exposes POST /api/v1/academics/subjects/
-    const { data } = await apiClient.post<ApiSuccessResponse<Subject>>(
+    const apiPayload = {
+      ...payload,
+      linked_class: formatLinkedClass(payload.linked_class_ids)
+    };
+    const { data } = await apiClient.post<any>(
       API_ENDPOINTS.academics.subjects,
-      payload,
+      apiPayload,
     );
     return data.data;
   },
@@ -179,9 +197,13 @@ export const subjectsService = {
       return delay(enriched);
     }
     // TODO: Wire when backend exposes PATCH /api/v1/academics/subjects/{id}/
-    const { data } = await apiClient.patch<ApiSuccessResponse<Subject>>(
+    const apiPayload = {
+      ...payload,
+      linked_class: formatLinkedClass(payload.linked_class_ids)
+    };
+    const { data } = await apiClient.put<any>(
       API_ENDPOINTS.academics.subjectDetail(id),
-      payload,
+      apiPayload,
     );
     return data.data;
   },

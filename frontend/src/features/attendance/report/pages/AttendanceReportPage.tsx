@@ -29,8 +29,11 @@ function SummaryPill({ label, value }: { label: string; value: number }) {
 }
 
 export function AttendanceReportPage() {
-  const { data: classes = [] } = useClasses();
-  const { data: sections = [] } = useSections();
+  const { data: classesData } = useClasses();
+  const classes = classesData?.results || [];
+  
+  const { data: sectionsData } = useSections();
+  const sections = sectionsData?.results || [];
 
   const [fromDate, setFromDate] = useState(daysAgoIso(7));
   const [toDate, setToDate] = useState(todayIsoDate());
@@ -48,10 +51,13 @@ export function AttendanceReportPage() {
     [fromDate, toDate, classId, sectionId],
   );
 
-  const { data: report, isLoading, isError, error, refetch } = useAttendanceReport(
-    filters,
-    submitted,
-  );
+  const {
+    data: report,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useAttendanceReport(filters, submitted);
 
   const classOptions = [
     { value: '', label: 'All classes' },

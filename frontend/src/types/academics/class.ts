@@ -17,4 +17,4 @@ export interface CreateClassPayload {
   is_active: ActiveFlag;
 }
 
-export interface UpdateClassPayload extends CreateClassPayload {}
+export type UpdateClassPayload = CreateClassPayload;

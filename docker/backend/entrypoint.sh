@@ -30,15 +30,24 @@ echo "Checking onboarding prerequisites..."
 python manage.py check_onboarding || true
 
 echo "Running migrations..."
-python manage.py migrate --noinput || {
-    echo "Full migrate failed; applying framework migrations only..."
-    python manage.py migrate contenttypes --noinput
-    python manage.py migrate django_celery_results --noinput
-    python manage.py migrate django_celery_beat --noinput
-    python manage.py migrate sessions --noinput
-}
-
-echo "Collecting static files..."
-python manage.py collectstatic --noinput --clear 2>/dev/null || true
+if [ "${STAGING_DEPLOY:-false}" = "true" ]; then
+    python manage.py migrate --noinput || {
+        echo "WARN: Full migrate failed on staging; applying framework migrations only..."
+        python manage.py migrate contenttypes --noinput
+        python manage.py migrate django_celery_results --noinput
+        python manage.py migrate django_celery_beat --noinput
+        python manage.py migrate sessions --noinput
+    }
+    python manage.py collectstatic --noinput --clear
+else
+    python manage.py migrate --noinput || {
+        echo "Full migrate failed; applying framework migrations only..."
+        python manage.py migrate contenttypes --noinput
+        python manage.py migrate django_celery_results --noinput
+        python manage.py migrate django_celery_beat --noinput
+        python manage.py migrate sessions --noinput
+    }
+    python manage.py collectstatic --noinput --clear 2>/dev/null || true
+fi
 
 exec "$@"

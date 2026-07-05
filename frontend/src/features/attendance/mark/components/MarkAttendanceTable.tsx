@@ -4,7 +4,7 @@ import { Select } from '@components/ui/select';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { AttendanceStatusBadge } from '@features/attendance/components/AttendanceStatusBadge';
 
-export interface MarkAttendanceRow extends AttendanceRosterEntry {}
+export type MarkAttendanceRow = AttendanceRosterEntry;
 
 interface MarkAttendanceTableProps {
   entries: MarkAttendanceRow[];
@@ -56,9 +56,7 @@ export function MarkAttendanceTable({
     {
       id: 'preview',
       header: 'Mark',
-      cell: (row) => (
-        <AttendanceStatusBadge label={row.status_label} statusKey={row.status_key} />
-      ),
+      cell: (row) => <AttendanceStatusBadge label={row.status_label} statusKey={row.status_key} />,
     },
     {
       id: 'remark',
@@ -74,7 +72,5 @@ export function MarkAttendanceTable({
     },
   ];
 
-  return (
-    <DataTable data={entries} columns={columns} getRowKey={(row) => row.student_id} />
-  );
+  return <DataTable data={entries} columns={columns} getRowKey={(row) => row.student_id} />;
 }

@@ -2,7 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
 import { examGroupsService } from '@services/api';
-import type { CreateExamGroupPayload, UpdateExamGroupPayload } from '@app-types/examinations/exam-group';
+import type {
+  CreateExamGroupPayload,
+  UpdateExamGroupPayload,
+} from '@app-types/examinations/exam-group';
 import { getApiErrorMessage } from '@utils/session';
 
 export function useExamGroups() {

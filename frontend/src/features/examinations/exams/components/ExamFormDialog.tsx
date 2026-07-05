@@ -59,7 +59,8 @@ export function ExamFormDialog({
   const isEdit = Boolean(exam);
 
   const activeGroups = useMemo(
-    () => examGroups.filter((g) => g.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
+    () =>
+      examGroups.filter((g) => g.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
     [examGroups],
   );
   const groupOptions = activeGroups.map((g) => ({ value: String(g.id), label: g.name }));
@@ -68,8 +69,7 @@ export function ExamFormDialog({
     [sessions],
   );
 
-  const defaultSessionId =
-    sessions.find((s) => s.is_active === 'yes')?.id ?? sessions[0]?.id ?? 0;
+  const defaultSessionId = sessions.find((s) => s.is_active === 'yes')?.id ?? sessions[0]?.id ?? 0;
 
   const hasOptions = groupOptions.length > 0 && sessionOptions.length > 0;
 
@@ -137,7 +137,12 @@ export function ExamFormDialog({
             )}
 
             <FormField label="Name" htmlFor="name" error={errors.name?.message} required>
-              <Input id="name" placeholder="Mid-Term 2025" {...register('name')} disabled={!hasOptions} />
+              <Input
+                id="name"
+                placeholder="Mid-Term 2025"
+                {...register('name')}
+                disabled={!hasOptions}
+              />
             </FormField>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -187,7 +192,12 @@ export function ExamFormDialog({
 
             <div className="grid gap-4 sm:grid-cols-2">
               <FormField label="Date from" htmlFor="date_from" error={errors.date_from?.message}>
-                <Input id="date_from" type="date" {...register('date_from')} disabled={!hasOptions} />
+                <Input
+                  id="date_from"
+                  type="date"
+                  {...register('date_from')}
+                  disabled={!hasOptions}
+                />
               </FormField>
               <FormField label="Date to" htmlFor="date_to" error={errors.date_to?.message}>
                 <Input id="date_to" type="date" {...register('date_to')} disabled={!hasOptions} />
@@ -227,8 +237,17 @@ export function ExamFormDialog({
               </div>
             </FormField>
 
-            <FormField label="Description" htmlFor="description" error={errors.description?.message}>
-              <Textarea id="description" rows={2} {...register('description')} disabled={!hasOptions} />
+            <FormField
+              label="Description"
+              htmlFor="description"
+              error={errors.description?.message}
+            >
+              <Textarea
+                id="description"
+                rows={2}
+                {...register('description')}
+                disabled={!hasOptions}
+              />
             </FormField>
 
             <FormField label="Active">
@@ -236,7 +255,9 @@ export function ExamFormDialog({
                 <Switch
                   id="is_active"
                   checked={isActive}
-                  onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                  onCheckedChange={(checked) =>
+                    setValue('is_active', checked, { shouldDirty: true })
+                  }
                   disabled={!hasOptions}
                 />
                 <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>

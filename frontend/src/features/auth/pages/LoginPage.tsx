@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Button } from '@components/ui/button';
@@ -23,10 +23,16 @@ export function LoginPage() {
     onError: () => setError('Invalid username or password'),
   });
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
-    loginMutation.mutate({ username, password });
+    const formData = new FormData(e.currentTarget);
+    const formUsername = formData.get('username') as string;
+    const formPassword = formData.get('password') as string;
+    loginMutation.mutate({
+      username: formUsername || username,
+      password: formPassword || password,
+    });
   };
 
   return (
@@ -40,7 +46,7 @@ export function LoginPage() {
           type="text"
           name="username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
           required
           autoComplete="username"
         />
@@ -49,7 +55,7 @@ export function LoginPage() {
           type="password"
           name="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
           required
           autoComplete="current-password"
         />

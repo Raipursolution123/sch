@@ -10,8 +10,8 @@ export function HomePage() {
           {env.appName}
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-          Enterprise-grade multi-school ERP platform. Foundation architecture is ready for
-          modular business feature development.
+          Enterprise-grade multi-school ERP platform. Foundation architecture is ready for modular
+          business feature development.
         </p>
         <div className="mt-8 flex justify-center gap-4">
           <Link

@@ -1,14 +1,26 @@
 import { useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Pencil } from 'lucide-react';
+import { Link, useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@components/ui/alert-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { StaffOverviewTab } from '@features/staff/components/StaffOverviewTab';
 import { StaffEmploymentTab } from '@features/staff/components/StaffEmploymentTab';
 import { StaffPayrollTab } from '@features/staff/components/StaffPayrollTab';
-import { StaffFormDialog } from '@features/staff/components/StaffFormDialog';
+import { StaffDocumentsTab } from '@features/staff/components/StaffDocumentsTab';
+import { StaffFormDialog, type StaffFormSection } from '@features/staff/components/StaffFormDialog';
 import type { StaffFormValues } from '@features/staff/schemas/staff-form.schema';
 import { toStaffPayload } from '@features/staff/utils/staff-payload';
 import {
@@ -16,6 +28,7 @@ import {
   useStaffDesignations,
   useStaffMember,
   useUpdateStaff,
+  useDeleteStaff,
 } from '@hooks/useStaff';
 import { ROUTES } from '@constants/index';
 
@@ -23,7 +36,7 @@ const PROFILE_TABS = [
   { id: 'overview', label: 'Overview', enabled: true },
   { id: 'employment', label: 'Employment', enabled: true },
   { id: 'payroll', label: 'Payroll', enabled: true },
-  { id: 'documents', label: 'Documents', enabled: false },
+  { id: 'documents', label: 'Documents', enabled: true },
 ] as const;
 
 type ProfileTabId = (typeof PROFILE_TABS)[number]['id'];
@@ -41,11 +54,27 @@ export function StaffProfilePage() {
   const { data: departments = [] } = useStaffDepartments();
   const { data: designations = [] } = useStaffDesignations();
   const updateMutation = useUpdateStaff(id);
+  const deleteMutation = useDeleteStaff();
+  const navigate = useNavigate();
+
+  const handleDelete = () => {
+    deleteMutation.mutate(id, {
+      onSuccess: () => navigate(ROUTES.staff.root)
+    });
+  };
 
   const activeTab = searchParams.get('tab');
   const currentTab = isProfileTab(activeTab) ? activeTab : 'overview';
 
-  const canEdit = departments.length > 0 && designations.length > 0;
+  const tabToSection: Record<string, StaffFormSection> = {
+    overview: 'all',
+    employment: 'employment',
+    payroll: 'payroll',
+    documents: 'all',
+  };
+  const editSection = tabToSection[currentTab] ?? 'all';
+
+  const canEdit = true;
 
   const handleEditSubmit = (values: StaffFormValues) => {
     updateMutation.mutate(toStaffPayload(values), {
@@ -77,10 +106,41 @@ export function StaffProfilePage() {
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to Staff
         </Link>
-        <Button variant="outline" className="gap-1" onClick={() => setEditOpen(true)} disabled={!canEdit}>
-          <Pencil className="h-4 w-4" aria-hidden="true" />
-          Edit
-        </Button>
+        <div className="flex gap-2">
+          {currentTab !== 'documents' && (
+            <Button
+              variant="outline"
+              className="gap-1"
+              onClick={() => setEditOpen(true)}
+            >
+              <Pencil className="h-4 w-4" aria-hidden="true" />
+              Edit
+            </Button>
+          )}
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="gap-1">
+                <Trash2 className="h-4 w-4" aria-hidden="true" />
+                Delete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Staff Member</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete this staff member? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
 
       <Tabs
@@ -110,8 +170,12 @@ export function StaffProfilePage() {
           <StaffPayrollTab staff={staff} />
         </TabsContent>
 
+        <TabsContent value="documents" className="mt-6">
+          <StaffDocumentsTab staff={staff} />
+        </TabsContent>
+
         {PROFILE_TABS.filter(
-          (tab) => tab.id !== 'overview' && tab.id !== 'employment' && tab.id !== 'payroll',
+          (tab) => tab.id !== 'overview' && tab.id !== 'employment' && tab.id !== 'payroll' && tab.id !== 'documents',
         ).map((tab) => (
           <TabsContent key={tab.id} value={tab.id} className="mt-6">
             <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
@@ -129,6 +193,7 @@ export function StaffProfilePage() {
         staff={staff}
         onSubmit={handleEditSubmit}
         isLoading={updateMutation.isPending}
+        section={editSection}
       />
     </div>
   );

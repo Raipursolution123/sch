@@ -4,14 +4,17 @@ import secrets
 from dataclasses import dataclass
 from datetime import date, datetime
 
-import bcrypt
 from django.db import connection, transaction
 from django.utils import timezone
+
+import bcrypt
 
 from apps.accounts.services.legacy_password import hash_legacy_password
 from core.provisioning.paths import SEEDS_DIR
 
-SCH_SETTINGS_TEMPLATE = (SEEDS_DIR / "templates" / "sch_settings_insert.sql").read_text(encoding="utf-8")
+SCH_SETTINGS_TEMPLATE = (SEEDS_DIR / "templates" / "sch_settings_insert.sql").read_text(
+    encoding="utf-8"
+)
 
 
 @dataclass
@@ -233,7 +236,9 @@ def create_school_setup(data: SchoolSetupInput) -> dict:
                 ],
             )
             user_id = cursor.lastrowid
-            cursor.execute("UPDATE staff SET user_id = %s WHERE id = %s", [user_id, staff_id])
+            cursor.execute(
+                "UPDATE staff SET user_id = %s WHERE id = %s", [user_id, staff_id]
+            )
 
     return {
         "school_name": data.school_name,

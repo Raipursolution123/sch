@@ -19,4 +19,4 @@ export interface CreateLanguagePayload {
   is_active: ActiveFlag;
 }
 
-export interface UpdateLanguagePayload extends CreateLanguagePayload {}
+export type UpdateLanguagePayload = CreateLanguagePayload;

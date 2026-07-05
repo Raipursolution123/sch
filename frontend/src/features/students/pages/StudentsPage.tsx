@@ -10,11 +10,7 @@ import { StudentsTable } from '@features/students/components/StudentsTable';
 import { StudentAdmissionDialog } from '@features/students/components/StudentAdmissionDialog';
 import type { StudentAdmissionFormValues } from '@features/students/schemas/student-admission.schema';
 import { toStudentPayload } from '@features/students/utils/student-payload';
-import {
-  useCreateStudent,
-  useStudents,
-  useSuggestedAdmissionNo,
-} from '@hooks/useStudents';
+import { useCreateStudent, useStudents, useSuggestedAdmissionNo } from '@hooks/useStudents';
 import { useClasses } from '@hooks/useClasses';
 import { useSections } from '@hooks/useSections';
 import { matchesSearch } from '@utils/search';
@@ -22,8 +18,11 @@ import { formatClassSection } from '@utils/student';
 
 export function StudentsPage() {
   const { data: students, isLoading, isError, error, refetch } = useStudents();
-  const { data: classes = [] } = useClasses();
-  const { data: sections = [] } = useSections();
+  const { data: classesData } = useClasses();
+  const classes = classesData?.results || [];
+  
+  const { data: sectionsData } = useSections();
+  const sections = sectionsData?.results || [];
   const createMutation = useCreateStudent();
 
   const [admissionOpen, setAdmissionOpen] = useState(false);

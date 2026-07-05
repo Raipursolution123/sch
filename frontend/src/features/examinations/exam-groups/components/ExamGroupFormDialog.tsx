@@ -94,7 +94,12 @@ export function ExamGroupFormDialog({
             <FormField label="Name" htmlFor="name" error={errors.name?.message} required>
               <Input id="name" placeholder="Mid-Term Exams" {...register('name')} />
             </FormField>
-            <FormField label="Exam type" htmlFor="exam_type" error={errors.exam_type?.message} required>
+            <FormField
+              label="Exam type"
+              htmlFor="exam_type"
+              error={errors.exam_type?.message}
+              required
+            >
               <Controller
                 name="exam_type"
                 control={control}
@@ -108,7 +113,11 @@ export function ExamGroupFormDialog({
                 )}
               />
             </FormField>
-            <FormField label="Description" htmlFor="description" error={errors.description?.message}>
+            <FormField
+              label="Description"
+              htmlFor="description"
+              error={errors.description?.message}
+            >
               <Textarea id="description" rows={2} {...register('description')} />
             </FormField>
             <FormField label="Active">
@@ -116,7 +125,9 @@ export function ExamGroupFormDialog({
                 <Switch
                   id="is_active"
                   checked={isActive}
-                  onCheckedChange={(checked) => setValue('is_active', checked, { shouldDirty: true })}
+                  onCheckedChange={(checked) =>
+                    setValue('is_active', checked, { shouldDirty: true })
+                  }
                 />
                 <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
               </div>

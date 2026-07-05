@@ -59,7 +59,7 @@ class User(models.Model):
 
     @property
     def is_active_user(self):
-        return (self.is_active or "").lower() in {"yes", "1", "true"}
+        return str(self.is_active or "").lower() in {"yes", "1", "true"}
 
     @property
     def is_staff(self):
@@ -67,6 +67,8 @@ class User(models.Model):
 
     @property
     def is_superadmin(self):
+        from django.db.models import Q
+
         from apps.accounts.models.role import Role, StaffRole
 
         if self.role == "staff":
@@ -76,7 +78,9 @@ class User(models.Model):
                 is_active=1,
             ).exists()
 
-        return Role.objects.filter(slug=self.role, is_superadmin=1).exists()
+        return Role.objects.filter(
+            Q(slug=self.role) | Q(name=self.role), is_superadmin=1
+        ).exists()
 
     @property
     def role_slug(self):

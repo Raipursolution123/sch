@@ -167,7 +167,7 @@ let mockStaff: StaffRecord[] = [
 
 let nextMockId = 5;
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 function delay<T>(value: T, ms = 300): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
@@ -269,23 +269,28 @@ export const staffService = {
     return data.data;
   },
 
-  list: async (): Promise<StaffListItem[]> => {
+  list: async (page = 1): Promise<{ results: StaffListItem[]; count: number }> => {
     if (USE_MOCK) {
-      return delay(
-        [...mockStaff]
-          .map(toListItem)
-          .sort(
-            (a, b) =>
-              a.department_name.localeCompare(b.department_name) ||
-              a.full_name.localeCompare(b.full_name),
-          ),
-      );
+      const all = [...mockStaff]
+        .map(toListItem)
+        .sort(
+          (a, b) =>
+            a.department_name.localeCompare(b.department_name) ||
+            a.full_name.localeCompare(b.full_name),
+        );
+      return delay({ results: all, count: all.length });
     }
-    // TODO: Wire when backend exposes GET /api/v1/staff/
-    const { data } = await apiClient.get<ApiSuccessResponse<StaffListItem[]>>(
-      API_ENDPOINTS.staff.list,
+    const { data } = await apiClient.get<any>(
+      `${API_ENDPOINTS.staff.list}?page=${page}`,
     );
-    return data.data;
+    let results: StaffListItem[] = [];
+    if (data?.results?.staff) results = data.results.staff;
+    else if (data?.data?.staff) results = data.data.staff;
+    else if (data?.staff) results = data.staff;
+    else if (data?.results && Array.isArray(data.results)) results = data.results;
+    
+    const count = data?.count || data?.data?.count || results.length;
+    return { results, count };
   },
 
   getById: async (id: number): Promise<StaffDetail> => {
@@ -294,18 +299,17 @@ export const staffService = {
       if (!record) throw new Error('Staff member not found');
       return delay(toDetail(record));
     }
-    // TODO: Wire when backend exposes GET /api/v1/staff/{id}/
-    const { data } = await apiClient.get<ApiSuccessResponse<StaffDetail>>(
+    const { data } = await apiClient.get<any>(
       API_ENDPOINTS.staff.detail(id),
     );
-    return data.data;
+    return data.data?.staff || data.data || data;
   },
 
   suggestEmployeeId: async (): Promise<string> => {
     if (USE_MOCK) {
       return delay(suggestEmployeeId(mockStaff.map((s) => s.employee_id)));
     }
-    const staff = await staffService.list();
+    const { results: staff } = await staffService.list();
     return suggestEmployeeId(staff.map((s) => s.employee_id));
   },
 
@@ -326,12 +330,11 @@ export const staffService = {
       mockStaff = [...mockStaff, created];
       return delay(toDetail(created));
     }
-    // TODO: Wire when backend exposes POST /api/v1/staff/
-    const { data } = await apiClient.post<ApiSuccessResponse<StaffDetail>>(
+    const { data } = await apiClient.post<any>(
       API_ENDPOINTS.staff.list,
       payload,
     );
-    return data.data;
+    return data.data?.staff || data.data || data;
   },
 
   update: async (id: number, payload: UpdateStaffPayload): Promise<StaffDetail> => {
@@ -340,9 +343,7 @@ export const staffService = {
       if (index === -1) throw new Error('Staff member not found');
 
       const employeeId = payload.employee_id.trim().toUpperCase();
-      if (
-        mockStaff.some((s) => s.id !== id && s.employee_id.toUpperCase() === employeeId)
-      ) {
+      if (mockStaff.some((s) => s.id !== id && s.employee_id.toUpperCase() === employeeId)) {
         throw new Error('A staff member with this employee ID already exists');
       }
       if (!MOCK_DEPARTMENTS.some((d) => d.id === payload.department_id)) {
@@ -363,11 +364,45 @@ export const staffService = {
       mockStaff = mockStaff.map((s) => (s.id === id ? updated : s));
       return delay(toDetail(updated));
     }
-    // TODO: Wire when backend exposes PATCH /api/v1/staff/{id}/
-    const { data } = await apiClient.patch<ApiSuccessResponse<StaffDetail>>(
+    const { data } = await apiClient.put<any>(
       API_ENDPOINTS.staff.detail(id),
       payload,
     );
-    return data.data;
+    return data.data?.staff || data.data || data;
+  },
+
+  delete: async (id: number): Promise<void> => {
+    if (USE_MOCK) {
+      mockStaff = mockStaff.filter((s) => s.id !== id);
+      return delay(undefined);
+    }
+    await apiClient.delete(API_ENDPOINTS.staff.detail(id));
+  },
+
+  uploadDocument: async (id: number, data: FormData): Promise<any> => {
+    if (USE_MOCK) {
+      return delay({ success: true, message: 'Document uploaded (mock)' });
+    }
+    const response = await apiClient.post<any>(
+      API_ENDPOINTS.staff.documentUpload(id),
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  },
+
+  deleteDocument: async (id: number, data: { document_type: string; document_id?: number }): Promise<any> => {
+    if (USE_MOCK) {
+      return delay({ success: true, message: 'Document deleted (mock)' });
+    }
+    const response = await apiClient.delete<any>(
+      API_ENDPOINTS.staff.documentDelete(id),
+      { data }
+    );
+    return response.data;
   },
 };

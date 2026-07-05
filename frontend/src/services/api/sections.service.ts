@@ -40,7 +40,7 @@ let mockSections: Section[] = [
 ];
 let nextMockId = 5;
 
-const USE_MOCK = true; // TODO: Set to false when backend sections API is deployed
+const USE_MOCK = false; // TODO: Set to false when backend sections API is deployed
 
 function delay<T>(value: T, ms = 300): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
@@ -51,15 +51,24 @@ function mockList(): Section[] {
 }
 
 export const sectionsService = {
-  list: async (): Promise<Section[]> => {
+  list: async (page = 1): Promise<{ results: Section[]; count: number }> => {
     if (USE_MOCK) {
-      return delay(mockList());
+      const allData = await delay(mockList());
+      return { results: allData, count: allData.length };
     }
     // TODO: Wire when backend exposes GET /api/v1/academics/sections/
-    const { data } = await apiClient.get<ApiSuccessResponse<Section[]>>(
-      API_ENDPOINTS.academics.sections,
+    const { data } = await apiClient.get<any>(
+      `${API_ENDPOINTS.academics.sections}?page=${page}`,
     );
-    return data.data;
+    let results: Section[] = [];
+    if (data?.results?.sections && Array.isArray(data.results.sections)) results = data.results.sections;
+    else if (data?.data?.sections && Array.isArray(data.data.sections)) results = data.data.sections;
+    else if (data?.sections && Array.isArray(data.sections)) results = data.sections;
+    else if (data?.data && Array.isArray(data.data)) results = data.data;
+    else if (data?.results && Array.isArray(data.results)) results = data.results;
+    
+    const count = data?.count || data?.data?.count || results.length;
+    return { results, count };
   },
 
   create: async (payload: CreateSectionPayload): Promise<Section> => {

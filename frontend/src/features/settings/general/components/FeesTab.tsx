@@ -62,7 +62,12 @@ export function FeesTab({ settings, onSave, isSaving }: FeesTabProps) {
         }
       >
         <div className="grid gap-4 sm:grid-cols-2">
-          <FormField label="Currency code" htmlFor="currency" error={errors.currency?.message} required>
+          <FormField
+            label="Currency code"
+            htmlFor="currency"
+            error={errors.currency?.message}
+            required
+          >
             <Input id="currency" placeholder="INR" {...register('currency')} />
           </FormField>
           <FormField
@@ -85,7 +90,12 @@ export function FeesTab({ settings, onSave, isSaving }: FeesTabProps) {
             htmlFor="fee_due_days"
             error={errors.fee_due_days?.message}
           >
-            <Input id="fee_due_days" type="number" min={0} {...register('fee_due_days', { valueAsNumber: true })} />
+            <Input
+              id="fee_due_days"
+              type="number"
+              min={0}
+              {...register('fee_due_days', { valueAsNumber: true })}
+            />
           </FormField>
         </div>
         <div className="space-y-4 border-t pt-4">

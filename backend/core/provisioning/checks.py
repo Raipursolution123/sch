@@ -69,7 +69,9 @@ def check_onboarding() -> OnboardingStatus:
     except Exception as exc:
         status.issues.append(f"Database connection failed: {exc}")
         status.guidance.append("Check DB_HOST, DB_NAME, DB_USER, DB_PASSWORD in .env")
-        status.guidance.append("If using Docker: docker compose -f docker-compose.dev.yml up -d mysql")
+        status.guidance.append(
+            "If using Docker: docker compose -f docker-compose.dev.yml up -d mysql"
+        )
         return status
 
     with connection.cursor() as cursor:
@@ -85,7 +87,9 @@ def check_onboarding() -> OnboardingStatus:
 
         required_tables = ["sch_settings", "roles", "staff", "students", "sessions"]
         missing = [name for name in required_tables if not _table_exists(cursor, name)]
-        status.schema_ready = not missing and status.table_count >= EXPECTED_BUSINESS_TABLES
+        status.schema_ready = (
+            not missing and status.table_count >= EXPECTED_BUSINESS_TABLES
+        )
 
         if missing:
             status.issues.append(f"Missing tables: {', '.join(missing)}")
@@ -95,8 +99,12 @@ def check_onboarding() -> OnboardingStatus:
             )
 
         if not status.schema_ready:
-            status.guidance.append(f"Apply frozen schema: mysql -u USER -p DATABASE < {SCHEMA_SQL}")
-            status.guidance.append("Or from Docker: docker compose exec -T mysql mysql -u school_erp -pschool_erp school_erp < backend/seeds/schema.sql")
+            status.guidance.append(
+                f"Apply frozen schema: mysql -u USER -p DATABASE < {SCHEMA_SQL}"
+            )
+            status.guidance.append(
+                "Or from Docker: docker compose exec -T mysql mysql -u school_erp -pschool_erp school_erp < backend/seeds/schema.sql"
+            )
 
         status.roles_count = _count_rows(cursor, "roles")
         super_admin_role = 0
@@ -116,11 +124,15 @@ def check_onboarding() -> OnboardingStatus:
 
         if status.schema_ready and not status.basic_seed_ready:
             status.issues.append("Basic product seed is missing or incomplete")
-            status.guidance.append(f"Load basic seed: mysql -u USER -p DATABASE < {BASIC_SEED_SQL}")
+            status.guidance.append(
+                f"Load basic seed: mysql -u USER -p DATABASE < {BASIC_SEED_SQL}"
+            )
 
         status.school_initialized = _count_rows(cursor, "sch_settings") >= 1
         if status.basic_seed_ready and not status.school_initialized:
-            status.issues.append("School has not been initialized (sch_settings is empty)")
+            status.issues.append(
+                "School has not been initialized (sch_settings is empty)"
+            )
             status.guidance.append("Run: python manage.py initial_setup")
 
     if status.ready_for_development:

@@ -7,7 +7,5 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ isActive }: StatusBadgeProps) {
   const active = isActive === 'yes';
-  return (
-    <Badge variant={active ? 'success' : 'muted'}>{active ? 'Active' : 'Inactive'}</Badge>
-  );
+  return <Badge variant={active ? 'success' : 'muted'}>{active ? 'Active' : 'Inactive'}</Badge>;
 }

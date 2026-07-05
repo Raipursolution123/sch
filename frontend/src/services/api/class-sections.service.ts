@@ -20,14 +20,42 @@ interface ClassSectionRecord {
 
 // TODO: Remove mock store when GET /api/v1/academics/class-sections/ is available
 let mockClassSections: ClassSectionRecord[] = [
-  { id: 1, class_id: 4, section_id: 1, is_active: 'yes', created_at: '2024-01-01T00:00:00Z', updated_at: null },
-  { id: 2, class_id: 4, section_id: 2, is_active: 'yes', created_at: '2024-01-01T00:00:00Z', updated_at: null },
-  { id: 3, class_id: 5, section_id: 1, is_active: 'yes', created_at: '2024-01-01T00:00:00Z', updated_at: null },
-  { id: 4, class_id: 5, section_id: 2, is_active: 'no', created_at: '2024-01-01T00:00:00Z', updated_at: null },
+  {
+    id: 1,
+    class_id: 4,
+    section_id: 1,
+    is_active: 'yes',
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: null,
+  },
+  {
+    id: 2,
+    class_id: 4,
+    section_id: 2,
+    is_active: 'yes',
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: null,
+  },
+  {
+    id: 3,
+    class_id: 5,
+    section_id: 1,
+    is_active: 'yes',
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: null,
+  },
+  {
+    id: 4,
+    class_id: 5,
+    section_id: 2,
+    is_active: 'no',
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: null,
+  },
 ];
 let nextMockId = 5;
 
-const USE_MOCK = true; // TODO: Set to false when backend class-sections API is deployed
+const USE_MOCK = false; // TODO: Set to false when backend class-sections API is deployed
 
 function delay<T>(value: T, ms = 300): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
@@ -72,21 +100,29 @@ function assertUniquePair(classId: number, sectionId: number, excludeId?: number
 }
 
 export const classSectionsService = {
-  list: async (): Promise<ClassSection[]> => {
+  list: async (page = 1): Promise<{ results: ClassSection[]; count: number }> => {
     if (USE_MOCK) {
-      const enriched = await enrich(mockList());
-      return delay(
-        enriched.sort(
-          (a, b) =>
-            a.class_name.localeCompare(b.class_name) || a.section_name.localeCompare(b.section_name),
-        ),
+      const allData = await enrich(mockList());
+      const sorted = allData.sort(
+        (a, b) =>
+          a.class_name.localeCompare(b.class_name) ||
+          a.section_name.localeCompare(b.section_name),
       );
+      return delay({ results: sorted, count: sorted.length });
     }
     // TODO: Wire when backend exposes GET /api/v1/academics/class-sections/
-    const { data } = await apiClient.get<ApiSuccessResponse<ClassSection[]>>(
-      API_ENDPOINTS.academics.classSections,
+    const { data } = await apiClient.get<any>(
+      `${API_ENDPOINTS.academics.classSections}?page=${page}`,
     );
-    return data.data;
+    let results: ClassSection[] = [];
+    if (data?.results?.class_sections && Array.isArray(data.results.class_sections)) results = data.results.class_sections;
+    else if (data?.data?.class_sections && Array.isArray(data.data.class_sections)) results = data.data.class_sections;
+    else if (data?.class_sections && Array.isArray(data.class_sections)) results = data.class_sections;
+    else if (data?.data && Array.isArray(data.data)) results = data.data;
+    else if (data?.results && Array.isArray(data.results)) results = data.results;
+
+    const count = data?.count || data?.data?.count || results.length;
+    return { results, count };
   },
 
   create: async (payload: CreateClassSectionPayload): Promise<ClassSection> => {
