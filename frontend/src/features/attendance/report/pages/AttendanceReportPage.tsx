@@ -78,7 +78,7 @@ export function AttendanceReportPage() {
     <div className="space-y-6">
       <PageHeader
         title="Attendance Report"
-        description="Review attendance records by date range, class, and section."
+        // description="Review attendance records by date range, class, and section."
       />
 
       <div className="grid gap-4 rounded-lg border bg-card p-4 sm:grid-cols-2 lg:grid-cols-5">
