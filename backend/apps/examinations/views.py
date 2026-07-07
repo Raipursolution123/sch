@@ -154,3 +154,124 @@ class ExamGroupsDetailView(APIView):
         except Exception as e:
             logger.error(f"Error deleting exam group: {e}")
             return APIResponse.error(message=f"Failed to delete exam group: {str(e)}")
+
+from apps.examinations.models.exams import Exams
+
+def serialize_exam(exam):
+    return {
+        'id': exam.id,
+        'name': exam.name,
+        'session_id': exam.sesion_id,  # Note the spelling in the model is sesion_id
+        'note': exam.note,
+        'is_active': exam.is_active,
+        'created_at': safe_date_str(exam.created_at, '%Y-%m-%dT%H:%M:%SZ'),
+        'updated_at': safe_date_str(exam.updated_at),
+    }
+
+class ExamsListCreateView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        try:
+            exams_qs = Exams.objects.all().order_by('-id')
+            
+            paginator = StandardResultsSetPagination()
+            paginated_qs = paginator.paginate_queryset(exams_qs, request, view=self)
+            
+            current_page = paginated_qs if paginated_qs is not None else exams_qs
+            data = [serialize_exam(exam) for exam in current_page]
+            
+            if paginated_qs is not None:
+                return APIResponse.success(
+                    data={
+                        "count": paginator.page.paginator.count,
+                        "next": paginator.get_next_link(),
+                        "previous": paginator.get_previous_link(),
+                        "results": data
+                    },
+                    message="Exams retrieved successfully."
+                )
+                
+            return APIResponse.success(data=data, message="Exams retrieved successfully.")
+        except Exception as e:
+            logger.error(f"Error fetching exams: {e}")
+            return APIResponse.error(message=f"Failed to fetch exams: {str(e)}")
+
+    def post(self, request):
+        try:
+            data = request.data
+            
+            exam = Exams.objects.create(
+                name=data.get('name'),
+                sesion_id=data.get('session_id'),
+                note=data.get('note'),
+                is_active=data.get('is_active', 'no'),
+                created_at=timezone.now(),
+                updated_at=timezone.now().date(),
+            )
+            
+            return APIResponse.success(
+                data=serialize_exam(exam), 
+                message="Exam created successfully.", 
+                status_code=201
+            )
+        except Exception as e:
+            logger.error(f"Error creating exam: {e}")
+            return APIResponse.error(message=f"Failed to create exam: {str(e)}")
+
+
+class ExamsDetailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, pk):
+        return Exams.objects.filter(id=pk).first()
+
+    def get(self, request, pk):
+        try:
+            exam = self.get_object(pk)
+            if not exam:
+                return APIResponse.error(message="Exam not found.", status_code=404)
+                
+            return APIResponse.success(
+                data=serialize_exam(exam), 
+                message="Exam retrieved successfully."
+            )
+        except Exception as e:
+            logger.error(f"Error fetching exam: {e}")
+            return APIResponse.error(message=f"Failed to fetch exam: {str(e)}")
+
+    def put(self, request, pk):
+        try:
+            exam = self.get_object(pk)
+            if not exam:
+                return APIResponse.error(message="Exam not found.", status_code=404)
+                
+            data = request.data
+            
+            if 'name' in data: exam.name = data['name']
+            if 'session_id' in data: exam.sesion_id = data['session_id']
+            if 'note' in data: exam.note = data['note']
+            if 'is_active' in data: exam.is_active = data['is_active']
+            
+            exam.updated_at = timezone.now().date()
+            exam.save()
+            
+            return APIResponse.success(
+                data=serialize_exam(exam), 
+                message="Exam updated successfully."
+            )
+        except Exception as e:
+            logger.error(f"Error updating exam: {e}")
+            return APIResponse.error(message=f"Failed to update exam: {str(e)}")
+
+    def delete(self, request, pk):
+        try:
+            exam = self.get_object(pk)
+            if not exam:
+                return APIResponse.error(message="Exam not found.", status_code=404)
+                
+            exam.delete()
+            return APIResponse.success(message="Exam deleted successfully.")
+        except Exception as e:
+            logger.error(f"Error deleting exam: {e}")
+            return APIResponse.error(message=f"Failed to delete exam: {str(e)}")
