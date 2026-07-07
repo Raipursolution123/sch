@@ -18,10 +18,10 @@ def _validate_session_format(session_name):
         end_year = int(end_year_str)
         
     if end_year - start_year != 1:
-        return False, 'not allow to create a session with more then 1 year gap.'
+        return False, 'Session not allowed.'
         
     return True, session_name_clean
-
+    
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
