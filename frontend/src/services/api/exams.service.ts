@@ -75,7 +75,7 @@ function delay<T>(value: T, ms = 300): Promise<T> {
 
 async function enrich(record: ExamRecord): Promise<Exam> {
   const [groups, sessions] = await Promise.all([examGroupsService.list(), sessionsService.list()]);
-  const group = groups.find((g) => g.id === record.exam_group_id);
+  const group = groups.results.find((g) => g.id === record.exam_group_id);
   const session = sessions.results.find((s) => s.id === record.session_id);
   return {
     id: record.id,
@@ -111,7 +111,7 @@ export const examsService = {
   create: async (payload: CreateExamPayload): Promise<Exam> => {
     if (USE_MOCK) {
       const groups = await examGroupsService.list();
-      if (!groups.some((g) => g.id === payload.exam_group_id && g.is_active === 'yes')) {
+      if (!groups.results.some((g) => g.id === payload.exam_group_id && g.is_active === 'yes')) {
         throw new Error('Selected exam group is not available');
       }
       const sessions = await sessionsService.list();
@@ -148,7 +148,7 @@ export const examsService = {
       const index = mockExams.findIndex((e) => e.id === id);
       if (index === -1) throw new Error('Exam not found');
       const groups = await examGroupsService.list();
-      if (!groups.some((g) => g.id === payload.exam_group_id && g.is_active === 'yes')) {
+      if (!groups.results.some((g) => g.id === payload.exam_group_id && g.is_active === 'yes')) {
         throw new Error('Selected exam group is not available');
       }
       const updated: ExamRecord = {

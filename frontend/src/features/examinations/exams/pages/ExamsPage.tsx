@@ -34,7 +34,8 @@ function toPayload(values: ExamFormValues) {
 
 export function ExamsPage() {
   const { data: exams, isLoading, isError, error, refetch } = useExams();
-  const { data: examGroups = [] } = useExamGroups();
+  const { data: examGroupsData } = useExamGroups();
+  const examGroups = examGroupsData?.results || [];
   const { data: sessionsData } = useSessions();
   const sessions = sessionsData?.results || [];
   const createMutation = useCreateExam();
