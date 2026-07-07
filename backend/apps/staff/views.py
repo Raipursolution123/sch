@@ -162,9 +162,10 @@ class StaffListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can create staff.',
+                message='Access denied. Only Super Admins or Admins can create staff.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -273,7 +274,8 @@ class StaffDetailView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return APIResponse.error(message='Authentication required.', status_code=status.HTTP_401_UNAUTHORIZED)
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(message='Access denied.', status_code=status.HTTP_403_FORBIDDEN)
 
         s = self._get_staff(pk)
@@ -333,7 +335,8 @@ class StaffDetailView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return APIResponse.error(message='Authentication required.', status_code=status.HTTP_401_UNAUTHORIZED)
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(message='Access denied.', status_code=status.HTTP_403_FORBIDDEN)
 
         s = self._get_staff(pk)
@@ -393,7 +396,8 @@ class StaffDocumentUploadView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return APIResponse.error(message='Authentication required.', status_code=status.HTTP_401_UNAUTHORIZED)
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(message='Access denied.', status_code=status.HTTP_403_FORBIDDEN)
 
         try:
@@ -477,7 +481,8 @@ class StaffDocumentDeleteView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return APIResponse.error(message='Authentication required.', status_code=status.HTTP_401_UNAUTHORIZED)
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(message='Access denied.', status_code=status.HTTP_403_FORBIDDEN)
 
         try:
