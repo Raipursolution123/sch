@@ -61,7 +61,7 @@ const mockPayments: PaymentRecord[] = [
   },
 ];
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 function delay<T>(value: T, ms = 300): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
@@ -92,7 +92,7 @@ async function buildSummary(studentId: number): Promise<StudentFeeSummary> {
     sessionsService.list(),
   ]);
 
-  const activeSession = sessions.find((s) => s.is_active === 'yes') ?? sessions[0];
+  const activeSession = sessions.results.find((s) => s.is_active === 'yes') ?? sessions.results[0];
   const classAssignments = assignments.filter(
     (a) =>
       a.is_active === 'yes' &&
@@ -166,5 +166,17 @@ export const studentFeesService = {
       API_ENDPOINTS.students.fees(studentId),
     );
     return data.data;
+  },
+  payFee: async (
+    studentId: number,
+    payload: { amount: number; feetype_id: number; payment_mode?: string; description?: string; date?: string },
+  ): Promise<void> => {
+    await apiClient.post(API_ENDPOINTS.students.fees(studentId), payload);
+  },
+  revertFee: async (studentId: number, feetypeId: number): Promise<void> => {
+    await apiClient.delete(`${API_ENDPOINTS.students.fees(studentId)}?feetype_id=${feetypeId}`);
+  },
+  deletePayment: async (studentId: number, paymentId: number): Promise<void> => {
+    await apiClient.delete(`${API_ENDPOINTS.students.fees(studentId)}?payment_id=${paymentId}`);
   },
 };

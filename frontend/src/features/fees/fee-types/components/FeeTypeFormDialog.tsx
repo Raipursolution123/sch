@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -20,6 +20,7 @@ import {
   feeTypeFormSchema,
   type FeeTypeFormValues,
 } from '@features/fees/fee-types/schemas/fee-type.schema';
+import { useCreateFeeCategory } from '@hooks/useFeeTypes';
 
 interface FeeTypeFormDialogProps {
   open: boolean;
@@ -82,9 +83,31 @@ export function FeeTypeFormDialog({
       ...defaultValues,
       feecategory_id: categories[0]?.id ?? 0,
     });
+    setIsCreatingCategory(false);
+    setNewCategoryName('');
   }, [open, isEdit, feeType, categories, reset]);
 
   const isActive = watch('is_active');
+  const createCategoryMutation = useCreateFeeCategory();
+  
+  const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+
+  const handleCreateCategory = () => {
+    const name = newCategoryName.trim();
+    if (!name) return;
+    
+    createCategoryMutation.mutate(
+      { name, is_active: 'yes' },
+      {
+        onSuccess: (newCat) => {
+          setIsCreatingCategory(false);
+          setNewCategoryName('');
+          setValue('feecategory_id', newCat.id, { shouldValidate: true, shouldDirty: true });
+        }
+      }
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -112,20 +135,63 @@ export function FeeTypeFormDialog({
               error={errors.feecategory_id?.message}
               required
             >
-              <Controller
-                name="feecategory_id"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    id="feecategory_id"
-                    placeholder="Select category"
-                    options={categoryOptions}
-                    value={field.value ? String(field.value) : ''}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    disabled={categoryOptions.length === 0}
-                  />
+              <div className="flex items-center gap-2">
+                {isCreatingCategory ? (
+                  <>
+                    <Input
+                      placeholder="Category name..."
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      className="flex-1"
+                      autoFocus
+                    />
+                    <Button 
+                      type="button" 
+                      onClick={handleCreateCategory} 
+                      disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
+                    >
+                      Save
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      onClick={() => {
+                        setIsCreatingCategory(false);
+                        setNewCategoryName('');
+                      }}
+                      disabled={createCategoryMutation.isPending}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex-1">
+                      <Controller
+                        name="feecategory_id"
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            id="feecategory_id"
+                            placeholder={categoryOptions.length === 0 ? 'No categories available' : 'Select category'}
+                            options={categoryOptions}
+                            value={field.value ? String(field.value) : ''}
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                            disabled={categoryOptions.length === 0}
+                          />
+                        )}
+                      />
+                    </div>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => setIsCreatingCategory(true)}
+                    >
+                      New
+                    </Button>
+                  </>
                 )}
-              />
+              </div>
             </FormField>
             <FormField
               label="Description"

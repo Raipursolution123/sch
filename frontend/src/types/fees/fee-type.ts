@@ -3,6 +3,8 @@ import type { ActiveFlag } from '@app-types/settings/session';
 export interface FeeCategory {
   id: number;
   name: string;
+  is_active: ActiveFlag;
+  created_at: string;
 }
 
 export interface FeeType {

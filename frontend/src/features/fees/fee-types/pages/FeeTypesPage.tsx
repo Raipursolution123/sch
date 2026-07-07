@@ -63,12 +63,11 @@ export function FeeTypesPage() {
     <div className="space-y-6">
       <PageHeader
         title="Fee Types"
-        description="Define fee types and categories used when building fee packages."
+        // description="Define fee types and categories used when building fee packages."
         actions={
           <Button
             onClick={() => setDialogMode('create')}
             className="gap-1"
-            disabled={categories.length === 0}
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
             Add Fee Type
@@ -90,12 +89,10 @@ export function FeeTypesPage() {
           title="No fee types configured"
           description="Add your first fee type to start building fee structures."
           action={
-            categories.length > 0 ? (
               <Button onClick={() => setDialogMode('create')} className="gap-1">
                 <Plus className="h-4 w-4" aria-hidden="true" />
                 Add Fee Type
               </Button>
-            ) : undefined
           }
         />
       )}

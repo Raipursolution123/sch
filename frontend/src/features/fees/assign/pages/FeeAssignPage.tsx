@@ -42,12 +42,10 @@ export function FeeAssignPage() {
   const { data: assignments, isLoading, isError, error, refetch } = useFeeAssignments();
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  
-  const { data: sectionsData } = useSections();
-  const sections = sectionsData?.results || [];
   const { data: feeGroups = [] } = useFeeGroups();
   const { data: feeTypes = [] } = useFeeTypes();
-  const { data: sessions = [] } = useSessions();
+  const { data: sessionsData } = useSessions();
+  const sessions = sessionsData?.results || [];
   const createMutation = useCreateFeeAssignment();
   const updateMutation = useUpdateFeeAssignment();
   const deleteMutation = useDeleteFeeAssignment();
@@ -85,7 +83,7 @@ export function FeeAssignPage() {
     <div className="space-y-6">
       <PageHeader
         title="Assign Fees"
-        description="Assign fee groups to classes for the active session with per-line amounts."
+        // description="Assign fee groups to classes for the active session with per-line amounts."
         actions={
           <Button
             onClick={() => setDialogMode('create')}

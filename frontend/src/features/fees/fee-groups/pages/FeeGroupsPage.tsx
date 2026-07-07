@@ -59,7 +59,7 @@ export function FeeGroupsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Fee Groups"
-        description="Bundle fee types into packages for assignment to classes."
+        // description="Bundle fee types into packages for assignment to classes."
         actions={
           <Button onClick={() => setDialogMode('create')} className="gap-1">
             <Plus className="h-4 w-4" aria-hidden="true" />
