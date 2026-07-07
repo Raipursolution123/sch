@@ -6,41 +6,15 @@ import type {
   CreateSessionPayload,
   UpdateSessionPayload,
 } from '@app-types/settings/session';
+import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
 export const sessionsService = {
   list: async (page: number = 1): Promise<{ results: AcademicSession[]; count: number }> => {
-    const { data } = await apiClient.get<any>(
+    const { data } = await apiClient.get<BackendPayload>(
       `${API_ENDPOINTS.settings.sessions}?page=${page}`,
     );
-
-    // Standard paginated DRF response (results is array)
-    if (data?.results && Array.isArray(data.results)) {
-      return {
-        results: data.results,
-        count: data.count || 0,
-      };
-    }
-
-    // Standard paginated DRF response: { count, next, previous, results: { sessions: [...] } }
-    if (data?.results?.sessions && Array.isArray(data.results.sessions)) {
-      return {
-        results: data.results.sessions,
-        count: data.count || 0,
-      };
-    }
-
-    // Shape 1: APIResponse.success with direct array → { success, message, data: [...] }
-    if (data?.data && Array.isArray(data.data)) {
-      return { results: data.data, count: data.data.length };
-    }
-
-    // Shape 2: APIResponse.success with sessions key → { success, message, data: { sessions: [...] } }
-    const dataWithSessions = data?.data as unknown as { sessions?: AcademicSession[] };
-    if (dataWithSessions?.sessions && Array.isArray(dataWithSessions.sessions)) {
-      return { results: dataWithSessions.sessions, count: dataWithSessions.sessions.length };
-    }
-
-    return { results: [], count: 0 };
+    const results = extractList<AcademicSession>(data, 'sessions');
+    return { results, count: extractCount(data, results.length) };
   },
 
   getActive: async (): Promise<AcademicSession | null> => {

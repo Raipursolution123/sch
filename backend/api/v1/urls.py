@@ -29,7 +29,3 @@ urlpatterns = [
     # fees
     path("fees/", include("apps.fees.urls")),
 ]
-
-
-
-

@@ -20,7 +20,7 @@ export function StudentsPage() {
   const { data: students, isLoading, isError, error, refetch } = useStudents();
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  
+
   const { data: sectionsData } = useSections();
   const sections = sectionsData?.results || [];
   const createMutation = useCreateStudent();

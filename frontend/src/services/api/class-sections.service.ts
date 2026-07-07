@@ -6,6 +6,7 @@ import type {
   CreateClassSectionPayload,
   UpdateClassSectionPayload,
 } from '@app-types/academics/class-section';
+import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 import { classesService } from './classes.service';
 import { sectionsService } from './sections.service';
 
@@ -105,23 +106,16 @@ export const classSectionsService = {
       const allData = await enrich(mockList());
       const sorted = allData.sort(
         (a, b) =>
-          a.class_name.localeCompare(b.class_name) ||
-          a.section_name.localeCompare(b.section_name),
+          a.class_name.localeCompare(b.class_name) || a.section_name.localeCompare(b.section_name),
       );
       return delay({ results: sorted, count: sorted.length });
     }
     // TODO: Wire when backend exposes GET /api/v1/academics/class-sections/
-    const { data } = await apiClient.get<any>(
+    const { data } = await apiClient.get<BackendPayload>(
       `${API_ENDPOINTS.academics.classSections}?page=${page}`,
     );
-    let results: ClassSection[] = [];
-    if (data?.results?.class_sections && Array.isArray(data.results.class_sections)) results = data.results.class_sections;
-    else if (data?.data?.class_sections && Array.isArray(data.data.class_sections)) results = data.data.class_sections;
-    else if (data?.class_sections && Array.isArray(data.class_sections)) results = data.class_sections;
-    else if (data?.data && Array.isArray(data.data)) results = data.data;
-    else if (data?.results && Array.isArray(data.results)) results = data.results;
-
-    const count = data?.count || data?.data?.count || results.length;
+    const results = extractList<ClassSection>(data, 'class_sections');
+    const count = extractCount(data, results.length);
     return { results, count };
   },
 

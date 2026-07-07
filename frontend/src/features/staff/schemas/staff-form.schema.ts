@@ -21,7 +21,7 @@ export const staffFormSchema = z.object({
   permanent_address: z.string().trim().min(1, 'Permanent address is required'),
   marital_status: z.string().min(1, 'Marital status is required'),
   contract_type: z.string().min(1, 'Contract type is required'),
-  basic_salary: z.coerce.number().nullable().optional(),
+  basic_salary: z.number().nullable().optional(),
   is_active: z.boolean(),
 });
 

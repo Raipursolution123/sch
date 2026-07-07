@@ -6,24 +6,12 @@ import type {
   FeeAssignment,
   UpdateFeeAssignmentPayload,
 } from '@app-types/fees/fee-assignment';
+import { type BackendPayload, extractList } from '@utils/api-response';
 
 export const feeAssignmentsService = {
   list: async (): Promise<FeeAssignment[]> => {
-    const { data } = await apiClient.get<any>(API_ENDPOINTS.fees.assignments);
-
-    // Handle DRF paginated response: { count, next, previous, results: [...] }
-    if (data?.results && Array.isArray(data.results)) {
-      return data.results;
-    }
-    // Handle APIResponse wrapper: { success, message, data: [...] }
-    if (data?.data && Array.isArray(data.data)) {
-      return data.data;
-    }
-    if (data?.data?.results && Array.isArray(data.data.results)) {
-      return data.data.results;
-    }
-
-    return [];
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.fees.assignments);
+    return extractList<FeeAssignment>(data);
   },
 
   create: async (payload: CreateFeeAssignmentPayload): Promise<FeeAssignment> => {

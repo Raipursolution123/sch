@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui/dialog';
 import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
 import { Label } from '@components/ui/label';
@@ -32,9 +27,9 @@ export function StaffDocumentUploadDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
-    
+
     onSubmit(file, documentType === 'other_document_file' ? documentName : undefined);
-    
+
     // Reset state after submission
     if (!isLoading) {
       setFile(null);

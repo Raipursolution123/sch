@@ -23,7 +23,7 @@ export function SettingsCard({
       className={cn('rounded-lg border bg-card shadow-sm', className)}
       aria-labelledby={`${title.replace(/\s+/g, '-').toLowerCase()}-heading`}
     >
-      <div className="border-b px-6 py-4 flex items-center justify-between">
+      <div className="flex items-center justify-between border-b px-6 py-4">
         <div>
           <h2
             id={`${title.replace(/\s+/g, '-').toLowerCase()}-heading`}

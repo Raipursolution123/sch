@@ -110,11 +110,7 @@ export function SubjectsPage() {
             }}
             onDelete={setDeleteTarget}
           />
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
 

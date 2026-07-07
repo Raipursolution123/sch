@@ -3,7 +3,10 @@ import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
 import { feeTypesService } from '@services/api';
 import type { CreateFeeTypePayload, UpdateFeeTypePayload } from '@app-types/fees/fee-type';
-import type { CreateFeeCategoryPayload, UpdateFeeCategoryPayload } from '@services/api/fee-types.service';
+import type {
+  CreateFeeCategoryPayload,
+  UpdateFeeCategoryPayload,
+} from '@services/api/fee-types.service';
 import { getApiErrorMessage } from '@utils/session';
 
 // ── Fee Categories ─────────────────────────────────────────────

@@ -27,7 +27,6 @@ export function StaffPayrollTab({ staff }: StaffPayrollTabProps) {
             value={staff.basic_salary != null ? 'Configured' : 'Not configured'}
           />
         </dl>
-
       </SettingsCard>
     </div>
   );

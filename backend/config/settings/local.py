@@ -31,9 +31,11 @@ REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (  # noqa: F405
 
 # Monkeypatch database version check for older MariaDB versions in local dev
 from django.db.backends.base.base import BaseDatabaseWrapper
+
 BaseDatabaseWrapper.check_database_version_supported = lambda self: None
 
 from django.db.backends.mysql.features import DatabaseFeatures
+
 DatabaseFeatures.can_return_columns_from_insert = False
 DatabaseFeatures.can_return_rows_from_bulk_insert = False
 
@@ -44,6 +46,3 @@ CACHES = {
         "LOCATION": "school-erp-local-cache",
     }
 }
-
-
-

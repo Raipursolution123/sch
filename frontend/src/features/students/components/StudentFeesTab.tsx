@@ -8,7 +8,12 @@ import { ErrorState } from '@components/feedback/ErrorState';
 import { SettingsCard } from '@components/forms/SettingsCard';
 import { FeeLineStatusBadge } from '@features/students/components/FeeLineStatusBadge';
 import { CollectFeeDialog } from '@features/students/components/CollectFeeDialog';
-import { useStudentFees, usePayStudentFee, useRevertStudentFee, useDeletePayment } from '@hooks/useStudentFees';
+import {
+  useStudentFees,
+  usePayStudentFee,
+  useRevertStudentFee,
+  useDeletePayment,
+} from '@hooks/useStudentFees';
 import { ROUTES } from '@constants/index';
 import type { StudentDetail } from '@app-types/students/student';
 import type { StudentFeeLine, StudentFeePayment } from '@app-types/students/student-fees';
@@ -81,7 +86,7 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
         ),
       },
     ],
-    [deletePaymentMutation]
+    [deletePaymentMutation],
   );
 
   const lineColumns = useMemo<DataTableColumn<StudentFeeLine>[]>(
@@ -163,7 +168,7 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
           ),
       },
     ],
-    [payFeeMutation, revertFeeMutation]
+    [payFeeMutation, revertFeeMutation],
   );
 
   if (isLoading) {

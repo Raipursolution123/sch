@@ -102,7 +102,8 @@ export function useDeleteStaffDocument(id: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { document_type: string; document_id?: number }) => staffService.deleteDocument(id, data),
+    mutationFn: (data: { document_type: string; document_id?: number }) =>
+      staffService.deleteDocument(id, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.staff.all });
       toast.success('Document deleted successfully');

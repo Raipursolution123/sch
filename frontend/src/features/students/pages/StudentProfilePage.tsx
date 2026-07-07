@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Pencil } from 'lucide-react';
-import { Button } from '@components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { ErrorState } from '@components/feedback/ErrorState';
@@ -38,16 +37,13 @@ export function StudentProfilePage() {
   const { data: student, isLoading, isError, error, refetch } = useStudent(id);
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  
+
   const { data: sectionsData } = useSections();
   const sections = sectionsData?.results || [];
   const updateMutation = useUpdateStudent(id);
 
   const activeTab = searchParams.get('tab');
   const currentTab = isProfileTab(activeTab) ? activeTab : 'overview';
-
-  const canEdit =
-    classes.some((c) => c.is_active === 'yes') && sections.some((s) => s.is_active === 'yes');
 
   const handleEditSubmit = (values: StudentAdmissionFormValues) => {
     updateMutation.mutate(toStudentPayload(values), {

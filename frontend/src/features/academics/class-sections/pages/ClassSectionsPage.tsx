@@ -40,7 +40,7 @@ export function ClassSectionsPage() {
 
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  
+
   const { data: sectionsData } = useSections();
   const sections = sectionsData?.results || [];
   const createMutation = useCreateClassSection();
@@ -125,11 +125,7 @@ export function ClassSectionsPage() {
             }}
             onDelete={setDeleteTarget}
           />
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
 

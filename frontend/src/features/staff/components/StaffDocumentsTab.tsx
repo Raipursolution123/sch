@@ -22,8 +22,18 @@ interface DocumentItemProps {
   isDeleting: boolean;
 }
 
-function DocumentItem({ label, type, filename, name, id, onDeleteClick, isDeleting }: DocumentItemProps) {
-  const downloadUrl = filename.startsWith('http') ? filename : `${env.apiBaseUrl.replace('/api/v1', '')}/media/${filename}`;
+function DocumentItem({
+  label,
+  type,
+  filename,
+  name,
+  id,
+  onDeleteClick,
+  isDeleting,
+}: DocumentItemProps) {
+  const downloadUrl = filename.startsWith('http')
+    ? filename
+    : `${env.apiBaseUrl.replace('/api/v1', '')}/media/${filename}`;
 
   return (
     <div className="flex items-center justify-between py-3">
@@ -37,20 +47,20 @@ function DocumentItem({ label, type, filename, name, id, onDeleteClick, isDeleti
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <a 
-          href={downloadUrl} 
-          target="_blank" 
-          rel="noopener noreferrer" 
+        <a
+          href={downloadUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           download
           className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
           title="Download"
         >
           <Download className="h-4 w-4" />
         </a>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          title="Delete" 
+        <Button
+          variant="ghost"
+          size="icon"
+          title="Delete"
           onClick={() => onDeleteClick(type, id)}
           disabled={isDeleting}
           className="text-destructive hover:bg-destructive/10 hover:text-destructive"
@@ -73,10 +83,19 @@ interface DocumentSectionProps {
   isDeleting: boolean;
 }
 
-function DocumentSection({ title, description, documents, type, label, onUploadClick, onDeleteClick, isDeleting }: DocumentSectionProps) {
+function DocumentSection({
+  title,
+  description,
+  documents,
+  type,
+  label,
+  onUploadClick,
+  onDeleteClick,
+  isDeleting,
+}: DocumentSectionProps) {
   return (
-    <SettingsCard 
-      title={title} 
+    <SettingsCard
+      title={title}
       description={description}
       action={
         <Button variant="outline" size="sm" onClick={() => onUploadClick(type, label)}>
@@ -88,22 +107,20 @@ function DocumentSection({ title, description, documents, type, label, onUploadC
       {documents && documents.length > 0 ? (
         <div className="divide-y">
           {documents.map((doc) => (
-            <DocumentItem 
+            <DocumentItem
               key={doc.id}
-              label={label} 
+              label={label}
               type={type}
               id={doc.id}
-              name={doc.name} 
-              filename={doc.file_path} 
+              name={doc.name}
+              filename={doc.file_path}
               onDeleteClick={onDeleteClick}
               isDeleting={isDeleting}
             />
           ))}
         </div>
       ) : (
-        <div className="py-6 text-center text-sm text-muted-foreground">
-          No documents uploaded.
-        </div>
+        <div className="py-6 text-center text-sm text-muted-foreground">No documents uploaded.</div>
       )}
     </SettingsCard>
   );
@@ -111,7 +128,9 @@ function DocumentSection({ title, description, documents, type, label, onUploadC
 
 export function StaffDocumentsTab({ staff }: StaffDocumentsTabProps) {
   const [uploadOpen, setUploadOpen] = useState(false);
-  const [activeUploadType, setActiveUploadType] = useState<{ type: string; label: string } | null>(null);
+  const [activeUploadType, setActiveUploadType] = useState<{ type: string; label: string } | null>(
+    null,
+  );
 
   const uploadMutation = useUploadStaffDocument(staff.id);
   const deleteMutation = useDeleteStaffDocument(staff.id);
@@ -135,7 +154,7 @@ export function StaffDocumentsTab({ staff }: StaffDocumentsTabProps) {
       onSuccess: () => {
         setUploadOpen(false);
         setActiveUploadType(null);
-      }
+      },
     });
   };
 
@@ -196,4 +215,3 @@ export function StaffDocumentsTab({ staff }: StaffDocumentsTabProps) {
     </div>
   );
 }
-    

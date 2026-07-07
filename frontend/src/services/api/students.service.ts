@@ -8,25 +8,12 @@ import type {
   UpdateStudentPayload,
 } from '@app-types/students/student';
 import { suggestAdmissionNumber } from '@utils/student';
+import { type BackendPayload, extractList } from '@utils/api-response';
 
 export const studentsService = {
   list: async (): Promise<StudentListItem[]> => {
-    const { data } = await apiClient.get<any>(API_ENDPOINTS.students.list);
-
-    // Handle DRF paginated response: { count, next, previous, results: [...] }
-    if (data?.results && Array.isArray(data.results)) {
-      return data.results;
-    }
-    // Handle APIResponse wrapper: { success, message, data: [...] }
-    if (data?.data && Array.isArray(data.data)) {
-      return data.data;
-    }
-    // Handle APIResponse wrapper with nested results: { success, message, data: { results: [...] } }
-    if (data?.data?.results && Array.isArray(data.data.results)) {
-      return data.data.results;
-    }
-
-    return [];
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.students.list);
+    return extractList<StudentListItem>(data);
   },
 
   getById: async (id: number): Promise<StudentDetail> => {

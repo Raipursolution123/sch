@@ -10,6 +10,7 @@ import type {
   UpdateStaffPayload,
 } from '@app-types/staff/staff';
 import { formatStaffName, suggestEmployeeId } from '@utils/staff';
+import { type BackendPayload, extractCount, extractEntity, extractList } from '@utils/api-response';
 
 interface StaffRecord {
   id: number;
@@ -216,6 +217,10 @@ function toDetail(record: StaffRecord): StaffDetail {
     contract_type: record.contract_type,
     basic_salary: record.basic_salary,
     note: record.note,
+    resume: [],
+    joining_letter: [],
+    resignation_letter: [],
+    other_documents: [],
     updated_at: record.updated_at,
   };
 }
@@ -280,17 +285,11 @@ export const staffService = {
         );
       return delay({ results: all, count: all.length });
     }
-    const { data } = await apiClient.get<any>(
+    const { data } = await apiClient.get<BackendPayload>(
       `${API_ENDPOINTS.staff.list}?page=${page}`,
     );
-    let results: StaffListItem[] = [];
-    if (data?.results?.staff) results = data.results.staff;
-    else if (data?.data?.staff) results = data.data.staff;
-    else if (data?.staff) results = data.staff;
-    else if (data?.results && Array.isArray(data.results)) results = data.results;
-    
-    const count = data?.count || data?.data?.count || results.length;
-    return { results, count };
+    const results = extractList<StaffListItem>(data, 'staff');
+    return { results, count: extractCount(data, results.length) };
   },
 
   getById: async (id: number): Promise<StaffDetail> => {
@@ -299,10 +298,8 @@ export const staffService = {
       if (!record) throw new Error('Staff member not found');
       return delay(toDetail(record));
     }
-    const { data } = await apiClient.get<any>(
-      API_ENDPOINTS.staff.detail(id),
-    );
-    return data.data?.staff || data.data || data;
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.staff.detail(id));
+    return extractEntity<StaffDetail>(data, 'staff');
   },
 
   suggestEmployeeId: async (): Promise<string> => {
@@ -330,11 +327,8 @@ export const staffService = {
       mockStaff = [...mockStaff, created];
       return delay(toDetail(created));
     }
-    const { data } = await apiClient.post<any>(
-      API_ENDPOINTS.staff.list,
-      payload,
-    );
-    return data.data?.staff || data.data || data;
+    const { data } = await apiClient.post<BackendPayload>(API_ENDPOINTS.staff.list, payload);
+    return extractEntity<StaffDetail>(data, 'staff');
   },
 
   update: async (id: number, payload: UpdateStaffPayload): Promise<StaffDetail> => {
@@ -364,11 +358,8 @@ export const staffService = {
       mockStaff = mockStaff.map((s) => (s.id === id ? updated : s));
       return delay(toDetail(updated));
     }
-    const { data } = await apiClient.put<any>(
-      API_ENDPOINTS.staff.detail(id),
-      payload,
-    );
-    return data.data?.staff || data.data || data;
+    const { data } = await apiClient.put<BackendPayload>(API_ENDPOINTS.staff.detail(id), payload);
+    return extractEntity<StaffDetail>(data, 'staff');
   },
 
   delete: async (id: number): Promise<void> => {
@@ -379,29 +370,32 @@ export const staffService = {
     await apiClient.delete(API_ENDPOINTS.staff.detail(id));
   },
 
-  uploadDocument: async (id: number, data: FormData): Promise<any> => {
+  uploadDocument: async (id: number, formData: FormData): Promise<BackendPayload> => {
     if (USE_MOCK) {
       return delay({ success: true, message: 'Document uploaded (mock)' });
     }
-    const response = await apiClient.post<any>(
+    const response = await apiClient.post<BackendPayload>(
       API_ENDPOINTS.staff.documentUpload(id),
-      data,
+      formData,
       {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      }
+      },
     );
     return response.data;
   },
 
-  deleteDocument: async (id: number, data: { document_type: string; document_id?: number }): Promise<any> => {
+  deleteDocument: async (
+    id: number,
+    payload: { document_type: string; document_id?: number },
+  ): Promise<BackendPayload> => {
     if (USE_MOCK) {
       return delay({ success: true, message: 'Document deleted (mock)' });
     }
-    const response = await apiClient.delete<any>(
+    const response = await apiClient.delete<BackendPayload>(
       API_ENDPOINTS.staff.documentDelete(id),
-      { data }
+      { data: payload },
     );
     return response.data;
   },

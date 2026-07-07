@@ -169,7 +169,13 @@ export const studentFeesService = {
   },
   payFee: async (
     studentId: number,
-    payload: { amount: number; feetype_id: number; payment_mode?: string; description?: string; date?: string },
+    payload: {
+      amount: number;
+      feetype_id: number;
+      payment_mode?: string;
+      description?: string;
+      date?: string;
+    },
   ): Promise<void> => {
     await apiClient.post(API_ENDPOINTS.students.fees(studentId), payload);
   },

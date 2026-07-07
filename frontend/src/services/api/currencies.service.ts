@@ -6,6 +6,7 @@ import type {
   Currency,
   UpdateCurrencyPayload,
 } from '@app-types/settings/currency';
+import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
 interface BackendCurrency {
   id: number;
@@ -26,35 +27,14 @@ function mapCurrency(c: BackendCurrency): Currency {
 
 export const currenciesService = {
   list: async (page: number = 1): Promise<{ results: Currency[]; count: number }> => {
-    const { data } = await apiClient.get<any>(
+    const { data } = await apiClient.get<BackendPayload>(
       `${API_ENDPOINTS.settings.currencies}?page=${page}`,
     );
-
-    // Standard paginated DRF response (results is array)
-    if (data?.results && Array.isArray(data.results)) {
-      return {
-        results: data.results.map(mapCurrency),
-        count: data.count || 0,
-      };
-    }
-
-    // Standard paginated DRF response: { count, next, previous, results: { currencies: [...] } }
-    if (data?.results?.currencies && Array.isArray(data.results.currencies)) {
-      return {
-        results: data.results.currencies.map(mapCurrency),
-        count: data.count || 0,
-      };
-    }
-
-    // Fallback: raw array wrapper
-    if (Array.isArray(data?.data)) {
-      return {
-        results: (data.data as unknown as BackendCurrency[]).map(mapCurrency),
-        count: data.data.length,
-      };
-    }
-
-    return { results: [], count: 0 };
+    const raw = extractList<BackendCurrency>(data, 'currencies');
+    return {
+      results: raw.map(mapCurrency),
+      count: extractCount(data, raw.length),
+    };
   },
 
   create: async (payload: CreateCurrencyPayload): Promise<Currency> => {

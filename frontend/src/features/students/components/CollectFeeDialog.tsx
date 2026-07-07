@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -27,7 +27,13 @@ interface CollectFeeDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   feeLine: StudentFeeLine | null;
-  onSubmit: (payload: { amount: number; feetype_id: number; date: string; payment_mode: string; description: string }) => void;
+  onSubmit: (payload: {
+    amount: number;
+    feetype_id: number;
+    date: string;
+    payment_mode: string;
+    description: string;
+  }) => void;
   isLoading?: boolean;
 }
 
@@ -38,7 +44,13 @@ const PAYMENT_MODES = [
   { value: 'Online', label: 'Online' },
 ];
 
-export function CollectFeeDialog({ open, onOpenChange, feeLine, onSubmit, isLoading }: CollectFeeDialogProps) {
+export function CollectFeeDialog({
+  open,
+  onOpenChange,
+  feeLine,
+  onSubmit,
+  isLoading,
+}: CollectFeeDialogProps) {
   const {
     control,
     handleSubmit,
@@ -63,7 +75,7 @@ export function CollectFeeDialog({ open, onOpenChange, feeLine, onSubmit, isLoad
 
   const handleFormSubmit = (values: CollectFeeFormValues) => {
     if (!feeLine) return;
-    
+
     onSubmit({
       amount: feeLine.balance,
       feetype_id: feeLine.feetype_id,
@@ -79,15 +91,15 @@ export function CollectFeeDialog({ open, onOpenChange, feeLine, onSubmit, isLoad
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <DialogHeader>
             <DialogTitle>Collect Fee</DialogTitle>
-            <DialogDescription>
-              Record a payment for {feeLine?.feetype_name}.
-            </DialogDescription>
+            <DialogDescription>Record a payment for {feeLine?.feetype_name}.</DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <p className="text-sm font-medium">Amount to pay</p>
-              <p className="text-2xl font-bold tracking-tight">₹{feeLine?.balance?.toFixed(2) ?? '0.00'}</p>
+              <p className="text-2xl font-bold tracking-tight">
+                ₹{feeLine?.balance?.toFixed(2) ?? '0.00'}
+              </p>
             </div>
 
             <FormField label="Date of Payment" htmlFor="date" error={errors.date?.message} required>
@@ -99,8 +111,13 @@ export function CollectFeeDialog({ open, onOpenChange, feeLine, onSubmit, isLoad
                 )}
               />
             </FormField>
-            
-            <FormField label="Payment Mode" htmlFor="payment_mode" error={errors.payment_mode?.message} required>
+
+            <FormField
+              label="Payment Mode"
+              htmlFor="payment_mode"
+              error={errors.payment_mode?.message}
+              required
+            >
               <Controller
                 name="payment_mode"
                 control={control}

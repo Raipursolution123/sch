@@ -31,7 +31,7 @@ function SummaryPill({ label, value }: { label: string; value: number }) {
 export function AttendanceReportPage() {
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  
+
   const { data: sectionsData } = useSections();
   const sections = sectionsData?.results || [];
 

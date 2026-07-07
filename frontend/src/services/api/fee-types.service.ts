@@ -7,6 +7,7 @@ import type {
   FeeType,
   UpdateFeeTypePayload,
 } from '@app-types/fees/fee-type';
+import { type BackendPayload, extractList } from '@utils/api-response';
 
 export interface CreateFeeCategoryPayload {
   name: string;
@@ -18,21 +19,8 @@ export type UpdateFeeCategoryPayload = Partial<CreateFeeCategoryPayload>;
 export const feeTypesService = {
   // ── Fee Categories ────────────────────────────────────────────
   listCategories: async (): Promise<FeeCategory[]> => {
-    const { data } = await apiClient.get<any>(API_ENDPOINTS.fees.categories);
-
-    // Standard DRF paginated: { count, results: [...] }
-    if (data?.results && Array.isArray(data.results)) {
-      return data.results;
-    }
-    // APIResponse wrapper: { success, data: [...] }
-    if (data?.data && Array.isArray(data.data)) {
-      return data.data;
-    }
-    if (data?.data?.results && Array.isArray(data.data.results)) {
-      return data.data.results;
-    }
-
-    return [];
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.fees.categories);
+    return extractList<FeeCategory>(data);
   },
 
   createCategory: async (payload: CreateFeeCategoryPayload): Promise<FeeCategory> => {
@@ -57,21 +45,8 @@ export const feeTypesService = {
 
   // ── Fee Types ─────────────────────────────────────────────────
   list: async (): Promise<FeeType[]> => {
-    const { data } = await apiClient.get<any>(API_ENDPOINTS.fees.feeTypes);
-
-    // Handle DRF paginated response: { count, next, previous, results: [...] }
-    if (data?.results && Array.isArray(data.results)) {
-      return data.results;
-    }
-    // Handle APIResponse wrapper: { success, message, data: [...] }
-    if (data?.data && Array.isArray(data.data)) {
-      return data.data;
-    }
-    if (data?.data?.results && Array.isArray(data.data.results)) {
-      return data.data.results;
-    }
-
-    return [];
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.fees.feeTypes);
+    return extractList<FeeType>(data);
   },
 
   create: async (payload: CreateFeeTypePayload): Promise<FeeType> => {

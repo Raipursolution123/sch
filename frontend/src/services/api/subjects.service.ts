@@ -1,12 +1,12 @@
 import { apiClient } from '@services/api/client';
 import { API_ENDPOINTS } from '@constants/index';
-import type { ApiSuccessResponse } from '@app-types/api';
 import type {
   CreateSubjectPayload,
   Subject,
   UpdateSubjectPayload,
 } from '@app-types/academics/subject';
 import { classesService } from './classes.service';
+import { type BackendPayload, extractCount, extractEntity, extractList } from '@utils/api-response';
 
 interface SubjectRecord {
   id: number;
@@ -123,23 +123,12 @@ export const subjectsService = {
       return delay({ results: sorted, count: sorted.length });
     }
     // TODO: Wire when backend exposes GET /api/v1/academics/subjects/
-    const { data } = await apiClient.get<any>(
+    const { data } = await apiClient.get<BackendPayload>(
       `${API_ENDPOINTS.academics.subjects}?page=${page}`,
     );
-    let results: Subject[] = [];
-    if (data?.results?.subjects && Array.isArray(data.results.subjects)) results = data.results.subjects;
-    else if (data?.data?.subjects && Array.isArray(data.data.subjects)) results = data.data.subjects;
-    else if (data?.subjects && Array.isArray(data.subjects)) results = data.subjects;
-    else if (data?.data && Array.isArray(data.data)) results = data.data;
-    else if (data?.results && Array.isArray(data.results)) results = data.results;
-
-    // We must ensure the linked_class string from the backend is parsed properly
-    // backend sends `linked_class`, frontend uses `linked_class_ids` and `linked_class_labels`.
-    // Instead of doing it here, we will just use `enrich` function if we needed to, but `enrich` was defined up top.
-    const finalResults = await enrich(results as unknown as SubjectRecord[]);
-
-    const count = data?.count || data?.data?.count || finalResults.length;
-    return { results: finalResults, count };
+    const raw = extractList<SubjectRecord>(data, 'subjects');
+    const finalResults = await enrich(raw);
+    return { results: finalResults, count: extractCount(data, finalResults.length) };
   },
 
   create: async (payload: CreateSubjectPayload): Promise<Subject> => {
@@ -165,13 +154,13 @@ export const subjectsService = {
     // TODO: Wire when backend exposes POST /api/v1/academics/subjects/
     const apiPayload = {
       ...payload,
-      linked_class: formatLinkedClass(payload.linked_class_ids)
+      linked_class: formatLinkedClass(payload.linked_class_ids),
     };
-    const { data } = await apiClient.post<any>(
+    const { data } = await apiClient.post<BackendPayload>(
       API_ENDPOINTS.academics.subjects,
       apiPayload,
     );
-    return data.data;
+    return extractEntity<Subject>(data);
   },
 
   update: async (id: number, payload: UpdateSubjectPayload): Promise<Subject> => {
@@ -199,13 +188,13 @@ export const subjectsService = {
     // TODO: Wire when backend exposes PATCH /api/v1/academics/subjects/{id}/
     const apiPayload = {
       ...payload,
-      linked_class: formatLinkedClass(payload.linked_class_ids)
+      linked_class: formatLinkedClass(payload.linked_class_ids),
     };
-    const { data } = await apiClient.put<any>(
+    const { data } = await apiClient.put<BackendPayload>(
       API_ENDPOINTS.academics.subjectDetail(id),
       apiPayload,
     );
-    return data.data;
+    return extractEntity<Subject>(data);
   },
 
   delete: async (id: number): Promise<void> => {

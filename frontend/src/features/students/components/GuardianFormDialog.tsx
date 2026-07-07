@@ -66,7 +66,9 @@ export function GuardianFormDialog({
           </DialogHeader>
           <div className="space-y-6 py-4">
             <section className="space-y-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">Parents Details</h3>
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">
+                Parents Details
+              </h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 <FormField
                   label="Father's name"
@@ -84,9 +86,11 @@ export function GuardianFormDialog({
                 </FormField>
               </div>
             </section>
-            
+
             <section className="space-y-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">Guardian</h3>
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">
+                Guardian
+              </h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 <FormField
                   label="Guardian's name"

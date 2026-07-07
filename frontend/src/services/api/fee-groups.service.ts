@@ -6,25 +6,12 @@ import type {
   FeeGroup,
   UpdateFeeGroupPayload,
 } from '@app-types/fees/fee-group';
+import { type BackendPayload, extractList } from '@utils/api-response';
 
 export const feeGroupsService = {
   list: async (): Promise<FeeGroup[]> => {
-    const { data } = await apiClient.get<any>(API_ENDPOINTS.fees.feeGroups);
-    
-    // Handle DRF paginated response: { count, next, previous, results: [...] }
-    if (data?.results && Array.isArray(data.results)) {
-      return data.results;
-    }
-    // Handle APIResponse wrapper: { success, message, data: [...] }
-    if (data?.data && Array.isArray(data.data)) {
-      return data.data;
-    }
-    // Handle APIResponse wrapper with nested results
-    if (data?.data?.results && Array.isArray(data.data.results)) {
-      return data.data.results;
-    }
-    
-    return [];
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.fees.feeGroups);
+    return extractList<FeeGroup>(data);
   },
 
   create: async (payload: CreateFeeGroupPayload): Promise<FeeGroup> => {

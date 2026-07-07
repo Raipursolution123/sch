@@ -6,6 +6,7 @@ import type {
   Language,
   UpdateLanguagePayload,
 } from '@app-types/settings/language';
+import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
 // The backend returns is_rtl as 0 or 1. Let's map it to boolean for the frontend.
 interface BackendLanguage extends Omit<Language, 'is_rtl'> {
@@ -19,35 +20,14 @@ const mapLanguage = (l: BackendLanguage): Language => ({
 
 export const languagesService = {
   list: async (page: number = 1): Promise<{ results: Language[]; count: number }> => {
-    const { data } = await apiClient.get<any>(
+    const { data } = await apiClient.get<BackendPayload>(
       `${API_ENDPOINTS.settings.languages}?page=${page}`,
     );
-    
-    // Standard paginated DRF response (results is array)
-    if (data?.results && Array.isArray(data.results)) {
-      return {
-        results: data.results.map(mapLanguage),
-        count: data.count || 0,
-      };
-    }
-    
-    // Standard paginated DRF response: { count, next, previous, results: { languages: [...] } }
-    if (data?.results?.languages && Array.isArray(data.results.languages)) {
-      return {
-        results: data.results.languages.map(mapLanguage),
-        count: data.count || 0,
-      };
-    }
-    
-    // Fallback: raw array wrapper
-    if (Array.isArray(data?.data)) {
-        return {
-          results: (data.data as unknown as BackendLanguage[]).map(mapLanguage),
-          count: data.data.length,
-        };
-    }
-    
-    return { results: [], count: 0 };
+    const raw = extractList<BackendLanguage>(data, 'languages');
+    return {
+      results: raw.map(mapLanguage),
+      count: extractCount(data, raw.length),
+    };
   },
 
   create: async (payload: CreateLanguagePayload): Promise<Language> => {

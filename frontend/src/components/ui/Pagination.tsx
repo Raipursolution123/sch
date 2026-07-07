@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from './Button';
+import { Button } from './button';
 import { cn } from '@utils/cn';
 
 export interface PaginationProps {
@@ -9,12 +9,7 @@ export interface PaginationProps {
   className?: string;
 }
 
-export function Pagination({
-  currentPage,
-  totalPages,
-  onPageChange,
-  className,
-}: PaginationProps) {
+export function Pagination({ currentPage, totalPages, onPageChange, className }: PaginationProps) {
   if (totalPages <= 1) return null;
 
   return (

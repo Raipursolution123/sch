@@ -14,8 +14,13 @@ export function usePayStudentFee(studentId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: { amount: number; feetype_id: number; payment_mode?: string; description?: string; date?: string }) =>
-      studentFeesService.payFee(studentId, payload),
+    mutationFn: (payload: {
+      amount: number;
+      feetype_id: number;
+      payment_mode?: string;
+      description?: string;
+      date?: string;
+    }) => studentFeesService.payFee(studentId, payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.students.fees(studentId) });
     },

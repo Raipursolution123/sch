@@ -6,6 +6,7 @@ import type {
   SchoolClass,
   UpdateClassPayload,
 } from '@app-types/academics/class';
+import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
 // TODO: Remove mock store when GET /api/v1/academics/classes/ is available
 let mockClasses: SchoolClass[] = [
@@ -99,17 +100,11 @@ export const classesService = {
       return { results: allData, count: allData.length };
     }
     // TODO: Wire when backend exposes GET /api/v1/academics/classes/
-    const { data } = await apiClient.get<any>(
+    const { data } = await apiClient.get<BackendPayload>(
       `${API_ENDPOINTS.academics.classes}?page=${page}`,
     );
-    let results: SchoolClass[] = [];
-    if (data?.results?.classes && Array.isArray(data.results.classes)) results = data.results.classes;
-    else if (data?.data?.classes && Array.isArray(data.data.classes)) results = data.data.classes;
-    else if (data?.classes && Array.isArray(data.classes)) results = data.classes;
-    else if (data?.data && Array.isArray(data.data)) results = data.data;
-    else if (data?.results && Array.isArray(data.results)) results = data.results;
-
-    const count = data?.count || data?.data?.count || results.length;
+    const results = extractList<SchoolClass>(data, 'classes');
+    const count = extractCount(data, results.length);
     return { results, count };
   },
 

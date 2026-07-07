@@ -36,14 +36,14 @@ const columns: DataTableColumn<AcademicSession>[] = [
   },
 ];
 
-export function SessionsTable({ 
-  sessions, 
+export function SessionsTable({
+  sessions,
   totalCount,
   page,
   onPageChange,
-  onEdit, 
-  onActivate, 
-  onDelete 
+  onEdit,
+  onActivate,
+  onDelete,
 }: SessionsTableProps) {
   return (
     <div className="space-y-4">

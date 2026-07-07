@@ -6,6 +6,7 @@ import type {
   Section,
   UpdateSectionPayload,
 } from '@app-types/academics/section';
+import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
 // TODO: Remove mock store when GET /api/v1/academics/sections/ is available
 let mockSections: Section[] = [
@@ -57,17 +58,11 @@ export const sectionsService = {
       return { results: allData, count: allData.length };
     }
     // TODO: Wire when backend exposes GET /api/v1/academics/sections/
-    const { data } = await apiClient.get<any>(
+    const { data } = await apiClient.get<BackendPayload>(
       `${API_ENDPOINTS.academics.sections}?page=${page}`,
     );
-    let results: Section[] = [];
-    if (data?.results?.sections && Array.isArray(data.results.sections)) results = data.results.sections;
-    else if (data?.data?.sections && Array.isArray(data.data.sections)) results = data.data.sections;
-    else if (data?.sections && Array.isArray(data.sections)) results = data.sections;
-    else if (data?.data && Array.isArray(data.data)) results = data.data;
-    else if (data?.results && Array.isArray(data.results)) results = data.results;
-    
-    const count = data?.count || data?.data?.count || results.length;
+    const results = extractList<Section>(data, 'sections');
+    const count = extractCount(data, results.length);
     return { results, count };
   },
 

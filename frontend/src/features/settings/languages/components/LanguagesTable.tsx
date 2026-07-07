@@ -57,13 +57,13 @@ const columns: DataTableColumn<Language>[] = [
   },
 ];
 
-export function LanguagesTable({ 
-  languages, 
+export function LanguagesTable({
+  languages,
   totalCount,
   page,
   onPageChange,
-  onEdit, 
-  onDelete 
+  onEdit,
+  onDelete,
 }: LanguagesTableProps) {
   return (
     <div className="space-y-4">

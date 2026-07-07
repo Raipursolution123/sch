@@ -89,14 +89,14 @@ export function FeeTypeFormDialog({
 
   const isActive = watch('is_active');
   const createCategoryMutation = useCreateFeeCategory();
-  
+
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
 
   const handleCreateCategory = () => {
     const name = newCategoryName.trim();
     if (!name) return;
-    
+
     createCategoryMutation.mutate(
       { name, is_active: 'yes' },
       {
@@ -104,8 +104,8 @@ export function FeeTypeFormDialog({
           setIsCreatingCategory(false);
           setNewCategoryName('');
           setValue('feecategory_id', newCat.id, { shouldValidate: true, shouldDirty: true });
-        }
-      }
+        },
+      },
     );
   };
 
@@ -145,16 +145,16 @@ export function FeeTypeFormDialog({
                       className="flex-1"
                       autoFocus
                     />
-                    <Button 
-                      type="button" 
-                      onClick={handleCreateCategory} 
+                    <Button
+                      type="button"
+                      onClick={handleCreateCategory}
                       disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
                     >
                       Save
                     </Button>
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
+                    <Button
+                      type="button"
+                      variant="ghost"
                       onClick={() => {
                         setIsCreatingCategory(false);
                         setNewCategoryName('');
@@ -173,7 +173,11 @@ export function FeeTypeFormDialog({
                         render={({ field }) => (
                           <Select
                             id="feecategory_id"
-                            placeholder={categoryOptions.length === 0 ? 'No categories available' : 'Select category'}
+                            placeholder={
+                              categoryOptions.length === 0
+                                ? 'No categories available'
+                                : 'Select category'
+                            }
                             options={categoryOptions}
                             value={field.value ? String(field.value) : ''}
                             onChange={(e) => field.onChange(Number(e.target.value))}
@@ -182,9 +186,9 @@ export function FeeTypeFormDialog({
                         )}
                       />
                     </div>
-                    <Button 
-                      type="button" 
-                      variant="outline" 
+                    <Button
+                      type="button"
+                      variant="outline"
                       onClick={() => setIsCreatingCategory(true)}
                     >
                       New

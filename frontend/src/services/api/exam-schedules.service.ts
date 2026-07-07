@@ -87,11 +87,12 @@ function delay<T>(value: T, ms = 300): Promise<T> {
 }
 
 async function enrich(record: ScheduleRecord): Promise<ExamSchedule> {
-  const [exams, subjects, sessions] = await Promise.all([
+  const [exams, subjectsResult, sessions] = await Promise.all([
     examsService.list(),
     subjectsService.list(),
     sessionsService.list(),
   ]);
+  const subjects = subjectsResult.results;
   const exam = exams.find((e) => e.id === record.exam_id);
   const subject = subjects.find((s) => s.id === record.subject_id);
   const session = sessions.results.find((s) => s.id === record.session_id);
@@ -137,11 +138,12 @@ export const examSchedulesService = {
 
   create: async (payload: CreateExamSchedulePayload): Promise<ExamSchedule> => {
     if (USE_MOCK) {
-      const [exams, subjects, sessions] = await Promise.all([
+      const [exams, subjectsResult, sessions] = await Promise.all([
         examsService.list(),
         subjectsService.list(),
         sessionsService.list(),
       ]);
+      const subjects = subjectsResult.results;
       if (!exams.some((e) => e.id === payload.exam_id && e.is_active === 'yes')) {
         throw new Error('Selected exam is not available');
       }

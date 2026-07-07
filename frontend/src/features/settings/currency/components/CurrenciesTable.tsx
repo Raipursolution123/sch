@@ -104,7 +104,7 @@ export function CurrenciesTable({
           );
         }}
       />
-      
+
       <Pagination
         currentPage={page}
         totalPages={Math.ceil(totalCount / 20)}

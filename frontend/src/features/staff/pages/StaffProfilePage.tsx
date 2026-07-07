@@ -59,7 +59,7 @@ export function StaffProfilePage() {
 
   const handleDelete = () => {
     deleteMutation.mutate(id, {
-      onSuccess: () => navigate(ROUTES.staff.root)
+      onSuccess: () => navigate(ROUTES.staff.root),
     });
   };
 
@@ -73,8 +73,6 @@ export function StaffProfilePage() {
     documents: 'all',
   };
   const editSection = tabToSection[currentTab] ?? 'all';
-
-  const canEdit = true;
 
   const handleEditSubmit = (values: StaffFormValues) => {
     updateMutation.mutate(toStaffPayload(values), {
@@ -108,11 +106,7 @@ export function StaffProfilePage() {
         </Link>
         <div className="flex gap-2">
           {currentTab !== 'documents' && (
-            <Button
-              variant="outline"
-              className="gap-1"
-              onClick={() => setEditOpen(true)}
-            >
+            <Button variant="outline" className="gap-1" onClick={() => setEditOpen(true)}>
               <Pencil className="h-4 w-4" aria-hidden="true" />
               Edit
             </Button>
@@ -134,7 +128,10 @@ export function StaffProfilePage() {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
                   {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -173,16 +170,6 @@ export function StaffProfilePage() {
         <TabsContent value="documents" className="mt-6">
           <StaffDocumentsTab staff={staff} />
         </TabsContent>
-
-        {PROFILE_TABS.filter(
-          (tab) => tab.id !== 'overview' && tab.id !== 'employment' && tab.id !== 'payroll' && tab.id !== 'documents',
-        ).map((tab) => (
-          <TabsContent key={tab.id} value={tab.id} className="mt-6">
-            <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-              {tab.label} details coming soon.
-            </div>
-          </TabsContent>
-        ))}
       </Tabs>
 
       <StaffFormDialog
