@@ -107,7 +107,7 @@ export function StudentsTable({ students }: StudentsTableProps) {
         title="Delete student"
         description={`Are you sure you want to delete ${studentToDelete?.full_name}? This action cannot be undone.`}
         confirmLabel="Delete"
-        variant="destructive"
+        destructive
         isLoading={deleteMutation.isPending}
         onConfirm={handleDelete}
       />
