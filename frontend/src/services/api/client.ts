@@ -94,6 +94,10 @@ apiClient.interceptors.response.use(
       }
     }
 
+    if (error.response?.data && (error.response.data as any).error?.message) {
+      error.message = (error.response.data as any).error.message;
+    }
+
     return Promise.reject(error);
   },
 );

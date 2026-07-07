@@ -1,7 +1,27 @@
 import logging 
 import datetime
+import re
 from django.db import transaction
 from django.utils import timezone
+
+def _validate_session_format(session_name):
+    session_name_clean = str(session_name).strip()
+    match = re.match(r'^(\d{4})\s*-\s*(\d{2,4})$', session_name_clean)
+    if not match:
+        return False, 'Session must be in format YYYY-YYYY or YYYY-YY (e.g., 2026-2027).'
+    
+    start_year = int(match.group(1))
+    end_year_str = match.group(2)
+    if len(end_year_str) == 2:
+        end_year = int(str(start_year)[:2] + end_year_str)
+    else:
+        end_year = int(end_year_str)
+        
+    if end_year - start_year != 1:
+        return False, 'Session not allowed.'
+        
+    return True, session_name_clean
+
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -641,7 +661,14 @@ class SessionsListCreateView(APIView):
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-        session_name_clean = str(session_name).strip()
+        is_valid, validation_result = _validate_session_format(session_name)
+        if not is_valid:
+            return APIResponse.error(
+                message=validation_result,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        session_name_clean = validation_result
         if Sessions.objects.filter(session__iexact=session_name_clean).exists():
             return APIResponse.error(
                 message=f"Session '{session_name_clean}' already exists.",
@@ -747,6 +774,15 @@ class SessionsDetailView(APIView):
                     message='Session name cannot be empty.',
                     status_code=status.HTTP_400_BAD_REQUEST,
                 )
+                
+            is_valid, validation_result = _validate_session_format(session_name_clean)
+            if not is_valid:
+                return APIResponse.error(
+                    message=validation_result,
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
+            session_name_clean = validation_result
+                
             if Sessions.objects.filter(session__iexact=session_name_clean).exclude(pk=pk).exists():
                 return APIResponse.error(
                     message=f"Session '{session_name_clean}' already exists.",
@@ -1319,4 +1355,4 @@ class SubjectsDetailView(APIView):
             return APIResponse.success(message=f"Subject '{subject_name}' deleted successfully.")
         except Exception as e:
             logger.error(f"Error deleting subject ID {pk}: {str(e)}")
-            return APIResponse.error(message=f"Database error: {str(e)}", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return APIResponse.error(message=f"Database error: {str(e)}", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
