@@ -24,6 +24,10 @@ urlpatterns = [
     path("academics/", include("apps.academics.urls")),
     # staff
     path("staff/", include("apps.staff.urls")),
+    # students
+    path("students/", include("apps.students.urls")),
+    # fees
+    path("fees/", include("apps.fees.urls")),
 ]
 
 

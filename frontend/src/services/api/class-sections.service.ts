@@ -63,8 +63,8 @@ function delay<T>(value: T, ms = 300): Promise<T> {
 
 async function enrich(records: ClassSectionRecord[]): Promise<ClassSection[]> {
   const [classes, sections] = await Promise.all([classesService.list(), sectionsService.list()]);
-  const classMap = new Map(classes.map((c) => [c.id, c.class_name]));
-  const sectionMap = new Map(sections.map((s) => [s.id, s.section_name]));
+  const classMap = new Map(classes.results.map((c) => [c.id, c.class_name]));
+  const sectionMap = new Map(sections.results.map((s) => [s.id, s.section_name]));
 
   return records.map((record) => ({
     ...record,
@@ -79,10 +79,10 @@ function mockList(): ClassSectionRecord[] {
 
 async function validateReferences(classId: number, sectionId: number): Promise<void> {
   const [classes, sections] = await Promise.all([classesService.list(), sectionsService.list()]);
-  const schoolClass = classes.find((c) => c.id === classId);
+  const schoolClass = classes.results.find((c) => c.id === classId);
   if (!schoolClass) throw new Error('Selected class not found');
   if (schoolClass.is_active !== 'yes') throw new Error('Selected class is inactive');
-  const section = sections.find((s) => s.id === sectionId);
+  const section = sections.results.find((s) => s.id === sectionId);
   if (!section) throw new Error('Selected section not found');
   if (section.is_active !== 'yes') throw new Error('Selected section is inactive');
 }

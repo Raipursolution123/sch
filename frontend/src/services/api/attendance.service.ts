@@ -96,8 +96,8 @@ export const attendanceService = {
         sectionsService.list(),
         studentsService.list(),
       ]);
-      const schoolClass = classes.find((c) => c.id === classId);
-      const section = sections.find((s) => s.id === sectionId);
+      const schoolClass = classes.results.find((c) => c.id === classId);
+      const section = sections.results.find((s) => s.id === sectionId);
       if (!schoolClass || !section) throw new Error('Class or section not found');
 
       const rosterStudents = students
@@ -191,8 +191,8 @@ export const attendanceService = {
         .filter((r) => (filters.section_id ? r.section_id === filters.section_id : true))
         .map((record) => {
           const student = students.find((s) => s.id === record.student_id);
-          const schoolClass = classes.find((c) => c.id === record.class_id);
-          const section = sections.find((s) => s.id === record.section_id);
+          const schoolClass = classes.results.find((c) => c.id === record.class_id);
+          const section = sections.results.find((s) => s.id === record.section_id);
           const type = getTypeById(record.attendence_type_id) ?? MOCK_ATTENDANCE_TYPES[0];
           return {
             id: record.id,
