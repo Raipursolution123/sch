@@ -512,7 +512,7 @@ class FeeAssignmentsListView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        qs = FeeSessionGroups.objects.all().order_by('-id')
+        qs = FeeSessionGroups.objects.all().order_by('id')
 
         paginator = StandardResultsSetPagination()
         paginated_qs = paginator.paginate_queryset(qs, request, view=self)
