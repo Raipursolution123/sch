@@ -433,7 +433,7 @@ export function StaffFormDialog({
                       id="basic_salary"
                       type="number"
                       placeholder="e.g. 25000"
-                      {...register('basic_salary')}
+                      {...register('basic_salary', { valueAsNumber: true })}
                     />
                   </FormField>
                   <FormField
