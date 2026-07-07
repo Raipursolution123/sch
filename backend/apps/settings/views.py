@@ -63,9 +63,10 @@ class LanguagesListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can create languages.',
+                message='Access denied. Only Super Admins or Admins can create languages.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -179,9 +180,10 @@ class LanguagesDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can modify languages.',
+                message='Access denied. Only Super Admins or Admins can modify languages.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -267,9 +269,10 @@ class LanguagesDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can delete languages.',
+                message='Access denied. Only Super Admins or Admins can delete languages.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -352,9 +355,10 @@ class CurrenciesListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can create currencies.',
+                message='Access denied. Only Super Admins or Admins can create currencies.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -462,7 +466,8 @@ class CurrenciesDetailView(APIView):
                 message='Authentication required.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
                 message='Access denied.',
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -536,7 +541,8 @@ class CurrenciesDetailView(APIView):
                 message='Authentication required.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
                 message='Access denied.',
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -575,7 +581,8 @@ class CurrenciesActivateView(APIView):
                 message='Authentication required.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
                 message='Access denied.',
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -682,9 +689,10 @@ class GeneralSettingsView(APIView):
                     message='Authentication required.',
                     status_code=status.HTTP_401_UNAUTHORIZED,
                 )
-            if user_role != 'Super Admin':
+            is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+            if not is_admin:
                 return APIResponse.error(
-                    message='Access denied. Only Super Admins can update general settings.',
+                    message='Access denied. Only Super Admins or Admins can update general settings.',
                     status_code=status.HTTP_403_FORBIDDEN,
                 )
 
