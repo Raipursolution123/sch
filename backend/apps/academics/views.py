@@ -86,8 +86,9 @@ class ClassSectionsListView(APIView):
 
     def post(self, request):
         user_role = (request.user.role if request.user.is_authenticated else None)
-        if user_role != 'Super Admin':
-            return Response({'status': 'error', 'message': 'Access denied. Only Super Admins can create mappings.'}, status=status.HTTP_403_FORBIDDEN)
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
+            return Response({'status': 'error', 'message': 'Access denied. Only Super Admins or Admins can create mappings.'}, status=status.HTTP_403_FORBIDDEN)
             
         data = request.data
         class_id = data.get('class_id')
@@ -142,8 +143,9 @@ class ClassSectionsBulkAssignView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
         user_role = (request.user.role if request.user.is_authenticated else None)
-        if user_role != 'Super Admin':
-            return Response({'status': 'error', 'message': 'Access denied. Only Super Admins can assign sections to classes.'}, status=status.HTTP_403_FORBIDDEN)
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
+            return Response({'status': 'error', 'message': 'Access denied. Only Super Admins or Admins can assign sections to classes.'}, status=status.HTTP_403_FORBIDDEN)
                     
         data = request.data
         class_id = data.get('class_id')
@@ -295,8 +297,9 @@ class ClassSectionsDetailView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return Response({'status': 'error', 'message': 'Authentication required. Please login first.'}, status=status.HTTP_401_UNAUTHORIZED)
-        if user_role != 'Super Admin':
-            return Response({'status': 'error', 'message': 'Access denied. Only Super Admins can modify mappings.'}, status=status.HTTP_403_FORBIDDEN)
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
+            return Response({'status': 'error', 'message': 'Access denied. Only Super Admins or Admins can modify mappings.'}, status=status.HTTP_403_FORBIDDEN)
             
         try:
             mapping = ClassSections.objects.get(pk=pk)
@@ -339,8 +342,9 @@ class ClassSectionsDetailView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return Response({'status': 'error', 'message': 'Authentication required. Please login first.'}, status=status.HTTP_401_UNAUTHORIZED)
-        if user_role != 'Super Admin':
-            return Response({'status': 'error', 'message': 'Access denied. Only Super Admins can delete mappings.'}, status=status.HTTP_403_FORBIDDEN)
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
+            return Response({'status': 'error', 'message': 'Access denied. Only Super Admins or Admins can delete mappings.'}, status=status.HTTP_403_FORBIDDEN)
             
         try:
             mapping = ClassSections.objects.get(pk=pk)
@@ -410,9 +414,10 @@ class SectionsListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can create sections.',
+                message='Access denied. Only Super Admins or Admins can create sections.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -504,9 +509,10 @@ class SectionsDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can modify sections.',
+                message='Access denied. Only Super Admins or Admins can modify sections.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -569,9 +575,10 @@ class SectionsDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can delete/deactivate sections.',
+                message='Access denied. Only Super Admins or Admins can delete/deactivate sections.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -647,9 +654,10 @@ class SessionsListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can create sessions.',
+                message='Access denied. Only Super Admins or Admins can create sessions.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -750,9 +758,10 @@ class SessionsDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can modify sessions.',
+                message='Access denied. Only Super Admins or Admins can modify sessions.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -826,9 +835,10 @@ class SessionsDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can delete/deactivate sessions.',
+                message='Access denied. Only Super Admins or Admins can delete/deactivate sessions.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -873,9 +883,10 @@ class SessionActivateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can activate sessions.',
+                message='Access denied. Only Super Admins or Admins can activate sessions.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -965,9 +976,10 @@ class ClassesListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can create classes.',
+                message='Access denied. Only Super Admins or Admins can create classes.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -1073,9 +1085,10 @@ class ClassesDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can modify classes.',
+                message='Access denied. Only Super Admins or Admins can modify classes.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -1142,9 +1155,10 @@ class ClassesDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can delete/deactivate classes.',
+                message='Access denied. Only Super Admins or Admins can delete/deactivate classes.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -1223,9 +1237,10 @@ class SubjectsListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins can create subjects.',
+                message='Access denied. Only Super Admins or Admins can create subjects.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -1303,7 +1318,8 @@ class SubjectsDetailView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return APIResponse.error(message='Authentication required.', status_code=status.HTTP_401_UNAUTHORIZED)
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(message='Access denied.', status_code=status.HTTP_403_FORBIDDEN)
 
         subject_obj = self._get_subject(pk)
@@ -1341,7 +1357,8 @@ class SubjectsDetailView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return APIResponse.error(message='Authentication required.', status_code=status.HTTP_401_UNAUTHORIZED)
-        if user_role != 'Super Admin':
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        if not is_admin:
             return APIResponse.error(message='Access denied.', status_code=status.HTTP_403_FORBIDDEN)
 
         subject_obj = self._get_subject(pk)
