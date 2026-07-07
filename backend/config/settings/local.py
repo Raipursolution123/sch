@@ -1,5 +1,8 @@
 from .base import *  # noqa: F401, F403
 
+from django.db.backends.base.base import BaseDatabaseWrapper
+from django.db.backends.mysql.features import DatabaseFeatures
+
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "backend"]
@@ -30,11 +33,7 @@ REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (  # noqa: F405
 )
 
 # Monkeypatch database version check for older MariaDB versions in local dev
-from django.db.backends.base.base import BaseDatabaseWrapper
-
 BaseDatabaseWrapper.check_database_version_supported = lambda self: None
-
-from django.db.backends.mysql.features import DatabaseFeatures
 
 DatabaseFeatures.can_return_columns_from_insert = False
 DatabaseFeatures.can_return_rows_from_bulk_insert = False
