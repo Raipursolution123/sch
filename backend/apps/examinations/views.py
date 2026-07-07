@@ -143,6 +143,8 @@ class ExamGroupsDetailView(APIView):
             logger.error(f"Error updating exam group: {e}")
             return APIResponse.error(message=f"Failed to update exam group: {str(e)}")
 
+    patch = put
+
     def delete(self, request, pk):
         try:
             exam_group = self.get_object(pk)
@@ -294,6 +296,8 @@ class ExamsDetailView(APIView):
         except Exception as e:
             logger.error(f"Error updating exam: {e}")
             return APIResponse.error(message=f"Failed to update exam: {str(e)}")
+
+    patch = put
 
     def delete(self, request, pk):
         try:

@@ -63,7 +63,7 @@ export const examsService = {
   },
 
   update: async (id: number, payload: UpdateExamPayload): Promise<Exam> => {
-    const { data } = await apiClient.patch<ApiSuccessResponse<ExamRecord>>(
+    const { data } = await apiClient.put<ApiSuccessResponse<ExamRecord>>(
       API_ENDPOINTS.examinations.examDetail(id),
       payload,
     );
