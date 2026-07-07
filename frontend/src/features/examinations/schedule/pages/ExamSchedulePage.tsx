@@ -45,7 +45,8 @@ export function ExamSchedulePage() {
   const { data: schedules, isLoading, isError, error, refetch } = useExamSchedules();
   const { data: exams = [] } = useExams();
   const { data: subjects = [] } = useSubjects();
-  const { data: sessions = [] } = useSessions();
+  const { data: sessionsData } = useSessions();
+  const sessions = sessionsData?.results || [];
   const createMutation = useCreateExamSchedule();
   const updateMutation = useUpdateExamSchedule();
   const deleteMutation = useDeleteExamSchedule();

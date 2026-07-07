@@ -35,7 +35,8 @@ function toPayload(values: ExamFormValues) {
 export function ExamsPage() {
   const { data: exams, isLoading, isError, error, refetch } = useExams();
   const { data: examGroups = [] } = useExamGroups();
-  const { data: sessions = [] } = useSessions();
+  const { data: sessionsData } = useSessions();
+  const sessions = sessionsData?.results || [];
   const createMutation = useCreateExam();
   const updateMutation = useUpdateExam();
   const deleteMutation = useDeleteExam();

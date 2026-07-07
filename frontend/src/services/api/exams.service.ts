@@ -76,7 +76,7 @@ function delay<T>(value: T, ms = 300): Promise<T> {
 async function enrich(record: ExamRecord): Promise<Exam> {
   const [groups, sessions] = await Promise.all([examGroupsService.list(), sessionsService.list()]);
   const group = groups.find((g) => g.id === record.exam_group_id);
-  const session = sessions.find((s) => s.id === record.session_id);
+  const session = sessions.results.find((s) => s.id === record.session_id);
   return {
     id: record.id,
     name: record.name,
@@ -115,7 +115,7 @@ export const examsService = {
         throw new Error('Selected exam group is not available');
       }
       const sessions = await sessionsService.list();
-      if (!sessions.some((s) => s.id === payload.session_id)) {
+      if (!sessions.results.some((s) => s.id === payload.session_id)) {
         throw new Error('Selected session is not available');
       }
       const created: ExamRecord = {

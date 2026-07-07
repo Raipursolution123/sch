@@ -94,7 +94,7 @@ async function enrich(record: ScheduleRecord): Promise<ExamSchedule> {
   ]);
   const exam = exams.find((e) => e.id === record.exam_id);
   const subject = subjects.find((s) => s.id === record.subject_id);
-  const session = sessions.find((s) => s.id === record.session_id);
+  const session = sessions.results.find((s) => s.id === record.session_id);
   return {
     id: record.id,
     exam_id: record.exam_id,
@@ -148,7 +148,7 @@ export const examSchedulesService = {
       if (!subjects.some((s) => s.id === payload.subject_id && s.is_active === 'yes')) {
         throw new Error('Selected subject is not available');
       }
-      if (!sessions.some((s) => s.id === payload.session_id)) {
+      if (!sessions.results.some((s) => s.id === payload.session_id)) {
         throw new Error('Selected session is not available');
       }
       const duplicate = mockSchedules.some(
