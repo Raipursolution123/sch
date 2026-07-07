@@ -43,4 +43,8 @@ export const studentsService = {
     );
     return data.data;
   },
+
+  delete: async (id: number): Promise<void> => {
+    await apiClient.delete(API_ENDPOINTS.students.detail(id));
+  },
 };

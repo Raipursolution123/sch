@@ -57,3 +57,16 @@ export function useUpdateStudent(id: number) {
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update student')),
   });
 }
+
+export function useDeleteStudent() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => studentsService.delete(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.students.all });
+      toast.success('Student deleted successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete student')),
+  });
+}
