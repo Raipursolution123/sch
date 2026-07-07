@@ -33,7 +33,8 @@ function toPayload(values: ExamFormValues) {
 }
 
 export function ExamsPage() {
-  const { data: exams, isLoading, isError, error, refetch } = useExams();
+  const { data: examsData, isLoading, isError, error, refetch } = useExams();
+  const exams = examsData?.results || [];
   const { data: examGroupsData } = useExamGroups();
   const examGroups = examGroupsData?.results || [];
   const { data: sessionsData } = useSessions();

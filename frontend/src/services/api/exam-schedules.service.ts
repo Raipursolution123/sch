@@ -93,7 +93,7 @@ async function enrich(record: ScheduleRecord): Promise<ExamSchedule> {
     sessionsService.list(),
   ]);
   const subjects = subjectsResult.results;
-  const exam = exams.find((e) => e.id === record.exam_id);
+  const exam = exams.results.find((e) => e.id === record.exam_id);
   const subject = subjects.find((s) => s.id === record.subject_id);
   const session = sessions.results.find((s) => s.id === record.session_id);
   return {
@@ -144,7 +144,7 @@ export const examSchedulesService = {
         sessionsService.list(),
       ]);
       const subjects = subjectsResult.results;
-      if (!exams.some((e) => e.id === payload.exam_id && e.is_active === 'yes')) {
+      if (!exams.results.some((e) => e.id === payload.exam_id && e.is_active === 'yes')) {
         throw new Error('Selected exam is not available');
       }
       if (!subjects.some((s) => s.id === payload.subject_id && s.is_active === 'yes')) {

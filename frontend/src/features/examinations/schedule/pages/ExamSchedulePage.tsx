@@ -43,7 +43,8 @@ function toPayload(values: ExamScheduleFormValues) {
 
 export function ExamSchedulePage() {
   const { data: schedules, isLoading, isError, error, refetch } = useExamSchedules();
-  const { data: exams = [] } = useExams();
+  const { data: examsData } = useExams();
+  const exams = examsData?.results || [];
   const { data: subjectsData } = useSubjects();
   const subjects = subjectsData?.results ?? [];
   const { data: sessionsData } = useSessions();
