@@ -37,7 +37,7 @@ export function StudentGuardiansTab({ student }: StudentGuardiansTabProps) {
   return (
     <>
       <SettingsCard
-        title="Guardian details"
+        title="Parents Details"
         description="Parent and guardian contact information."
         footer={
           <Button variant="outline" className="gap-1" onClick={() => setEditOpen(true)}>

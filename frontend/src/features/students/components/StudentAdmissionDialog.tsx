@@ -115,6 +115,7 @@ export function StudentAdmissionDialog({
       email: '',
       father_name: '',
       mother_name: '',
+      guardian_name: '',
       guardian_phone: '',
       current_address: '',
       blood_group: '',
@@ -148,6 +149,7 @@ export function StudentAdmissionDialog({
       email: '',
       father_name: '',
       mother_name: '',
+      guardian_name: '',
       guardian_phone: '',
       current_address: '',
       blood_group: '',
@@ -308,7 +310,7 @@ export function StudentAdmissionDialog({
             </section>
 
             <section className="space-y-4">
-              <SectionHeading>Guardian</SectionHeading>
+              <SectionHeading>Parents Details</SectionHeading>
               <div className="grid gap-4 sm:grid-cols-2">
                 <FormField
                   label="Father's name"
@@ -323,6 +325,17 @@ export function StudentAdmissionDialog({
                   error={errors.mother_name?.message}
                 >
                   <Input id="mother_name" {...register('mother_name')} />
+                </FormField>
+              </div>
+
+              <SectionHeading>Guardian</SectionHeading>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  label="Guardian's name"
+                  htmlFor="guardian_name"
+                  error={errors.guardian_name?.message}
+                >
+                  <Input id="guardian_name" {...register('guardian_name')} />
                 </FormField>
                 <FormField
                   label="Guardian phone"

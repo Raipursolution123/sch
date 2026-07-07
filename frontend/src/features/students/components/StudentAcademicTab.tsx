@@ -21,8 +21,8 @@ function DetailItem({ label, value }: { label: string; value: string | null | un
 }
 
 export function StudentAcademicTab({ student }: StudentAcademicTabProps) {
-  const { data: sessions, isLoading } = useSessions();
-  const activeSession = sessions?.find((s) => s.is_active === 'yes');
+  const { data: sessionsData, isLoading } = useSessions();
+  const activeSession = sessionsData?.results.find((s) => s.is_active === 'yes');
 
   if (isLoading) {
     return <LoadingState message="Loading academic details..." />;

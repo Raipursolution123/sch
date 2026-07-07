@@ -1,10 +1,14 @@
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Trash2 } from 'lucide-react';
+import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { SettingsCard } from '@components/forms/SettingsCard';
 import { FeeLineStatusBadge } from '@features/students/components/FeeLineStatusBadge';
-import { useStudentFees } from '@hooks/useStudentFees';
+import { CollectFeeDialog } from '@features/students/components/CollectFeeDialog';
+import { useStudentFees, usePayStudentFee, useRevertStudentFee, useDeletePayment } from '@hooks/useStudentFees';
 import { ROUTES } from '@constants/index';
 import type { StudentDetail } from '@app-types/students/student';
 import type { StudentFeeLine, StudentFeePayment } from '@app-types/students/student-fees';
@@ -14,87 +18,6 @@ import { formatClassSection } from '@utils/student';
 interface StudentFeesTabProps {
   student: StudentDetail;
 }
-
-const lineColumns: DataTableColumn<StudentFeeLine>[] = [
-  {
-    id: 'feetype',
-    header: 'Fee type',
-    cellClassName: 'font-medium',
-    cell: (row) => (
-      <div>
-        <span>{row.feetype_name}</span>
-        <p className="text-xs font-normal text-muted-foreground">{row.feetype_code}</p>
-      </div>
-    ),
-  },
-  {
-    id: 'group',
-    header: 'Group',
-    cellClassName: 'text-muted-foreground',
-    cell: (row) => row.fee_group_name,
-  },
-  {
-    id: 'amount',
-    header: 'Amount',
-    cellClassName: 'tabular-nums',
-    cell: (row) => formatAmount(row.amount),
-  },
-  {
-    id: 'paid',
-    header: 'Paid',
-    cellClassName: 'tabular-nums text-muted-foreground',
-    cell: (row) => formatAmount(row.amount_paid),
-  },
-  {
-    id: 'balance',
-    header: 'Balance',
-    cellClassName: 'tabular-nums',
-    cell: (row) => formatAmount(row.balance),
-  },
-  {
-    id: 'due_date',
-    header: 'Due',
-    cellClassName: 'text-muted-foreground',
-    cell: (row) => formatDate(row.due_date),
-  },
-  {
-    id: 'status',
-    header: 'Status',
-    cell: (row) => <FeeLineStatusBadge status={row.status} />,
-  },
-];
-
-const paymentColumns: DataTableColumn<StudentFeePayment>[] = [
-  {
-    id: 'date',
-    header: 'Date',
-    cellClassName: 'text-muted-foreground',
-    cell: (row) => formatDate(row.date),
-  },
-  {
-    id: 'feetype',
-    header: 'Fee type',
-    cell: (row) => row.feetype_name ?? '—',
-  },
-  {
-    id: 'amount',
-    header: 'Amount',
-    cellClassName: 'tabular-nums font-medium',
-    cell: (row) => formatAmount(row.amount),
-  },
-  {
-    id: 'mode',
-    header: 'Mode',
-    cellClassName: 'text-muted-foreground',
-    cell: (row) => row.payment_mode,
-  },
-  {
-    id: 'description',
-    header: 'Note',
-    cellClassName: 'text-muted-foreground max-w-xs truncate',
-    cell: (row) => row.description ?? '—',
-  },
-];
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
@@ -107,6 +30,141 @@ function SummaryCard({ label, value }: { label: string; value: string }) {
 
 export function StudentFeesTab({ student }: StudentFeesTabProps) {
   const { data: fees, isLoading, isError, error, refetch } = useStudentFees(student.id);
+  const payFeeMutation = usePayStudentFee(student.id);
+  const revertFeeMutation = useRevertStudentFee(student.id);
+  const deletePaymentMutation = useDeletePayment(student.id);
+
+  const [collectDialogOpen, setCollectDialogOpen] = useState(false);
+  const [selectedFeeLine, setSelectedFeeLine] = useState<StudentFeeLine | null>(null);
+
+  const paymentColumns = useMemo<DataTableColumn<StudentFeePayment>[]>(
+    () => [
+      {
+        id: 'date',
+        header: 'Date of Payment',
+        cellClassName: 'text-muted-foreground',
+        cell: (row) => formatDate(row.date),
+      },
+      {
+        id: 'feetype',
+        header: 'Fee type',
+        cell: (row) => row.feetype_name ?? '—',
+      },
+      {
+        id: 'amount',
+        header: 'Amount',
+        cellClassName: 'tabular-nums font-medium',
+        cell: (row) => formatAmount(row.amount),
+      },
+      {
+        id: 'description',
+        header: 'Note',
+        cellClassName: 'text-muted-foreground max-w-xs truncate',
+        cell: (row) => row.description ?? '—',
+      },
+      {
+        id: 'actions',
+        header: '',
+        cellClassName: 'text-right',
+        cell: (row) => (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+            disabled={deletePaymentMutation.isPending}
+            onClick={() => deletePaymentMutation.mutate(row.id)}
+            title="Delete Payment"
+          >
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">Delete</span>
+          </Button>
+        ),
+      },
+    ],
+    [deletePaymentMutation]
+  );
+
+  const lineColumns = useMemo<DataTableColumn<StudentFeeLine>[]>(
+    () => [
+      {
+        id: 'feetype',
+        header: 'Fee type',
+        cellClassName: 'font-medium',
+        cell: (row) => (
+          <div>
+            <span>{row.feetype_name}</span>
+            <p className="text-xs font-normal text-muted-foreground">{row.feetype_code}</p>
+          </div>
+        ),
+      },
+      {
+        id: 'group',
+        header: 'Group',
+        cellClassName: 'text-muted-foreground',
+        cell: (row) => row.fee_group_name,
+      },
+      {
+        id: 'amount',
+        header: 'Amount',
+        cellClassName: 'tabular-nums',
+        cell: (row) => formatAmount(row.amount),
+      },
+      {
+        id: 'paid',
+        header: 'Paid',
+        cellClassName: 'tabular-nums text-muted-foreground',
+        cell: (row) => formatAmount(row.amount_paid),
+      },
+      {
+        id: 'balance',
+        header: 'Balance',
+        cellClassName: 'tabular-nums',
+        cell: (row) => formatAmount(row.balance),
+      },
+      {
+        id: 'due_date',
+        header: 'Due',
+        cellClassName: 'text-muted-foreground',
+        cell: (row) => formatDate(row.due_date),
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        cell: (row) => <FeeLineStatusBadge status={row.status} />,
+      },
+      {
+        id: 'actions',
+        header: '',
+        cellClassName: 'text-right',
+        cell: (row) =>
+          row.status !== 'paid' ? (
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={payFeeMutation.isPending}
+              onClick={() => {
+                setSelectedFeeLine(row);
+                setCollectDialogOpen(true);
+              }}
+            >
+              Paid
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={revertFeeMutation.isPending}
+              onClick={() => {
+                revertFeeMutation.mutate(row.feetype_id);
+              }}
+            >
+              Revert
+            </Button>
+          ),
+      },
+    ],
+    [payFeeMutation, revertFeeMutation]
+  );
 
   if (isLoading) {
     return <LoadingState message="Loading fee details..." />;
@@ -167,6 +225,18 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
           />
         )}
       </SettingsCard>
+
+      <CollectFeeDialog
+        open={collectDialogOpen}
+        onOpenChange={setCollectDialogOpen}
+        feeLine={selectedFeeLine}
+        onSubmit={(payload) => {
+          payFeeMutation.mutate(payload, {
+            onSuccess: () => setCollectDialogOpen(false),
+          });
+        }}
+        isLoading={payFeeMutation.isPending}
+      />
     </div>
   );
 }

@@ -59,46 +59,56 @@ export function GuardianFormDialog({
       <DialogContent className="sm:max-w-lg">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Edit guardian details</DialogTitle>
+            <DialogTitle>Edit Parents Details</DialogTitle>
             <DialogDescription>
               Update parent and guardian contact information for this student.
             </DialogDescription>
           </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <FormField
-              label="Father's name"
-              htmlFor="father_name"
-              error={errors.father_name?.message}
-            >
-              <Input id="father_name" {...register('father_name')} />
-            </FormField>
-            <FormField
-              label="Mother's name"
-              htmlFor="mother_name"
-              error={errors.mother_name?.message}
-            >
-              <Input id="mother_name" {...register('mother_name')} />
-            </FormField>
-            <FormField
-              label="Guardian name"
-              htmlFor="guardian_name"
-              error={errors.guardian_name?.message}
-            >
-              <Input id="guardian_name" {...register('guardian_name')} />
-            </FormField>
-            <FormField
-              label="Guardian phone"
-              htmlFor="guardian_phone"
-              error={errors.guardian_phone?.message}
-            >
-              <Input
-                id="guardian_phone"
-                type="tel"
-                autoComplete="tel"
-                {...register('guardian_phone')}
-              />
-            </FormField>
+          <div className="space-y-6 py-4">
+            <section className="space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">Parents Details</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  label="Father's name"
+                  htmlFor="father_name"
+                  error={errors.father_name?.message}
+                >
+                  <Input id="father_name" {...register('father_name')} />
+                </FormField>
+                <FormField
+                  label="Mother's name"
+                  htmlFor="mother_name"
+                  error={errors.mother_name?.message}
+                >
+                  <Input id="mother_name" {...register('mother_name')} />
+                </FormField>
+              </div>
+            </section>
+            
+            <section className="space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">Guardian</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  label="Guardian's name"
+                  htmlFor="guardian_name"
+                  error={errors.guardian_name?.message}
+                >
+                  <Input id="guardian_name" {...register('guardian_name')} />
+                </FormField>
+                <FormField
+                  label="Guardian phone"
+                  htmlFor="guardian_phone"
+                  error={errors.guardian_phone?.message}
+                >
+                  <Input
+                    id="guardian_phone"
+                    type="tel"
+                    autoComplete="tel"
+                    {...register('guardian_phone')}
+                  />
+                </FormField>
+              </div>
+            </section>
           </div>
 
           <DialogFooter>

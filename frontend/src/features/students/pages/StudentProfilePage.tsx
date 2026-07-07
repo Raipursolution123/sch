@@ -79,16 +79,6 @@ export function StudentProfilePage() {
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to Students
         </Link>
-        <Button
-          variant="outline"
-          className="gap-1"
-          onClick={() => setEditOpen(true)}
-          disabled={!canEdit}
-          title={canEdit ? undefined : 'Add active classes and sections first'}
-        >
-          <Pencil className="h-4 w-4" aria-hidden="true" />
-          Edit
-        </Button>
       </div>
 
       <Tabs

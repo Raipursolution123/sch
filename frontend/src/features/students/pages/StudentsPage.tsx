@@ -57,7 +57,7 @@ export function StudentsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Students"
-        description="Browse enrolled students and open profiles for details."
+        // description="Browse enrolled students and open profiles for details."
         actions={
           <Button
             onClick={() => setAdmissionOpen(true)}

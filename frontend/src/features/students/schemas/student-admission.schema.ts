@@ -28,6 +28,7 @@ export const studentAdmissionSchema = z.object({
     .refine((v) => !v || z.string().email().safeParse(v).success, 'Enter a valid email'),
   father_name: z.string().trim().max(100).optional().or(z.literal('')),
   mother_name: z.string().trim().max(100).optional().or(z.literal('')),
+  guardian_name: z.string().trim().max(100).optional().or(z.literal('')),
   guardian_phone: z
     .string()
     .trim()
