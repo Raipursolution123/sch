@@ -94,8 +94,9 @@ apiClient.interceptors.response.use(
       }
     }
 
-    if (error.response?.data && (error.response.data as any).error?.message) {
-      error.message = (error.response.data as any).error.message;
+    const responseData = error.response?.data as { error?: { message?: string } } | undefined;
+    if (responseData?.error?.message) {
+      error.message = responseData.error.message;
     }
 
     return Promise.reject(error);
