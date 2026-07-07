@@ -1,7 +1,7 @@
-from .base import *  # noqa: F401, F403
-
 from django.db.backends.base.base import BaseDatabaseWrapper
 from django.db.backends.mysql.features import DatabaseFeatures
+
+from .base import *  # noqa: F401, F403
 
 DEBUG = True
 
