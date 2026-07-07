@@ -58,8 +58,8 @@ export const API_ENDPOINTS = {
     documentDelete: (id: number) => `/staff/${id}/documents/delete/`,
   },
   fees: {
-    // TODO: Wire when backend exposes fees endpoints
     categories: '/fees/categories/',
+    categoryDetail: (id: number) => `/fees/categories/${id}/`,
     feeTypes: '/fees/fee-types/',
     feeTypeDetail: (id: number) => `/fees/fee-types/${id}/`,
     feeGroups: '/fees/fee-groups/',
