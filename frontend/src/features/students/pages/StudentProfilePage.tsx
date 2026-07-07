@@ -93,7 +93,7 @@ export function StudentProfilePage() {
         </TabsList>
 
         <TabsContent value="overview" className="mt-6">
-          <StudentOverviewTab student={student} />
+          <StudentOverviewTab student={student} onEditClick={() => setEditOpen(true)} />
         </TabsContent>
 
         <TabsContent value="academic" className="mt-6">

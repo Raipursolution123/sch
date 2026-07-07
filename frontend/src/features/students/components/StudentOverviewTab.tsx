@@ -4,8 +4,12 @@ import { SettingsCard } from '@components/forms/SettingsCard';
 import { formatClassSection, formatGender, getStudentInitials } from '@utils/student';
 import { formatDate } from '@utils/format';
 
+import { Button } from '@components/ui/button';
+import { Pencil } from 'lucide-react';
+
 interface StudentOverviewTabProps {
   student: StudentDetail;
+  onEditClick: () => void;
 }
 
 function DetailItem({ label, value }: { label: string; value: string | null | undefined }) {
@@ -17,7 +21,7 @@ function DetailItem({ label, value }: { label: string; value: string | null | un
   );
 }
 
-export function StudentOverviewTab({ student }: StudentOverviewTabProps) {
+export function StudentOverviewTab({ student, onEditClick }: StudentOverviewTabProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 rounded-lg border bg-card p-6 sm:flex-row sm:items-center">
@@ -35,6 +39,12 @@ export function StudentOverviewTab({ student }: StudentOverviewTabProps) {
           <p className="mt-1 text-sm text-muted-foreground">
             {student.admission_no} · {formatClassSection(student.class_name, student.section_name)}
           </p>
+        </div>
+        <div className="flex shrink-0 sm:ml-auto">
+          <Button variant="outline" size="sm" onClick={onEditClick}>
+            <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
+            Edit details
+          </Button>
         </div>
       </div>
 
