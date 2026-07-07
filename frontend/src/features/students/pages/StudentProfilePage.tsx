@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Trash2 } from 'lucide-react';
+import { Button } from '@components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
+import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { StudentOverviewTab } from '@features/students/components/StudentOverviewTab';
@@ -11,7 +13,7 @@ import { StudentGuardiansTab } from '@features/students/components/StudentGuardi
 import { StudentAdmissionDialog } from '@features/students/components/StudentAdmissionDialog';
 import type { StudentAdmissionFormValues } from '@features/students/schemas/student-admission.schema';
 import { toStudentPayload } from '@features/students/utils/student-payload';
-import { useStudent, useUpdateStudent } from '@hooks/useStudents';
+import { useStudent, useUpdateStudent, useDeleteStudent } from '@hooks/useStudents';
 import { useClasses } from '@hooks/useClasses';
 import { useSections } from '@hooks/useSections';
 import { ROUTES } from '@constants/index';
@@ -31,8 +33,10 @@ function isProfileTab(value: string | null): value is ProfileTabId {
 
 export function StudentProfilePage() {
   const { studentId } = useParams<{ studentId: string }>();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [editOpen, setEditOpen] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const id = Number(studentId);
   const { data: student, isLoading, isError, error, refetch } = useStudent(id);
   const { data: classesData } = useClasses();
@@ -41,6 +45,7 @@ export function StudentProfilePage() {
   const { data: sectionsData } = useSections();
   const sections = sectionsData?.results || [];
   const updateMutation = useUpdateStudent(id);
+  const deleteMutation = useDeleteStudent();
 
   const activeTab = searchParams.get('tab');
   const currentTab = isProfileTab(activeTab) ? activeTab : 'overview';
@@ -48,6 +53,15 @@ export function StudentProfilePage() {
   const handleEditSubmit = (values: StudentAdmissionFormValues) => {
     updateMutation.mutate(toStudentPayload(values), {
       onSuccess: () => setEditOpen(false),
+    });
+  };
+
+  const handleDeleteSubmit = () => {
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        setDeleteConfirmOpen(false);
+        navigate(ROUTES.students.root);
+      },
     });
   };
 
@@ -75,6 +89,16 @@ export function StudentProfilePage() {
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to Students
         </Link>
+
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => setDeleteConfirmOpen(true)}
+          className="gap-2"
+        >
+          <Trash2 className="h-4 w-4" />
+          Delete Student
+        </Button>
       </div>
 
       <Tabs
@@ -117,6 +141,17 @@ export function StudentProfilePage() {
         student={student}
         onSubmit={handleEditSubmit}
         isLoading={updateMutation.isPending}
+      />
+
+      <ConfirmDialog
+        open={deleteConfirmOpen}
+        onOpenChange={setDeleteConfirmOpen}
+        title="Delete student"
+        description={`Are you sure you want to delete ${student.full_name}? This action cannot be undone.`}
+        confirmLabel="Delete"
+        destructive
+        isLoading={deleteMutation.isPending}
+        onConfirm={handleDeleteSubmit}
       />
     </div>
   );
