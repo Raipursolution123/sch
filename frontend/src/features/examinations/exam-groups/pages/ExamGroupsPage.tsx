@@ -31,7 +31,7 @@ function toPayload(values: ExamGroupFormValues) {
 }
 
 export function ExamGroupsPage() {
-  const { data: examGroups, isLoading, isError, error, refetch } = useExamGroups();
+  const { data: examGroupsData, isLoading, isError, error, refetch } = useExamGroups();
   const createMutation = useCreateExamGroup();
   const updateMutation = useUpdateExamGroup();
   const deleteMutation = useDeleteExamGroup();
@@ -78,7 +78,7 @@ export function ExamGroupsPage() {
         />
       )}
 
-      {!isLoading && !isError && examGroups?.length === 0 && (
+      {!isLoading && !isError && examGroupsData?.results.length === 0 && (
         <EmptyState
           title="No exam groups configured"
           description="Create an exam group to organize term, unit, and annual exams."
@@ -91,9 +91,9 @@ export function ExamGroupsPage() {
         />
       )}
 
-      {!isLoading && !isError && examGroups && examGroups.length > 0 && (
+      {!isLoading && !isError && examGroupsData && examGroupsData.results.length > 0 && (
         <ExamGroupsTable
-          examGroups={examGroups}
+          examGroups={examGroupsData.results}
           onEdit={(examGroup) => {
             setSelectedExamGroup(examGroup);
             setDialogMode('edit');
