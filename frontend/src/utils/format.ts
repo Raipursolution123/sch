@@ -10,6 +10,14 @@ export function formatDate(iso: string | null): string {
   });
 }
 
+/** Compact INR for dashboard KPIs (e.g. ₹12.45L). */
+export function formatCompactAmount(amount: number | null | undefined): string {
+  if (amount == null || Number.isNaN(amount)) return '—';
+  if (amount >= 100_000) return `₹${(amount / 100_000).toFixed(2)}L`;
+  if (amount >= 1_000) return `₹${(amount / 1_000).toFixed(1)}K`;
+  return formatAmount(amount);
+}
+
 /** Currency display for fee amounts (defaults to INR). */
 export function formatAmount(amount: number | null | undefined): string {
   if (amount == null || Number.isNaN(amount)) return '—';

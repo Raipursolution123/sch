@@ -1,8 +1,9 @@
 export interface KpiMetric {
   label: string;
   value: string;
-  changePercent: number;
-  changeLabel: string;
+  /** Omitted when no historical comparison API is available. */
+  changePercent?: number;
+  changeLabel?: string;
   sparkline?: number[];
 }
 
@@ -35,6 +36,14 @@ export interface UpcomingExam {
   room: string;
 }
 
+export interface AttentionItem {
+  id: string;
+  severity: 'danger' | 'warning' | 'info';
+  title: string;
+  description?: string;
+  href?: string;
+}
+
 export interface DashboardOverview {
   kpis: {
     students: KpiMetric;
@@ -44,6 +53,7 @@ export interface DashboardOverview {
   };
   weeklyAttendance: WeeklyAttendancePoint[];
   feeOverview: FeeOverview;
+  attentionItems: AttentionItem[];
   recentActivity: DashboardActivity[];
   upcomingExams: UpcomingExam[];
 }

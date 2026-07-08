@@ -18,7 +18,7 @@ export function DashboardLayout() {
       </div>
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar />
-        <main className="flex-1 overflow-auto p-4 lg:p-6">
+        <main className="flex-1 overflow-auto bg-muted/30 p-4 lg:p-8">
           <Outlet />
         </main>
       </div>

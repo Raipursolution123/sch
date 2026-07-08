@@ -8,12 +8,23 @@ import type {
   UpdateStudentPayload,
 } from '@app-types/students/student';
 import { suggestAdmissionNumber } from '@utils/student';
-import { type BackendPayload, extractList } from '@utils/api-response';
+import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
 export const studentsService = {
+  listPaginated: async (
+    page = 1,
+    pageSize = 20,
+  ): Promise<{ results: StudentListItem[]; count: number }> => {
+    const { data } = await apiClient.get<BackendPayload>(
+      `${API_ENDPOINTS.students.list}?page=${page}&page_size=${pageSize}`,
+    );
+    const results = extractList<StudentListItem>(data);
+    return { results, count: extractCount(data, results.length) };
+  },
+
   list: async (): Promise<StudentListItem[]> => {
-    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.students.list);
-    return extractList<StudentListItem>(data);
+    const { results } = await studentsService.listPaginated(1);
+    return results;
   },
 
   getById: async (id: number): Promise<StudentDetail> => {

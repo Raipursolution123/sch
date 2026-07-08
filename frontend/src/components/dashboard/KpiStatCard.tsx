@@ -2,6 +2,8 @@ import type { LucideIcon } from 'lucide-react';
 import { cn } from '@utils/cn';
 import { Sparkline } from '@components/dashboard/Sparkline';
 import { TrendBadge } from '@components/dashboard/TrendBadge';
+import type { SoftTone } from '@utils/tone';
+import { toneIconClasses } from '@utils/tone';
 
 interface KpiStatCardProps {
   label: string;
@@ -10,18 +12,11 @@ interface KpiStatCardProps {
   changePercent: number;
   changeLabel: string;
   sparkline?: number[];
-  iconTone?: 'primary' | 'success' | 'warning' | 'neutral';
+  iconTone?: SoftTone;
   className?: string;
 }
 
-const iconToneClasses = {
-  primary: 'bg-primary/10 text-primary',
-  success: 'bg-emerald-50 text-emerald-600',
-  warning: 'bg-amber-50 text-amber-600',
-  neutral: 'bg-muted text-muted-foreground',
-} as const;
-
-/** Primary KPI widget — update layout and styling from this single component. */
+/** Primary KPI widget — icon variant for secondary metric displays. */
 export function KpiStatCard({
   label,
   value,
@@ -43,7 +38,7 @@ export function KpiStatCard({
         <div
           className={cn(
             'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg',
-            iconToneClasses[iconTone],
+            toneIconClasses(iconTone),
           )}
         >
           <Icon className="h-5 w-5" aria-hidden="true" />

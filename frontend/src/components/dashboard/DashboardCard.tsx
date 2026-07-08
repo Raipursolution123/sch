@@ -26,7 +26,7 @@ export function DashboardCard({
   return (
     <section
       className={cn(
-        'overflow-hidden rounded-xl border bg-card shadow-sm transition-shadow hover:shadow-md',
+        'overflow-hidden rounded-xl border bg-card shadow-sm transition-shadow',
         className,
       )}
       aria-labelledby={headingId}

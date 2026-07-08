@@ -10,6 +10,8 @@ export {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from './alert-dialog';
+export { Avatar, getInitials } from './avatar';
+export type { AvatarProps } from './avatar';
 export { Badge, badgeVariants } from './badge';
 export { Button, buttonVariants } from './button';
 export type { ButtonProps } from './button';
@@ -28,6 +30,7 @@ export type { InputProps } from './input';
 export { Label } from './label';
 export { Select } from './select';
 export type { SelectProps } from './select';
+export { Skeleton } from './skeleton';
 export { Switch } from './switch';
 export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';

@@ -1,8 +1,16 @@
+import type { LucideIcon } from 'lucide-react';
+import {
+  BookOpen,
+  Briefcase,
+  CalendarCheck,
+  GraduationCap,
+  IndianRupee,
+  LayoutDashboard,
+  Settings,
+  Users,
+} from 'lucide-react';
 import { SETTINGS_NAV } from './settings-nav';
 import { ACADEMICS_NAV } from './academics-nav';
-import { FEES_NAV } from './fees-nav';
-import { ATTENDANCE_NAV } from './attendance-nav';
-import { EXAMINATIONS_NAV } from './examinations-nav';
 import { ROUTES } from './routes';
 
 export const API_ENDPOINTS = {
@@ -93,40 +101,42 @@ export const STORAGE_KEYS = {
   refreshToken: 'school_erp_refresh_token',
 } as const;
 
+export type NavSection = 'main' | 'people' | 'operations' | 'system';
+
 export interface NavItem {
   label: string;
   path?: string;
   disabled?: boolean;
+  icon?: LucideIcon;
+  section?: NavSection;
   children?: NavItem[];
 }
 
+export const NAV_SECTION_LABELS: Record<Exclude<NavSection, 'main'>, string> = {
+  people: 'PEOPLE',
+  operations: 'OPERATIONS',
+  system: 'SYSTEM',
+};
+
 export const ADMIN_NAV: NavItem[] = [
-  { label: 'Dashboard', path: ROUTES.dashboard },
-  {
-    label: 'Settings',
-    path: ROUTES.settings.root,
-    children: [...SETTINGS_NAV],
-  },
+  { label: 'Dashboard', path: ROUTES.dashboard, icon: LayoutDashboard, section: 'main' },
+  { label: 'Students', path: ROUTES.students.root, icon: Users, section: 'people' },
+  { label: 'Staff', path: ROUTES.staff.root, icon: Briefcase, section: 'people' },
   {
     label: 'Academics',
     path: ROUTES.academics.root,
+    icon: GraduationCap,
+    section: 'operations',
     children: [...ACADEMICS_NAV],
   },
-  { label: 'Students', path: ROUTES.students.root },
-  { label: 'Staff', path: ROUTES.staff.root },
+  { label: 'Fees', path: ROUTES.fees.feeTypes, icon: IndianRupee, section: 'operations' },
+  { label: 'Attendance', path: ROUTES.attendance.mark, icon: CalendarCheck, section: 'operations' },
+  { label: 'Examinations', path: ROUTES.examinations.exams, icon: BookOpen, section: 'operations' },
   {
-    label: 'Fees',
-    path: ROUTES.fees.root,
-    children: [...FEES_NAV],
-  },
-  {
-    label: 'Attendance',
-    path: ROUTES.attendance.root,
-    children: [...ATTENDANCE_NAV],
-  },
-  {
-    label: 'Examinations',
-    path: ROUTES.examinations.root,
-    children: [...EXAMINATIONS_NAV],
+    label: 'Settings',
+    path: ROUTES.settings.root,
+    icon: Settings,
+    section: 'system',
+    children: [...SETTINGS_NAV],
   },
 ];

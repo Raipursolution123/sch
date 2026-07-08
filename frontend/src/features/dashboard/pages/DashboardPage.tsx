@@ -1,19 +1,21 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Briefcase, CalendarCheck, IndianRupee, Users } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { buttonVariants } from '@components/ui/button';
 import {
   ActivityFeed,
   ActivityFeedEmpty,
+  AttentionList,
   DashboardCard,
   DashboardHero,
+  DashboardSkeleton,
   FeeProgressList,
-  KpiStatCard,
+  getTodayLabel,
   MiniBarChart,
   QuickActionTile,
+  StatAccentCard,
   UpcomingExamsList,
 } from '@components/dashboard';
 import { ErrorState } from '@components/feedback/ErrorState';
-import { LoadingState } from '@components/feedback/LoadingState';
 import { DASHBOARD_QUICK_ACTIONS } from '@constants/dashboard';
 import { ROUTES } from '@constants/index';
 import { useDashboardOverview } from '@hooks/useDashboard';
@@ -32,10 +34,15 @@ export function DashboardPage() {
   const { data: activeSession } = useActiveSession();
   const { data, isLoading, isError, error, refetch } = useDashboardOverview();
 
-  const displayName = user?.username || user?.role || 'Admin';
+  const displayName =
+    user?.role && user.role.toLowerCase() !== user?.username?.toLowerCase()
+      ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+      : user?.username?.includes('@')
+        ? 'Admin'
+        : user?.username || 'Admin';
 
   if (isLoading) {
-    return <LoadingState message="Loading dashboard..." />;
+    return <DashboardSkeleton />;
   }
 
   if (isError || !data) {
@@ -47,14 +54,15 @@ export function DashboardPage() {
     );
   }
 
-  const { kpis, weeklyAttendance, feeOverview, recentActivity, upcomingExams } = data;
+  const { kpis, weeklyAttendance, feeOverview, attentionItems, recentActivity, upcomingExams } =
+    data;
   const feeTotal = feeOverview.collected + feeOverview.pending + feeOverview.overdue;
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 pb-2 lg:space-y-8">
       <DashboardHero
         greeting={getGreeting(displayName)}
-        subtitle="Track school performance, stay on top of operations, and jump into key modules from one place."
+        dateLabel={getTodayLabel()}
         sessionLabel={activeSession?.session}
       />
 
@@ -63,47 +71,40 @@ export function DashboardPage() {
           Key performance indicators
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <KpiStatCard
+          <StatAccentCard
             label={kpis.students.label}
             value={kpis.students.value}
-            icon={Users}
             changePercent={kpis.students.changePercent}
             changeLabel={kpis.students.changeLabel}
-            sparkline={kpis.students.sparkline}
-            iconTone="primary"
+            accentTone="primary"
           />
-          <KpiStatCard
+          <StatAccentCard
             label={kpis.staff.label}
             value={kpis.staff.value}
-            icon={Briefcase}
             changePercent={kpis.staff.changePercent}
             changeLabel={kpis.staff.changeLabel}
-            iconTone="neutral"
+            accentTone="violet"
           />
-          <KpiStatCard
+          <StatAccentCard
             label={kpis.fees.label}
             value={kpis.fees.value}
-            icon={IndianRupee}
             changePercent={kpis.fees.changePercent}
             changeLabel={kpis.fees.changeLabel}
-            iconTone="success"
+            accentTone="brown"
           />
-          <KpiStatCard
+          <StatAccentCard
             label={kpis.attendance.label}
             value={kpis.attendance.value}
-            icon={CalendarCheck}
             changePercent={kpis.attendance.changePercent}
             changeLabel={kpis.attendance.changeLabel}
-            sparkline={kpis.attendance.sparkline}
-            iconTone="warning"
+            accentTone="teal"
           />
         </div>
       </section>
 
       <div className="grid gap-6 lg:grid-cols-5">
         <DashboardCard
-          title="Weekly Attendance"
-          description="Average attendance rate by weekday"
+          title="Weekly attendance"
           className="lg:col-span-3"
           action={
             <Link
@@ -125,8 +126,14 @@ export function DashboardPage() {
           />
         </DashboardCard>
 
+        <DashboardCard title="Needs attention" className="lg:col-span-2">
+          <AttentionList items={attentionItems} />
+        </DashboardCard>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-5">
         <DashboardCard
-          title="Fee Collection"
+          title="Fee collection"
           description="Current session breakdown"
           className="lg:col-span-2"
           action={
@@ -149,12 +156,11 @@ export function DashboardPage() {
             ]}
           />
         </DashboardCard>
-      </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
         <DashboardCard
-          title="Upcoming Exams"
+          title="Upcoming exams"
           description="Next scheduled papers"
+          className="lg:col-span-3"
           action={
             <Link
               to={ROUTES.examinations.schedule}
@@ -167,18 +173,18 @@ export function DashboardPage() {
         >
           <UpcomingExamsList items={upcomingExams} />
         </DashboardCard>
-
-        <DashboardCard title="Recent Activity" description="Latest updates across modules">
-          {recentActivity.length > 0 ? (
-            <ActivityFeed items={recentActivity} />
-          ) : (
-            <ActivityFeedEmpty />
-          )}
-        </DashboardCard>
       </div>
 
+      <DashboardCard title="Recent activity" description="Latest updates across modules">
+        {recentActivity.length > 0 ? (
+          <ActivityFeed items={recentActivity} />
+        ) : (
+          <ActivityFeedEmpty />
+        )}
+      </DashboardCard>
+
       <DashboardCard
-        title="Quick Actions"
+        title="Quick actions"
         description="Shortcuts to frequently used modules"
         padding="none"
         contentClassName="p-5 sm:p-6"

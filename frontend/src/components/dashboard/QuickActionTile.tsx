@@ -2,13 +2,15 @@ import { Link } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@utils/cn';
+import type { SoftTone } from '@utils/tone';
+import { toneIconClasses } from '@utils/tone';
 
 export interface QuickActionItem {
   label: string;
   description: string;
   path: string;
   icon: LucideIcon;
-  tone?: 'primary' | 'success' | 'warning' | 'neutral';
+  tone?: SoftTone;
 }
 
 interface QuickActionTileProps {
@@ -17,11 +19,15 @@ interface QuickActionTileProps {
 }
 
 const toneClasses = {
-  primary: 'bg-primary/10 text-primary group-hover:bg-primary/15',
-  success: 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100',
-  warning: 'bg-amber-50 text-amber-600 group-hover:bg-amber-100',
-  neutral: 'bg-muted text-muted-foreground group-hover:bg-muted/80',
-} as const;
+  primary: toneIconClasses('primary', true),
+  success: toneIconClasses('success', true),
+  warning: toneIconClasses('warning', true),
+  danger: toneIconClasses('danger', true),
+  neutral: toneIconClasses('neutral', true),
+  violet: toneIconClasses('violet', true),
+  teal: toneIconClasses('teal', true),
+  brown: toneIconClasses('brown', true),
+} as const satisfies Record<SoftTone, string>;
 
 export function QuickActionTile({ item, className }: QuickActionTileProps) {
   const Icon = item.icon;

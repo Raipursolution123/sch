@@ -22,6 +22,10 @@ const toneClasses = {
 
 /** Horizontal progress breakdown for fee collection overview. */
 export function FeeProgressList({ items, total, collectionRate, className }: FeeProgressListProps) {
+  if (total <= 0) {
+    return <FeeProgressEmpty className={className} />;
+  }
+
   return (
     <div className={cn('space-y-5', className)}>
       <div>
@@ -66,6 +70,14 @@ export function FeeProgressList({ items, total, collectionRate, className }: Fee
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+export function FeeProgressEmpty({ className }: { className?: string }) {
+  return (
+    <div className={cn('py-10 text-center text-sm text-muted-foreground', className)}>
+      Fee collection summary is not available until the school-wide fees API is connected.
     </div>
   );
 }

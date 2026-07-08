@@ -16,7 +16,7 @@ export const TrendBadge = memo(function TrendBadge({ value, label, className }: 
     <div
       className={cn(
         'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium',
-        isPositive ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700',
+        isPositive ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive',
         className,
       )}
       aria-label={`${isPositive ? 'Up' : 'Down'} ${Math.abs(value)} percent ${label}`}

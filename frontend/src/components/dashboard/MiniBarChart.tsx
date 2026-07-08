@@ -24,10 +24,18 @@ export const MiniBarChart = memo(function MiniBarChart({
 }: MiniBarChartProps) {
   const peak = maxValue ?? Math.max(...data.map((point) => point.value), 1);
 
+  if (data.length === 0) {
+    return (
+      <p className={cn('py-10 text-center text-sm text-muted-foreground', className)}>
+        No attendance data available yet.
+      </p>
+    );
+  }
+
   return (
     <div className={cn('space-y-4', className)} role="group" aria-label={ariaLabel}>
       <div className="flex h-40 items-end gap-2 sm:gap-3">
-        {data.map((point) => {
+        {data.map((point, index) => {
           const height = Math.max(8, (point.value / peak) * 100);
 
           return (
@@ -38,7 +46,12 @@ export const MiniBarChart = memo(function MiniBarChart({
               </span>
               <div className="flex w-full flex-1 items-end">
                 <div
-                  className="w-full rounded-t-md bg-gradient-to-t from-primary/80 to-primary transition-all duration-300 hover:from-primary hover:to-primary/90"
+                  className={cn(
+                    'w-full rounded-t-md transition-all duration-300',
+                    index % 2 === 0
+                      ? 'bg-chart-2/80 hover:bg-chart-2'
+                      : 'bg-chart-3/70 hover:bg-chart-3',
+                  )}
                   style={{ height: `${height}%` }}
                   role="img"
                   aria-label={`${point.label}: ${point.value}${valueSuffix}`}

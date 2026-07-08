@@ -10,6 +10,10 @@ interface UpcomingExamsListProps {
 }
 
 export function UpcomingExamsList({ items, className }: UpcomingExamsListProps) {
+  if (items.length === 0) {
+    return <UpcomingExamsEmpty className={className} />;
+  }
+
   return (
     <ul className={cn('space-y-3', className)}>
       {items.map((exam, index) => (
@@ -48,5 +52,14 @@ export function UpcomingExamsList({ items, className }: UpcomingExamsListProps) 
         </li>
       ))}
     </ul>
+  );
+}
+
+export function UpcomingExamsEmpty({ className }: { className?: string }) {
+  return (
+    <div className={cn('flex flex-col items-center justify-center py-10 text-center', className)}>
+      <CalendarDays className="h-8 w-8 text-muted-foreground/50" aria-hidden="true" />
+      <p className="mt-3 text-sm text-muted-foreground">No upcoming exams scheduled.</p>
+    </div>
   );
 }
