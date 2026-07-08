@@ -151,28 +151,49 @@ class StudentsListView(APIView):
                     gender=data.get('gender', '').strip() if data.get('gender') else None,
                     mobileno=data.get('mobileno', '').strip() if data.get('mobileno') else None,
                     email=data.get('email', '').strip() if data.get('email') else None,
+                    state=data.get('state', '').strip() if data.get('state') else None,
+                    city=data.get('city', '').strip() if data.get('city') else None,
+                    pincode=data.get('pincode', '').strip() if data.get('pincode') else None,
+                    religion=data.get('religion', '').strip() if data.get('religion') else None,
+                    cast=data.get('cast', '').strip() if data.get('cast') else None,
                     dob=data.get('dob') if data.get('dob') else None,
                     is_active=data.get('is_active', 'yes'),
                     father_name=data.get('father_name', '').strip() if data.get('father_name') else None,
+                    father_phone=data.get('father_phone', '').strip() if data.get('father_phone') else None,
+                    father_occupation=data.get('father_occupation', '').strip() if data.get('father_occupation') else None,
                     mother_name=data.get('mother_name', '').strip() if data.get('mother_name') else None,
+                    mother_phone=data.get('mother_phone', '').strip() if data.get('mother_phone') else None,
+                    mother_occupation=data.get('mother_occupation', '').strip() if data.get('mother_occupation') else None,
                     guardian_name=data.get('guardian_name', '').strip() if data.get('guardian_name') else None,
+                    guardian_relation=data.get('guardian_relation', '').strip() if data.get('guardian_relation') else None,
                     guardian_phone=data.get('guardian_phone', '').strip() if data.get('guardian_phone') else None,
+                    guardian_occupation=data.get('guardian_occupation', '').strip() if data.get('guardian_occupation') else '',
+                    guardian_address=data.get('guardian_address', '').strip() if data.get('guardian_address') else None,
+                    guardian_email=data.get('guardian_email', '').strip() if data.get('guardian_email') else None,
+                    guardian_is=data.get('guardian_is', 'father').strip(),
                     current_address=data.get('current_address', '').strip() if data.get('current_address') else None,
-                    permanent_address=data.get('current_address', '').strip() if data.get('current_address') else None,
+                    permanent_address=data.get('permanent_address', '').strip() if data.get('permanent_address') else (data.get('current_address', '').strip() if data.get('current_address') else None),
                     blood_group=data.get('blood_group', '').strip() if data.get('blood_group') else '',
-                    religion=data.get('religion', '').strip() if data.get('religion') else None,
-                    category_id=data.get('category_id', '').strip() if data.get('category_id') else None,
+                    school_house_id=int(data.get('school_house_id')) if data.get('school_house_id') else None,
+                    hostel_room_id=int(data.get('hostel_room_id')) if data.get('hostel_room_id') else 0,
+                    room_bed_id=int(data.get('room_bed_id')) if data.get('room_bed_id') else 0,
+                    adhar_no=data.get('adhar_no', '').strip() if data.get('adhar_no') else None,
+                    samagra_id=data.get('samagra_id', '').strip() if data.get('samagra_id') else None,
+                    bank_account_no=data.get('bank_account_no', '').strip() if data.get('bank_account_no') else None,
+                    bank_name=data.get('bank_name', '').strip() if data.get('bank_name') else None,
+                    ifsc_code=data.get('ifsc_code', '').strip() if data.get('ifsc_code') else None,
+                    previous_school=data.get('previous_school', '').strip() if data.get('previous_school') else None,
+                    height=data.get('height', '').strip() if data.get('height') else '',
+                    weight=data.get('weight', '').strip() if data.get('weight') else '',
+                    measurement_date=data.get('measurement_date') if data.get('measurement_date') else None,
+                    note=data.get('note', '').strip() if data.get('note') else None,
                     rte=data.get('rte', 'No'),
                     created_at=timezone.now(),
                     dis_reason=0,
                     dis_note="",
-                    guardian_is="father",
-                    guardian_occupation="",
                     father_pic="",
                     mother_pic="",
-                    guardian_pic="",
-                    height="",
-                    weight=""
+                    guardian_pic=""
                 )
                 
                 # Generate parent_id by creating a User record for the parent
@@ -237,6 +258,9 @@ class StudentDetailView(APIView):
         return APIResponse.success(data=detail)
 
     def patch(self, request, pk):
+        return self.put(request, pk)
+
+    def put(self, request, pk):
         student = Students.objects.filter(id=pk).first()
         if not student:
             return APIResponse.error(message='Student not found.')
@@ -276,18 +300,46 @@ class StudentDetailView(APIView):
                 if 'gender' in data: student.gender = data['gender']
                 if 'mobileno' in data: student.mobileno = data['mobileno'].strip() if data['mobileno'] else None
                 if 'email' in data: student.email = data['email'].strip() if data['email'] else None
+                if 'state' in data: student.state = data['state'].strip() if data['state'] else None
+                if 'city' in data: student.city = data['city'].strip() if data['city'] else None
+                if 'pincode' in data: student.pincode = data['pincode'].strip() if data['pincode'] else None
+                if 'religion' in data: student.religion = data['religion'].strip() if data['religion'] else None
+                if 'cast' in data: student.cast = data['cast'].strip() if data['cast'] else None
                 if 'dob' in data: student.dob = data['dob'] if data['dob'] else None
                 if 'is_active' in data: student.is_active = data['is_active']
                 if 'father_name' in data: student.father_name = data['father_name'].strip() if data['father_name'] else None
+                if 'father_phone' in data: student.father_phone = data['father_phone'].strip() if data['father_phone'] else None
+                if 'father_occupation' in data: student.father_occupation = data['father_occupation'].strip() if data['father_occupation'] else None
                 if 'mother_name' in data: student.mother_name = data['mother_name'].strip() if data['mother_name'] else None
+                if 'mother_phone' in data: student.mother_phone = data['mother_phone'].strip() if data['mother_phone'] else None
+                if 'mother_occupation' in data: student.mother_occupation = data['mother_occupation'].strip() if data['mother_occupation'] else None
                 if 'guardian_name' in data: student.guardian_name = data['guardian_name'].strip() if data['guardian_name'] else None
+                if 'guardian_relation' in data: student.guardian_relation = data['guardian_relation'].strip() if data['guardian_relation'] else None
                 if 'guardian_phone' in data: student.guardian_phone = data['guardian_phone'].strip() if data['guardian_phone'] else None
+                if 'guardian_occupation' in data: student.guardian_occupation = data['guardian_occupation'].strip() if data['guardian_occupation'] else ''
+                if 'guardian_address' in data: student.guardian_address = data['guardian_address'].strip() if data['guardian_address'] else None
+                if 'guardian_email' in data: student.guardian_email = data['guardian_email'].strip() if data['guardian_email'] else None
+                if 'guardian_is' in data: student.guardian_is = data['guardian_is'].strip() if data['guardian_is'] else 'father'
                 if 'current_address' in data: 
                     student.current_address = data['current_address'].strip() if data['current_address'] else None
+                if 'permanent_address' in data: 
+                    student.permanent_address = data['permanent_address'].strip() if data['permanent_address'] else None
+                elif 'current_address' in data:
                     student.permanent_address = data['current_address'].strip() if data['current_address'] else None
                 if 'blood_group' in data: student.blood_group = data['blood_group'].strip() if data['blood_group'] else ''
-                if 'religion' in data: student.religion = data['religion'].strip() if data['religion'] else None
-                if 'category_id' in data: student.category_id = data['category_id'].strip() if data['category_id'] else None
+                if 'school_house_id' in data: student.school_house_id = int(data['school_house_id']) if data['school_house_id'] else None
+                if 'hostel_room_id' in data: student.hostel_room_id = int(data['hostel_room_id']) if data['hostel_room_id'] else 0
+                if 'room_bed_id' in data: student.room_bed_id = int(data['room_bed_id']) if data['room_bed_id'] else 0
+                if 'adhar_no' in data: student.adhar_no = data['adhar_no'].strip() if data['adhar_no'] else None
+                if 'samagra_id' in data: student.samagra_id = data['samagra_id'].strip() if data['samagra_id'] else None
+                if 'bank_account_no' in data: student.bank_account_no = data['bank_account_no'].strip() if data['bank_account_no'] else None
+                if 'bank_name' in data: student.bank_name = data['bank_name'].strip() if data['bank_name'] else None
+                if 'ifsc_code' in data: student.ifsc_code = data['ifsc_code'].strip() if data['ifsc_code'] else None
+                if 'previous_school' in data: student.previous_school = data['previous_school'].strip() if data['previous_school'] else None
+                if 'height' in data: student.height = data['height'].strip() if data['height'] else ''
+                if 'weight' in data: student.weight = data['weight'].strip() if data['weight'] else ''
+                if 'measurement_date' in data: student.measurement_date = data['measurement_date'] if data['measurement_date'] else None
+                if 'note' in data: student.note = data['note'].strip() if data['note'] else None
                 if 'rte' in data: student.rte = data['rte']
                 
                 if not student.parent_id and (student.father_name or student.mother_name or student.guardian_name):
@@ -367,14 +419,37 @@ def _get_student_detail(student, class_id, section_id, class_name, section_name)
         'section_name': section_name,
         'admission_date': safe_date_str(student.admission_date),
         'father_name': student.father_name,
+        'father_phone': student.father_phone,
+        'father_occupation': student.father_occupation,
         'mother_name': student.mother_name,
+        'mother_phone': student.mother_phone,
+        'mother_occupation': student.mother_occupation,
         'guardian_name': student.guardian_name,
+        'guardian_relation': student.guardian_relation,
         'guardian_phone': student.guardian_phone,
+        'guardian_occupation': student.guardian_occupation,
+        'guardian_address': student.guardian_address,
+        'guardian_email': student.guardian_email,
+        'guardian_is': student.guardian_is,
         'current_address': student.current_address,
         'permanent_address': student.permanent_address,
         'blood_group': student.blood_group,
         'religion': student.religion,
+        'cast': student.cast,
         'category_id': student.category_id,
+        'school_house_id': student.school_house_id,
+        'hostel_room_id': student.hostel_room_id,
+        'room_bed_id': student.room_bed_id,
+        'adhar_no': student.adhar_no,
+        'samagra_id': student.samagra_id,
+        'bank_account_no': student.bank_account_no,
+        'bank_name': student.bank_name,
+        'ifsc_code': student.ifsc_code,
+        'previous_school': student.previous_school,
+        'height': student.height,
+        'weight': student.weight,
+        'measurement_date': safe_date_str(student.measurement_date),
+        'note': student.note,
         'rte': student.rte,
         'created_at': safe_date_str(student.created_at, '%Y-%m-%dT%H:%M:%SZ'),
         'updated_at': safe_date_str(student.updated_at),

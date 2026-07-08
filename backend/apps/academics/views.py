@@ -950,13 +950,32 @@ class ClassesListCreateView(APIView):
         paginated_qs = paginator.paginate_queryset(classes_qs, request, view=self)
 
         classes_data = []
-        for c in (paginated_qs if paginated_qs is not None else classes_qs):
+        current_page_classes = paginated_qs if paginated_qs is not None else classes_qs
+        class_ids = [c.id for c in current_page_classes]
+        
+        # Load all active class sections mappings
+        class_sections_qs = ClassSections.objects.filter(class_id__in=class_ids, is_active='yes')
+        section_ids_all = list(set(cs.section_id for cs in class_sections_qs if cs.section_id))
+        sections_dict = {s.id: s.section for s in Sections.objects.filter(id__in=section_ids_all)}
+        
+        from collections import defaultdict
+        class_sections_map = defaultdict(list)
+        for cs in class_sections_qs:
+            sec_name = sections_dict.get(cs.section_id)
+            if sec_name:
+                class_sections_map[cs.class_id].append({
+                    'id': cs.section_id,
+                    'section_name': sec_name
+                })
+
+        for c in current_page_classes:
             classes_data.append({
                 'id': c.id,
                 'class_name': c.class_field,
                 'sort_order': c.sort_order,
                 'is_hedu_program': c.is_hedu_program == 'yes' or c.is_hedu_program == 'true' or c.is_hedu_program == 'True',
                 'is_active': c.is_active,
+                'sections': class_sections_map[c.id],
                 'created_at': c.created_at.strftime('%Y-%m-%d %H:%M:%S') if c.created_at else None,
                 'updated_at': c.updated_at.strftime('%Y-%m-%d') if c.updated_at else None,
             })
@@ -1007,16 +1026,51 @@ class ClassesListCreateView(APIView):
         is_hedu_program_raw = data.get('is_hedu_program', '')
         is_hedu_program = 'yes' if is_hedu_program_raw is True or str(is_hedu_program_raw).lower() in ['yes', 'true', '1'] else 'no'
 
+        sections = data.get('sections', [])
+        if isinstance(sections, str):
+            try:
+                import json
+                sections = json.loads(sections)
+            except ValueError:
+                pass
+        if not isinstance(sections, list):
+            sections = []
+
+        section_ids = []
+        if sections:
+            try:
+                section_ids = list(set([int(sid) for sid in sections]))
+                valid_sections_count = Sections.objects.filter(id__in=section_ids).count()
+                if valid_sections_count != len(section_ids):
+                    return APIResponse.error(
+                        message='One or more provided section IDs are invalid.',
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                    )
+            except (ValueError, TypeError):
+                return APIResponse.error(
+                    message='sections must contain valid integers.',
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
+
         try:
-            new_class = Classes.objects.create(
-                class_field=class_name_clean,
-                sort_order=sort_order,
-                is_hedu_program=is_hedu_program,
-                is_active='yes',
-                created_at=timezone.now(),
-            )
+            with transaction.atomic():
+                new_class = Classes.objects.create(
+                    class_field=class_name_clean,
+                    sort_order=sort_order,
+                    is_hedu_program=is_hedu_program,
+                    is_active='yes',
+                    created_at=timezone.now(),
+                )
+                for sec_id in section_ids:
+                    ClassSections.objects.create(
+                        class_id=new_class.id,
+                        section_id=sec_id,
+                        is_active='yes',
+                        created_at=timezone.now()
+                    )
+
             logger.info(
-                f"Class '{class_name_clean}' created by user {(request.user.username if request.user.is_authenticated else 'Unknown')}."
+                f"Class '{class_name_clean}' created with sections {section_ids} by user {(request.user.username if request.user.is_authenticated else 'Unknown')}."
             )
             return APIResponse.success(
                 data={
@@ -1025,6 +1079,7 @@ class ClassesListCreateView(APIView):
                     'sort_order': new_class.sort_order,
                     'is_hedu_program': new_class.is_hedu_program == 'yes' or new_class.is_hedu_program == 'true' or new_class.is_hedu_program == 'True',
                     'is_active': new_class.is_active,
+                    'sections': [{'id': sid, 'section_name': Sections.objects.get(id=sid).section} for sid in section_ids]
                 },
                 message=f"Class '{class_name_clean}' created successfully.",
                 status_code=status.HTTP_201_CREATED,
@@ -1062,6 +1117,15 @@ class ClassesDetailView(APIView):
                 status_code=status.HTTP_404_NOT_FOUND,
             )
 
+        class_sections_qs = ClassSections.objects.filter(class_id=class_obj.id, is_active='yes')
+        section_ids = [cs.section_id for cs in class_sections_qs]
+        sections_list = []
+        for s in Sections.objects.filter(id__in=section_ids):
+            sections_list.append({
+                'id': s.id,
+                'section_name': s.section
+            })
+
         return APIResponse.success(
             data={
                 'id': class_obj.id,
@@ -1069,6 +1133,7 @@ class ClassesDetailView(APIView):
                 'sort_order': class_obj.sort_order,
                 'is_hedu_program': class_obj.is_hedu_program == 'yes' or class_obj.is_hedu_program == 'true' or class_obj.is_hedu_program == 'True',
                 'is_active': class_obj.is_active,
+                'sections': sections_list,
                 'created_at': class_obj.created_at.strftime('%Y-%m-%d %H:%M:%S') if class_obj.created_at else None,
                 'updated_at': class_obj.updated_at.strftime('%Y-%m-%d') if class_obj.updated_at else None,
             },
@@ -1104,6 +1169,7 @@ class ClassesDetailView(APIView):
         is_active = data.get('is_active')
         sort_order = data.get('sort_order')
         is_hedu_program = data.get('is_hedu_program')
+        sections = data.get('sections')
 
         if class_name is not None:
             class_name_clean = str(class_name).strip()
@@ -1136,11 +1202,85 @@ class ClassesDetailView(APIView):
         if is_hedu_program is not None:
             class_obj.is_hedu_program = 'yes' if is_hedu_program is True or str(is_hedu_program).lower() in ['yes', 'true', '1'] else 'no'
 
+        section_ids = None
+        if sections is not None:
+            if isinstance(sections, str):
+                try:
+                    import json
+                    sections = json.loads(sections)
+                except ValueError:
+                    pass
+            if not isinstance(sections, list):
+                return APIResponse.error(
+                    message='sections must be a list.',
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
+            try:
+                section_ids = list(set([int(sid) for sid in sections]))
+                valid_sections_count = Sections.objects.filter(id__in=section_ids).count()
+                if valid_sections_count != len(section_ids):
+                    return APIResponse.error(
+                        message='One or more provided section IDs are invalid.',
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                    )
+            except (ValueError, TypeError):
+                return APIResponse.error(
+                    message='sections must contain valid integers.',
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
+
         try:
-            class_obj.updated_at = datetime.date.today()
-            class_obj.save()
-            logger.info(f"Class ID {pk} updated by user {(request.user.username if request.user.is_authenticated else 'Unknown')}.")
+            with transaction.atomic():
+                class_obj.updated_at = datetime.date.today()
+                class_obj.save()
+
+                if section_ids is not None:
+                    existing_mappings = ClassSections.objects.filter(class_id=class_obj.id)
+                    mapping_dict = {m.section_id: m for m in existing_mappings}
+
+                    for sec_id in section_ids:
+                        if sec_id in mapping_dict:
+                            m = mapping_dict[sec_id]
+                            if m.is_active != 'yes':
+                                m.is_active = 'yes'
+                                m.updated_at = datetime.date.today()
+                                m.save()
+                        else:
+                            ClassSections.objects.create(
+                                class_id=class_obj.id,
+                                section_id=sec_id,
+                                is_active='yes',
+                                created_at=timezone.now()
+                            )
+
+                    for sec_id, m in mapping_dict.items():
+                        if sec_id not in section_ids:
+                            active_student_sessions = StudentSession.objects.filter(
+                                class_id=class_obj.id,
+                                section_id=m.section_id,
+                                is_active='yes'
+                            ).exists()
+                            if active_student_sessions:
+                                sec_obj_remove = Sections.objects.get(id=m.section_id)
+                                raise ValueError(f"Cannot remove section '{sec_obj_remove.section}' from class '{class_obj.class_field}' because active students are assigned to this specific mapping.")
+                            if m.is_active != 'no':
+                                m.is_active = 'no'
+                                m.updated_at = datetime.date.today()
+                                m.save()
+
+            logger.info(f"Class ID {pk} and its sections updated by user {(request.user.username if request.user.is_authenticated else 'Unknown')}.")
             return APIResponse.success(message='Class updated successfully.')
+        except ValueError as val_err:
+            return APIResponse.error(
+                message=str(val_err),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception as e:
+            logger.error(f"Error updating class ID {pk}: {str(e)}")
+            return APIResponse.error(
+                message=f"Database error: {str(e)}",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
         except Exception as e:
             logger.error(f"Error updating class ID {pk}: {str(e)}")
             return APIResponse.error(
