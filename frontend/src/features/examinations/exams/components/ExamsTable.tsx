@@ -1,8 +1,8 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
 import { Badge } from '@components/ui/badge';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import type { Exam } from '@app-types/examinations/exam';
 import { formatDate } from '@utils/format';
 
@@ -81,15 +81,17 @@ export function ExamsTable({ exams, onEdit, onDelete }: ExamsTableProps) {
         const isActive = exam.is_active === 'yes';
         return (
           <>
-            <Button
+            <PermissionButton
+              permission="exams.edit"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(exam)}
               aria-label={`Edit ${exam.name}`}
             >
               <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="exams.delete"
               variant="ghost"
               size="sm"
               disabled={isActive}
@@ -98,7 +100,7 @@ export function ExamsTable({ exams, onEdit, onDelete }: ExamsTableProps) {
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </PermissionButton>
           </>
         );
       }}

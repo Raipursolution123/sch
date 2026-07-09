@@ -49,7 +49,7 @@ export const DASHBOARD_QUICK_ACTIONS: QuickActionItem[] = [
   {
     label: 'Academic Session',
     description: 'Set the active academic year',
-    path: ROUTES.settings.sessions,
+    path: ROUTES.academics.sessions,
     icon: CalendarDays,
     tone: 'neutral',
   },

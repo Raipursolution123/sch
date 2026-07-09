@@ -1,17 +1,10 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { FormField } from '@components/forms/FormField';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormSection } from '@components/forms/FormSection';
+import { FormTextField } from '@components/forms/fields';
 import {
   guardianFormSchema,
   type GuardianFormValues,
@@ -40,7 +33,7 @@ export function GuardianFormDialog({
   isLoading,
 }: GuardianFormDialogProps) {
   const {
-    register,
+    control,
     handleSubmit,
     reset,
     formState: { errors },
@@ -55,76 +48,39 @@ export function GuardianFormDialog({
   }, [open, defaultValues, reset]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogHeader>
-            <DialogTitle>Edit Parents Details</DialogTitle>
-            <DialogDescription>
-              Update parent and guardian contact information for this student.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-6 py-4">
-            <section className="space-y-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">
-                Parents Details
-              </h3>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <FormField
-                  label="Father's name"
-                  htmlFor="father_name"
-                  error={errors.father_name?.message}
-                >
-                  <Input id="father_name" {...register('father_name')} />
-                </FormField>
-                <FormField
-                  label="Mother's name"
-                  htmlFor="mother_name"
-                  error={errors.mother_name?.message}
-                >
-                  <Input id="mother_name" {...register('mother_name')} />
-                </FormField>
-              </div>
-            </section>
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      isEdit
+      isLoading={isLoading}
+      title="Edit Parents Details"
+      description="Update parent and guardian contact information for this student."
+      submitLabel="Save changes"
+      onSubmit={handleSubmit(onSubmit)}
+      size="sm"
+    >
+      <FormErrorSummary errors={errors} />
 
-            <section className="space-y-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">
-                Guardian
-              </h3>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <FormField
-                  label="Guardian's name"
-                  htmlFor="guardian_name"
-                  error={errors.guardian_name?.message}
-                >
-                  <Input id="guardian_name" {...register('guardian_name')} />
-                </FormField>
-                <FormField
-                  label="Guardian phone"
-                  htmlFor="guardian_phone"
-                  error={errors.guardian_phone?.message}
-                >
-                  <Input
-                    id="guardian_phone"
-                    type="tel"
-                    autoComplete="tel"
-                    {...register('guardian_phone')}
-                  />
-                </FormField>
-              </div>
-            </section>
-          </div>
+      <FormSection title="Parents Details">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <FormTextField control={control} name="father_name" label="Father's name" optional />
+          <FormTextField control={control} name="mother_name" label="Mother's name" optional />
+        </div>
+      </FormSection>
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={isLoading}>
-              Save changes
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <FormSection title="Guardian">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <FormTextField control={control} name="guardian_name" label="Guardian's name" optional />
+          <FormTextField
+            control={control}
+            name="guardian_phone"
+            label="Guardian phone"
+            type="tel"
+            autoComplete="tel"
+            optional
+          />
+        </div>
+      </FormSection>
+    </EntityFormDialog>
   );
 }

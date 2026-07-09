@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { SectionFormDialog } from '@features/academics/sections/components/SectionFormDialog';
 import { SectionsTable } from '@features/academics/sections/components/SectionsTable';
-import { Pagination } from '@components/ui/Pagination';
 import type { SectionFormValues } from '@features/academics/sections/schemas/section.schema';
 import {
   useCreateSection,
@@ -18,6 +13,7 @@ import {
 } from '@hooks/useSections';
 import type { Section } from '@app-types/academics/section';
 import type { ActiveFlag } from '@app-types/settings/session';
+import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
 
@@ -33,7 +29,6 @@ export function SectionsPage() {
   const { data: sectionsData, isLoading, isError, error, refetch } = useSections(page);
   const sections = sectionsData?.results;
   const count = sectionsData?.count || 0;
-  const totalPages = Math.ceil(count / 10); // StandardResultsSetPagination PAGE_SIZE is 10
 
   const createMutation = useCreateSection();
   const updateMutation = useUpdateSection();
@@ -59,86 +54,77 @@ export function SectionsPage() {
 
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
+  const addSectionAction = (
+    <PermissionButton permission="academics.manage" onClick={() => setDialogMode('create')} className="gap-1">
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Section
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Sections"
-        description="Manage section labels used to divide students within each class."
-        actions={
-          <Button onClick={() => setDialogMode('create')} className="gap-1">
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Section
-          </Button>
-        }
-      />
-
-      {isLoading && <LoadingState message="Loading sections..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load sections'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {!isLoading && !isError && sections?.length === 0 && (
-        <EmptyState
-          title="No sections configured"
-          description="Add your first section to enable class-section assignments."
-          action={
-            <Button onClick={() => setDialogMode('create')} className="gap-1">
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              Add Section
-            </Button>
-          }
-        />
-      )}
-
-      {!isLoading && !isError && sections && sections.length > 0 && (
-        <div className="space-y-4">
-          <SectionsTable
-            sections={sections}
-            onEdit={(section) => {
-              setSelectedSection(section);
-              setDialogMode('edit');
+    <ModuleListPack
+      title="Sections"
+      description="Manage section labels used to divide students within each class."
+      actions={addSectionAction}
+      isLoading={isLoading}
+      loadingMessage="Loading sections..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && sections?.length === 0}
+      emptyTitle="No sections configured"
+      emptyDescription="Add your first section to enable class-section assignments."
+      emptyAction={addSectionAction}
+      footer={
+        <>
+          <SectionFormDialog
+            open={dialogMode !== null}
+            onOpenChange={(open) => {
+              if (!open) closeFormDialog();
             }}
-            onDelete={setDeleteTarget}
+            section={dialogMode === 'edit' ? selectedSection : null}
+            onSubmit={handleFormSubmit}
+            isLoading={isFormLoading}
           />
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-        </div>
-      )}
 
-      <SectionFormDialog
-        open={dialogMode !== null}
-        onOpenChange={(open) => {
-          if (!open) closeFormDialog();
+          <ConfirmDialog
+            open={Boolean(deleteTarget)}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete section?"
+            description={
+              deleteTarget
+                ? `Permanently delete section "${deleteTarget.section_name}"? This cannot be undone.`
+                : ''
+            }
+            confirmLabel="Delete"
+            destructive
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, {
+                onSuccess: () => setDeleteTarget(null),
+              });
+            }}
+            isLoading={deleteMutation.isPending}
+          />
+        </>
+      }
+    >
+      <SectionsTable
+        sections={sections ?? []}
+        pagination={{
+          page,
+          pageSize: 10,
+          totalCount: count,
+          onPageChange: setPage,
         }}
-        section={dialogMode === 'edit' ? selectedSection : null}
-        onSubmit={handleFormSubmit}
-        isLoading={isFormLoading}
+        onEdit={(section) => {
+          setSelectedSection(section);
+          setDialogMode('edit');
+        }}
+        onDelete={setDeleteTarget}
       />
-
-      <ConfirmDialog
-        open={Boolean(deleteTarget)}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-        title="Delete section?"
-        description={
-          deleteTarget
-            ? `Permanently delete section "${deleteTarget.section_name}"? This cannot be undone.`
-            : ''
-        }
-        confirmLabel="Delete"
-        destructive
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, {
-            onSuccess: () => setDeleteTarget(null),
-          });
-        }}
-        isLoading={deleteMutation.isPending}
-      />
-    </div>
+    </ModuleListPack>
   );
 }

@@ -1,8 +1,15 @@
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { Label } from '@components/ui/label';
+import { useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormFileField, FormTextField } from '@components/forms/fields';
+
+type UploadFormValues = {
+  documentName?: string;
+  file: File | null;
+};
 
 interface StaffDocumentUploadDialogProps {
   open: boolean;
@@ -21,78 +28,87 @@ export function StaffDocumentUploadDialog({
   onSubmit,
   isLoading,
 }: StaffDocumentUploadDialogProps) {
-  const [file, setFile] = useState<File | null>(null);
-  const [documentName, setDocumentName] = useState('');
+  const needsDocumentName = documentType === 'other_document_file';
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!file) return;
+  const uploadSchema = useMemo(
+    () =>
+      z
+        .object({
+          documentName: z.string().optional(),
+          file: z
+            .custom<File | null>((value) => value === null || value instanceof File)
+            .refine((value) => value instanceof File, 'Select a file'),
+        })
+        .superRefine((data, ctx) => {
+          if (needsDocumentName && !data.documentName?.trim()) {
+            ctx.addIssue({
+              code: 'custom',
+              message: 'Enter document name',
+              path: ['documentName'],
+            });
+          }
+        }),
+    [needsDocumentName],
+  );
 
-    onSubmit(file, documentType === 'other_document_file' ? documentName : undefined);
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<UploadFormValues>({
+    resolver: zodResolver(uploadSchema),
+    defaultValues: {
+      documentName: '',
+      file: null,
+    },
+  });
 
-    // Reset state after submission
-    if (!isLoading) {
-      setFile(null);
-      setDocumentName('');
-    }
-  };
+  useEffect(() => {
+    if (!open) return;
+    reset({ documentName: '', file: null });
+  }, [open, reset]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
+  const handleFormSubmit = (values: UploadFormValues) => {
+    if (!(values.file instanceof File)) return;
+    if (needsDocumentName && !values.documentName?.trim()) return;
+
+    onSubmit(
+      values.file,
+      needsDocumentName ? values.documentName?.trim() : undefined,
+    );
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Upload {documentLabel}</DialogTitle>
-        </DialogHeader>
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={`Upload ${documentLabel}`}
+      description="Attach a document to this staff member's profile."
+      submitLabel="Upload"
+      isLoading={isLoading}
+      onSubmit={handleSubmit(handleFormSubmit)}
+    >
+      <FormErrorSummary errors={errors} />
 
-        <form onSubmit={handleSubmit} className="space-y-6 pt-4">
-          {documentType === 'other_document_file' && (
-            <div className="space-y-2">
-              <Label htmlFor="document-name">Document Name</Label>
-              <Input
-                id="document-name"
-                value={documentName}
-                onChange={(e) => setDocumentName(e.target.value)}
-                placeholder="e.g. Identity Proof"
-                required
-              />
-            </div>
-          )}
+      {needsDocumentName && (
+        <FormTextField
+          control={control}
+          name="documentName"
+          label="Document name"
+          placeholder="e.g. Identity Proof"
+          required
+        />
+      )}
 
-          <div className="space-y-2">
-            <Label htmlFor="file-upload">Select File</Label>
-            <Input
-              id="file-upload"
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-              onChange={handleFileChange}
-              required
-            />
-            <p className="text-xs text-muted-foreground">
-              Maximum file size: 5MB. Supported formats: PDF, JPG, PNG, DOCX.
-            </p>
-          </div>
-
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              disabled={isLoading}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={!file || isLoading}>
-              {isLoading ? 'Uploading...' : 'Upload'}
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <FormFileField
+        control={control}
+        name="file"
+        label="Select file"
+        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+        hint="Maximum file size: 5MB. Supported formats: PDF, JPG, PNG, DOCX."
+        required
+      />
+    </EntityFormDialog>
   );
 }

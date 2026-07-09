@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@components/ui/button';
-import { Select } from '@components/ui/select';
-import { Switch } from '@components/ui/switch';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormSelectField } from '@components/forms/fields';
 import { FormField } from '@components/forms/FormField';
 import { SettingsCard } from '@components/forms/SettingsCard';
+import { Switch } from '@components/ui/switch';
+import { PermissionButton } from '@components/rbac/PermissionButton';
+import { useUnsavedChangesWarning } from '@hooks/useUnsavedChangesWarning';
 import {
   DATE_FORMAT_OPTIONS,
   MONTH_OPTIONS,
@@ -27,7 +29,6 @@ interface RegionalTabProps {
 
 export function RegionalTab({ settings, onSave, isSaving }: RegionalTabProps) {
   const {
-    register,
     control,
     handleSubmit,
     reset,
@@ -45,6 +46,8 @@ export function RegionalTab({ settings, onSave, isSaving }: RegionalTabProps) {
     },
   });
 
+  const { navigationGuard } = useUnsavedChangesWarning(isDirty);
+
   useEffect(() => {
     reset({
       timezone: settings.timezone,
@@ -58,83 +61,94 @@ export function RegionalTab({ settings, onSave, isSaving }: RegionalTabProps) {
   }, [settings, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSave)} noValidate>
-      <SettingsCard
-        title="Regional Settings"
-        description="Date, time, timezone, and calendar preferences for the school."
-        footer={
-          <Button type="submit" isLoading={isSaving} disabled={!isDirty && !isSaving}>
-            Save changes
-          </Button>
-        }
-      >
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FormField label="Timezone" error={errors.timezone?.message} required>
-            <Select
-              options={[...TIMEZONE_OPTIONS]}
-              error={errors.timezone?.message}
-              {...register('timezone')}
-            />
-          </FormField>
-          <FormField label="Date format" error={errors.date_format?.message} required>
-            <Select
-              options={[...DATE_FORMAT_OPTIONS]}
-              error={errors.date_format?.message}
-              {...register('date_format')}
-            />
-          </FormField>
-          <FormField label="Time format" error={errors.time_format?.message} required>
-            <Select
-              options={[...TIME_FORMAT_OPTIONS]}
-              error={errors.time_format?.message}
-              {...register('time_format')}
-            />
-          </FormField>
-          <FormField label="Academic year starts in" error={errors.start_month?.message} required>
-            <Select
-              options={[...MONTH_OPTIONS]}
-              error={errors.start_month?.message}
-              {...register('start_month')}
-            />
-          </FormField>
-          <FormField label="Week starts on" error={errors.start_week?.message} required>
-            <Select
-              options={[...WEEKDAY_OPTIONS]}
-              error={errors.start_week?.message}
-              {...register('start_week')}
-            />
-          </FormField>
-          <FormField label="Weekly day off" error={errors.day_off?.message}>
-            <Select
-              options={[{ value: '', label: 'None' }, ...WEEKDAY_OPTIONS]}
-              error={errors.day_off?.message}
-              {...register('day_off')}
-            />
-          </FormField>
-        </div>
-        <FormField
-          label="Right-to-left (RTL) layout"
-          hint="Enable for Arabic, Hebrew, and other RTL languages."
+    <>
+      {navigationGuard}
+      <form onSubmit={handleSubmit(onSave)} noValidate>
+        <SettingsCard
+          title="Regional Settings"
+          description="Date, time, timezone, and calendar preferences for the school."
+          footer={
+            <PermissionButton
+              type="submit"
+              permission="settings.manage"
+              isLoading={isSaving}
+              disabled={!isDirty && !isSaving}
+            >
+              Save changes
+            </PermissionButton>
+          }
         >
-          <Controller
-            name="is_rtl"
-            control={control}
-            render={({ field }) => (
-              <div className="flex items-center gap-2">
-                <Switch
-                  id="is_rtl"
-                  checked={field.value === 'enabled'}
-                  onCheckedChange={(checked) => field.onChange(checked ? 'enabled' : 'disabled')}
-                  aria-label="Enable right-to-left layout"
-                />
-                <span className="text-sm text-muted-foreground">
-                  {field.value === 'enabled' ? 'Enabled' : 'Disabled'}
-                </span>
-              </div>
-            )}
-          />
-        </FormField>
-      </SettingsCard>
-    </form>
+          <FormErrorSummary errors={errors} className="mb-2" />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormSelectField
+              control={control}
+              name="timezone"
+              label="Timezone"
+              options={[...TIMEZONE_OPTIONS]}
+              required
+            />
+            <FormSelectField
+              control={control}
+              name="date_format"
+              label="Date format"
+              options={[...DATE_FORMAT_OPTIONS]}
+              required
+            />
+            <FormSelectField
+              control={control}
+              name="time_format"
+              label="Time format"
+              options={[...TIME_FORMAT_OPTIONS]}
+              required
+            />
+            <FormSelectField
+              control={control}
+              name="start_month"
+              label="Academic year starts in"
+              options={[...MONTH_OPTIONS]}
+              required
+            />
+            <FormSelectField
+              control={control}
+              name="start_week"
+              label="Week starts on"
+              options={[...WEEKDAY_OPTIONS]}
+              required
+            />
+            <FormSelectField
+              control={control}
+              name="day_off"
+              label="Weekly day off"
+              options={[{ value: '', label: 'None' }, ...WEEKDAY_OPTIONS]}
+              optional
+            />
+          </div>
+
+          <FormField
+            label="Right-to-left (RTL) layout"
+            hint="Enable for Arabic, Hebrew, and other RTL languages."
+          >
+            <Controller
+              name="is_rtl"
+              control={control}
+              render={({ field }) => (
+                <div className="flex items-center gap-2">
+                  <Switch
+                    id="is_rtl"
+                    checked={field.value === 'enabled'}
+                    onCheckedChange={(checked) => field.onChange(checked ? 'enabled' : 'disabled')}
+                    aria-label="Enable right-to-left layout"
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    {field.value === 'enabled' ? 'Enabled' : 'Disabled'}
+                  </span>
+                </div>
+              )}
+            />
+          </FormField>
+        </SettingsCard>
+      </form>
+    </>
   );
 }

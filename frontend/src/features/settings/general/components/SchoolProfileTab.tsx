@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { Textarea } from '@components/ui/textarea';
-import { FormField } from '@components/forms/FormField';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormSection } from '@components/forms/FormSection';
+import { FormTextField, FormTextareaField } from '@components/forms/fields';
 import { SettingsCard } from '@components/forms/SettingsCard';
+import { PermissionButton } from '@components/rbac/PermissionButton';
+import { useUnsavedChangesWarning } from '@hooks/useUnsavedChangesWarning';
 import {
   schoolProfileSchema,
   type SchoolProfileFormValues,
@@ -20,7 +21,7 @@ interface SchoolProfileTabProps {
 
 export function SchoolProfileTab({ settings, onSave, isSaving }: SchoolProfileTabProps) {
   const {
-    register,
+    control,
     handleSubmit,
     reset,
     formState: { errors, isDirty },
@@ -35,6 +36,8 @@ export function SchoolProfileTab({ settings, onSave, isSaving }: SchoolProfileTa
     },
   });
 
+  const { navigationGuard } = useUnsavedChangesWarning(isDirty);
+
   useEffect(() => {
     reset({
       name: settings.name,
@@ -46,34 +49,61 @@ export function SchoolProfileTab({ settings, onSave, isSaving }: SchoolProfileTa
   }, [settings, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSave)} noValidate>
-      <SettingsCard
-        title="School Profile"
-        description="Basic school identity and contact information shown across the ERP."
-        footer={
-          <Button type="submit" isLoading={isSaving} disabled={!isDirty && !isSaving}>
-            Save changes
-          </Button>
-        }
-      >
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FormField label="School name" htmlFor="name" error={errors.name?.message} required>
-            <Input id="name" {...register('name')} aria-required="true" />
-          </FormField>
-          <FormField label="DISE code" htmlFor="dise_code" error={errors.dise_code?.message}>
-            <Input id="dise_code" {...register('dise_code')} placeholder="UDISE+ code" />
-          </FormField>
-          <FormField label="Email" htmlFor="email" error={errors.email?.message} required>
-            <Input id="email" type="email" autoComplete="email" {...register('email')} />
-          </FormField>
-          <FormField label="Phone" htmlFor="phone" error={errors.phone?.message}>
-            <Input id="phone" type="tel" autoComplete="tel" {...register('phone')} />
-          </FormField>
-        </div>
-        <FormField label="Address" htmlFor="address" error={errors.address?.message}>
-          <Textarea id="address" rows={3} {...register('address')} />
-        </FormField>
-      </SettingsCard>
-    </form>
+    <>
+      {navigationGuard}
+      <form onSubmit={handleSubmit(onSave)} noValidate>
+        <SettingsCard
+          title="School Profile"
+          description="Basic school identity and contact information shown across the ERP."
+          footer={
+            <PermissionButton
+              type="submit"
+              permission="settings.manage"
+              isLoading={isSaving}
+              disabled={!isDirty && !isSaving}
+            >
+              Save changes
+            </PermissionButton>
+          }
+        >
+          <FormErrorSummary errors={errors} className="mb-2" />
+
+          <FormSection title="Identity" description="Official school name and registration codes.">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormTextField control={control} name="name" label="School name" required />
+              <FormTextField
+                control={control}
+                name="dise_code"
+                label="DISE code"
+                placeholder="UDISE+ code"
+                optional
+              />
+            </div>
+          </FormSection>
+
+          <FormSection title="Contact" description="Primary contact details for communications.">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormTextField
+                control={control}
+                name="email"
+                label="Email"
+                type="email"
+                autoComplete="email"
+                required
+              />
+              <FormTextField
+                control={control}
+                name="phone"
+                label="Phone"
+                type="tel"
+                autoComplete="tel"
+                optional
+              />
+            </div>
+            <FormTextareaField control={control} name="address" label="Address" rows={3} optional />
+          </FormSection>
+        </SettingsCard>
+      </form>
+    </>
   );
 }

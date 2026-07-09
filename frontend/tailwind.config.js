@@ -4,20 +4,29 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        canvas: {
+          DEFAULT: 'hsl(var(--canvas))',
+          soft: 'hsl(var(--canvas-soft))',
+        },
+        ink: {
+          DEFAULT: 'hsl(var(--ink))',
+          deep: 'hsl(var(--ink-deep))',
+        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
-          50: '#eff6ff',
-          100: '#dbeafe',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
+          hover: 'hsl(var(--primary-hover))',
+          neutral: 'hsl(var(--primary-neutral))',
+          pale: 'hsl(var(--primary-pale))',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -26,6 +35,7 @@ export default {
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
+          deep: 'hsl(var(--destructive-deep))',
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
@@ -39,6 +49,10 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
         sidebar: {
           DEFAULT: 'hsl(var(--sidebar-background))',
           foreground: 'hsl(var(--sidebar-foreground))',
@@ -48,19 +62,45 @@ export default {
         success: {
           DEFAULT: 'hsl(var(--success))',
           foreground: 'hsl(var(--success-foreground))',
+          deep: 'hsl(var(--success-deep))',
+          pale: 'hsl(var(--success-pale))',
         },
-        warning: 'hsl(var(--warning))',
+        warning: {
+          DEFAULT: 'hsl(var(--warning))',
+          foreground: 'hsl(var(--warning-foreground))',
+          deep: 'hsl(var(--warning-deep))',
+        },
+        info: {
+          DEFAULT: 'hsl(var(--info))',
+          foreground: 'hsl(var(--info-foreground))',
+        },
         chart: {
           1: 'hsl(var(--chart-1))',
           2: 'hsl(var(--chart-2))',
           3: 'hsl(var(--chart-3))',
+          4: 'hsl(var(--chart-4))',
+          5: 'hsl(var(--chart-5))',
           muted: 'hsl(var(--chart-muted))',
         },
       },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        lg: 'var(--radius-lg)',
+        md: 'var(--radius-md)',
+        sm: 'var(--radius-sm)',
+        xl: 'var(--radius-xl)',
+      },
+      boxShadow: {
+        sm: 'var(--shadow-sm)',
+        md: 'var(--shadow-md)',
+        lg: 'var(--shadow-lg)',
+      },
+      transitionDuration: {
+        fast: 'var(--motion-fast)',
+        DEFAULT: 'var(--motion-base)',
+        slow: 'var(--motion-slow)',
+      },
+      transitionTimingFunction: {
+        DEFAULT: 'var(--motion-ease)',
       },
       keyframes: {
         'accordion-down': {
@@ -73,8 +113,8 @@ export default {
         },
       },
       animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
+        'accordion-down': 'accordion-down var(--motion-base) var(--motion-ease)',
+        'accordion-up': 'accordion-up var(--motion-base) var(--motion-ease)',
       },
     },
   },

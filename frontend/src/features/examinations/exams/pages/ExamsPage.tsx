@@ -1,11 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
+import { ExamApprovalPanel } from '@features/examinations/exams/components/ExamApprovalPanel';
 import { ExamFormDialog } from '@features/examinations/exams/components/ExamFormDialog';
 import { ExamsTable } from '@features/examinations/exams/components/ExamsTable';
 import type { ExamFormValues } from '@features/examinations/exams/schemas/exam.schema';
@@ -14,6 +11,7 @@ import { useExamGroups } from '@hooks/useExamGroups';
 import { useSessions } from '@hooks/useSessions';
 import type { Exam } from '@app-types/examinations/exam';
 import type { ActiveFlag } from '@app-types/settings/session';
+import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
 
@@ -52,6 +50,11 @@ export function ExamsPage() {
     [examGroups, sessions],
   );
 
+  const pendingApprovalExams = useMemo(
+    () => exams.filter((exam) => !exam.is_published && exam.is_active === 'yes'),
+    [exams],
+  );
+
   const closeFormDialog = () => {
     setDialogMode(null);
     setSelectedExam(null);
@@ -68,92 +71,89 @@ export function ExamsPage() {
 
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
+  const addExamAction = (
+    <PermissionButton
+      permission="exams.create"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+      disabled={!canCreate}
+      title={canCreate ? undefined : 'Configure exam groups and sessions first'}
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Exam
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Exams"
-        description="Manage examination windows, passing criteria, and publication status."
-        actions={
-          <Button
-            onClick={() => setDialogMode('create')}
-            className="gap-1"
-            disabled={!canCreate}
-            title={canCreate ? undefined : 'Configure exam groups and sessions first'}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Exam
-          </Button>
-        }
-      />
+    <ModuleListPack
+      title="Exams"
+      description="Manage examination windows, passing criteria, and publication status."
+      actions={addExamAction}
+      prerequisiteHint={
+        !canCreate && !isLoading ? (
+          <p className="text-sm text-muted-foreground">
+            Set up exam groups and academic sessions before creating exams.
+          </p>
+        ) : undefined
+      }
+      isLoading={isLoading}
+      loadingMessage="Loading exams..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && exams.length === 0}
+      emptyTitle="No exams configured"
+      emptyDescription="Create an exam to define assessment windows for a session."
+      emptyAction={canCreate ? addExamAction : undefined}
+      footer={
+        <>
+          <ExamFormDialog
+            open={dialogMode !== null}
+            onOpenChange={(open) => {
+              if (!open) closeFormDialog();
+            }}
+            examGroups={examGroups}
+            sessions={sessions}
+            exam={dialogMode === 'edit' ? selectedExam : null}
+            onSubmit={handleFormSubmit}
+            isLoading={isFormLoading}
+          />
 
-      {!canCreate && !isLoading && (
-        <p className="text-sm text-muted-foreground">
-          Set up exam groups and academic sessions before creating exams.
-        </p>
+          <ConfirmDialog
+            open={deleteTarget !== null}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete exam"
+            description={deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''}
+            confirmLabel="Delete"
+            destructive
+            isLoading={deleteMutation.isPending}
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
+            }}
+          />
+        </>
+      }
+    >
+      {pendingApprovalExams.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-sm font-semibold text-foreground">Pending publication</h2>
+          {pendingApprovalExams.map((exam) => (
+            <ExamApprovalPanel key={exam.id} exam={exam} />
+          ))}
+        </div>
       )}
 
-      {isLoading && <LoadingState message="Loading exams..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load exams'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {!isLoading && !isError && exams?.length === 0 && (
-        <EmptyState
-          title="No exams configured"
-          description="Create an exam to define assessment windows for a session."
-          action={
-            canCreate ? (
-              <Button onClick={() => setDialogMode('create')} className="gap-1">
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                Add Exam
-              </Button>
-            ) : undefined
-          }
-        />
-      )}
-
-      {!isLoading && !isError && exams && exams.length > 0 && (
-        <ExamsTable
-          exams={exams}
-          onEdit={(exam) => {
-            setSelectedExam(exam);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
-      )}
-
-      <ExamFormDialog
-        open={dialogMode !== null}
-        onOpenChange={(open) => {
-          if (!open) closeFormDialog();
+      <ExamsTable
+        exams={exams}
+        onEdit={(exam) => {
+          setSelectedExam(exam);
+          setDialogMode('edit');
         }}
-        examGroups={examGroups}
-        sessions={sessions}
-        exam={dialogMode === 'edit' ? selectedExam : null}
-        onSubmit={handleFormSubmit}
-        isLoading={isFormLoading}
+        onDelete={setDeleteTarget}
       />
-
-      <ConfirmDialog
-        open={deleteTarget !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-        title="Delete exam"
-        description={deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''}
-        confirmLabel="Delete"
-        destructive
-        isLoading={deleteMutation.isPending}
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
-        }}
-      />
-    </div>
+    </ModuleListPack>
   );
 }

@@ -9,6 +9,8 @@ export interface User {
   is_superadmin: boolean;
   created_at: string;
   updated_at: string | null;
+  /** Legacy permission_category keys — populated from backend `/me` when available. */
+  permissions?: string[];
 }
 
 export interface AuthTokens {

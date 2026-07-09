@@ -5,6 +5,7 @@ import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import type { StudentListItem } from '@app-types/students/student';
 import { ROUTES } from '@constants/index';
 import { formatClassSection, formatGender } from '@utils/student';
@@ -12,12 +13,16 @@ import { useDeleteStudent } from '@hooks/useStudents';
 
 interface StudentsTableProps {
   students: StudentListItem[];
+  searchValue: string;
+  onSearchChange: (value: string) => void;
 }
 
 const columns: DataTableColumn<StudentListItem>[] = [
   {
     id: 'admission_no',
     header: 'Admission No.',
+    enableSorting: true,
+    sortValue: (row) => row.admission_no,
     cell: (row) => (
       <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.admission_no}</code>
     ),
@@ -25,17 +30,23 @@ const columns: DataTableColumn<StudentListItem>[] = [
   {
     id: 'full_name',
     header: 'Student',
+    enableSorting: true,
+    sortValue: (row) => row.full_name,
     cellClassName: 'font-medium',
     cell: (row) => row.full_name,
   },
   {
     id: 'class_section',
     header: 'Class',
+    enableSorting: true,
+    sortValue: (row) => formatClassSection(row.class_name, row.section_name),
     cell: (row) => formatClassSection(row.class_name, row.section_name),
   },
   {
     id: 'roll_no',
     header: 'Roll No.',
+    enableSorting: true,
+    sortValue: (row) => row.roll_no ?? '',
     cellClassName: 'text-muted-foreground tabular-nums',
     cell: (row) => (row.roll_no != null ? row.roll_no : '—'),
   },
@@ -58,7 +69,7 @@ const columns: DataTableColumn<StudentListItem>[] = [
   },
 ];
 
-export function StudentsTable({ students }: StudentsTableProps) {
+export function StudentsTable({ students, searchValue, onSearchChange }: StudentsTableProps) {
   const navigate = useNavigate();
   const [studentToDelete, setStudentToDelete] = useState<StudentListItem | null>(null);
   const deleteMutation = useDeleteStudent();
@@ -77,8 +88,14 @@ export function StudentsTable({ students }: StudentsTableProps) {
         data={students}
         columns={columns}
         getRowKey={(student) => student.id}
+        enableSorting
+        showDensityToggle
+        searchValue={searchValue}
+        onSearchChange={onSearchChange}
+        searchPlaceholder="Search by name, admission no., class…"
+        emptyMessage="No students match your search."
         actions={(student) => (
-          <div className="flex items-center gap-1">
+          <>
             <Button
               variant="ghost"
               size="sm"
@@ -87,7 +104,8 @@ export function StudentsTable({ students }: StudentsTableProps) {
             >
               <Eye className="h-4 w-4" />
             </Button>
-            <Button
+            <PermissionButton
+              permission="students.delete"
               variant="ghost"
               size="sm"
               onClick={() => setStudentToDelete(student)}
@@ -95,8 +113,8 @@ export function StudentsTable({ students }: StudentsTableProps) {
               className="text-destructive hover:bg-destructive/10 hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
+            </PermissionButton>
+          </>
         )}
         actionsHeader="Actions"
       />

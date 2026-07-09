@@ -1,0 +1,52 @@
+@media print {
+  @page {
+    margin: 12mm;
+    size: A4 portrait;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print,
+  nav,
+  aside,
+  header,
+  [data-app-chrome] {
+    display: none !important;
+  }
+
+  #report-print-root {
+    display: block !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+  #report-print-root table {
+    font-size: 10pt;
+    page-break-inside: auto;
+  }
+
+  #report-print-root tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  #report-print-root thead {
+    display: table-header-group;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}
+
+.print-only {
+  display: none;
+}

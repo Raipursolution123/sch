@@ -1,5 +1,5 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import type { FeeAssignment } from '@app-types/fees/fee-assignment';
@@ -64,15 +64,17 @@ export function FeeAssignmentsTable({ assignments, onEdit, onDelete }: FeeAssign
         const isActive = assignment.is_active === 'yes';
         return (
           <>
-            <Button
+            <PermissionButton
+              permission="fees.manage"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(assignment)}
               aria-label={`Edit assignment for ${assignment.class_name}`}
             >
               <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="fees.manage"
               variant="ghost"
               size="sm"
               disabled={isActive}
@@ -81,7 +83,7 @@ export function FeeAssignmentsTable({ assignments, onEdit, onDelete }: FeeAssign
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </PermissionButton>
           </>
         );
       }}

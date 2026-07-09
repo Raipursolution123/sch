@@ -1,18 +1,11 @@
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import { Select } from '@components/ui/select';
-import { Switch } from '@components/ui/switch';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
 import { FormField } from '@components/forms/FormField';
+import { FormSwitchField } from '@components/forms/fields';
+import { Select } from '@components/ui/select';
 import type { ClassSection } from '@app-types/academics/class-section';
 import type { SchoolClass } from '@app-types/academics/class';
 import type { Section } from '@app-types/academics/section';
@@ -95,12 +88,12 @@ export function ClassSectionFormDialog({
     [activeSections],
   );
 
+  const hasOptions = classOptions.length > 0 && sectionOptions.length > 0;
+
   const {
     control,
     handleSubmit,
     reset,
-    watch,
-    setValue,
     formState: { errors },
   } = useForm<ClassSectionFormValues>({
     resolver: zodResolver(classSectionFormSchema),
@@ -125,98 +118,73 @@ export function ClassSectionFormDialog({
     }
   }, [open, classSection, activeClasses, activeSections, reset]);
 
-  const isActive = watch('is_active');
-  const hasOptions = classOptions.length > 0 && sectionOptions.length > 0;
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogHeader>
-            <DialogTitle>{isEdit ? 'Edit Class Section' : 'Add Class Section'}</DialogTitle>
-            <DialogDescription>
-              {isEdit
-                ? 'Update the class–section link used for enrollment and timetables.'
-                : 'Link an active class with an active section to create a teachable group.'}
-            </DialogDescription>
-          </DialogHeader>
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      isEdit={isEdit}
+      isLoading={isLoading}
+      title={isEdit ? 'Edit Class Section' : 'Add Class Section'}
+      description={
+        isEdit
+          ? 'Update the class–section link used for enrollment and timetables.'
+          : 'Link an active class with an active section to create a teachable group.'
+      }
+      submitLabel={isEdit ? 'Save changes' : 'Create link'}
+      submitDisabled={!hasOptions}
+      onSubmit={handleSubmit(onSubmit)}
+      size="sm"
+    >
+      <FormErrorSummary errors={errors} />
 
-          <div className="space-y-4 py-4">
-            {!hasOptions && (
-              <p className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
-                Add at least one active class and one active section before creating a class
-                section.
-              </p>
-            )}
+      {!hasOptions && (
+        <p className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
+          Add at least one active class and one active section before creating a class section.
+        </p>
+      )}
 
-            <FormField label="Class" htmlFor="class_id" error={errors.class_id?.message} required>
-              <Controller
-                name="class_id"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    id="class_id"
-                    placeholder="Select class"
-                    options={classOptions}
-                    value={field.value ? String(field.value) : ''}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    disabled={!hasOptions}
-                    aria-invalid={Boolean(errors.class_id)}
-                  />
-                )}
-              />
-            </FormField>
+      <FormField label="Class" htmlFor="class_id" error={errors.class_id?.message} required>
+        <Controller
+          name="class_id"
+          control={control}
+          render={({ field }) => (
+            <Select
+              id="class_id"
+              placeholder="Select class"
+              options={classOptions}
+              value={field.value ? String(field.value) : ''}
+              onChange={(e) => field.onChange(Number(e.target.value))}
+              disabled={!hasOptions}
+              aria-invalid={Boolean(errors.class_id)}
+            />
+          )}
+        />
+      </FormField>
 
-            <FormField
-              label="Section"
-              htmlFor="section_id"
-              error={errors.section_id?.message}
-              required
-            >
-              <Controller
-                name="section_id"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    id="section_id"
-                    placeholder="Select section"
-                    options={sectionOptions}
-                    value={field.value ? String(field.value) : ''}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    disabled={!hasOptions}
-                    aria-invalid={Boolean(errors.section_id)}
-                  />
-                )}
-              />
-            </FormField>
+      <FormField label="Section" htmlFor="section_id" error={errors.section_id?.message} required>
+        <Controller
+          name="section_id"
+          control={control}
+          render={({ field }) => (
+            <Select
+              id="section_id"
+              placeholder="Select section"
+              options={sectionOptions}
+              value={field.value ? String(field.value) : ''}
+              onChange={(e) => field.onChange(Number(e.target.value))}
+              disabled={!hasOptions}
+              aria-invalid={Boolean(errors.section_id)}
+            />
+          )}
+        />
+      </FormField>
 
-            <FormField
-              label="Active"
-              hint="Inactive links are hidden from student assignment flows."
-            >
-              <div className="flex items-center gap-2 pt-1">
-                <Switch
-                  id="is_active"
-                  checked={isActive}
-                  onCheckedChange={(checked) =>
-                    setValue('is_active', checked, { shouldDirty: true })
-                  }
-                />
-                <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
-              </div>
-            </FormField>
-          </div>
-
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={isLoading} disabled={!hasOptions}>
-              {isEdit ? 'Save changes' : 'Create link'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <FormSwitchField
+        control={control}
+        name="is_active"
+        label="Active"
+        hint="Inactive links are hidden from student assignment flows."
+      />
+    </EntityFormDialog>
   );
 }

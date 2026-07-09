@@ -4,6 +4,7 @@ import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import type { StaffListItem } from '@app-types/staff/staff';
+import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { ROUTES } from '@constants/index';
 import { formatDepartmentDesignation } from '@utils/staff';
 import { formatGender } from '@utils/student';
@@ -11,12 +12,17 @@ import { formatDate } from '@utils/format';
 
 interface StaffTableProps {
   staff: StaffListItem[];
+  searchValue: string;
+  onSearchChange: (value: string) => void;
+  pagination: DataTablePaginationConfig;
 }
 
 const columns: DataTableColumn<StaffListItem>[] = [
   {
     id: 'employee_id',
     header: 'Employee ID',
+    enableSorting: true,
+    sortValue: (row) => row.employee_id,
     cell: (row) => (
       <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.employee_id}</code>
     ),
@@ -24,12 +30,16 @@ const columns: DataTableColumn<StaffListItem>[] = [
   {
     id: 'full_name',
     header: 'Name',
+    enableSorting: true,
+    sortValue: (row) => row.full_name,
     cellClassName: 'font-medium',
     cell: (row) => row.full_name,
   },
   {
     id: 'role',
     header: 'Department',
+    enableSorting: true,
+    sortValue: (row) => formatDepartmentDesignation(row.department_name, row.designation_name),
     cell: (row) => formatDepartmentDesignation(row.department_name, row.designation_name),
   },
   {
@@ -41,6 +51,8 @@ const columns: DataTableColumn<StaffListItem>[] = [
   {
     id: 'date_of_joining',
     header: 'Joined',
+    enableSorting: true,
+    sortValue: (row) => row.date_of_joining,
     cellClassName: 'text-muted-foreground',
     cell: (row) => formatDate(row.date_of_joining),
   },
@@ -57,7 +69,7 @@ const columns: DataTableColumn<StaffListItem>[] = [
   },
 ];
 
-export function StaffTable({ staff }: StaffTableProps) {
+export function StaffTable({ staff, searchValue, onSearchChange, pagination }: StaffTableProps) {
   const navigate = useNavigate();
 
   return (
@@ -65,6 +77,13 @@ export function StaffTable({ staff }: StaffTableProps) {
       data={staff}
       columns={columns}
       getRowKey={(member) => member.id}
+      enableSorting
+      showDensityToggle
+      searchValue={searchValue}
+      onSearchChange={onSearchChange}
+      searchPlaceholder="Search by name, employee ID, department…"
+      pagination={pagination}
+      emptyMessage="No staff match your search."
       actions={(member) => (
         <Button
           variant="ghost"

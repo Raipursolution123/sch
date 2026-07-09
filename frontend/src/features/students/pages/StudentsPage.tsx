@@ -1,11 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { ListSearch } from '@components/forms/ListSearch';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { StudentsTable } from '@features/students/components/StudentsTable';
 import { StudentAdmissionDialog } from '@features/students/components/StudentAdmissionDialog';
 import type { StudentAdmissionFormValues } from '@features/students/schemas/student-admission.schema';
@@ -15,6 +10,7 @@ import { useClasses } from '@hooks/useClasses';
 import { useSections } from '@hooks/useSections';
 import { matchesSearch } from '@utils/search';
 import { formatClassSection } from '@utils/student';
+import { ModuleListPack } from '@workflow-packs';
 
 export function StudentsPage() {
   const { data: students, isLoading, isError, error, refetch } = useStudents();
@@ -53,78 +49,56 @@ export function StudentsPage() {
     });
   };
 
+  const addStudentAction = (
+    <PermissionButton
+      permission="students.create"
+      onClick={() => setAdmissionOpen(true)}
+      className="gap-1"
+      disabled={!canAdmit}
+      title={canAdmit ? undefined : 'Add active classes and sections first'}
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Student
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Students"
-        // description="Browse enrolled students and open profiles for details."
-        actions={
-          <Button
-            onClick={() => setAdmissionOpen(true)}
-            className="gap-1"
-            disabled={!canAdmit}
-            title={canAdmit ? undefined : 'Add active classes and sections first'}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Student
-          </Button>
-        }
-      />
-
-      {!canAdmit && !isLoading && (
-        <p className="text-sm text-muted-foreground">
-          Configure active classes and sections under Academics before admitting students.
-        </p>
-      )}
-
-      {isLoading && <LoadingState message="Loading students..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load students'}
-          onRetry={() => void refetch()}
+    <ModuleListPack
+      title="Students"
+      actions={addStudentAction}
+      prerequisiteHint={
+        !canAdmit && !isLoading ? (
+          <p className="text-sm text-muted-foreground">
+            Configure active classes and sections under Academics before admitting students.
+          </p>
+        ) : undefined
+      }
+      isLoading={isLoading}
+      loadingMessage="Loading students..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && students?.length === 0}
+      emptyTitle="No students found"
+      emptyDescription="Admit your first student to start building enrollment records."
+      emptyAction={canAdmit ? addStudentAction : undefined}
+      footer={
+        <StudentAdmissionDialog
+          open={admissionOpen}
+          onOpenChange={setAdmissionOpen}
+          classes={classes}
+          sections={sections}
+          suggestedAdmissionNo={suggestedAdmissionNo}
+          onSubmit={handleSubmit}
+          isLoading={createMutation.isPending}
         />
-      )}
-
-      {!isLoading && !isError && students?.length === 0 && (
-        <EmptyState
-          title="No students found"
-          description="Admit your first student to start building enrollment records."
-          action={
-            canAdmit ? (
-              <Button onClick={() => setAdmissionOpen(true)} className="gap-1">
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                Add Student
-              </Button>
-            ) : undefined
-          }
-        />
-      )}
-
-      {!isLoading && !isError && students && students.length > 0 && (
-        <>
-          <ListSearch
-            value={search}
-            onChange={setSearch}
-            placeholder="Search by name, admission no., class..."
-          />
-          {filteredStudents.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No students match your search.</p>
-          ) : (
-            <StudentsTable students={filteredStudents} />
-          )}
-        </>
-      )}
-
-      <StudentAdmissionDialog
-        open={admissionOpen}
-        onOpenChange={setAdmissionOpen}
-        classes={classes}
-        sections={sections}
-        suggestedAdmissionNo={suggestedAdmissionNo}
-        onSubmit={handleSubmit}
-        isLoading={createMutation.isPending}
+      }
+    >
+      <StudentsTable
+        students={filteredStudents}
+        searchValue={search}
+        onSearchChange={setSearch}
       />
-    </div>
+    </ModuleListPack>
   );
 }

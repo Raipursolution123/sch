@@ -29,7 +29,9 @@
       "@app-types/*": ["./src/types/*"],
       "@utils/*": ["./src/utils/*"],
       "@constants/*": ["./src/constants/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@workflow-packs": ["./src/workflow-packs/index.ts"],
+      "@workflow-packs/*": ["./src/workflow-packs/*"]
     }
   },
   "include": ["src"]

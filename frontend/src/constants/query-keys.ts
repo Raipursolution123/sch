@@ -111,4 +111,15 @@ export const queryKeys = {
     all: ['dashboard'] as const,
     overview: () => [...queryKeys.dashboard.all, 'overview'] as const,
   },
+  notifications: {
+    all: ['notifications'] as const,
+    list: (sessionId: number | null) =>
+      [...queryKeys.notifications.all, 'list', sessionId] as const,
+  },
+  workflows: {
+    all: ['workflows'] as const,
+    record: (entityType: string, entityId: number) =>
+      [...queryKeys.workflows.all, entityType, entityId] as const,
+    exams: () => [...queryKeys.workflows.all, 'exam'] as const,
+  },
 } as const;

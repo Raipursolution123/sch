@@ -1,18 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { Switch } from '@components/ui/switch';
-import { FormField } from '@components/forms/FormField';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormNumberField, FormSwitchField, FormTextField } from '@components/forms/fields';
 import type { SchoolClass } from '@app-types/academics/class';
 import {
   classFormSchema,
@@ -48,11 +39,9 @@ export function ClassFormDialog({
   const isEdit = Boolean(schoolClass);
 
   const {
-    register,
+    control,
     handleSubmit,
     reset,
-    watch,
-    setValue,
     formState: { errors },
   } = useForm<ClassFormValues>({
     resolver: zodResolver(classFormSchema),
@@ -79,96 +68,44 @@ export function ClassFormDialog({
     }
   }, [open, schoolClass, suggestedSortOrder, reset]);
 
-  const isHedu = watch('is_hedu_program');
-  const isActive = watch('is_active');
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogHeader>
-            <DialogTitle>{isEdit ? 'Edit Class' : 'Add Class'}</DialogTitle>
-            <DialogDescription>
-              {isEdit
-                ? 'Update class details. Sort order controls display sequence across the system.'
-                : 'Create a new class for student enrollment and academic structure.'}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <FormField
-              label="Class name"
-              htmlFor="class_name"
-              error={errors.class_name?.message}
-              required
-            >
-              <Input
-                id="class_name"
-                placeholder="Class 5"
-                {...register('class_name')}
-                aria-invalid={Boolean(errors.class_name)}
-              />
-            </FormField>
-
-            <FormField
-              label="Sort order"
-              htmlFor="sort_order"
-              error={errors.sort_order?.message}
-              hint="Lower numbers appear first in lists and dropdowns."
-              required
-            >
-              <Input
-                id="sort_order"
-                type="number"
-                min={0}
-                {...register('sort_order', { valueAsNumber: true })}
-                aria-invalid={Boolean(errors.sort_order)}
-              />
-            </FormField>
-
-            <FormField
-              label="Higher education program"
-              hint="Mark classes that belong to senior secondary / higher-ed streams."
-            >
-              <div className="flex items-center gap-2 pt-1">
-                <Switch
-                  id="is_hedu_program"
-                  checked={isHedu}
-                  onCheckedChange={(checked) =>
-                    setValue('is_hedu_program', checked, { shouldDirty: true })
-                  }
-                />
-                <span className="text-sm text-muted-foreground">{isHedu ? 'Yes' : 'No'}</span>
-              </div>
-            </FormField>
-
-            <FormField
-              label="Active"
-              hint="Inactive classes are hidden from enrollment and assignment flows."
-            >
-              <div className="flex items-center gap-2 pt-1">
-                <Switch
-                  id="is_active"
-                  checked={isActive}
-                  onCheckedChange={(checked) =>
-                    setValue('is_active', checked, { shouldDirty: true })
-                  }
-                />
-                <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
-              </div>
-            </FormField>
-          </div>
-
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={isLoading}>
-              {isEdit ? 'Save changes' : 'Create class'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      isEdit={isEdit}
+      isLoading={isLoading}
+      title={isEdit ? 'Edit Class' : 'Add Class'}
+      description={
+        isEdit
+          ? 'Update class details. Sort order controls display sequence across the system.'
+          : 'Create a new class for student enrollment and academic structure.'
+      }
+      submitLabel={isEdit ? 'Save changes' : 'Create class'}
+      onSubmit={handleSubmit(onSubmit)}
+      size="sm"
+    >
+      <FormErrorSummary errors={errors} />
+      <FormTextField control={control} name="class_name" label="Class name" placeholder="Class 5" required />
+      <FormNumberField
+        control={control}
+        name="sort_order"
+        label="Sort order"
+        hint="Lower numbers appear first in lists and dropdowns."
+        required
+        min={0}
+      />
+      <FormSwitchField
+        control={control}
+        name="is_hedu_program"
+        label="Higher education program"
+        hint="Mark classes that belong to senior secondary / higher-ed streams."
+      />
+      <FormSwitchField
+        control={control}
+        name="is_active"
+        label="Active"
+        hint="Inactive classes are hidden from enrollment and assignment flows."
+      />
+    </EntityFormDialog>
   );
 }

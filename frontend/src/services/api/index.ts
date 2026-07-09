@@ -19,3 +19,5 @@ export { examGroupsService } from './exam-groups.service';
 export { examsService } from './exams.service';
 export { examSchedulesService } from './exam-schedules.service';
 export { dashboardService } from './dashboard.service';
+export { notificationsService } from './notifications.service';
+export { workflowService } from './workflow.service';

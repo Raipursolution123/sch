@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
-import { FormField } from '@components/forms/FormField';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormNumberField, FormSelectField } from '@components/forms/fields';
 import { SettingsCard } from '@components/forms/SettingsCard';
+import { PermissionButton } from '@components/rbac/PermissionButton';
+import { useUnsavedChangesWarning } from '@hooks/useUnsavedChangesWarning';
 import { CLASS_TEACHER_OPTIONS } from '@features/settings/general/constants/options';
 import {
   attendanceSettingsSchema,
@@ -21,7 +21,7 @@ interface AttendanceTabProps {
 
 export function AttendanceTab({ settings, onSave, isSaving }: AttendanceTabProps) {
   const {
-    register,
+    control,
     handleSubmit,
     reset,
     formState: { errors, isDirty },
@@ -34,6 +34,8 @@ export function AttendanceTab({ settings, onSave, isSaving }: AttendanceTabProps
     },
   });
 
+  const { navigationGuard } = useUnsavedChangesWarning(isDirty);
+
   useEffect(() => {
     reset({
       attendence_type: settings.attendence_type,
@@ -43,54 +45,52 @@ export function AttendanceTab({ settings, onSave, isSaving }: AttendanceTabProps
   }, [settings, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSave)} noValidate>
-      <SettingsCard
-        title="Attendance Settings"
-        description="Configure attendance rules and class teacher workflow."
-        footer={
-          <Button type="submit" isLoading={isSaving} disabled={!isDirty && !isSaving}>
-            Save changes
-          </Button>
-        }
-      >
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FormField
-            label="Attendance type ID"
-            htmlFor="attendence_type"
-            error={errors.attendence_type?.message}
-            hint="Maps to legacy attendance type configuration."
-          >
-            <Input
-              id="attendence_type"
-              type="number"
+    <>
+      {navigationGuard}
+      <form onSubmit={handleSubmit(onSave)} noValidate>
+        <SettingsCard
+          title="Attendance Settings"
+          description="Configure attendance rules and class teacher workflow."
+          footer={
+            <PermissionButton
+              type="submit"
+              permission="settings.manage"
+              isLoading={isSaving}
+              disabled={!isDirty && !isSaving}
+            >
+              Save changes
+            </PermissionButton>
+          }
+        >
+          <FormErrorSummary errors={errors} className="mb-2" />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormNumberField
+              control={control}
+              name="attendence_type"
+              label="Attendance type ID"
+              hint="Maps to legacy attendance type configuration."
               min={0}
-              {...register('attendence_type', { valueAsNumber: true })}
             />
-          </FormField>
-          <FormField
-            label="Low attendance limit (%)"
-            htmlFor="low_attendance_limit"
-            error={errors.low_attendance_limit?.message}
-            required
-          >
-            <Input
-              id="low_attendance_limit"
-              type="number"
+            <FormNumberField
+              control={control}
+              name="low_attendance_limit"
+              label="Low attendance limit (%)"
+              required
               min={0}
               max={100}
               step={0.1}
-              {...register('low_attendance_limit', { valueAsNumber: true })}
             />
-          </FormField>
-          <FormField label="Class teacher module" error={errors.class_teacher?.message} required>
-            <Select
+            <FormSelectField
+              control={control}
+              name="class_teacher"
+              label="Class teacher module"
               options={[...CLASS_TEACHER_OPTIONS]}
-              error={errors.class_teacher?.message}
-              {...register('class_teacher')}
+              required
             />
-          </FormField>
-        </div>
-      </SettingsCard>
-    </form>
+          </div>
+        </SettingsCard>
+      </form>
+    </>
   );
 }

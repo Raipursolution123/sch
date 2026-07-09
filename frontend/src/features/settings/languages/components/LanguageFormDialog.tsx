@@ -1,18 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { Switch } from '@components/ui/switch';
-import { FormField } from '@components/forms/FormField';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormSwitchField, FormTextField } from '@components/forms/fields';
 import type { Language } from '@app-types/settings/language';
 import {
   languageFormSchema,
@@ -55,11 +46,9 @@ export function LanguageFormDialog({
   const isEdit = Boolean(language);
 
   const {
-    register,
+    control,
     handleSubmit,
     reset,
-    watch,
-    setValue,
     formState: { errors },
   } = useForm<LanguageFormValues>({
     resolver: zodResolver(languageFormSchema),
@@ -72,104 +61,58 @@ export function LanguageFormDialog({
     }
   }, [open, language, reset]);
 
-  const isRtl = watch('is_rtl');
-  const isActive = watch('is_active');
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogHeader>
-            <DialogTitle>{isEdit ? 'Edit Language' : 'Add Language'}</DialogTitle>
-            <DialogDescription>
-              {isEdit
-                ? 'Update locale details. Short and country codes identify the language pack.'
-                : 'Add a language for UI translation and regional formatting.'}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <FormField
-              label="Language name"
-              htmlFor="language"
-              error={errors.language?.message}
-              required
-            >
-              <Input
-                id="language"
-                placeholder="English"
-                {...register('language')}
-                aria-invalid={Boolean(errors.language)}
-              />
-            </FormField>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <FormField
-                label="Short code"
-                htmlFor="short_code"
-                error={errors.short_code?.message}
-                required
-              >
-                <Input
-                  id="short_code"
-                  placeholder="en"
-                  {...register('short_code')}
-                  aria-invalid={Boolean(errors.short_code)}
-                />
-              </FormField>
-              <FormField
-                label="Country code"
-                htmlFor="country_code"
-                error={errors.country_code?.message}
-                required
-              >
-                <Input
-                  id="country_code"
-                  placeholder="us"
-                  {...register('country_code')}
-                  aria-invalid={Boolean(errors.country_code)}
-                />
-              </FormField>
-            </div>
-
-            <FormField
-              label="Right-to-left (RTL)"
-              hint="Enable for languages such as Arabic or Hebrew."
-            >
-              <div className="flex items-center gap-2 pt-1">
-                <Switch
-                  id="is_rtl"
-                  checked={isRtl}
-                  onCheckedChange={(checked) => setValue('is_rtl', checked, { shouldDirty: true })}
-                />
-                <span className="text-sm text-muted-foreground">{isRtl ? 'Yes' : 'No'}</span>
-              </div>
-            </FormField>
-
-            <FormField label="Active" hint="Active languages are available across the application.">
-              <div className="flex items-center gap-2 pt-1">
-                <Switch
-                  id="is_active"
-                  checked={isActive}
-                  onCheckedChange={(checked) =>
-                    setValue('is_active', checked, { shouldDirty: true })
-                  }
-                />
-                <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
-              </div>
-            </FormField>
-          </div>
-
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={isLoading}>
-              {isEdit ? 'Save changes' : 'Create language'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      isEdit={isEdit}
+      isLoading={isLoading}
+      title={isEdit ? 'Edit Language' : 'Add Language'}
+      description={
+        isEdit
+          ? 'Update locale details. Short and country codes identify the language pack.'
+          : 'Add a language for UI translation and regional formatting.'
+      }
+      submitLabel={isEdit ? 'Save changes' : 'Create language'}
+      onSubmit={handleSubmit(onSubmit)}
+      size="sm"
+    >
+      <FormErrorSummary errors={errors} />
+      <FormTextField
+        control={control}
+        name="language"
+        label="Language name"
+        placeholder="English"
+        required
+      />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <FormTextField
+          control={control}
+          name="short_code"
+          label="Short code"
+          placeholder="en"
+          required
+        />
+        <FormTextField
+          control={control}
+          name="country_code"
+          label="Country code"
+          placeholder="us"
+          required
+        />
+      </div>
+      <FormSwitchField
+        control={control}
+        name="is_rtl"
+        label="Right-to-left (RTL)"
+        hint="Enable for languages such as Arabic or Hebrew."
+      />
+      <FormSwitchField
+        control={control}
+        name="is_active"
+        label="Active"
+        hint="Active languages are available across the application."
+      />
+    </EntityFormDialog>
   );
 }

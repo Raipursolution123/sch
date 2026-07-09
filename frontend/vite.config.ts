@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => {
         '@utils': path.resolve(__dirname, './src/utils'),
         '@constants': path.resolve(__dirname, './src/constants'),
         '@assets': path.resolve(__dirname, './src/assets'),
+        '@workflow-packs': path.resolve(__dirname, './src/workflow-packs'),
       },
     },
     server: {
