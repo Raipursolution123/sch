@@ -654,10 +654,10 @@ class SessionsListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can create sessions.',
+                message='Access denied. Only Super Admins, Admins, or Staff can create sessions.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -758,10 +758,10 @@ class SessionsDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can modify sessions.',
+                message='Access denied. Only Super Admins, Admins, or Staff can modify sessions.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -835,10 +835,10 @@ class SessionsDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can delete/deactivate sessions.',
+                message='Access denied. Only Super Admins, Admins, or Staff can delete/deactivate sessions.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -883,10 +883,10 @@ class SessionActivateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can activate sessions.',
+                message='Access denied. Only Super Admins, Admins, or Staff can activate sessions.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
