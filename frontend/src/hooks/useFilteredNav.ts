@@ -16,12 +16,14 @@ import { normalizeRole } from '@utils/normalize-role';
 export function useFilteredNav(): NavItem[] {
   const user = useAuthStore((s) => s.user);
   const role = normalizeRole(user);
-  const legacyKeys = user?.permissions ?? [];
+  const permissions = user?.permissions;
 
   return useMemo(() => {
     if (role === 'superadmin' || role === 'admin') {
       return filterNavigationTree(ADMIN_NAV, createPermissiveChecker());
     }
+
+    const legacyKeys = permissions ?? [];
 
     const checker = createNavigationPermissionChecker({
       legacyKeys: new Set(legacyKeys),
@@ -29,5 +31,5 @@ export function useFilteredNav(): NavItem[] {
     });
 
     return filterNavigationTree(ADMIN_NAV, checker);
-  }, [role, legacyKeys]);
+  }, [role, permissions]);
 }

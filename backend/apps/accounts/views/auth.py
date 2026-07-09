@@ -47,6 +47,7 @@ class RegisterView(APIView):
             )
 
         import uuid
+
         now = timezone.now()
         try:
             staff = Staff.objects.create(

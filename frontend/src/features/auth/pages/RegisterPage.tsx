@@ -6,6 +6,7 @@ import { Input } from '@components/ui/input';
 import { ROUTES } from '@constants/index';
 import { authService } from '@services/api';
 import { useAuthStore } from '@store/index';
+import { getApiErrorMessage } from '@utils/session';
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -25,9 +26,8 @@ export function RegisterPage() {
       setAuth(data.user, data.tokens.access, data.tokens.refresh);
       navigate(ROUTES.dashboard, { replace: true });
     },
-    onError: (err: any) => {
-      const message = err.response?.data?.message || 'Registration failed. Please check your details.';
-      setError(message);
+    onError: (error) => {
+      setError(getApiErrorMessage(error, 'Registration failed. Please check your details.'));
     },
   });
 
