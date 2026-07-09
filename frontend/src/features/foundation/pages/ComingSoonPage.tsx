@@ -13,7 +13,8 @@ function resolvePageMeta(matches: ReturnType<typeof useMatches>): AppRouteHandle
 
   return {
     title: 'Coming Soon',
-    description: 'This module is part of the admin foundation and will be implemented in a future release.',
+    description:
+      'This module is part of the admin foundation and will be implemented in a future release.',
   };
 }
 

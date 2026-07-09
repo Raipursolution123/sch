@@ -1,9 +1,4 @@
-import {
-  Controller,
-  type Control,
-  type FieldPath,
-  type FieldValues,
-} from 'react-hook-form';
+import { Controller, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
 import { FormField, getFormFieldA11yProps } from '@components/forms/FormField';
 import { Input } from '@components/ui/input';
 
@@ -72,7 +67,10 @@ export function FormTimeField<T extends FieldValues>(props: FormTimeFieldProps<T
       control={props.control}
       name={props.name}
       render={({ field, fieldState }) => {
-        const a11y = getFormFieldA11yProps(fieldId, { hint: props.hint, error: fieldState.error?.message });
+        const a11y = getFormFieldA11yProps(fieldId, {
+          hint: props.hint,
+          error: fieldState.error?.message,
+        });
         return (
           <FormField
             label={props.label}

@@ -248,7 +248,12 @@ export function StudentAdmissionDialog({
               )}
             />
           </FormField>
-          <FormField label="Section" htmlFor="section_id" error={errors.section_id?.message} required>
+          <FormField
+            label="Section"
+            htmlFor="section_id"
+            error={errors.section_id?.message}
+            required
+          >
             <Controller
               name="section_id"
               control={control}

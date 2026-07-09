@@ -57,7 +57,11 @@ export function DataTableToolbar({
       <div className="flex items-center gap-2 self-end sm:self-auto">
         {toolbarExtra}
         {showDensity && (
-          <div className="flex items-center rounded-md border border-border p-0.5" role="group" aria-label="Table density">
+          <div
+            className="flex items-center rounded-md border border-border p-0.5"
+            role="group"
+            aria-label="Table density"
+          >
             <Button
               type="button"
               variant={density === 'compact' ? 'secondary' : 'ghost'}

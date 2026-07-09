@@ -70,9 +70,7 @@ export function EntityFormDialog({
 
           <div
             className={
-              scrollable
-                ? 'min-h-0 flex-1 space-y-6 overflow-y-auto py-4 pr-1'
-                : 'space-y-4 py-4'
+              scrollable ? 'min-h-0 flex-1 space-y-6 overflow-y-auto py-4 pr-1' : 'space-y-4 py-4'
             }
           >
             {children}

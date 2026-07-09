@@ -160,12 +160,7 @@ export function ExamFormDialog({
             )}
           />
         </FormField>
-        <FormField
-          label="Session"
-          htmlFor="session_id"
-          error={errors.session_id?.message}
-          required
-        >
+        <FormField label="Session" htmlFor="session_id" error={errors.session_id?.message} required>
           <Controller
             name="session_id"
             control={control}

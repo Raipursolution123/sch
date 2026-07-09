@@ -41,9 +41,7 @@ export function FormField({
             </span>
           )}
         </label>
-        {optional && !required && (
-          <span className="text-xs text-muted-foreground">(optional)</span>
-        )}
+        {optional && !required && <span className="text-xs text-muted-foreground">(optional)</span>}
       </div>
       {children}
       {hint && !error && (

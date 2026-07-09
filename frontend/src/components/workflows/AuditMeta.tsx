@@ -10,7 +10,13 @@ interface AuditMetaProps {
 }
 
 /** Audit-friendly metadata for entity detail screens. */
-export function AuditMeta({ updatedAt, updatedBy, createdAt, createdBy, className }: AuditMetaProps) {
+export function AuditMeta({
+  updatedAt,
+  updatedBy,
+  createdAt,
+  createdBy,
+  className,
+}: AuditMetaProps) {
   if (!updatedAt && !createdAt) return null;
 
   return (

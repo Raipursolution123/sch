@@ -168,8 +168,18 @@ export function StaffFormDialog({
           <SectionHeading>Employment</SectionHeading>
           <div className="grid gap-4 sm:grid-cols-2">
             <FormTextField control={control} name="employee_id" label="Employee ID" required />
-            <FormDateField control={control} name="date_of_joining" label="Date of joining" optional />
-            <FormDateField control={control} name="date_of_leaving" label="Date of leaving" optional />
+            <FormDateField
+              control={control}
+              name="date_of_joining"
+              label="Date of joining"
+              optional
+            />
+            <FormDateField
+              control={control}
+              name="date_of_leaving"
+              label="Date of leaving"
+              optional
+            />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <FormField

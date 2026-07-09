@@ -125,7 +125,9 @@ export function ExamsPage() {
               if (!open) setDeleteTarget(null);
             }}
             title="Delete exam"
-            description={deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''}
+            description={
+              deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''
+            }
             confirmLabel="Delete"
             destructive
             isLoading={deleteMutation.isPending}

@@ -20,12 +20,7 @@ export function AdminSidebar() {
       aria-label="Application sidebar"
       aria-expanded={!collapsed}
     >
-      <div
-        className={cn(
-          'border-b border-sidebar-border',
-          collapsed ? 'px-2 py-4' : 'px-5 py-5',
-        )}
-      >
+      <div className={cn('border-b border-sidebar-border', collapsed ? 'px-2 py-4' : 'px-5 py-5')}>
         {collapsed ? (
           <Link
             to={ROUTES.dashboard}
@@ -45,7 +40,7 @@ export function AdminSidebar() {
         )}
       </div>
 
-      <div className="flex-1 overflow-x-hidden overflow-y-auto px-2 py-4">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-4">
         <AdminNav collapsed={collapsed} />
       </div>
 

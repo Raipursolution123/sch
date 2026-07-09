@@ -1,9 +1,4 @@
-import {
-  Controller,
-  type Control,
-  type FieldPath,
-  type FieldValues,
-} from 'react-hook-form';
+import { Controller, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
 import { FormField, getFormFieldA11yProps } from '@components/forms/FormField';
 import { cn } from '@utils/cn';
 import { controlInputClassName, controlHeightClassName } from '@utils/form-control';
@@ -66,9 +61,7 @@ export function FormFileField<T extends FieldValues>({
               {...a11y}
             />
             {value != null && typeof value === 'object' && 'name' in value && (
-              <p className="text-xs text-muted-foreground">
-                Selected: {(value as File).name}
-              </p>
+              <p className="text-xs text-muted-foreground">Selected: {(value as File).name}</p>
             )}
           </FormField>
         );

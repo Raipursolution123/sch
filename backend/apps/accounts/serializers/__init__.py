@@ -1,7 +1,7 @@
 from apps.accounts.serializers.auth import (
     LoginSerializer,
-    UserSerializer,
     RegisterSerializer,
+    UserSerializer,
 )
 
 __all__ = ["UserSerializer", "LoginSerializer", "RegisterSerializer"]

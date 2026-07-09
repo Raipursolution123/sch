@@ -28,10 +28,7 @@ export function FormRadioGroupField({
   className,
 }: FormRadioGroupFieldProps) {
   return (
-    <fieldset
-      disabled={disabled}
-      className={cn('space-y-2', disabled && 'opacity-60', className)}
-    >
+    <fieldset disabled={disabled} className={cn('space-y-2', disabled && 'opacity-60', className)}>
       <legend className="text-sm font-medium text-foreground">
         {label}
         {required && (

@@ -75,8 +75,7 @@ function buildWeeklyAttendancePoints(rows: AttendanceReportRow[]): WeeklyAttenda
     const stats = byDate.get(iso);
     points.push({
       label: DAY_LABELS[date.getDay()],
-      rate:
-        stats && stats.total > 0 ? Math.round((stats.present / stats.total) * 100) : 0,
+      rate: stats && stats.total > 0 ? Math.round((stats.present / stats.total) * 100) : 0,
     });
   }
 
@@ -295,9 +294,7 @@ export const dashboardService = {
     const weeklyAttendance = attendanceReport
       ? buildWeeklyAttendancePoints(attendanceReport.rows)
       : [];
-    const attendanceRate = attendanceReport
-      ? computeAttendanceRate(attendanceReport.rows)
-      : null;
+    const attendanceRate = attendanceReport ? computeAttendanceRate(attendanceReport.rows) : null;
 
     return {
       kpis: buildKpis(studentsPage.count, staffPage.count, feeOverview, attendanceRate),

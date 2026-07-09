@@ -95,7 +95,13 @@ export function ExamGroupFormDialog({
         options={examTypeSelectOptions}
         required
       />
-      <FormTextareaField control={control} name="description" label="Description" rows={2} optional />
+      <FormTextareaField
+        control={control}
+        name="description"
+        label="Description"
+        rows={2}
+        optional
+      />
       <FormSwitchField control={control} name="is_active" label="Active" />
     </EntityFormDialog>
   );

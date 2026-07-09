@@ -1,9 +1,4 @@
-import {
-  Controller,
-  type Control,
-  type FieldPath,
-  type FieldValues,
-} from 'react-hook-form';
+import { Controller, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
 import { FormField } from '@components/forms/FormField';
 import { Switch } from '@components/ui/switch';
 

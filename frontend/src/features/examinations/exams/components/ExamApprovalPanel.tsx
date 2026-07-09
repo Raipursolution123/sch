@@ -86,7 +86,10 @@ export function ExamApprovalPanel({ exam }: ExamApprovalPanelProps) {
         />
         <p className="text-xs text-muted-foreground">
           Teachers submit exams for review. Principals approve before schedules go live.{' '}
-          <Link to={ROUTES.examinations.exams} className="text-ink underline-offset-2 hover:underline">
+          <Link
+            to={ROUTES.examinations.exams}
+            className="text-ink underline-offset-2 hover:underline"
+          >
             View all exams
           </Link>
         </p>

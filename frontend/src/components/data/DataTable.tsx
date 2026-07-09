@@ -14,10 +14,7 @@ import { DataTableBulkBar } from '@components/data/DataTableBulkBar';
 import { DataTablePagination } from '@components/data/DataTablePagination';
 import { DataTableSkeleton } from '@components/data/DataTableSkeleton';
 import { DataTableToolbar } from '@components/data/DataTableToolbar';
-import {
-  readStoredDensity,
-  storeDensity,
-} from '@components/data/data-table-density';
+import { readStoredDensity, storeDensity } from '@components/data/data-table-density';
 import type { DataTableColumnMeta } from '@components/data/data-table-layout';
 import {
   DATA_TABLE_SCROLL_CLASS,
@@ -33,11 +30,17 @@ import type {
 } from '@components/data/data-table-types';
 import { cn } from '@utils/cn';
 
-export type { DataTableColumn, DataTableDensity, DataTableProps } from '@components/data/data-table-types';
+export type {
+  DataTableColumn,
+  DataTableDensity,
+  DataTableProps,
+} from '@components/data/data-table-types';
 
 function SortIndicator({ direction }: { direction: false | 'asc' | 'desc' }) {
-  if (direction === 'asc') return <ArrowUp className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />;
-  if (direction === 'desc') return <ArrowDown className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />;
+  if (direction === 'asc')
+    return <ArrowUp className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />;
+  if (direction === 'desc')
+    return <ArrowDown className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />;
   return <ArrowUpDown className="ml-1 inline h-3.5 w-3.5 opacity-40" aria-hidden="true" />;
 }
 
@@ -156,7 +159,9 @@ export function DataTable<T>({
   toolbarExtra,
   showDensityToggle = false,
 }: DataTableProps<T>) {
-  const [internalDensity, setInternalDensity] = useState<DataTableDensity>(() => readStoredDensity());
+  const [internalDensity, setInternalDensity] = useState<DataTableDensity>(() =>
+    readStoredDensity(),
+  );
   const [internalSelection, setInternalSelection] = useState<RowSelectionState>({});
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -207,8 +212,7 @@ export function DataTable<T>({
   });
 
   const selectedCount = table.getSelectedRowModel().rows.length;
-  const showToolbar =
-    onSearchChange != null || showDensityToggle || toolbarExtra != null;
+  const showToolbar = onSearchChange != null || showDensityToggle || toolbarExtra != null;
 
   return (
     <div className={cn('overflow-hidden rounded-lg border bg-card shadow-sm', className)}>
@@ -218,16 +222,15 @@ export function DataTable<T>({
           onSearchChange={onSearchChange}
           searchPlaceholder={searchPlaceholder}
           density={density}
-          onDensityChange={showDensityToggle || onDensityChange != null ? handleDensityChange : undefined}
+          onDensityChange={
+            showDensityToggle || onDensityChange != null ? handleDensityChange : undefined
+          }
           toolbarExtra={toolbarExtra}
         />
       )}
 
       {enableRowSelection && (
-        <DataTableBulkBar
-          selectedCount={selectedCount}
-          onClear={() => table.resetRowSelection()}
-        >
+        <DataTableBulkBar selectedCount={selectedCount} onClear={() => table.resetRowSelection()}>
           {bulkActions}
         </DataTableBulkBar>
       )}

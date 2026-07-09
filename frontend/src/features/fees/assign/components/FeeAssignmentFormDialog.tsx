@@ -183,7 +183,12 @@ export function FeeAssignmentFormDialog({
             )}
           />
         </FormField>
-        <FormField label="Fee group" htmlFor="fee_group_id" error={errors.fee_group_id?.message} required>
+        <FormField
+          label="Fee group"
+          htmlFor="fee_group_id"
+          error={errors.fee_group_id?.message}
+          required
+        >
           <Controller
             name="fee_group_id"
             control={control}
@@ -217,7 +222,10 @@ export function FeeAssignmentFormDialog({
         </FormField>
       </div>
 
-      <FormSection title="Fee lines" description="Add one row per fee type with amount and optional due date.">
+      <FormSection
+        title="Fee lines"
+        description="Add one row per fee type with amount and optional due date."
+      >
         <div className="flex justify-end">
           <Button
             type="button"
@@ -307,7 +315,13 @@ export function FeeAssignmentFormDialog({
         </p>
       </FormSection>
 
-      <FormSwitchField control={control} name="is_active" label="Active assignment" onLabel="Yes" offLabel="No" />
+      <FormSwitchField
+        control={control}
+        name="is_active"
+        label="Active assignment"
+        onLabel="Yes"
+        offLabel="No"
+      />
     </EntityFormDialog>
   );
 }

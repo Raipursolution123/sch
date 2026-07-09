@@ -27,7 +27,7 @@ export function ApprovalTimeline({ events, className }: ApprovalTimelineProps) {
             aria-hidden="true"
           />
           <div>
-            <p className="text-sm font-medium text-foreground capitalize">
+            <p className="text-sm font-medium capitalize text-foreground">
               {event.status.replace('_', ' ')}
               <span className="font-normal text-muted-foreground">
                 {' '}

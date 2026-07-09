@@ -18,7 +18,8 @@ export function PermissionGate({
 }: PermissionGateProps) {
   const { can, canAny, canAll } = usePermissions();
   const items = Array.isArray(permission) ? permission : [permission];
-  const allowed = mode === 'all' ? canAll(items) : items.length === 1 ? can(items[0]) : canAny(items);
+  const allowed =
+    mode === 'all' ? canAll(items) : items.length === 1 ? can(items[0]) : canAny(items);
 
   return allowed ? children : fallback;
 }

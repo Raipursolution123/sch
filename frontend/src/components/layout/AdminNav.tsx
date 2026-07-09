@@ -185,7 +185,10 @@ export function AdminNav({ onNavigate, className, collapsed = false }: AdminNavP
         return (
           <div key={item.id}>
             {needsLabel && (
-              <NavSectionLabel section={section as Exclude<NavSection, 'main'>} collapsed={collapsed} />
+              <NavSectionLabel
+                section={section as Exclude<NavSection, 'main'>}
+                collapsed={collapsed}
+              />
             )}
             <NavGroup item={item} collapsed={collapsed} onNavigate={onNavigate} />
           </div>

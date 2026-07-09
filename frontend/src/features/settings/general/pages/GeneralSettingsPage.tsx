@@ -65,7 +65,11 @@ export function GeneralSettingsPage() {
                     isSaving={updateMutation.isPending}
                   />
                 ) : tab.id === 'fees' ? (
-                  <FeesTab settings={settings} onSave={onSave} isSaving={updateMutation.isPending} />
+                  <FeesTab
+                    settings={settings}
+                    onSave={onSave}
+                    isSaving={updateMutation.isPending}
+                  />
                 ) : (
                   <MaintenanceTab
                     settings={settings}

@@ -240,7 +240,12 @@ export function ExamScheduleFormDialog({
           optional
           disabled={!hasOptions}
         />
-        <FormField label="Full marks" htmlFor="full_marks" error={errors.full_marks?.message} optional>
+        <FormField
+          label="Full marks"
+          htmlFor="full_marks"
+          error={errors.full_marks?.message}
+          optional
+        >
           <Controller
             name="full_marks"
             control={control}

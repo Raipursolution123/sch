@@ -85,7 +85,13 @@ export function ClassFormDialog({
       size="sm"
     >
       <FormErrorSummary errors={errors} />
-      <FormTextField control={control} name="class_name" label="Class name" placeholder="Class 5" required />
+      <FormTextField
+        control={control}
+        name="class_name"
+        label="Class name"
+        placeholder="Class 5"
+        required
+      />
       <FormNumberField
         control={control}
         name="sort_order"

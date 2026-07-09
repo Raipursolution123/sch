@@ -30,11 +30,7 @@ export const notificationsService = {
         title: item.title,
         body: item.description ?? 'Requires your attention',
         href: item.href,
-        category: item.id.includes('exam')
-          ? 'exam'
-          : item.id.includes('fee')
-            ? 'fee'
-            : 'staff',
+        category: item.id.includes('exam') ? 'exam' : item.id.includes('fee') ? 'fee' : 'staff',
         createdAt: new Date().toISOString(),
         read: readIds.has(`attention-${item.id}`),
       });
@@ -59,9 +55,7 @@ export const notificationsService = {
       });
     }
 
-    return items.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    );
+    return items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   },
 
   markRead(id: string) {

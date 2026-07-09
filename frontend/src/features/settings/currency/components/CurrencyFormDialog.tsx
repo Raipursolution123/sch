@@ -94,13 +94,7 @@ export function CurrencyFormDialog({
           hint="ISO 4217 code"
           required
         />
-        <FormTextField
-          control={control}
-          name="symbol"
-          label="Symbol"
-          placeholder="₹"
-          required
-        />
+        <FormTextField control={control} name="symbol" label="Symbol" placeholder="₹" required />
       </div>
       <FormTextField
         control={control}

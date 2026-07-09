@@ -39,7 +39,9 @@ export function ModuleSubNavLayout({
                   className={({ isActive }) =>
                     cn(
                       'block rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                      isActive ? 'bg-primary-pale font-semibold text-ink' : 'text-foreground hover:bg-muted',
+                      isActive
+                        ? 'bg-primary-pale font-semibold text-ink'
+                        : 'text-foreground hover:bg-muted',
                     )
                   }
                 >

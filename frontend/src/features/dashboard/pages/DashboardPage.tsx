@@ -153,7 +153,11 @@ export function DashboardPage() {
             </Link>
           }
         >
-          <ChartPanel isEmpty={feeTotal <= 0} emptyTitle="No fee assignments yet" emptyDescription="Assign fees to classes to track collection on the dashboard.">
+          <ChartPanel
+            isEmpty={feeTotal <= 0}
+            emptyTitle="No fee assignments yet"
+            emptyDescription="Assign fees to classes to track collection on the dashboard."
+          >
             <FeeProgressList
               total={feeTotal}
               collectionRate={feeOverview.collectionRate}

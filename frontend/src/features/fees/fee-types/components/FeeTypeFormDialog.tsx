@@ -113,7 +113,13 @@ export function FeeTypeFormDialog({
       <FormErrorSummary errors={errors} />
       <div className="grid gap-4 sm:grid-cols-2">
         <FormTextField control={control} name="code" label="Code" placeholder="TUITION" required />
-        <FormTextField control={control} name="name" label="Name" placeholder="Tuition Fee" required />
+        <FormTextField
+          control={control}
+          name="name"
+          label="Name"
+          placeholder="Tuition Fee"
+          required
+        />
       </div>
       <FormField
         label="Category"
@@ -177,7 +183,13 @@ export function FeeTypeFormDialog({
           )}
         </div>
       </FormField>
-      <FormTextareaField control={control} name="description" label="Description" rows={2} optional />
+      <FormTextareaField
+        control={control}
+        name="description"
+        label="Description"
+        rows={2}
+        optional
+      />
       <FormSwitchField control={control} name="is_active" label="Active" />
     </EntityFormDialog>
   );

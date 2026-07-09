@@ -1,9 +1,5 @@
 import type { ReactNode } from 'react';
-import {
-  ReportFilterBar,
-  ReportHeader,
-  ReportPrintShell,
-} from '@components/reports';
+import { ReportFilterBar, ReportHeader, ReportPrintShell } from '@components/reports';
 import { EmptyState } from '@components/feedback/EmptyState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
@@ -70,11 +66,7 @@ export function ModuleReportPack({
         exportDisabled={exportDisabled}
       />
 
-      <ReportFilterBar
-        sessionLabel={sessionLabel}
-        onApply={onApply}
-        applyDisabled={applyDisabled}
-      >
+      <ReportFilterBar sessionLabel={sessionLabel} onApply={onApply} applyDisabled={applyDisabled}>
         {filters}
       </ReportFilterBar>
 
@@ -90,11 +82,7 @@ export function ModuleReportPack({
       {submitted && !isLoading && !isError && hasData && (
         <ReportPrintShell printTitle={printTitle ?? title} printSubtitle={printSubtitle}>
           {summary}
-          {isEmpty ? (
-            <EmptyState title={emptyTitle} description={emptyDescription} />
-          ) : (
-            children
-          )}
+          {isEmpty ? <EmptyState title={emptyTitle} description={emptyDescription} /> : children}
         </ReportPrintShell>
       )}
     </div>

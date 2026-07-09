@@ -99,7 +99,9 @@ export function FeeTypesPage() {
               if (!open) setDeleteTarget(null);
             }}
             title="Delete fee type"
-            description={deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''}
+            description={
+              deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''
+            }
             confirmLabel="Delete"
             destructive
             isLoading={deleteMutation.isPending}

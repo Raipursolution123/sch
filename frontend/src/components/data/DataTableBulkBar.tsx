@@ -26,9 +26,7 @@ export function DataTableBulkBar({
       role="status"
       aria-live="polite"
     >
-      <span className="text-sm font-medium text-ink">
-        {selectedCount} selected
-      </span>
+      <span className="text-sm font-medium text-ink">{selectedCount} selected</span>
       <div className="flex flex-wrap items-center gap-2">{children}</div>
       <Button
         type="button"

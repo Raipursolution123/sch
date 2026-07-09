@@ -1,10 +1,5 @@
 import type { HTMLInputTypeAttribute } from 'react';
-import {
-  Controller,
-  type Control,
-  type FieldPath,
-  type FieldValues,
-} from 'react-hook-form';
+import { Controller, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
 import { FormField, getFormFieldA11yProps } from '@components/forms/FormField';
 import { Input } from '@components/ui/input';
 

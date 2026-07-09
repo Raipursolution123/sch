@@ -11,7 +11,14 @@ interface StatCardProps {
 }
 
 /** Lightweight KPI card for dashboards and summary rows. */
-export function StatCard({ label, value, description, icon: Icon, trend, className }: StatCardProps) {
+export function StatCard({
+  label,
+  value,
+  description,
+  icon: Icon,
+  trend,
+  className,
+}: StatCardProps) {
   return (
     <article
       className={cn(

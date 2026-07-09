@@ -73,10 +73,7 @@ export function StaffDocumentUploadDialog({
     if (!(values.file instanceof File)) return;
     if (needsDocumentName && !values.documentName?.trim()) return;
 
-    onSubmit(
-      values.file,
-      needsDocumentName ? values.documentName?.trim() : undefined,
-    );
+    onSubmit(values.file, needsDocumentName ? values.documentName?.trim() : undefined);
   };
 
   return (

@@ -94,11 +94,7 @@ export function StudentsPage() {
         />
       }
     >
-      <StudentsTable
-        students={filteredStudents}
-        searchValue={search}
-        onSearchChange={setSearch}
-      />
+      <StudentsTable students={filteredStudents} searchValue={search} onSearchChange={setSearch} />
     </ModuleListPack>
   );
 }

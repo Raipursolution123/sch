@@ -61,7 +61,11 @@ export function SubjectsPage() {
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
   const addSubjectAction = (
-    <PermissionButton permission="academics.manage" onClick={() => setDialogMode('create')} className="gap-1">
+    <PermissionButton
+      permission="academics.manage"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+    >
       <Plus className="h-4 w-4" aria-hidden="true" />
       Add Subject
     </PermissionButton>

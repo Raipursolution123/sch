@@ -75,7 +75,9 @@ export function FilterBar({
         />
       )}
       {children && <div className="flex flex-1 flex-wrap items-center gap-2">{children}</div>}
-      {actions && <div className="flex shrink-0 flex-wrap items-center gap-2 sm:ml-auto">{actions}</div>}
+      {actions && (
+        <div className="flex shrink-0 flex-wrap items-center gap-2 sm:ml-auto">{actions}</div>
+      )}
     </div>
   );
 }

@@ -22,10 +22,7 @@ export function ReportFilterBar({
 }: ReportFilterBarProps) {
   return (
     <div
-      className={cn(
-        'no-print rounded-lg border border-border/80 bg-card p-4 shadow-sm',
-        className,
-      )}
+      className={cn('no-print rounded-lg border border-border/80 bg-card p-4 shadow-sm', className)}
     >
       {sessionLabel && (
         <p className="mb-3 text-xs font-medium text-muted-foreground">

@@ -19,7 +19,10 @@ export function HomePage() {
           <Link to={ROUTES.login} className={cn(buttonVariants(), 'px-6 py-3')}>
             Sign in
           </Link>
-          <Link to={ROUTES.register} className={cn(buttonVariants({ variant: 'outline' }), 'px-6 py-3')}>
+          <Link
+            to={ROUTES.register}
+            className={cn(buttonVariants({ variant: 'outline' }), 'px-6 py-3')}
+          >
             Get started
           </Link>
         </div>

@@ -1,9 +1,4 @@
-import {
-  Controller,
-  type Control,
-  type FieldPath,
-  type FieldValues,
-} from 'react-hook-form';
+import { Controller, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
 import { Search } from 'lucide-react';
 import { FormField, getFormFieldA11yProps } from '@components/forms/FormField';
 import { Input } from '@components/ui/input';

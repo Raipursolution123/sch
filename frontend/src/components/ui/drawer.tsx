@@ -54,7 +54,10 @@ const DrawerHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 
 const DrawerFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn('mt-auto flex flex-col-reverse gap-2 border-t bg-muted/20 px-6 py-4 sm:flex-row sm:justify-end', className)}
+    className={cn(
+      'mt-auto flex flex-col-reverse gap-2 border-t bg-muted/20 px-6 py-4 sm:flex-row sm:justify-end',
+      className,
+    )}
     {...props}
   />
 );

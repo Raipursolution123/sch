@@ -16,13 +16,7 @@ const alignClasses = {
 /** Sticky or inline action row for page-level primary/secondary actions. */
 export function ActionBar({ children, className, align = 'end' }: ActionBarProps) {
   return (
-    <div
-      className={cn(
-        'flex flex-wrap items-center gap-2',
-        alignClasses[align],
-        className,
-      )}
-    >
+    <div className={cn('flex flex-wrap items-center gap-2', alignClasses[align], className)}>
       {children}
     </div>
   );

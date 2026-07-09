@@ -29,10 +29,7 @@ export function Breadcrumbs({ pathname, className }: BreadcrumbsProps) {
               )}
               <li className="min-w-0">
                 {item.href && !isLast ? (
-                  <Link
-                    to={item.href}
-                    className="truncate transition-colors hover:text-foreground"
-                  >
+                  <Link to={item.href} className="truncate transition-colors hover:text-foreground">
                     {item.label}
                   </Link>
                 ) : (

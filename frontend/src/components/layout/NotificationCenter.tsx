@@ -9,7 +9,11 @@ import {
   DrawerTitle,
 } from '@components/ui/drawer';
 import type { AppNotification } from '@app-types/notifications';
-import { useMarkAllNotificationsRead, useMarkNotificationRead, useNotifications } from '@hooks/useNotifications';
+import {
+  useMarkAllNotificationsRead,
+  useMarkNotificationRead,
+  useNotifications,
+} from '@hooks/useNotifications';
 import { formatDate } from '@utils/format';
 import { cn } from '@utils/cn';
 
@@ -88,9 +92,12 @@ export function NotificationCenter({ open, onOpenChange }: NotificationCenterPro
                 size="sm"
                 className="gap-1.5"
                 onClick={() =>
-                  markAllRead.mutate(notifications.map((item) => item.id), {
-                    onSuccess: () => onOpenChange(false),
-                  })
+                  markAllRead.mutate(
+                    notifications.map((item) => item.id),
+                    {
+                      onSuccess: () => onOpenChange(false),
+                    },
+                  )
                 }
               >
                 <CheckCheck className="h-4 w-4" aria-hidden="true" />
@@ -109,11 +116,7 @@ export function NotificationCenter({ open, onOpenChange }: NotificationCenterPro
 
           <div className="space-y-2">
             {notifications.map((item) => (
-              <NotificationItem
-                key={item.id}
-                item={item}
-                onRead={(id) => markRead.mutate(id)}
-              />
+              <NotificationItem key={item.id} item={item} onRead={(id) => markRead.mutate(id)} />
             ))}
           </div>
         </div>

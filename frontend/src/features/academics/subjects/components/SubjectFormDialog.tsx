@@ -4,11 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
 import { FormField } from '@components/forms/FormField';
-import {
-  FormSelectField,
-  FormSwitchField,
-  FormTextField,
-} from '@components/forms/fields';
+import { FormSelectField, FormSwitchField, FormTextField } from '@components/forms/fields';
 import type { Subject } from '@app-types/academics/subject';
 import type { SchoolClass } from '@app-types/academics/class';
 import { SUBJECT_TYPE_OPTIONS } from '@features/academics/subjects/constants/options';
@@ -139,10 +135,7 @@ export function SubjectFormDialog({
         />
       </div>
 
-      <FormField
-        label="Linked classes"
-        hint="Optional. Restrict this subject to specific classes."
-      >
+      <FormField label="Linked classes" hint="Optional. Restrict this subject to specific classes.">
         {selectableClasses.length === 0 ? (
           <p className="text-sm text-muted-foreground">No active classes available.</p>
         ) : (

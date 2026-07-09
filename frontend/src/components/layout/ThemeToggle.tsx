@@ -12,7 +12,11 @@ export function ThemeToggle() {
   const { mode, setMode } = useTheme();
 
   return (
-    <div className="flex items-center gap-1 rounded-lg border bg-muted/40 p-1" role="group" aria-label="Theme">
+    <div
+      className="flex items-center gap-1 rounded-lg border bg-muted/40 p-1"
+      role="group"
+      aria-label="Theme"
+    >
       {MODES.map(({ value, label, icon: Icon }) => (
         <Button
           key={value}

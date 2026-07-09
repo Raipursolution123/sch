@@ -133,7 +133,10 @@ const ExamSchedulePage = lazy(() =>
 export const adminRoutes: RouteObject[] = [
   { path: 'dashboard', element: <DashboardPage /> },
 
-  { path: LEGACY_SETTINGS_SESSIONS.slice(1), element: <Navigate to={ROUTES.academics.sessions} replace /> },
+  {
+    path: LEGACY_SETTINGS_SESSIONS.slice(1),
+    element: <Navigate to={ROUTES.academics.sessions} replace />,
+  },
 
   createModuleRoutes('/academics', ROUTES.academics.sessions, [
     { path: 'sessions', element: <SessionsPage /> },
