@@ -63,10 +63,10 @@ class LanguagesListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can create languages.',
+                message='Access denied. Only Super Admins, Admins, or Staff can create languages.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -180,10 +180,10 @@ class LanguagesDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can modify languages.',
+                message='Access denied. Only Super Admins, Admins, or Staff can modify languages.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -269,10 +269,10 @@ class LanguagesDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can delete languages.',
+                message='Access denied. Only Super Admins, Admins, or Staff can delete languages.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
