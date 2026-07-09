@@ -132,28 +132,7 @@ class StaffListCreateView(APIView):
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
 
-        # --- AUTO-FIX STAGING DATABASE ---
-        # Automatically upgrade admin@demo.com to Super Admin in the database
-        if request.user.username == 'admin@demo.com' and request.user.role != 'Super Admin':
-            from apps.accounts.models.role import Role
-            from django.utils import timezone
-            try:
-                Role.objects.get_or_create(
-                    name='Super Admin',
-                    defaults={
-                        'slug': 'super-admin',
-                        'is_active': 1,
-                        'is_system': 1,
-                        'is_superadmin': 1,
-                        'created_at': timezone.now()
-                    }
-                )
-                Role.objects.filter(name='Super Admin').update(is_superadmin=1)
-                request.user.role = 'Super Admin'
-                request.user.save(update_fields=['role'])
-            except Exception as e:
-                logger.error(f"Auto-upgrade failed: {e}")
-        # ---------------------------------
+
 
         staff_qs = Staff.objects.all().order_by('name', 'surname')
         
