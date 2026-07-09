@@ -25,7 +25,10 @@ export function RegisterPage() {
       setAuth(data.user, data.tokens.access, data.tokens.refresh);
       navigate(ROUTES.dashboard, { replace: true });
     },
-    onError: () => setError('Registration failed. Please check your details.'),
+    onError: (err: any) => {
+      const message = err.response?.data?.message || 'Registration failed. Please check your details.';
+      setError(message);
+    },
   });
 
   const handleSubmit = (e: FormEvent) => {
@@ -54,6 +57,7 @@ export function RegisterPage() {
             name="first_name"
             value={form.first_name}
             onChange={(e) => updateField('first_name', e.target.value)}
+            required
           />
           <Input
             label="Last name"
@@ -63,8 +67,8 @@ export function RegisterPage() {
           />
         </div>
         <Input
-          label="Username"
-          type="text"
+          label="Email address"
+          type="email"
           name="username"
           value={form.username}
           onChange={(e) => updateField('username', e.target.value)}
@@ -77,6 +81,7 @@ export function RegisterPage() {
           value={form.password}
           onChange={(e) => updateField('password', e.target.value)}
           required
+          minLength={6}
         />
         <Input
           label="Confirm password"
@@ -85,6 +90,7 @@ export function RegisterPage() {
           value={form.password_confirm}
           onChange={(e) => updateField('password_confirm', e.target.value)}
           required
+          minLength={6}
         />
         {error && <p className="text-sm text-destructive">{error}</p>}
         <Button type="submit" isLoading={registerMutation.isPending} className="w-full">
