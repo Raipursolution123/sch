@@ -37,6 +37,7 @@ from .models import (
 )
 
 from apps.students.models import StudentSession
+from apps.settings.models.sch_settings import SchSettings
 
 logger = logging.getLogger(__name__)
 
@@ -629,12 +630,16 @@ class SessionsListCreateView(APIView):
         paginator = StandardResultsSetPagination()
         paginated_qs = paginator.paginate_queryset(sessions_qs, request, view=self)
 
+        sch_setting = SchSettings.objects.first()
+        active_session_id = sch_setting.session_id if sch_setting else 0
+
         sessions_data = []
         for s in (paginated_qs if paginated_qs is not None else sessions_qs):
             sessions_data.append({
                 'id': s.id,
                 'session': s.session,
                 'is_active': s.is_active,
+                'active': s.id if s.id == active_session_id else 0,
                 'created_at': s.created_at.strftime('%Y-%m-%d %H:%M:%S') if s.created_at else None,
                 'updated_at': s.updated_at.strftime('%Y-%m-%d') if s.updated_at else None,
             })
@@ -737,11 +742,15 @@ class SessionsDetailView(APIView):
                 status_code=status.HTTP_404_NOT_FOUND,
             )
 
+        sch_setting = SchSettings.objects.first()
+        active_session_id = sch_setting.session_id if sch_setting else 0
+
         return APIResponse.success(
             data={
                 'id': session_obj.id,
                 'session': session_obj.session,
                 'is_active': session_obj.is_active,
+                'active': session_obj.id if session_obj.id == active_session_id else 0,
                 'created_at': session_obj.created_at.strftime('%Y-%m-%d %H:%M:%S') if session_obj.created_at else None,
                 'updated_at': session_obj.updated_at.strftime('%Y-%m-%d') if session_obj.updated_at else None,
             },

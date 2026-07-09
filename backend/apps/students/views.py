@@ -731,3 +731,46 @@ class StudentFeesView(APIView):
         except Exception as e:
             logger.error(f"Error reverting payment: {e}")
             return APIResponse.error(message=f'Failed to revert payment: {str(e)}')
+
+
+class StudentAcademicSessionsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, student_id):
+        user_role = (request.user.role if request.user.is_authenticated else None)
+        if not user_role:
+            return APIResponse.error(
+                message='Authentication required. Please login first.',
+                status_code=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        student = Students.objects.filter(id=student_id).first()
+        if not student:
+            return APIResponse.error(
+                message='Student not found.',
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
+
+        session_ids = StudentSession.objects.filter(student_id=student_id).values_list('session_id', flat=True).distinct()
+        sessions = Sessions.objects.filter(id__in=session_ids).order_by('id')
+
+        from apps.settings.models.sch_settings import SchSettings
+        sch_setting = SchSettings.objects.first()
+        active_session_id = sch_setting.session_id if sch_setting else 0
+
+        sessions_data = []
+        for s in sessions:
+            sessions_data.append({
+                'id': s.id,
+                'session': s.session,
+                'is_active': s.is_active,
+                'active': s.id if s.id == active_session_id else 0,
+                'created_at': s.created_at.strftime('%Y-%m-%d %H:%M:%S') if s.created_at else None,
+                'updated_at': s.updated_at.strftime('%Y-%m-%d') if s.updated_at else None,
+            })
+
+        return APIResponse.success(
+            data={'sessions': sessions_data},
+            message='Student academic sessions retrieved successfully.'
+        )
+
