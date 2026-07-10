@@ -10,7 +10,9 @@ from common.responses.api import APIResponse
 from apps.examinations.models.exam_group_class_batch_exams import (
     ExamGroupClassBatchExams,
 )
-from apps.examinations.models.exam_schedules import ExamSchedules
+from apps.examinations.models.exam_group_class_batch_exam_subjects import (
+    ExamGroupClassBatchExamSubjects,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -345,25 +347,32 @@ class ExamsDetailView(APIView):
 
 
 def serialize_exam_schedule(schedule):
-    is_active_str = (
-        "yes"
-        if schedule.is_active == "yes"
-        or schedule.is_active == 1
-        or schedule.is_active == "1"
-        else "no"
-    )
+    is_active_str = "yes" if schedule.is_active == 1 else "no"
+    parent_exam = ExamGroupClassBatchExams.objects.filter(
+        id=schedule.exam_group_class_batch_exams_id
+    ).first()
+    session_id = parent_exam.session_id if parent_exam else None
+
+    # Format time from TimeField
+    if isinstance(schedule.time_from, str):
+        start_time_str = schedule.time_from[:5]
+    elif schedule.time_from:
+        start_time_str = schedule.time_from.strftime("%H:%M")
+    else:
+        start_time_str = None
+
     return {
         "id": schedule.id,
-        "exam_id": schedule.exam_id,
-        "subject_id": schedule.teacher_subject_id,
-        "session_id": schedule.session_id,
-        "date_of_exam": safe_date_str(schedule.date_of_exam),
-        "start_time": schedule.start_to,
-        "end_time": schedule.end_from,
+        "exam_id": schedule.exam_group_class_batch_exams_id,
+        "subject_id": schedule.subject_id,
+        "session_id": session_id,
+        "date_of_exam": safe_date_str(schedule.date_from),
+        "start_time": start_time_str,
+        "end_time": schedule.duration,  # map end_time to duration
         "room_no": schedule.room_no,
-        "full_marks": schedule.full_marks,
-        "passing_marks": schedule.passing_marks,
-        "note": schedule.note,
+        "full_marks": schedule.max_marks,
+        "passing_marks": schedule.min_marks,
+        "note": None,
         "is_active": is_active_str,
         "created_at": (
             safe_date_str(schedule.created_at, "%Y-%m-%dT%H:%M:%SZ")
@@ -379,7 +388,7 @@ class ExamSchedulesListView(APIView):
 
     def get(self, request):
         try:
-            schedules_qs = ExamSchedules.objects.all().order_by("-id")
+            schedules_qs = ExamGroupClassBatchExamSubjects.objects.all().order_by("-id")
             data = [serialize_exam_schedule(s) for s in schedules_qs]
             return APIResponse.success(
                 data=data, message="Exam schedules retrieved successfully."
@@ -394,23 +403,19 @@ class ExamSchedulesListView(APIView):
         try:
             data = request.data
 
-            is_active_val = data.get("is_active")
-            if isinstance(is_active_val, str):
-                is_active_val = "yes" if is_active_val.lower() == "yes" else "no"
-            elif is_active_val is None:
-                is_active_val = "yes"
+            is_active_val = (
+                1 if str(data.get("is_active", "yes")).lower() == "yes" else 0
+            )
 
-            schedule = ExamSchedules.objects.create(
-                session_id=data.get("session_id"),
-                exam_id=data.get("exam_id"),
-                teacher_subject_id=data.get("subject_id"),
-                date_of_exam=data.get("date_of_exam") or None,
-                start_to=data.get("start_time"),
-                end_from=data.get("end_time"),
+            schedule = ExamGroupClassBatchExamSubjects.objects.create(
+                exam_group_class_batch_exams_id=data.get("exam_id"),
+                subject_id=data.get("subject_id"),
+                date_from=data.get("date_of_exam") or timezone.now().date(),
+                time_from=data.get("start_time") or "09:00",
+                duration=data.get("end_time") or "12:00",  # map end_time to duration
                 room_no=data.get("room_no"),
-                full_marks=data.get("full_marks"),
-                passing_marks=data.get("passing_marks"),
-                note=data.get("note"),
+                max_marks=data.get("full_marks"),
+                min_marks=data.get("passing_marks"),
                 is_active=is_active_val,
                 created_at=timezone.now(),
                 updated_at=timezone.now().date(),
@@ -432,7 +437,7 @@ class ExamSchedulesDetailView(APIView):
     permission_classes = [AllowAny]
 
     def get_object(self, pk):
-        return ExamSchedules.objects.filter(id=pk).first()
+        return ExamGroupClassBatchExamSubjects.objects.filter(id=pk).first()
 
     def get(self, request, pk):
         try:
@@ -460,34 +465,28 @@ class ExamSchedulesDetailView(APIView):
 
             data = request.data
 
-            if "session_id" in data:
-                schedule.session_id = data["session_id"]
             if "exam_id" in data:
-                schedule.exam_id = data["exam_id"]
+                schedule.exam_group_class_batch_exams_id = data["exam_id"]
             if "subject_id" in data:
-                schedule.teacher_subject_id = data["subject_id"]
+                schedule.subject_id = data["subject_id"]
             if "date_of_exam" in data:
-                schedule.date_of_exam = data["date_of_exam"] or None
+                schedule.date_from = data["date_of_exam"] or timezone.now().date()
             if "start_time" in data:
-                schedule.start_to = data["start_time"]
+                schedule.time_from = data["start_time"]
             if "end_time" in data:
-                schedule.end_from = data["end_time"]
+                schedule.duration = data["end_time"]
             if "room_no" in data:
                 schedule.room_no = data["room_no"]
             if "full_marks" in data:
-                schedule.full_marks = data["full_marks"]
+                schedule.max_marks = data["full_marks"]
             if "passing_marks" in data:
-                schedule.passing_marks = data["passing_marks"]
-            if "note" in data:
-                schedule.note = data["note"]
+                schedule.min_marks = data["passing_marks"]
             if "is_active" in data:
                 is_active_val = data["is_active"]
                 if isinstance(is_active_val, str):
-                    schedule.is_active = (
-                        "yes" if is_active_val.lower() == "yes" else "no"
-                    )
+                    schedule.is_active = 1 if is_active_val.lower() == "yes" else 0
                 else:
-                    schedule.is_active = "yes" if is_active_val else "no"
+                    schedule.is_active = 1 if is_active_val else 0
 
             schedule.updated_at = timezone.now().date()
             schedule.save()
