@@ -1,6 +1,11 @@
 from typing import Any
 
-from apps.academics.models import Classes, ClassSections, Sections, SubjectGroupClassSections
+from apps.academics.models import (
+    Classes,
+    ClassSections,
+    Sections,
+    SubjectGroupClassSections,
+)
 from apps.academics.models.subject_groups import SubjectGroups
 from apps.students.models.student_fees_master import StudentFeesMaster
 from apps.students.models.student_session import StudentSession
@@ -68,7 +73,9 @@ def has_active_fees(student_session_id: int) -> bool:
 def subject_group_valid_for_target(
     subject_group_id: int, session_id: int, class_section_id: int
 ) -> bool:
-    group = SubjectGroups.objects.filter(id=subject_group_id, session_id=session_id).first()
+    group = SubjectGroups.objects.filter(
+        id=subject_group_id, session_id=session_id
+    ).first()
     if group is None:
         return False
     return SubjectGroupClassSections.objects.filter(

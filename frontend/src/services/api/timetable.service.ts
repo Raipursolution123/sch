@@ -36,10 +36,7 @@ export const timetableService = {
     return extractList<TimetableSubjectOption>(data, 'options');
   },
 
-  listForStaff: async (
-    sessionId: number,
-    staffId: number,
-  ): Promise<TimetablePeriod[]> => {
+  listForStaff: async (sessionId: number, staffId: number): Promise<TimetablePeriod[]> => {
     const { data } = await apiClient.get<BackendPayload>(
       `${API_ENDPOINTS.academics.timetableTeacher}?session_id=${sessionId}&staff_id=${staffId}`,
     );
@@ -54,10 +51,7 @@ export const timetableService = {
     return data.data;
   },
 
-  update: async (
-    id: number,
-    payload: UpdateTimetablePeriodPayload,
-  ): Promise<TimetablePeriod> => {
+  update: async (id: number, payload: UpdateTimetablePeriodPayload): Promise<TimetablePeriod> => {
     const { data } = await apiClient.patch<ApiSuccessResponse<TimetablePeriod>>(
       API_ENDPOINTS.academics.timetableDetail(id),
       payload,

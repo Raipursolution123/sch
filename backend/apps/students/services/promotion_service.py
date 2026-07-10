@@ -95,9 +95,13 @@ class PromotionService:
         }
 
     def execute(self, payload: dict[str, Any]) -> dict[str, Any]:
-        from_session_id = self._require_int(payload.get("from_session_id"), "from_session_id")
+        from_session_id = self._require_int(
+            payload.get("from_session_id"), "from_session_id"
+        )
         from_class_id = self._require_int(payload.get("from_class_id"), "from_class_id")
-        from_section_id = self._require_int(payload.get("from_section_id"), "from_section_id")
+        from_section_id = self._require_int(
+            payload.get("from_section_id"), "from_section_id"
+        )
         to_session_id = self._require_int(payload.get("to_session_id"), "to_session_id")
         to_class_id = self._require_int(payload.get("to_class_id"), "to_class_id")
         to_section_id = self._require_int(payload.get("to_section_id"), "to_section_id")
@@ -128,7 +132,9 @@ class PromotionService:
             from_session_id, from_class_id, from_section_id
         )
         if student_ids_filter:
-            allowed = {self._require_int(sid, "student_ids") for sid in student_ids_filter}
+            allowed = {
+                self._require_int(sid, "student_ids") for sid in student_ids_filter
+            }
             enrollments = [e for e in enrollments if e.student_id in allowed]
 
         student_map = selectors.students_by_ids(
@@ -151,10 +157,7 @@ class PromotionService:
                     continue
 
                 default_login = 0
-                if (
-                    current_session_id == to_session_id
-                    and source.default_login == 1
-                ):
+                if current_session_id == to_session_id and source.default_login == 1:
                     default_login = 1
                     source.default_login = 0
                     source.save(update_fields=["default_login"])
@@ -185,7 +188,12 @@ class PromotionService:
                         source.is_alumni = 1
                     source.updated_at = timezone.now().date()
                     source.save(
-                        update_fields=["is_active", "is_alumni", "default_login", "updated_at"]
+                        update_fields=[
+                            "is_active",
+                            "is_alumni",
+                            "default_login",
+                            "updated_at",
+                        ]
                     )
 
                 promoted.append(
@@ -249,9 +257,7 @@ class PromotionService:
         try:
             return int(value)
         except (TypeError, ValueError) as exc:
-            raise PromotionValidationError(
-                f"{field_name} must be an integer."
-            ) from exc
+            raise PromotionValidationError(f"{field_name} must be an integer.") from exc
 
     @staticmethod
     def _ensure_session(session_id: int, label: str) -> None:

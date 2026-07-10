@@ -40,12 +40,7 @@ const columns: DataTableColumn<ClassTeacherAssignment>[] = [
   },
 ];
 
-export function ClassTeachersTable({
-  rows,
-  onAssign,
-  onEdit,
-  onRemove,
-}: ClassTeachersTableProps) {
+export function ClassTeachersTable({ rows, onAssign, onEdit, onRemove }: ClassTeachersTableProps) {
   return (
     <DataTable
       data={rows}

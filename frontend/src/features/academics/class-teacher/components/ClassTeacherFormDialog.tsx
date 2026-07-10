@@ -1,9 +1,10 @@
 import { useEffect, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
-import { FormSelectField } from '@components/forms/fields';
+import { FormField } from '@components/forms/FormField';
+import { Select } from '@components/ui/select';
 import type { ClassTeacherAssignment } from '@app-types/academics/class-teacher';
 import type { StaffListItem } from '@app-types/staff/staff';
 import {
@@ -72,14 +73,22 @@ export function ClassTeacherFormDialog({
       submitLabel={isEdit ? 'Save' : 'Assign'}
     >
       <FormErrorSummary errors={errors} />
-      <FormSelectField
-        control={control}
-        name="staff_id"
-        label="Teacher"
-        options={staffOptions}
-        placeholder="Select teacher"
-        required
-      />
+      <FormField label="Teacher" htmlFor="staff_id" error={errors.staff_id?.message} required>
+        <Controller
+          name="staff_id"
+          control={control}
+          render={({ field }) => (
+            <Select
+              id="staff_id"
+              options={staffOptions}
+              placeholder="Select teacher"
+              value={field.value ? String(field.value) : ''}
+              onChange={(e) => field.onChange(Number(e.target.value))}
+              aria-invalid={Boolean(errors.staff_id)}
+            />
+          )}
+        />
+      </FormField>
     </EntityFormDialog>
   );
 }

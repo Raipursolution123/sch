@@ -69,7 +69,8 @@ export function SubjectGroupFormDialog({
   const [classSectionIds, setClassSectionIds] = useState<number[]>([]);
 
   const activeSubjects = useMemo(
-    () => subjects.filter((s) => s.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
+    () =>
+      subjects.filter((s) => s.is_active === 'yes').sort((a, b) => a.name.localeCompare(b.name)),
     [subjects],
   );
 
@@ -78,9 +79,7 @@ export function SubjectGroupFormDialog({
       classSections
         .filter((cs) => cs.is_active === 'yes')
         .sort((a, b) =>
-          `${a.class_name} ${a.section_name}`.localeCompare(
-            `${b.class_name} ${b.section_name}`,
-          ),
+          `${a.class_name} ${a.section_name}`.localeCompare(`${b.class_name} ${b.section_name}`),
         ),
     [classSections],
   );
@@ -307,9 +306,7 @@ export function SubjectGroupFormDialog({
                       className="h-4 w-4 rounded border-input"
                       checked={checked}
                       onChange={(e) =>
-                        setClassSectionIds(
-                          toggleId(classSectionIds, mapping.id, e.target.checked),
-                        )
+                        setClassSectionIds(toggleId(classSectionIds, mapping.id, e.target.checked))
                       }
                     />
                     {mapping.class_name} — {mapping.section_name}

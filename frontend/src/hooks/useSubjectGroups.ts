@@ -66,13 +66,8 @@ export function useDeleteSubjectGroup() {
 export function useSyncSubjectGroupSubjects() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      id,
-      payload,
-    }: {
-      id: number;
-      payload: SyncSubjectGroupSubjectsPayload;
-    }) => subjectGroupsService.syncSubjects(id, payload),
+    mutationFn: ({ id, payload }: { id: number; payload: SyncSubjectGroupSubjectsPayload }) =>
+      subjectGroupsService.syncSubjects(id, payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.academics.subjectGroups.all });
       toast.success('Subjects assigned');
@@ -84,18 +79,12 @@ export function useSyncSubjectGroupSubjects() {
 export function useSyncSubjectGroupClassSections() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      id,
-      payload,
-    }: {
-      id: number;
-      payload: SyncSubjectGroupClassSectionsPayload;
-    }) => subjectGroupsService.syncClassSections(id, payload),
+    mutationFn: ({ id, payload }: { id: number; payload: SyncSubjectGroupClassSectionsPayload }) =>
+      subjectGroupsService.syncClassSections(id, payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.academics.subjectGroups.all });
       toast.success('Class sections assigned');
     },
-    onError: (error) =>
-      toast.error(getApiErrorMessage(error, 'Failed to assign class sections')),
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to assign class sections')),
   });
 }

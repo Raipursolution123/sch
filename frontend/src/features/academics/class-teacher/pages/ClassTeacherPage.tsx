@@ -37,11 +37,13 @@ export function ClassTeacherPage() {
 
   const sessionId = sessionFilter ?? activeSessionId;
 
-  const { data: rows, isLoading, isError, error, refetch } = useClassTeachers(
-    sessionId,
-    classFilter,
-    sectionFilter,
-  );
+  const {
+    data: rows,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useClassTeachers(sessionId, classFilter, sectionFilter);
 
   const { data: staffData } = useStaff(1);
   const staff = staffData?.results ?? [];

@@ -41,10 +41,13 @@ export function SubjectGroupsPage() {
 
   const sessionId = sessionFilter ?? activeSessionId;
 
-  const { data: groupsData, isLoading, isError, error, refetch } = useSubjectGroups(
-    sessionId,
-    page,
-  );
+  const {
+    data: groupsData,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useSubjectGroups(sessionId, page);
   const groups = groupsData?.results;
   const count = groupsData?.count ?? 0;
 

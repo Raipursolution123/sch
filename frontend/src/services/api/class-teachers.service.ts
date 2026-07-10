@@ -8,11 +8,7 @@ import type {
 } from '@app-types/academics/class-teacher';
 import { type BackendPayload, extractList } from '@utils/api-response';
 
-function listQuery(
-  sessionId: number,
-  classId?: number,
-  sectionId?: number,
-): string {
+function listQuery(sessionId: number, classId?: number, sectionId?: number): string {
   const params = new URLSearchParams({ session_id: String(sessionId) });
   if (classId !== undefined) params.set('class_id', String(classId));
   if (sectionId !== undefined) params.set('section_id', String(sectionId));

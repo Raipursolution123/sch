@@ -50,8 +50,7 @@ export const queryKeys = {
       all: ['academics', 'subject-groups'] as const,
       list: (sessionId?: number) =>
         [...queryKeys.academics.subjectGroups.all, 'list', sessionId ?? 'all'] as const,
-      detail: (id: number) =>
-        [...queryKeys.academics.subjectGroups.all, 'detail', id] as const,
+      detail: (id: number) => [...queryKeys.academics.subjectGroups.all, 'detail', id] as const,
     },
     timetable: {
       all: ['academics', 'timetable'] as const,

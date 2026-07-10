@@ -23,9 +23,7 @@ export function PromoteWizard() {
   const classes = (classesData?.results ?? []).filter((c) => c.is_active === 'yes');
 
   const { data: classSectionsData } = useClassSections();
-  const classSections = (classSectionsData?.results ?? []).filter(
-    (m) => m.is_active === 'yes',
-  );
+  const classSections = (classSectionsData?.results ?? []).filter((m) => m.is_active === 'yes');
 
   const [step, setStep] = useState<Step>('Source');
 
@@ -94,14 +92,7 @@ export function PromoteWizard() {
       to_class_id: toClassId,
       to_section_id: toSectionId,
     };
-  }, [
-    fromSessionId,
-    fromClassId,
-    fromSectionId,
-    toSessionId,
-    toClassId,
-    toSectionId,
-  ]);
+  }, [fromSessionId, fromClassId, fromSectionId, toSessionId, toClassId, toSectionId]);
 
   const {
     data: preview,
@@ -155,9 +146,7 @@ export function PromoteWizard() {
       setSelectedStudentIds([]);
       return;
     }
-    setSelectedStudentIds(
-      preview.students.filter((s) => s.eligible).map((s) => s.student_id),
-    );
+    setSelectedStudentIds(preview.students.filter((s) => s.eligible).map((s) => s.student_id));
   };
 
   const handleExecute = () => {
@@ -372,7 +361,7 @@ export function PromoteWizard() {
 
       {step === 'Confirm' && preview && previewParams && (
         <div className="space-y-4">
-          <div className="rounded-md border p-4 text-sm space-y-2">
+          <div className="space-y-2 rounded-md border p-4 text-sm">
             <p>
               Promote <strong>{selectedStudentIds.length}</strong> student(s) to the target
               session/class-section.

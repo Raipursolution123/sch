@@ -193,9 +193,7 @@ def test_execute_skips_duplicate_target_enrollment(service):
 
 
 def test_validate_scope_missing_session_raises(service):
-    with patch(
-        "apps.students.services.promotion_service.Sessions"
-    ) as sessions_model:
+    with patch("apps.students.services.promotion_service.Sessions") as sessions_model:
         sessions_model.objects.filter.return_value.exists.return_value = False
         with pytest.raises(PromotionNotFoundError):
             service._validate_scope(1, 10, 20, 2, 11, 20)

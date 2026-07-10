@@ -7,7 +7,11 @@ import { FormField } from '@components/forms/FormField';
 import { FormSelectField } from '@components/forms/fields';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
-import type { TimetableDay, TimetablePeriod, TimetableSubjectOption } from '@app-types/academics/timetable';
+import type {
+  TimetableDay,
+  TimetablePeriod,
+  TimetableSubjectOption,
+} from '@app-types/academics/timetable';
 import type { StaffListItem } from '@app-types/staff/staff';
 import {
   timetablePeriodSchema,
@@ -125,13 +129,7 @@ export function TimetablePeriodDialog({
         </p>
       ) : null}
 
-      <FormSelectField
-        control={control}
-        name="day"
-        label="Day"
-        options={dayOptions}
-        required
-      />
+      <FormSelectField control={control} name="day" label="Day" options={dayOptions} required />
 
       <FormField
         label="Subject"
@@ -156,12 +154,7 @@ export function TimetablePeriodDialog({
         />
       </FormField>
 
-      <FormField
-        label="Teacher"
-        htmlFor="staff_id"
-        error={errors.staff_id?.message}
-        required
-      >
+      <FormField label="Teacher" htmlFor="staff_id" error={errors.staff_id?.message} required>
         <Controller
           name="staff_id"
           control={control}

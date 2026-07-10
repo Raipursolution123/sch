@@ -22,7 +22,6 @@ export function useExecutePromote() {
           (result.skipped_count ? `, skipped ${result.skipped_count}` : ''),
       );
     },
-    onError: (error) =>
-      toast.error(getApiErrorMessage(error, 'Failed to promote students')),
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to promote students')),
   });
 }

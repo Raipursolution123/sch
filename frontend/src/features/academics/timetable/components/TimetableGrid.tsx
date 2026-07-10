@@ -1,6 +1,10 @@
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { PermissionButton } from '@components/rbac/PermissionButton';
-import { TIMETABLE_DAYS, type TimetableDay, type TimetablePeriod } from '@app-types/academics/timetable';
+import {
+  TIMETABLE_DAYS,
+  type TimetableDay,
+  type TimetablePeriod,
+} from '@app-types/academics/timetable';
 import { cn } from '@utils/cn';
 
 interface TimetableGridProps {
@@ -28,7 +32,7 @@ function periodsForDay(periods: TimetablePeriod[], day: TimetableDay): Timetable
 
 export function TimetableGrid({ periods, onAdd, onEdit, onDelete }: TimetableGridProps) {
   return (
-    <div className="grid gap-3 lg:grid-cols-7 md:grid-cols-2">
+    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-7">
       {TIMETABLE_DAYS.map((day) => {
         const dayPeriods = periodsForDay(periods, day);
         return (

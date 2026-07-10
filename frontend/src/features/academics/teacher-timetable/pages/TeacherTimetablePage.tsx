@@ -45,10 +45,13 @@ export function TeacherTimetablePage() {
   const filtersLoading = sessionsLoading || staffLoading;
   const gridReady = sessionId !== undefined && staffFilter !== undefined;
 
-  const { data: periods, isLoading, isError, error, refetch } = useTeacherTimetable(
-    sessionId,
-    staffFilter,
-  );
+  const {
+    data: periods,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useTeacherTimetable(sessionId, staffFilter);
 
   const sessionOptions = sessions.map((s) => ({
     value: String(s.id),

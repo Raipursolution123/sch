@@ -1,4 +1,8 @@
-import { TIMETABLE_DAYS, type TimetableDay, type TimetablePeriod } from '@app-types/academics/timetable';
+import {
+  TIMETABLE_DAYS,
+  type TimetableDay,
+  type TimetablePeriod,
+} from '@app-types/academics/timetable';
 import { cn } from '@utils/cn';
 
 interface TeacherTimetableGridProps {
@@ -29,7 +33,7 @@ function periodsForDay(periods: TimetablePeriod[], day: TimetableDay): Timetable
 
 export function TeacherTimetableGrid({ periods }: TeacherTimetableGridProps) {
   return (
-    <div className="grid gap-3 lg:grid-cols-7 md:grid-cols-2">
+    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-7">
       {TIMETABLE_DAYS.map((day) => {
         const dayPeriods = periodsForDay(periods, day);
         return (

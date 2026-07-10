@@ -72,11 +72,13 @@ export function TimetablePage() {
   const gridReady =
     sessionId !== undefined && classFilter !== undefined && sectionFilter !== undefined;
 
-  const { data: periods, isLoading, isError, error, refetch } = useTimetable(
-    sessionId,
-    classFilter,
-    sectionFilter,
-  );
+  const {
+    data: periods,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useTimetable(sessionId, classFilter, sectionFilter);
 
   const { data: subjectOptions = [] } = useTimetableSubjectOptions(
     sessionId,
@@ -200,8 +202,7 @@ export function TimetablePage() {
           </p>
         ) : subjectOptions.length === 0 ? (
           <p className="text-sm text-amber-700 dark:text-amber-400">
-            Assign subjects to a subject group for this class-section before scheduling
-            periods.
+            Assign subjects to a subject group for this class-section before scheduling periods.
           </p>
         ) : (periods?.length ?? 0) === 0 ? (
           <p className="text-sm text-muted-foreground">
@@ -221,9 +222,7 @@ export function TimetablePage() {
             subjectOptions={subjectOptions}
             staff={staff}
             onSubmit={handleSubmit}
-            isLoading={
-              createMutation.isPending || updateMutation.isPending
-            }
+            isLoading={createMutation.isPending || updateMutation.isPending}
           />
 
           <ConfirmDialog

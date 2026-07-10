@@ -31,7 +31,9 @@ def _parse_int_param(request, name: str) -> int | None:
         return None
 
 
-def _require_params(request, names: list[str]) -> tuple[dict[str, int] | None, Response | None]:
+def _require_params(
+    request, names: list[str]
+) -> tuple[dict[str, int] | None, Response | None]:
     values: dict[str, int] = {}
     for name in names:
         parsed = _parse_int_param(request, name)
