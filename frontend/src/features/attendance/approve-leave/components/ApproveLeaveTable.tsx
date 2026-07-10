@@ -75,22 +75,28 @@ export function ApproveLeaveTable({ onEdit }: ApproveLeaveTableProps) {
                   <TableCell>{leave.reason}</TableCell>
                   <TableCell>
                     {leave.status === 0 && <Badge variant="secondary">Pending</Badge>}
-                    {leave.status === 1 && <Badge variant="default" className="bg-green-600">Approved</Badge>}
+                    {leave.status === 1 && (
+                      <Badge variant="default" className="bg-green-600">
+                        Approved
+                      </Badge>
+                    )}
                     {leave.status === 2 && <Badge variant="destructive">Rejected</Badge>}
                     {leave.is_attendance && (
-                      <Badge 
-                        variant="outline" 
+                      <Badge
+                        variant="outline"
                         className={`ml-2 border-orange-200 ${
-                          leave.attendance_type_label === 'Absent' ? 'bg-red-50 text-red-700' : 
-                          leave.attendance_type_label === 'Late' ? 'bg-orange-50 text-orange-700' : 
-                          'bg-blue-50 text-blue-700'
+                          leave.attendance_type_label === 'Absent'
+                            ? 'bg-red-50 text-red-700'
+                            : leave.attendance_type_label === 'Late'
+                              ? 'bg-orange-50 text-orange-700'
+                              : 'bg-blue-50 text-blue-700'
                         }`}
                       >
                         Teacher Marked: {leave.attendance_type_label}
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell className="text-right space-x-2">
+                  <TableCell className="space-x-2 text-right">
                     <Button variant="ghost" size="sm" onClick={() => onEdit(leave)}>
                       <Edit2 className="h-4 w-4" />
                     </Button>

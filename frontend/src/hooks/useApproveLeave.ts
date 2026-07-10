@@ -9,7 +9,12 @@ import {
 } from '@services/api/approve-leave.service';
 
 export const useApproveLeaves = (page: number = 1) => {
-  return useQuery<{ results: ApproveLeave[]; count: number; next: string | null; previous: string | null }>({
+  return useQuery<{
+    results: ApproveLeave[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  }>({
     queryKey: [...queryKeys.attendance.approveLeave.list(), page],
     queryFn: () => approveLeaveService.list(page),
     placeholderData: keepPreviousData,

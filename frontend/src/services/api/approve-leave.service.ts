@@ -39,14 +39,14 @@ export type ApproveLeaveUpdatePayload = {
 export const approveLeaveService = {
   list: async (page = 1): Promise<PaginatedResponse<ApproveLeave>> => {
     const { data } = await apiClient.get<ApiSuccessResponse<PaginatedResponse<ApproveLeave>>>(
-      `${API_ENDPOINTS.attendance.approveLeave}?page=${page}`
+      `${API_ENDPOINTS.attendance.approveLeave}?page=${page}`,
     );
     return data.data;
   },
 
   get: async (id: string): Promise<ApproveLeave> => {
     const { data } = await apiClient.get<ApiSuccessResponse<ApproveLeave>>(
-      API_ENDPOINTS.attendance.approveLeaveDetail(id)
+      API_ENDPOINTS.attendance.approveLeaveDetail(id),
     );
     return data.data;
   },
@@ -54,7 +54,7 @@ export const approveLeaveService = {
   create: async (payload: CreateApproveLeavePayload): Promise<ApproveLeave> => {
     const { data } = await apiClient.post<ApiSuccessResponse<ApproveLeave>>(
       API_ENDPOINTS.attendance.approveLeave,
-      payload
+      payload,
     );
     return data.data;
   },

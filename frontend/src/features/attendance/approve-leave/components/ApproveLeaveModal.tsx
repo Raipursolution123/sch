@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui/dialog';
 import { Input } from '@components/ui/input';
 import { Textarea } from '@components/ui/textarea';
 import { Button } from '@components/ui/button';
@@ -72,7 +67,7 @@ export function ApproveLeaveModal({ isOpen, onClose, leave }: ApproveLeaveModalP
           onSuccess: () => {
             onClose();
           },
-        }
+        },
       );
     } else {
       createMutation.mutate(
@@ -86,7 +81,7 @@ export function ApproveLeaveModal({ isOpen, onClose, leave }: ApproveLeaveModalP
           onSuccess: () => {
             onClose();
           },
-        }
+        },
       );
     }
   };
@@ -105,9 +100,7 @@ export function ApproveLeaveModal({ isOpen, onClose, leave }: ApproveLeaveModalP
               <Controller
                 control={control}
                 name="roll_no"
-                render={({ field }) => (
-                  <Input placeholder="Enter student roll number" {...field} />
-                )}
+                render={({ field }) => <Input placeholder="Enter student roll number" {...field} />}
               />
             </div>
           )}
@@ -118,7 +111,9 @@ export function ApproveLeaveModal({ isOpen, onClose, leave }: ApproveLeaveModalP
               <Controller
                 control={control}
                 name="from_date"
-                render={({ field }) => <Input type="date" disabled={leave?.is_attendance} {...field} />}
+                render={({ field }) => (
+                  <Input type="date" disabled={leave?.is_attendance} {...field} />
+                )}
               />
             </div>
             <div className="space-y-2">
@@ -126,7 +121,9 @@ export function ApproveLeaveModal({ isOpen, onClose, leave }: ApproveLeaveModalP
               <Controller
                 control={control}
                 name="to_date"
-                render={({ field }) => <Input type="date" disabled={leave?.is_attendance} {...field} />}
+                render={({ field }) => (
+                  <Input type="date" disabled={leave?.is_attendance} {...field} />
+                )}
               />
             </div>
           </div>
@@ -136,7 +133,13 @@ export function ApproveLeaveModal({ isOpen, onClose, leave }: ApproveLeaveModalP
             <Controller
               control={control}
               name="reason"
-              render={({ field }) => <Textarea placeholder="Enter leave reason" disabled={leave?.is_attendance} {...field} />}
+              render={({ field }) => (
+                <Textarea
+                  placeholder="Enter leave reason"
+                  disabled={leave?.is_attendance}
+                  {...field}
+                />
+              )}
             />
           </div>
 
@@ -148,15 +151,19 @@ export function ApproveLeaveModal({ isOpen, onClose, leave }: ApproveLeaveModalP
                 name="status"
                 render={({ field }) => (
                   <Select
-                    options={leave?.is_attendance ? [
-                      { value: '0', label: 'Pending' },
-                      { value: '1', label: 'Approve Exception (Mark as Present)' },
-                      { value: '2', label: 'Reject Exception' }
-                    ] : [
-                      { value: '0', label: 'Pending' },
-                      { value: '1', label: 'Approve' },
-                      { value: '2', label: 'Reject' },
-                    ]}
+                    options={
+                      leave?.is_attendance
+                        ? [
+                            { value: '0', label: 'Pending' },
+                            { value: '1', label: 'Approve Exception (Mark as Present)' },
+                            { value: '2', label: 'Reject Exception' },
+                          ]
+                        : [
+                            { value: '0', label: 'Pending' },
+                            { value: '1', label: 'Approve' },
+                            { value: '2', label: 'Reject' },
+                          ]
+                    }
                     value={field.value}
                     onChange={field.onChange}
                   />
