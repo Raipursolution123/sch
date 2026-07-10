@@ -39,6 +39,8 @@ export type Permission =
   | 'class_teacher.create'
   | 'class_teacher.edit'
   | 'class_teacher.delete'
+  | 'promote_students.view'
+  | 'promote_students.create'
   | 'sessions.view'
   | 'sessions.create'
   | 'sessions.edit'

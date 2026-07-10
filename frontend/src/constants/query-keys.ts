@@ -93,6 +93,27 @@ export const queryKeys = {
           sectionId ?? 'all',
         ] as const,
     },
+    promote: {
+      all: ['academics', 'promote'] as const,
+      preview: (params: {
+        from_session_id: number;
+        from_class_id: number;
+        from_section_id: number;
+        to_session_id: number;
+        to_class_id: number;
+        to_section_id: number;
+      }) =>
+        [
+          ...queryKeys.academics.promote.all,
+          'preview',
+          params.from_session_id,
+          params.from_class_id,
+          params.from_section_id,
+          params.to_session_id,
+          params.to_class_id,
+          params.to_section_id,
+        ] as const,
+    },
     sessions: {
       all: ['academics', 'sessions'] as const,
       list: (page: number) => [...queryKeys.academics.sessions.all, 'list', page] as const,

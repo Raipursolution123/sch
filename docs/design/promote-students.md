@@ -1,6 +1,6 @@
 # Design: Promote Students (Session Transfer)
 
-**Status:** DRAFT — awaiting approval before implementation  
+**Status:** IMPLEMENTED
 
 **Slice:** Bulk promote / transfer enrollments from one session + class-section to another  
 **Module:** `academics` (UI + API route); **data owner:** `students` (`student_session`)  
@@ -277,11 +277,9 @@ frontend/src/
 
 Approve if you agree we will:
 
-- [ ] Build preview + execute promote on frozen `student_session`
-- [ ] Use `HasLegacyPrivilege` + `promote_student`
-- [ ] Validate source/target session and class-section chain
-- [ ] Create target enrollments; deactivate source (optional alumni flag)
-- [ ] Ship wizard UI at `/academics/promote`
-- [ ] Keep fee copy and undo out of this PR
-
-**No code until you approve (confirm A–H, or say approve all).**
+- [x] Build preview + execute promote on frozen `student_session`
+- [x] Use `HasLegacyPrivilege` + `promote_student`
+- [x] Validate source/target session and class-section chain
+- [x] Create target enrollments; deactivate source (optional alumni flag)
+- [x] Ship wizard UI at `/academics/promote`
+- [x] Keep fee copy and undo out of this PR

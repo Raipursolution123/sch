@@ -38,6 +38,8 @@ export const API_ENDPOINTS = {
     timetableDetail: (id: number) => `/academics/timetable/${id}/`,
     classTeachers: '/academics/class-teachers/',
     classTeacherDetail: (id: number) => `/academics/class-teachers/${id}/`,
+    promotePreview: '/academics/promote/preview/',
+    promote: '/academics/promote/',
   },
   students: {
     list: '/students/',

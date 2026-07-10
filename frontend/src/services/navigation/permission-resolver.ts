@@ -59,6 +59,8 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'class_teacher.create': ['assign_class_teacher'],
   'class_teacher.edit': ['assign_class_teacher'],
   'class_teacher.delete': ['assign_class_teacher'],
+  'promote_students.view': ['promote_student'],
+  'promote_students.create': ['promote_student'],
   'sessions.view': ['session_setting'],
   'sessions.create': ['session_setting'],
   'sessions.edit': ['session_setting'],

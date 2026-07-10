@@ -11,6 +11,7 @@ from apps.academics.api.views.class_teacher import (
     ClassTeacherDetailView,
     ClassTeacherListCreateView,
 )
+from apps.academics.api.views.promote import PromoteExecuteView, PromotePreviewView
 from apps.academics.api.views.section import SectionDetailView, SectionListCreateView
 from apps.academics.api.views.session import (
     SessionActivateView,
@@ -109,4 +110,6 @@ urlpatterns = [
         ClassTeacherDetailView.as_view(),
         name="class_teachers_detail",
     ),
+    path("promote/preview/", PromotePreviewView.as_view(), name="promote_preview"),
+    path("promote/", PromoteExecuteView.as_view(), name="promote_execute"),
 ]
