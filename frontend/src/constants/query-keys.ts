@@ -94,6 +94,11 @@ export const queryKeys = {
         filters.class_id ?? 'all',
         filters.section_id ?? 'all',
       ] as const,
+    approveLeave: {
+      all: ['attendance', 'approve-leave'] as const,
+      list: () => [...queryKeys.attendance.approveLeave.all, 'list'] as const,
+      detail: (id: string) => [...queryKeys.attendance.approveLeave.all, 'detail', id] as const,
+    },
   },
   examinations: {
     all: ['examinations'] as const,

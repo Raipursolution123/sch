@@ -55,6 +55,8 @@ export const API_ENDPOINTS = {
     roster: '/attendance/roster/',
     mark: '/attendance/mark/',
     report: '/attendance/report/',
+    approveLeave: '/attendance/approve-leave/',
+    approveLeaveDetail: (id: string) => `/attendance/approve-leave/${id}/`,
   },
   examinations: {
     groups: '/examinations/groups/',

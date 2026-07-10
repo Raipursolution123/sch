@@ -64,7 +64,7 @@ let mockRecords: AttendanceRecord[] = [
 ];
 let nextRecordId = 4;
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 const DEFAULT_TYPE_ID = 1;
 
 function delay<T>(value: T, ms = 300): Promise<T> {

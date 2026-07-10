@@ -111,6 +111,12 @@ const AttendanceReportPage = lazy(() =>
   })),
 );
 
+const ApproveLeavePage = lazy(() =>
+  import('@features/attendance/approve-leave/pages/ApproveLeavePage').then((m) => ({
+    default: m.ApproveLeavePage,
+  })),
+);
+
 const ExamGroupsPage = lazy(() =>
   import('@features/examinations/exam-groups/pages/ExamGroupsPage').then((m) => ({
     default: m.ExamGroupsPage,
@@ -169,6 +175,7 @@ export const adminRoutes: RouteObject[] = [
   createModuleRoutes('/attendance', ROUTES.attendance.mark, [
     { path: 'mark', element: <MarkAttendancePage /> },
     { path: 'report', element: <AttendanceReportPage /> },
+    { path: 'approve-leave', element: <ApproveLeavePage /> },
   ]),
 
   createModuleRoutes('/fees', ROUTES.fees.feeTypes, [

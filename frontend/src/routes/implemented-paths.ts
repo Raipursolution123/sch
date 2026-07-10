@@ -15,6 +15,7 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.fees.assign,
   ROUTES.attendance.mark,
   ROUTES.attendance.report,
+  ROUTES.attendance.approveLeave,
   ROUTES.examinations.groups,
   ROUTES.examinations.exams,
   ROUTES.examinations.schedule,
