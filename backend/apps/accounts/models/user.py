@@ -95,4 +95,3 @@ class User(models.Model):
             if staff_role and staff_role.role:
                 return staff_role.role.slug or staff_role.role.name or self.role
         return self.role
-

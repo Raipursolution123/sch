@@ -1,7 +1,5 @@
 from rest_framework.permissions import BasePermission
 
-from apps.accounts.models import Role
-
 
 class IsSuperAdmin(BasePermission):
     """Allow access only to users mapped to a superadmin role in `roles`."""
