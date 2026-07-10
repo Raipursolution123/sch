@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { FeeGroupFormDialog } from '@features/fees/fee-groups/components/FeeGroupFormDialog';
 import { FeeGroupsTable } from '@features/fees/fee-groups/components/FeeGroupsTable';
 import type { FeeGroupFormValues } from '@features/fees/fee-groups/schemas/fee-group.schema';
@@ -17,6 +13,7 @@ import {
 } from '@hooks/useFeeGroups';
 import type { FeeGroup } from '@app-types/fees/fee-group';
 import type { ActiveFlag } from '@app-types/settings/session';
+import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
 
@@ -55,77 +52,70 @@ export function FeeGroupsPage() {
 
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
+  const addFeeGroupAction = (
+    <PermissionButton
+      permission="fees.manage"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Fee Group
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Fee Groups"
-        // description="Bundle fee types into packages for assignment to classes."
-        actions={
-          <Button onClick={() => setDialogMode('create')} className="gap-1">
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Fee Group
-          </Button>
-        }
-      />
+    <ModuleListPack
+      title="Fee Groups"
+      actions={addFeeGroupAction}
+      isLoading={isLoading}
+      loadingMessage="Loading fee groups..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && feeGroups?.length === 0}
+      emptyTitle="No fee groups configured"
+      emptyDescription="Create a fee group to organize fee types for class assignments."
+      emptyAction={addFeeGroupAction}
+      footer={
+        <>
+          <FeeGroupFormDialog
+            open={dialogMode !== null}
+            onOpenChange={(open) => {
+              if (!open) closeFormDialog();
+            }}
+            feeGroup={dialogMode === 'edit' ? selectedFeeGroup : null}
+            onSubmit={handleFormSubmit}
+            isLoading={isFormLoading}
+          />
 
-      {isLoading && <LoadingState message="Loading fee groups..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load fee groups'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {!isLoading && !isError && feeGroups?.length === 0 && (
-        <EmptyState
-          title="No fee groups configured"
-          description="Create a fee group to organize fee types for class assignments."
-          action={
-            <Button onClick={() => setDialogMode('create')} className="gap-1">
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              Add Fee Group
-            </Button>
-          }
-        />
-      )}
-
-      {!isLoading && !isError && feeGroups && feeGroups.length > 0 && (
-        <FeeGroupsTable
-          feeGroups={feeGroups}
-          onEdit={(feeGroup) => {
-            setSelectedFeeGroup(feeGroup);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
-      )}
-
-      <FeeGroupFormDialog
-        open={dialogMode !== null}
-        onOpenChange={(open) => {
-          if (!open) closeFormDialog();
+          <ConfirmDialog
+            open={deleteTarget !== null}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete fee group"
+            description={
+              deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''
+            }
+            confirmLabel="Delete"
+            destructive
+            isLoading={deleteMutation.isPending}
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
+            }}
+          />
+        </>
+      }
+    >
+      <FeeGroupsTable
+        feeGroups={feeGroups ?? []}
+        onEdit={(feeGroup) => {
+          setSelectedFeeGroup(feeGroup);
+          setDialogMode('edit');
         }}
-        feeGroup={dialogMode === 'edit' ? selectedFeeGroup : null}
-        onSubmit={handleFormSubmit}
-        isLoading={isFormLoading}
+        onDelete={setDeleteTarget}
       />
-
-      <ConfirmDialog
-        open={deleteTarget !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-        title="Delete fee group"
-        description={deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''}
-        confirmLabel="Delete"
-        destructive
-        isLoading={deleteMutation.isPending}
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
-        }}
-      />
-    </div>
+    </ModuleListPack>
   );
 }

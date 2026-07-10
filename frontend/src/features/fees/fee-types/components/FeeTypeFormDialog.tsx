@@ -1,20 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormField } from '@components/forms/FormField';
+import { FormSwitchField, FormTextField, FormTextareaField } from '@components/forms/fields';
 import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
-import { Switch } from '@components/ui/switch';
-import { Textarea } from '@components/ui/textarea';
-import { FormField } from '@components/forms/FormField';
 import type { FeeCategory, FeeType } from '@app-types/fees/fee-type';
 import {
   feeTypeFormSchema,
@@ -62,10 +55,8 @@ export function FeeTypeFormDialog({
 
   const {
     control,
-    register,
     handleSubmit,
     reset,
-    watch,
     setValue,
     formState: { errors },
   } = useForm<FeeTypeFormValues>({
@@ -87,7 +78,6 @@ export function FeeTypeFormDialog({
     setNewCategoryName('');
   }, [open, isEdit, feeType, categories, reset]);
 
-  const isActive = watch('is_active');
   const createCategoryMutation = useCreateFeeCategory();
 
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
@@ -110,124 +100,97 @@ export function FeeTypeFormDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogHeader>
-            <DialogTitle>{isEdit ? 'Edit fee type' : 'Add fee type'}</DialogTitle>
-            <DialogDescription>
-              Define a reusable fee type with a unique code and category.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <FormField label="Code" htmlFor="code" error={errors.code?.message} required>
-                <Input id="code" placeholder="TUITION" {...register('code')} />
-              </FormField>
-              <FormField label="Name" htmlFor="name" error={errors.name?.message} required>
-                <Input id="name" placeholder="Tuition Fee" {...register('name')} />
-              </FormField>
-            </div>
-            <FormField
-              label="Category"
-              htmlFor="feecategory_id"
-              error={errors.feecategory_id?.message}
-              required
-            >
-              <div className="flex items-center gap-2">
-                {isCreatingCategory ? (
-                  <>
-                    <Input
-                      placeholder="Category name..."
-                      value={newCategoryName}
-                      onChange={(e) => setNewCategoryName(e.target.value)}
-                      className="flex-1"
-                      autoFocus
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      isEdit={isEdit}
+      isLoading={isLoading}
+      title={isEdit ? 'Edit fee type' : 'Add fee type'}
+      description="Define a reusable fee type with a unique code and category."
+      submitLabel={isEdit ? 'Save changes' : 'Add fee type'}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <FormErrorSummary errors={errors} />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <FormTextField control={control} name="code" label="Code" placeholder="TUITION" required />
+        <FormTextField
+          control={control}
+          name="name"
+          label="Name"
+          placeholder="Tuition Fee"
+          required
+        />
+      </div>
+      <FormField
+        label="Category"
+        htmlFor="feecategory_id"
+        error={errors.feecategory_id?.message}
+        required
+      >
+        <div className="flex items-center gap-2">
+          {isCreatingCategory ? (
+            <>
+              <Input
+                placeholder="Category name..."
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                className="flex-1"
+                autoFocus
+              />
+              <Button
+                type="button"
+                onClick={handleCreateCategory}
+                disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
+              >
+                Save
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  setIsCreatingCategory(false);
+                  setNewCategoryName('');
+                }}
+                disabled={createCategoryMutation.isPending}
+              >
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="flex-1">
+                <Controller
+                  name="feecategory_id"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      id="feecategory_id"
+                      placeholder={
+                        categoryOptions.length === 0 ? 'No categories available' : 'Select category'
+                      }
+                      options={categoryOptions}
+                      value={field.value ? String(field.value) : ''}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      disabled={categoryOptions.length === 0}
                     />
-                    <Button
-                      type="button"
-                      onClick={handleCreateCategory}
-                      disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={() => {
-                        setIsCreatingCategory(false);
-                        setNewCategoryName('');
-                      }}
-                      disabled={createCategoryMutation.isPending}
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex-1">
-                      <Controller
-                        name="feecategory_id"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            id="feecategory_id"
-                            placeholder={
-                              categoryOptions.length === 0
-                                ? 'No categories available'
-                                : 'Select category'
-                            }
-                            options={categoryOptions}
-                            value={field.value ? String(field.value) : ''}
-                            onChange={(e) => field.onChange(Number(e.target.value))}
-                            disabled={categoryOptions.length === 0}
-                          />
-                        )}
-                      />
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsCreatingCategory(true)}
-                    >
-                      New
-                    </Button>
-                  </>
-                )}
-              </div>
-            </FormField>
-            <FormField
-              label="Description"
-              htmlFor="description"
-              error={errors.description?.message}
-            >
-              <Textarea id="description" rows={2} {...register('description')} />
-            </FormField>
-            <FormField label="Active">
-              <div className="flex items-center gap-2 pt-1">
-                <Switch
-                  id="is_active"
-                  checked={isActive}
-                  onCheckedChange={(checked) =>
-                    setValue('is_active', checked, { shouldDirty: true })
-                  }
+                  )}
                 />
-                <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
               </div>
-            </FormField>
-          </div>
-
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={isLoading}>
-              {isEdit ? 'Save changes' : 'Add fee type'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+              <Button type="button" variant="outline" onClick={() => setIsCreatingCategory(true)}>
+                New
+              </Button>
+            </>
+          )}
+        </div>
+      </FormField>
+      <FormTextareaField
+        control={control}
+        name="description"
+        label="Description"
+        rows={2}
+        optional
+      />
+      <FormSwitchField control={control} name="is_active" label="Active" />
+    </EntityFormDialog>
   );
 }

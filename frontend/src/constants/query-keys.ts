@@ -94,6 +94,11 @@ export const queryKeys = {
         filters.class_id ?? 'all',
         filters.section_id ?? 'all',
       ] as const,
+    approveLeave: {
+      all: ['attendance', 'approve-leave'] as const,
+      list: () => [...queryKeys.attendance.approveLeave.all, 'list'] as const,
+      detail: (id: string) => [...queryKeys.attendance.approveLeave.all, 'detail', id] as const,
+    },
   },
   examinations: {
     all: ['examinations'] as const,
@@ -110,5 +115,16 @@ export const queryKeys = {
   dashboard: {
     all: ['dashboard'] as const,
     overview: () => [...queryKeys.dashboard.all, 'overview'] as const,
+  },
+  notifications: {
+    all: ['notifications'] as const,
+    list: (sessionId: number | null) =>
+      [...queryKeys.notifications.all, 'list', sessionId] as const,
+  },
+  workflows: {
+    all: ['workflows'] as const,
+    record: (entityType: string, entityId: number) =>
+      [...queryKeys.workflows.all, entityType, entityId] as const,
+    exams: () => [...queryKeys.workflows.all, 'exam'] as const,
   },
 } as const;

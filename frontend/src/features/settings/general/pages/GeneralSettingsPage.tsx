@@ -1,8 +1,4 @@
 import { useSearchParams } from 'react-router-dom';
-import { PageHeader } from '@components/layout/PageHeader';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 import { GENERAL_SETTINGS_TABS } from '@features/settings/general/constants/options';
 import { SchoolProfileTab } from '@features/settings/general/components/SchoolProfileTab';
 import { RegionalTab } from '@features/settings/general/components/RegionalTab';
@@ -10,6 +6,7 @@ import { AttendanceTab } from '@features/settings/general/components/AttendanceT
 import { FeesTab } from '@features/settings/general/components/FeesTab';
 import { MaintenanceTab } from '@features/settings/general/components/MaintenanceTab';
 import { useGeneralSettings, useUpdateGeneralSettings } from '@hooks/useGeneralSettings';
+import { ModuleSettingsPack } from '@workflow-packs';
 import type { GeneralSettingsTab } from '@app-types/settings/general';
 
 const DEFAULT_TAB: GeneralSettingsTab = 'school-profile';
@@ -30,71 +27,61 @@ export function GeneralSettingsPage() {
     setSearchParams({ tab: value }, { replace: true });
   };
 
-  if (isLoading) {
-    return <LoadingState message="Loading general settings..." />;
-  }
-
-  if (isError || !settings) {
-    return (
-      <ErrorState
-        message={error instanceof Error ? error.message : 'Could not load general settings'}
-        onRetry={() => void refetch()}
-      />
-    );
-  }
+  const onSave = (payload: Parameters<typeof updateMutation.mutate>[0]) => {
+    updateMutation.mutate(payload);
+  };
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="General Settings"
-        description="Configure school profile, regional preferences, attendance, fees, and system access."
-      />
-
-      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-        <TabsList className="h-auto w-full flex-wrap justify-start gap-1">
-          {GENERAL_SETTINGS_TABS.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id}>
-              {tab.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        <TabsContent value="school-profile">
-          <SchoolProfileTab
-            settings={settings}
-            onSave={(payload) => updateMutation.mutate(payload)}
-            isSaving={updateMutation.isPending}
-          />
-        </TabsContent>
-        <TabsContent value="regional">
-          <RegionalTab
-            settings={settings}
-            onSave={(payload) => updateMutation.mutate(payload)}
-            isSaving={updateMutation.isPending}
-          />
-        </TabsContent>
-        <TabsContent value="attendance">
-          <AttendanceTab
-            settings={settings}
-            onSave={(payload) => updateMutation.mutate(payload)}
-            isSaving={updateMutation.isPending}
-          />
-        </TabsContent>
-        <TabsContent value="fees">
-          <FeesTab
-            settings={settings}
-            onSave={(payload) => updateMutation.mutate(payload)}
-            isSaving={updateMutation.isPending}
-          />
-        </TabsContent>
-        <TabsContent value="maintenance">
-          <MaintenanceTab
-            settings={settings}
-            onSave={(payload) => updateMutation.mutate(payload)}
-            isSaving={updateMutation.isPending}
-          />
-        </TabsContent>
-      </Tabs>
-    </div>
+    <ModuleSettingsPack
+      title="General Settings"
+      description="Configure school profile, regional preferences, attendance, fees, and system access."
+      isLoading={isLoading}
+      loadingMessage="Loading general settings..."
+      isError={isError || !settings}
+      error={error}
+      onRetry={() => void refetch()}
+      tabs={
+        settings
+          ? GENERAL_SETTINGS_TABS.map((tab) => ({
+              id: tab.id,
+              label: tab.label,
+              content:
+                tab.id === 'school-profile' ? (
+                  <SchoolProfileTab
+                    settings={settings}
+                    onSave={onSave}
+                    isSaving={updateMutation.isPending}
+                  />
+                ) : tab.id === 'regional' ? (
+                  <RegionalTab
+                    settings={settings}
+                    onSave={onSave}
+                    isSaving={updateMutation.isPending}
+                  />
+                ) : tab.id === 'attendance' ? (
+                  <AttendanceTab
+                    settings={settings}
+                    onSave={onSave}
+                    isSaving={updateMutation.isPending}
+                  />
+                ) : tab.id === 'fees' ? (
+                  <FeesTab
+                    settings={settings}
+                    onSave={onSave}
+                    isSaving={updateMutation.isPending}
+                  />
+                ) : (
+                  <MaintenanceTab
+                    settings={settings}
+                    onSave={onSave}
+                    isSaving={updateMutation.isPending}
+                  />
+                ),
+            }))
+          : []
+      }
+      activeTab={activeTab}
+      onTabChange={handleTabChange}
+    />
   );
 }

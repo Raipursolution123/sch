@@ -1,21 +1,8 @@
 import { useState } from 'react';
-import { Link, useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@components/ui/alert-dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { Pencil, Trash2 } from 'lucide-react';
+import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { StaffOverviewTab } from '@features/staff/components/StaffOverviewTab';
 import { StaffEmploymentTab } from '@features/staff/components/StaffEmploymentTab';
 import { StaffPayrollTab } from '@features/staff/components/StaffPayrollTab';
@@ -31,6 +18,7 @@ import {
   useDeleteStaff,
 } from '@hooks/useStaff';
 import { ROUTES } from '@constants/index';
+import { ModuleProfilePack } from '@workflow-packs';
 
 const PROFILE_TABS = [
   { id: 'overview', label: 'Overview', enabled: true },
@@ -49,6 +37,7 @@ export function StaffProfilePage() {
   const { staffId } = useParams<{ staffId: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const [editOpen, setEditOpen] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const id = Number(staffId);
   const { data: staff, isLoading, isError, error, refetch } = useStaffMember(id);
   const { data: departments = [] } = useStaffDepartments();
@@ -56,12 +45,6 @@ export function StaffProfilePage() {
   const updateMutation = useUpdateStaff(id);
   const deleteMutation = useDeleteStaff();
   const navigate = useNavigate();
-
-  const handleDelete = () => {
-    deleteMutation.mutate(id, {
-      onSuccess: () => navigate(ROUTES.staff.root),
-    });
-  };
 
   const activeTab = searchParams.get('tab');
   const currentTab = isProfileTab(activeTab) ? activeTab : 'overview';
@@ -80,108 +63,102 @@ export function StaffProfilePage() {
     });
   };
 
-  if (isLoading) {
-    return <LoadingState message="Loading staff profile..." />;
-  }
-
-  if (isError || !staff) {
-    return (
-      <ErrorState
-        title="Staff member not found"
-        message={error instanceof Error ? error.message : 'Could not load staff profile'}
-        onRetry={() => void refetch()}
-      />
-    );
-  }
+  const handleDeleteSubmit = () => {
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        setDeleteConfirmOpen(false);
+        navigate(ROUTES.staff.root);
+      },
+    });
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link
-          to={ROUTES.staff.root}
-          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back to Staff
-        </Link>
-        <div className="flex gap-2">
-          {currentTab !== 'documents' && (
-            <Button variant="outline" className="gap-1" onClick={() => setEditOpen(true)}>
-              <Pencil className="h-4 w-4" aria-hidden="true" />
-              Edit
-            </Button>
-          )}
+    <ModuleProfilePack
+      backTo={ROUTES.staff.root}
+      backLabel="Back to Staff"
+      isLoading={isLoading}
+      loadingMessage="Loading staff profile..."
+      isError={isError || !staff}
+      errorTitle="Staff member not found"
+      error={error}
+      onRetry={() => void refetch()}
+      headerActions={
+        staff ? (
+          <div className="flex gap-2">
+            {currentTab !== 'documents' && (
+              <PermissionButton
+                permission="staff.edit"
+                variant="outline"
+                className="gap-1"
+                onClick={() => setEditOpen(true)}
+              >
+                <Pencil className="h-4 w-4" aria-hidden="true" />
+                Edit
+              </PermissionButton>
+            )}
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="gap-1">
-                <Trash2 className="h-4 w-4" aria-hidden="true" />
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Staff Member</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete this staff member? This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleDelete}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </div>
+            <PermissionButton
+              permission="staff.delete"
+              variant="destructive"
+              className="gap-1"
+              onClick={() => setDeleteConfirmOpen(true)}
+            >
+              <Trash2 className="h-4 w-4" aria-hidden="true" />
+              Delete
+            </PermissionButton>
+          </div>
+        ) : undefined
+      }
+      tabs={
+        staff
+          ? PROFILE_TABS.map((tab) => ({
+              id: tab.id,
+              label: tab.label,
+              disabled: !tab.enabled,
+              content:
+                tab.id === 'overview' ? (
+                  <StaffOverviewTab staff={staff} />
+                ) : tab.id === 'employment' ? (
+                  <StaffEmploymentTab staff={staff} />
+                ) : tab.id === 'payroll' ? (
+                  <StaffPayrollTab staff={staff} />
+                ) : (
+                  <StaffDocumentsTab staff={staff} />
+                ),
+            }))
+          : []
+      }
+      activeTab={currentTab}
+      onTabChange={(value) => {
+        setSearchParams(value === 'overview' ? {} : { tab: value }, { replace: true });
+      }}
+      footer={
+        staff ? (
+          <>
+            <StaffFormDialog
+              open={editOpen}
+              onOpenChange={setEditOpen}
+              departments={departments}
+              designations={designations}
+              staff={staff}
+              onSubmit={handleEditSubmit}
+              isLoading={updateMutation.isPending}
+              section={editSection}
+            />
 
-      <Tabs
-        value={currentTab}
-        onValueChange={(value) => {
-          setSearchParams(value === 'overview' ? {} : { tab: value }, { replace: true });
-        }}
-      >
-        <TabsList className="w-full justify-start overflow-x-auto">
-          {PROFILE_TABS.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id} disabled={!tab.enabled}>
-              {tab.label}
-              {!tab.enabled && <span className="sr-only"> (coming soon)</span>}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        <TabsContent value="overview" className="mt-6">
-          <StaffOverviewTab staff={staff} />
-        </TabsContent>
-
-        <TabsContent value="employment" className="mt-6">
-          <StaffEmploymentTab staff={staff} />
-        </TabsContent>
-
-        <TabsContent value="payroll" className="mt-6">
-          <StaffPayrollTab staff={staff} />
-        </TabsContent>
-
-        <TabsContent value="documents" className="mt-6">
-          <StaffDocumentsTab staff={staff} />
-        </TabsContent>
-      </Tabs>
-
-      <StaffFormDialog
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        departments={departments}
-        designations={designations}
-        staff={staff}
-        onSubmit={handleEditSubmit}
-        isLoading={updateMutation.isPending}
-        section={editSection}
-      />
-    </div>
+            <ConfirmDialog
+              open={deleteConfirmOpen}
+              onOpenChange={setDeleteConfirmOpen}
+              title="Delete Staff Member"
+              description="Are you sure you want to delete this staff member? This action cannot be undone."
+              confirmLabel="Delete"
+              destructive
+              isLoading={deleteMutation.isPending}
+              onConfirm={handleDeleteSubmit}
+            />
+          </>
+        ) : undefined
+      }
+    />
   );
 }

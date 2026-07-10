@@ -1,5 +1,5 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import type { FeeGroup } from '@app-types/fees/fee-group';
@@ -21,7 +21,9 @@ const columns: DataTableColumn<FeeGroup>[] = [
   {
     id: 'description',
     header: 'Description',
-    cellClassName: 'text-muted-foreground max-w-xs truncate',
+    wrap: true,
+    maxWidth: '20rem',
+    cellClassName: 'text-muted-foreground truncate',
     cell: (row) => row.description ?? '—',
   },
   {
@@ -47,15 +49,17 @@ export function FeeGroupsTable({ feeGroups, onEdit, onDelete }: FeeGroupsTablePr
         const isActive = feeGroup.is_active === 'yes';
         return (
           <>
-            <Button
+            <PermissionButton
+              permission="fees.manage"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(feeGroup)}
               aria-label={`Edit ${feeGroup.name}`}
             >
               <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="fees.manage"
               variant="ghost"
               size="sm"
               disabled={isActive}
@@ -64,7 +68,7 @@ export function FeeGroupsTable({ feeGroups, onEdit, onDelete }: FeeGroupsTablePr
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </PermissionButton>
           </>
         );
       }}

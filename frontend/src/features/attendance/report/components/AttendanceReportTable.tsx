@@ -11,12 +11,16 @@ const columns: DataTableColumn<AttendanceReportRow>[] = [
   {
     id: 'date',
     header: 'Date',
+    enableSorting: true,
+    sortValue: (row) => row.date,
     cellClassName: 'text-muted-foreground',
     cell: (row) => formatDate(row.date),
   },
   {
     id: 'student',
     header: 'Student',
+    enableSorting: true,
+    sortValue: (row) => row.student_name,
     cellClassName: 'font-medium',
     cell: (row) => row.student_name,
   },
@@ -39,11 +43,21 @@ const columns: DataTableColumn<AttendanceReportRow>[] = [
   {
     id: 'remark',
     header: 'Remark',
-    cellClassName: 'text-muted-foreground max-w-xs truncate',
+    wrap: true,
+    maxWidth: '20rem',
+    cellClassName: 'text-muted-foreground truncate',
     cell: (row) => row.remark || '—',
   },
 ];
 
 export function AttendanceReportTable({ rows }: AttendanceReportTableProps) {
-  return <DataTable data={rows} columns={columns} getRowKey={(row) => row.id} />;
+  return (
+    <DataTable
+      data={rows}
+      columns={columns}
+      getRowKey={(row) => row.id}
+      enableSorting
+      showDensityToggle
+    />
+  );
 }

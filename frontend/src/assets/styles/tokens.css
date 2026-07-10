@@ -1,0 +1,137 @@
+/**
+ * School ERP design tokens — Wise-inspired, enterprise-first.
+ * Components consume semantic Tailwind/shadcn aliases mapped from these variables.
+ */
+
+@layer base {
+  :root {
+    /* Brand — Wise-inspired */
+    --canvas: 0 0% 100%;
+    --canvas-soft: 90 11% 91%;
+    --ink: 72 11% 5%;
+    --ink-deep: 140 88% 12%;
+    --body: 120 2% 27%;
+    --mute: 60 1% 52%;
+
+    --primary: 93 72% 67%;
+    --primary-foreground: 72 11% 5%;
+    --primary-hover: 93 100% 84%;
+    --primary-neutral: 100 58% 80%;
+    --primary-pale: 100 58% 91%;
+
+    /* Semantic */
+    --success: 137 58% 43%;
+    --success-foreground: 0 0% 100%;
+    --success-deep: 152 88% 16%;
+    --success-pale: 100 58% 91%;
+
+    --warning: 48 100% 55%;
+    --warning-foreground: 38 42% 20%;
+    --warning-deep: 32 100% 36%;
+
+    --destructive: 357 64% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-deep: 355 100% 33%;
+
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    /* shadcn semantic aliases */
+    --background: 90 11% 91%;
+    --foreground: 72 11% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 72 11% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 72 11% 5%;
+
+    --secondary: 90 8% 94%;
+    --secondary-foreground: 72 11% 5%;
+
+    --muted: 90 8% 94%;
+    --muted-foreground: 120 2% 27%;
+
+    --accent: 100 58% 91%;
+    --accent-foreground: 72 11% 5%;
+
+    --border: 90 6% 85%;
+    --input: 90 6% 85%;
+    --ring: 72 11% 5%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 72 11% 5%;
+    --sidebar-border: 90 6% 88%;
+    --sidebar-accent: 100 58% 91%;
+
+    /* Radius */
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius: 0.75rem;
+
+    /* Elevation */
+    --shadow-sm: 0 1px 2px 0 rgb(14 15 12 / 0.05);
+    --shadow-md: 0 4px 12px 0 rgb(14 15 12 / 0.08);
+    --shadow-lg: 0 8px 24px 0 rgb(14 15 12 / 0.1);
+
+    /* Motion */
+    --motion-fast: 150ms;
+    --motion-base: 200ms;
+    --motion-slow: 250ms;
+    --motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Density (used in later phases) */
+    --control-height-sm: 2rem;
+    --control-height-md: 2.25rem;
+    --control-height-lg: 2.75rem;
+
+    /* Charts */
+    --chart-1: 93 72% 67%;
+    --chart-2: 137 58% 43%;
+    --chart-3: 199 89% 48%;
+    --chart-4: 48 100% 55%;
+    --chart-5: 357 64% 51%;
+    --chart-muted: 90 6% 85%;
+  }
+
+  .dark {
+    --canvas: 72 11% 8%;
+    --canvas-soft: 72 11% 6%;
+    --ink: 90 11% 95%;
+    --ink-deep: 100 58% 91%;
+    --body: 90 8% 78%;
+    --mute: 90 4% 55%;
+
+    --primary: 93 72% 67%;
+    --primary-foreground: 72 11% 5%;
+    --primary-hover: 93 100% 84%;
+    --primary-neutral: 100 58% 80%;
+    --primary-pale: 140 88% 12%;
+
+    --background: 72 11% 6%;
+    --foreground: 90 11% 95%;
+    --card: 72 11% 9%;
+    --card-foreground: 90 11% 95%;
+    --popover: 72 11% 9%;
+    --popover-foreground: 90 11% 95%;
+
+    --secondary: 72 11% 14%;
+    --secondary-foreground: 90 11% 95%;
+
+    --muted: 72 11% 14%;
+    --muted-foreground: 90 8% 72%;
+
+    --accent: 140 88% 12%;
+    --accent-foreground: 100 58% 91%;
+
+    --border: 72 11% 18%;
+    --input: 72 11% 18%;
+    --ring: 93 72% 67%;
+
+    --sidebar-background: 72 11% 9%;
+    --sidebar-foreground: 90 11% 95%;
+    --sidebar-border: 72 11% 16%;
+    --sidebar-accent: 140 88% 12%;
+  }
+}

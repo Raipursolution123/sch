@@ -355,10 +355,10 @@ class CurrenciesListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can create currencies.',
+                message='Access denied. Only Super Admins, Admins, or Staff can create currencies.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -466,10 +466,10 @@ class CurrenciesDetailView(APIView):
                 message='Authentication required.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied.',
+                message='Access denied. Only Super Admins, Admins, or Staff can modify currencies.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -541,10 +541,10 @@ class CurrenciesDetailView(APIView):
                 message='Authentication required.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied.',
+                message='Access denied. Only Super Admins, Admins, or Staff can delete currencies.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -581,10 +581,10 @@ class CurrenciesActivateView(APIView):
                 message='Authentication required.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
         if not is_admin:
             return APIResponse.error(
-                message='Access denied.',
+                message='Access denied. Only Super Admins, Admins, or Staff can activate currencies.',
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
@@ -689,10 +689,10 @@ class GeneralSettingsView(APIView):
                     message='Authentication required.',
                     status_code=status.HTTP_401_UNAUTHORIZED,
                 )
-            is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
+            is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin', 'staff'])
             if not is_admin:
                 return APIResponse.error(
-                    message='Access denied. Only Super Admins or Admins can update general settings.',
+                    message='Access denied. Only Super Admins, Admins, or Staff can update general settings.',
                     status_code=status.HTTP_403_FORBIDDEN,
                 )
 

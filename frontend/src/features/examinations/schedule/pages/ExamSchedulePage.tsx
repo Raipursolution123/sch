@@ -1,11 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { ExamScheduleFormDialog } from '@features/examinations/schedule/components/ExamScheduleFormDialog';
 import { ExamSchedulesTable } from '@features/examinations/schedule/components/ExamSchedulesTable';
 import type { ExamScheduleFormValues } from '@features/examinations/schedule/schemas/exam-schedule.schema';
@@ -20,6 +16,7 @@ import { useSubjects } from '@hooks/useSubjects';
 import { useSessions } from '@hooks/useSessions';
 import type { ExamSchedule } from '@app-types/examinations/exam-schedule';
 import type { ActiveFlag } from '@app-types/settings/session';
+import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
 
@@ -81,97 +78,85 @@ export function ExamSchedulePage() {
 
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
+  const addScheduleAction = (
+    <PermissionButton
+      permission="exams.create"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+      disabled={!canSchedule}
+      title={canSchedule ? undefined : 'Configure exams, subjects, and sessions first'}
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Schedule
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Exam Schedule"
-        description="Schedule subject papers with dates, times, rooms, and marking details."
-        actions={
-          <Button
-            onClick={() => setDialogMode('create')}
-            className="gap-1"
-            disabled={!canSchedule}
-            title={canSchedule ? undefined : 'Configure exams, subjects, and sessions first'}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Schedule
-          </Button>
-        }
-      />
+    <ModuleListPack
+      title="Exam Schedule"
+      description="Schedule subject papers with dates, times, rooms, and marking details."
+      actions={addScheduleAction}
+      prerequisiteHint={
+        !canSchedule && !isLoading ? (
+          <p className="text-sm text-muted-foreground">
+            Set up exams, subjects, and academic sessions before scheduling papers.
+          </p>
+        ) : undefined
+      }
+      isLoading={isLoading}
+      loadingMessage="Loading exam schedules..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && schedules?.length === 0}
+      emptyTitle="No exam schedules"
+      emptyDescription="Add a schedule entry to assign subject papers to exam dates."
+      emptyAction={canSchedule ? addScheduleAction : undefined}
+      footer={
+        <>
+          <ExamScheduleFormDialog
+            open={dialogMode !== null}
+            onOpenChange={(open) => {
+              if (!open) closeFormDialog();
+            }}
+            exams={exams}
+            subjects={subjects}
+            sessions={sessions}
+            schedule={dialogMode === 'edit' ? selectedSchedule : null}
+            onSubmit={handleFormSubmit}
+            isLoading={isFormLoading}
+          />
 
-      {!canSchedule && !isLoading && (
-        <p className="text-sm text-muted-foreground">
-          Set up exams, subjects, and academic sessions before scheduling papers.
-        </p>
-      )}
-
-      {isLoading && <LoadingState message="Loading exam schedules..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load exam schedules'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {!isLoading && !isError && schedules?.length === 0 && (
-        <EmptyState
-          title="No exam schedules"
-          description="Add a schedule entry to assign subject papers to exam dates."
-          action={
-            canSchedule ? (
-              <Button onClick={() => setDialogMode('create')} className="gap-1">
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                Add Schedule
-              </Button>
-            ) : undefined
-          }
-        />
-      )}
-
-      {!isLoading && !isError && schedules && schedules.length > 0 && (
-        <ExamSchedulesTable
-          schedules={schedules}
-          onEdit={(schedule) => {
-            setSelectedSchedule(schedule);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
-      )}
-
-      <ExamScheduleFormDialog
-        open={dialogMode !== null}
-        onOpenChange={(open) => {
-          if (!open) closeFormDialog();
+          <ConfirmDialog
+            open={deleteTarget !== null}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete exam schedule"
+            description={
+              deleteTarget
+                ? `Delete the "${deleteTarget.subject_name}" schedule for ${deleteTarget.exam_name}?`
+                : ''
+            }
+            confirmLabel="Delete"
+            destructive
+            isLoading={deleteMutation.isPending}
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
+            }}
+          />
+        </>
+      }
+    >
+      <ExamSchedulesTable
+        schedules={schedules ?? []}
+        onEdit={(schedule) => {
+          setSelectedSchedule(schedule);
+          setDialogMode('edit');
         }}
-        exams={exams}
-        subjects={subjects}
-        sessions={sessions}
-        schedule={dialogMode === 'edit' ? selectedSchedule : null}
-        onSubmit={handleFormSubmit}
-        isLoading={isFormLoading}
+        onDelete={setDeleteTarget}
       />
-
-      <ConfirmDialog
-        open={deleteTarget !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-        title="Delete exam schedule"
-        description={
-          deleteTarget
-            ? `Delete the "${deleteTarget.subject_name}" schedule for ${deleteTarget.exam_name}?`
-            : ''
-        }
-        confirmLabel="Delete"
-        destructive
-        isLoading={deleteMutation.isPending}
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
-        }}
-      />
-    </div>
+    </ModuleListPack>
   );
 }

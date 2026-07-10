@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { LogOut } from 'lucide-react';
 import { Avatar, getInitials } from '@components/ui/avatar';
 import { Button } from '@components/ui/button';
+import { ThemeToggle } from '@components/layout/ThemeToggle';
 import { useAuthStore } from '@store/index';
 
 export function UserMenu() {
@@ -47,6 +48,10 @@ export function UserMenu() {
           <div className="border-b border-border px-4 py-3">
             <p className="text-sm font-medium text-foreground">{displayName}</p>
             {user?.role && <p className="text-xs text-muted-foreground">{user.role}</p>}
+          </div>
+          <div className="border-b border-border px-4 py-3">
+            <p className="mb-2 text-xs font-medium text-muted-foreground">Theme</p>
+            <ThemeToggle />
           </div>
           <div className="p-1">
             <Button

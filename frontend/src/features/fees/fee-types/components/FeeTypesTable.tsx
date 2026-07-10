@@ -1,5 +1,5 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import type { FeeType } from '@app-types/fees/fee-type';
@@ -54,15 +54,17 @@ export function FeeTypesTable({ feeTypes, onEdit, onDelete }: FeeTypesTableProps
         const isActive = feeType.is_active === 'yes';
         return (
           <>
-            <Button
+            <PermissionButton
+              permission="fees.manage"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(feeType)}
               aria-label={`Edit ${feeType.name}`}
             >
               <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="fees.manage"
               variant="ghost"
               size="sm"
               disabled={isActive}
@@ -71,7 +73,7 @@ export function FeeTypesTable({ feeTypes, onEdit, onDelete }: FeeTypesTableProps
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </PermissionButton>
           </>
         );
       }}

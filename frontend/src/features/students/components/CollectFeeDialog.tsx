@@ -1,19 +1,10 @@
 import { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
-import { FormField } from '@components/forms/FormField';
-import { Select } from '@components/ui/select';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormDateField, FormSelectField } from '@components/forms/fields';
 import type { StudentFeeLine } from '@app-types/students/student-fees';
 
 const collectFeeSchema = z.object({
@@ -86,69 +77,35 @@ export function CollectFeeDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <DialogHeader>
-            <DialogTitle>Collect Fee</DialogTitle>
-            <DialogDescription>Record a payment for {feeLine?.feetype_name}.</DialogDescription>
-          </DialogHeader>
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      isLoading={isLoading}
+      title="Collect Fee"
+      description={feeLine ? `Record a payment for ${feeLine.feetype_name}.` : undefined}
+      submitLabel="Confirm Payment"
+      submitDisabled={!feeLine}
+      onSubmit={handleSubmit(handleFormSubmit)}
+      size="sm"
+    >
+      <FormErrorSummary errors={errors} />
 
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <p className="text-sm font-medium">Amount to pay</p>
-              <p className="text-2xl font-bold tracking-tight">
-                ₹{feeLine?.balance?.toFixed(2) ?? '0.00'}
-              </p>
-            </div>
+      <div className="grid gap-2">
+        <p className="text-sm font-medium">Amount to pay</p>
+        <p className="text-2xl font-bold tracking-tight">
+          ₹{feeLine?.balance?.toFixed(2) ?? '0.00'}
+        </p>
+      </div>
 
-            <FormField label="Date of Payment" htmlFor="date" error={errors.date?.message} required>
-              <Controller
-                name="date"
-                control={control}
-                render={({ field }) => (
-                  <Input type="date" id="date" {...field} value={field.value || ''} />
-                )}
-              />
-            </FormField>
-
-            <FormField
-              label="Payment Mode"
-              htmlFor="payment_mode"
-              error={errors.payment_mode?.message}
-              required
-            >
-              <Controller
-                name="payment_mode"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    id="payment_mode"
-                    placeholder="Select mode"
-                    options={PAYMENT_MODES}
-                    value={field.value || ''}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-            </FormField>
-          </div>
-
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              disabled={isLoading}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isLoading || !feeLine}>
-              {isLoading ? 'Processing...' : 'Confirm Payment'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <FormDateField control={control} name="date" label="Date of Payment" required />
+      <FormSelectField
+        control={control}
+        name="payment_mode"
+        label="Payment Mode"
+        placeholder="Select mode"
+        options={PAYMENT_MODES}
+        required
+      />
+    </EntityFormDialog>
   );
 }

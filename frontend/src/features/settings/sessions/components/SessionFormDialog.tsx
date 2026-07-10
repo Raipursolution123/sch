@@ -1,16 +1,14 @@
-import { useEffect, useState, type FormEvent } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormTextField } from '@components/forms/fields';
 import type { AcademicSession } from '@app-types/settings/session';
-import { currentIndianAcademicSession, isValidSessionName } from '@utils/session';
+import { currentIndianAcademicSession } from '@utils/session';
+import {
+  sessionFormSchema,
+  type SessionFormValues,
+} from '@features/settings/sessions/schemas/session.schema';
 
 interface SessionFormDialogProps {
   open: boolean;
@@ -28,63 +26,42 @@ export function SessionFormDialog({
   isLoading,
 }: SessionFormDialogProps) {
   const isEdit = Boolean(session);
-  const [value, setValue] = useState('');
-  const [error, setError] = useState('');
+
+  const { control, handleSubmit, reset } = useForm<SessionFormValues>({
+    resolver: zodResolver(sessionFormSchema),
+    defaultValues: { session: currentIndianAcademicSession() },
+  });
 
   useEffect(() => {
     if (open) {
-      setValue(session?.session ?? currentIndianAcademicSession());
-      setError('');
+      reset({ session: session?.session ?? currentIndianAcademicSession() });
     }
-  }, [open, session]);
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const trimmed = value.trim();
-    if (!isValidSessionName(trimmed)) {
-      setError('Use format YYYY-YY (e.g. 2026-27)');
-      return;
-    }
-    onSubmit(trimmed);
-  };
+  }, [open, session, reset]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>{isEdit ? 'Edit Academic Session' : 'Add Academic Session'}</DialogTitle>
-            <DialogDescription>
-              {isEdit
-                ? 'Update the session label. Active status is managed separately.'
-                : 'Create a new academic year. New sessions start as inactive.'}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <Input
-              label="Session name"
-              name="session"
-              placeholder="2026-27"
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-                setError('');
-              }}
-              error={error}
-              required
-              autoFocus
-            />
-          </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={isLoading}>
-              {isEdit ? 'Save changes' : 'Create session'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      isEdit={isEdit}
+      isLoading={isLoading}
+      title={isEdit ? 'Edit Academic Session' : 'Add Academic Session'}
+      description={
+        isEdit
+          ? 'Update the session label. Active status is managed separately.'
+          : 'Create a new academic year. New sessions start as inactive.'
+      }
+      submitLabel={isEdit ? 'Save changes' : 'Create session'}
+      onSubmit={handleSubmit((values) => onSubmit(values.session))}
+      size="sm"
+    >
+      <FormTextField
+        control={control}
+        name="session"
+        label="Session name"
+        placeholder="2026-27"
+        required
+        autoFocus
+      />
+    </EntityFormDialog>
   );
 }

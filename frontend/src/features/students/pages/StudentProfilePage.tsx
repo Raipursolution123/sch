@@ -1,11 +1,8 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Trash2 } from 'lucide-react';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { StudentOverviewTab } from '@features/students/components/StudentOverviewTab';
 import { StudentAcademicTab } from '@features/students/components/StudentAcademicTab';
 import { StudentFeesTab } from '@features/students/components/StudentFeesTab';
@@ -17,6 +14,7 @@ import { useStudent, useUpdateStudent, useDeleteStudent } from '@hooks/useStuden
 import { useClasses } from '@hooks/useClasses';
 import { useSections } from '@hooks/useSections';
 import { ROUTES } from '@constants/index';
+import { ModuleProfilePack } from '@workflow-packs';
 
 const PROFILE_TABS = [
   { id: 'overview', label: 'Overview', enabled: true },
@@ -65,94 +63,79 @@ export function StudentProfilePage() {
     });
   };
 
-  if (isLoading) {
-    return <LoadingState message="Loading student profile..." />;
-  }
-
-  if (isError || !student) {
-    return (
-      <ErrorState
-        title="Student not found"
-        message={error instanceof Error ? error.message : 'Could not load student profile'}
-        onRetry={() => void refetch()}
-      />
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link
-          to={ROUTES.students.root}
-          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back to Students
-        </Link>
+    <ModuleProfilePack
+      backTo={ROUTES.students.root}
+      backLabel="Back to Students"
+      isLoading={isLoading}
+      loadingMessage="Loading student profile..."
+      isError={isError || !student}
+      errorTitle="Student not found"
+      error={error}
+      onRetry={() => void refetch()}
+      headerActions={
+        student ? (
+          <PermissionButton
+            permission="students.delete"
+            variant="destructive"
+            size="sm"
+            onClick={() => setDeleteConfirmOpen(true)}
+            className="gap-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            Delete Student
+          </PermissionButton>
+        ) : undefined
+      }
+      tabs={
+        student
+          ? PROFILE_TABS.map((tab) => ({
+              id: tab.id,
+              label: tab.label,
+              disabled: !tab.enabled,
+              content:
+                tab.id === 'overview' ? (
+                  <StudentOverviewTab student={student} onEditClick={() => setEditOpen(true)} />
+                ) : tab.id === 'academic' ? (
+                  <StudentAcademicTab student={student} />
+                ) : tab.id === 'fees' ? (
+                  <StudentFeesTab student={student} />
+                ) : (
+                  <StudentGuardiansTab student={student} />
+                ),
+            }))
+          : []
+      }
+      activeTab={currentTab}
+      onTabChange={(value) => {
+        setSearchParams(value === 'overview' ? {} : { tab: value }, { replace: true });
+      }}
+      footer={
+        student ? (
+          <>
+            <StudentAdmissionDialog
+              open={editOpen}
+              onOpenChange={setEditOpen}
+              classes={classes}
+              sections={sections}
+              student={student}
+              onSubmit={handleEditSubmit}
+              isLoading={updateMutation.isPending}
+            />
 
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={() => setDeleteConfirmOpen(true)}
-          className="gap-2"
-        >
-          <Trash2 className="h-4 w-4" />
-          Delete Student
-        </Button>
-      </div>
-
-      <Tabs
-        value={currentTab}
-        onValueChange={(value) => {
-          setSearchParams(value === 'overview' ? {} : { tab: value }, { replace: true });
-        }}
-      >
-        <TabsList className="w-full justify-start overflow-x-auto">
-          {PROFILE_TABS.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id} disabled={!tab.enabled}>
-              {tab.label}
-              {!tab.enabled && <span className="sr-only"> (coming soon)</span>}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        <TabsContent value="overview" className="mt-6">
-          <StudentOverviewTab student={student} onEditClick={() => setEditOpen(true)} />
-        </TabsContent>
-
-        <TabsContent value="academic" className="mt-6">
-          <StudentAcademicTab student={student} />
-        </TabsContent>
-
-        <TabsContent value="fees" className="mt-6">
-          <StudentFeesTab student={student} />
-        </TabsContent>
-
-        <TabsContent value="guardians" className="mt-6">
-          <StudentGuardiansTab student={student} />
-        </TabsContent>
-      </Tabs>
-
-      <StudentAdmissionDialog
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        classes={classes}
-        sections={sections}
-        student={student}
-        onSubmit={handleEditSubmit}
-        isLoading={updateMutation.isPending}
-      />
-
-      <ConfirmDialog
-        open={deleteConfirmOpen}
-        onOpenChange={setDeleteConfirmOpen}
-        title="Delete student"
-        description={`Are you sure you want to delete ${student.full_name}? This action cannot be undone.`}
-        confirmLabel="Delete"
-        destructive
-        isLoading={deleteMutation.isPending}
-        onConfirm={handleDeleteSubmit}
-      />
-    </div>
+            <ConfirmDialog
+              open={deleteConfirmOpen}
+              onOpenChange={setDeleteConfirmOpen}
+              title="Delete student"
+              description={`Are you sure you want to delete ${student.full_name}? This action cannot be undone.`}
+              confirmLabel="Delete"
+              destructive
+              isLoading={deleteMutation.isPending}
+              onConfirm={handleDeleteSubmit}
+            />
+          </>
+        ) : undefined
+      }
+    />
   );
 }

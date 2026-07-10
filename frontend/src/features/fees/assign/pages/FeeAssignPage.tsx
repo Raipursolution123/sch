@@ -1,11 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { FeeAssignmentFormDialog } from '@features/fees/assign/components/FeeAssignmentFormDialog';
 import { FeeAssignmentsTable } from '@features/fees/assign/components/FeeAssignmentsTable';
 import type { FeeAssignmentFormValues } from '@features/fees/assign/schemas/fee-assignment.schema';
@@ -21,6 +17,7 @@ import { useFeeTypes } from '@hooks/useFeeTypes';
 import { useSessions } from '@hooks/useSessions';
 import type { FeeAssignment } from '@app-types/fees/fee-assignment';
 import type { ActiveFlag } from '@app-types/settings/session';
+import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
 
@@ -79,100 +76,85 @@ export function FeeAssignPage() {
 
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
+  const assignAction = (
+    <PermissionButton
+      permission="fees.manage"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+      disabled={!canAssign}
+      title={canAssign ? undefined : 'Configure classes, fee types, groups, and sessions first'}
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Assign Fees
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Assign Fees"
-        // description="Assign fee groups to classes for the active session with per-line amounts."
-        actions={
-          <Button
-            onClick={() => setDialogMode('create')}
-            className="gap-1"
-            disabled={!canAssign}
-            title={
-              canAssign ? undefined : 'Configure classes, fee types, groups, and sessions first'
+    <ModuleListPack
+      title="Assign Fees"
+      actions={assignAction}
+      prerequisiteHint={
+        !canAssign && !isLoading ? (
+          <p className="text-sm text-muted-foreground">
+            Set up fee types, fee groups, classes, and academic sessions before assigning fees.
+          </p>
+        ) : undefined
+      }
+      isLoading={isLoading}
+      loadingMessage="Loading fee assignments..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && assignments?.length === 0}
+      emptyTitle="No fee assignments"
+      emptyDescription="Assign a fee group to a class to define what students owe."
+      emptyAction={canAssign ? assignAction : undefined}
+      footer={
+        <>
+          <FeeAssignmentFormDialog
+            open={dialogMode !== null}
+            onOpenChange={(open) => {
+              if (!open) closeFormDialog();
+            }}
+            classes={classes}
+            feeGroups={feeGroups}
+            feeTypes={feeTypes}
+            sessions={sessions}
+            assignment={dialogMode === 'edit' ? selectedAssignment : null}
+            onSubmit={handleFormSubmit}
+            isLoading={isFormLoading}
+          />
+
+          <ConfirmDialog
+            open={deleteTarget !== null}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete fee assignment"
+            description={
+              deleteTarget
+                ? `Delete the "${deleteTarget.fee_group_name}" assignment for ${deleteTarget.class_name}?`
+                : ''
             }
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Assign Fees
-          </Button>
-        }
-      />
-
-      {!canAssign && !isLoading && (
-        <p className="text-sm text-muted-foreground">
-          Set up fee types, fee groups, classes, and academic sessions before assigning fees.
-        </p>
-      )}
-
-      {isLoading && <LoadingState message="Loading fee assignments..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load fee assignments'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {!isLoading && !isError && assignments?.length === 0 && (
-        <EmptyState
-          title="No fee assignments"
-          description="Assign a fee group to a class to define what students owe."
-          action={
-            canAssign ? (
-              <Button onClick={() => setDialogMode('create')} className="gap-1">
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                Assign Fees
-              </Button>
-            ) : undefined
-          }
-        />
-      )}
-
-      {!isLoading && !isError && assignments && assignments.length > 0 && (
-        <FeeAssignmentsTable
-          assignments={assignments}
-          onEdit={(assignment) => {
-            setSelectedAssignment(assignment);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
-      )}
-
-      <FeeAssignmentFormDialog
-        open={dialogMode !== null}
-        onOpenChange={(open) => {
-          if (!open) closeFormDialog();
+            confirmLabel="Delete"
+            destructive
+            isLoading={deleteMutation.isPending}
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
+            }}
+          />
+        </>
+      }
+    >
+      <FeeAssignmentsTable
+        assignments={assignments ?? []}
+        onEdit={(assignment) => {
+          setSelectedAssignment(assignment);
+          setDialogMode('edit');
         }}
-        classes={classes}
-        feeGroups={feeGroups}
-        feeTypes={feeTypes}
-        sessions={sessions}
-        assignment={dialogMode === 'edit' ? selectedAssignment : null}
-        onSubmit={handleFormSubmit}
-        isLoading={isFormLoading}
+        onDelete={setDeleteTarget}
       />
-
-      <ConfirmDialog
-        open={deleteTarget !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-        title="Delete fee assignment"
-        description={
-          deleteTarget
-            ? `Delete the "${deleteTarget.fee_group_name}" assignment for ${deleteTarget.class_name}?`
-            : ''
-        }
-        confirmLabel="Delete"
-        destructive
-        isLoading={deleteMutation.isPending}
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
-        }}
-      />
-    </div>
+    </ModuleListPack>
   );
 }

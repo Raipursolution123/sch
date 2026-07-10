@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { ErrorBoundary } from '@components/feedback/ErrorBoundary';
 import { LoadingState } from '@components/feedback/LoadingState';
+import { ThemeInit } from '@components/layout/ThemeInit';
 import { queryClient } from '@app/query-client';
 import { router } from '@routes/index';
 
@@ -12,6 +13,7 @@ export function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
+        <ThemeInit />
         <Suspense fallback={<LoadingState message="Loading page..." />}>
           <RouterProvider router={router} />
         </Suspense>

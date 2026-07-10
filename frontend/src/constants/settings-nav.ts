@@ -8,7 +8,7 @@ export interface SettingsNavItem {
 
 /** Single source for Settings links in the main sidebar. */
 export const SETTINGS_NAV: SettingsNavItem[] = [
-  { label: 'Academic Session', path: ROUTES.settings.sessions },
+  { label: 'Academic Session', path: ROUTES.academics.sessions },
   { label: 'General Settings', path: ROUTES.settings.general },
   { label: 'Languages', path: ROUTES.settings.languages },
   { label: 'Currency', path: ROUTES.settings.currency },

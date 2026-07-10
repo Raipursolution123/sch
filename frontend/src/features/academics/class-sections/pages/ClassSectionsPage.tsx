@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { ClassSectionFormDialog } from '@features/academics/class-sections/components/ClassSectionFormDialog';
 import { ClassSectionsTable } from '@features/academics/class-sections/components/ClassSectionsTable';
-import { Pagination } from '@components/ui/Pagination';
 import type { ClassSectionFormValues } from '@features/academics/class-sections/schemas/class-section.schema';
 import {
   useClassSections,
@@ -20,6 +15,7 @@ import { useClasses } from '@hooks/useClasses';
 import { useSections } from '@hooks/useSections';
 import type { ClassSection } from '@app-types/academics/class-section';
 import type { ActiveFlag } from '@app-types/settings/session';
+import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
 
@@ -36,7 +32,6 @@ export function ClassSectionsPage() {
   const { data: mappingsData, isLoading, isError, error, refetch } = useClassSections(page);
   const mappings = mappingsData?.results;
   const count = mappingsData?.count || 0;
-  const totalPages = Math.ceil(count / 10); // StandardResultsSetPagination PAGE_SIZE is 10
 
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
@@ -72,96 +67,92 @@ export function ClassSectionsPage() {
   const canCreate =
     classes.some((c) => c.is_active === 'yes') && sections.some((s) => s.is_active === 'yes');
 
+  const addClassSectionAction = (
+    <PermissionButton
+      permission="academics.manage"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+      disabled={!canCreate}
+      title={canCreate ? undefined : 'Create active classes and sections first'}
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Class Section
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Class Sections"
-        description="Link classes with sections to define teachable groups (e.g. Class 1 — Section A)."
-        actions={
-          <Button onClick={() => setDialogMode('create')} className="gap-1" disabled={!canCreate}>
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Class Section
-          </Button>
-        }
-      />
-
-      {!canCreate && !isLoading && (
-        <p className="text-sm text-muted-foreground">
-          Create active classes and sections first, then link them here.
-        </p>
-      )}
-
-      {isLoading && <LoadingState message="Loading class sections..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load class sections'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {!isLoading && !isError && mappings?.length === 0 && (
-        <EmptyState
-          title="No class sections configured"
-          description="Link a class with a section to enable student enrollment per group."
-          action={
-            canCreate ? (
-              <Button onClick={() => setDialogMode('create')} className="gap-1">
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                Add Class Section
-              </Button>
-            ) : undefined
-          }
-        />
-      )}
-
-      {!isLoading && !isError && mappings && mappings.length > 0 && (
-        <div className="space-y-4">
-          <ClassSectionsTable
-            classSections={mappings}
-            onEdit={(classSection) => {
-              setSelectedClassSection(classSection);
-              setDialogMode('edit');
+    <ModuleListPack
+      title="Class Sections"
+      description="Link classes with sections to define teachable groups (e.g. Class 1 — Section A)."
+      actions={addClassSectionAction}
+      prerequisiteHint={
+        !canCreate && !isLoading ? (
+          <p className="text-sm text-muted-foreground">
+            Create active classes and sections first, then link them here.
+          </p>
+        ) : undefined
+      }
+      isLoading={isLoading}
+      loadingMessage="Loading class sections..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && mappings?.length === 0}
+      emptyTitle="No class sections configured"
+      emptyDescription="Link a class with a section to enable student enrollment per group."
+      emptyAction={canCreate ? addClassSectionAction : undefined}
+      footer={
+        <>
+          <ClassSectionFormDialog
+            open={dialogMode !== null}
+            onOpenChange={(open) => {
+              if (!open) closeFormDialog();
             }}
-            onDelete={setDeleteTarget}
+            classSection={dialogMode === 'edit' ? selectedClassSection : null}
+            classes={classes}
+            sections={sections}
+            onSubmit={handleFormSubmit}
+            isLoading={isFormLoading}
           />
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-        </div>
-      )}
 
-      <ClassSectionFormDialog
-        open={dialogMode !== null}
-        onOpenChange={(open) => {
-          if (!open) closeFormDialog();
+          <ConfirmDialog
+            open={Boolean(deleteTarget)}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete class section?"
+            description={
+              deleteTarget
+                ? `Permanently delete "${deleteTarget.class_name} — ${deleteTarget.section_name}"? This cannot be undone.`
+                : ''
+            }
+            confirmLabel="Delete"
+            destructive
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, {
+                onSuccess: () => setDeleteTarget(null),
+              });
+            }}
+            isLoading={deleteMutation.isPending}
+          />
+        </>
+      }
+    >
+      <ClassSectionsTable
+        classSections={mappings ?? []}
+        pagination={{
+          page,
+          pageSize: 10,
+          totalCount: count,
+          onPageChange: setPage,
         }}
-        classSection={dialogMode === 'edit' ? selectedClassSection : null}
-        classes={classes}
-        sections={sections}
-        onSubmit={handleFormSubmit}
-        isLoading={isFormLoading}
+        onEdit={(classSection) => {
+          setSelectedClassSection(classSection);
+          setDialogMode('edit');
+        }}
+        onDelete={setDeleteTarget}
       />
-
-      <ConfirmDialog
-        open={Boolean(deleteTarget)}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-        title="Delete class section?"
-        description={
-          deleteTarget
-            ? `Permanently delete "${deleteTarget.class_name} — ${deleteTarget.section_name}"? This cannot be undone.`
-            : ''
-        }
-        confirmLabel="Delete"
-        destructive
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, {
-            onSuccess: () => setDeleteTarget(null),
-          });
-        }}
-        isLoading={deleteMutation.isPending}
-      />
-    </div>
+    </ModuleListPack>
   );
 }

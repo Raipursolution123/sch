@@ -125,6 +125,9 @@ jobs:
       - name: TypeScript check
         run: npm run typecheck
 
+      - name: Design system audit
+        run: npm run ds:audit
+
   frontend-build:
     name: Frontend Build
     runs-on: ubuntu-latest

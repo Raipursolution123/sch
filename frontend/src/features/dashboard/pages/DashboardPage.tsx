@@ -5,6 +5,7 @@ import {
   ActivityFeed,
   ActivityFeedEmpty,
   AttentionList,
+  ChartPanel,
   DashboardCard,
   DashboardHero,
   DashboardSkeleton,
@@ -116,14 +117,20 @@ export function DashboardPage() {
             </Link>
           }
         >
-          <MiniBarChart
-            data={weeklyAttendance.map((point) => ({
-              label: point.label,
-              value: point.rate,
-            }))}
-            maxValue={100}
-            ariaLabel="Weekly attendance rates by day"
-          />
+          <ChartPanel
+            isEmpty={weeklyAttendance.every((point) => point.rate === 0)}
+            emptyTitle="No attendance data this week"
+            emptyDescription="Mark attendance to see weekly trends on the dashboard."
+          >
+            <MiniBarChart
+              data={weeklyAttendance.map((point) => ({
+                label: point.label,
+                value: point.rate,
+              }))}
+              maxValue={100}
+              ariaLabel="Weekly attendance rates by day"
+            />
+          </ChartPanel>
         </DashboardCard>
 
         <DashboardCard title="Needs attention" className="lg:col-span-2">
@@ -146,15 +153,21 @@ export function DashboardPage() {
             </Link>
           }
         >
-          <FeeProgressList
-            total={feeTotal}
-            collectionRate={feeOverview.collectionRate}
-            items={[
-              { label: 'Collected', amount: feeOverview.collected, tone: 'success' },
-              { label: 'Pending', amount: feeOverview.pending, tone: 'warning' },
-              { label: 'Overdue', amount: feeOverview.overdue, tone: 'destructive' },
-            ]}
-          />
+          <ChartPanel
+            isEmpty={feeTotal <= 0}
+            emptyTitle="No fee assignments yet"
+            emptyDescription="Assign fees to classes to track collection on the dashboard."
+          >
+            <FeeProgressList
+              total={feeTotal}
+              collectionRate={feeOverview.collectionRate}
+              items={[
+                { label: 'Collected', amount: feeOverview.collected, tone: 'success' },
+                { label: 'Pending', amount: feeOverview.pending, tone: 'warning' },
+                { label: 'Overdue', amount: feeOverview.overdue, tone: 'destructive' },
+              ]}
+            />
+          </ChartPanel>
         </DashboardCard>
 
         <DashboardCard

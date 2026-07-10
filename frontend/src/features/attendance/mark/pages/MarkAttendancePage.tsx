@@ -1,12 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Save } from 'lucide-react';
-import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { Select } from '@components/ui/select';
-import { PageHeader } from '@components/layout/PageHeader';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
-import { EmptyState } from '@components/feedback/EmptyState';
 import { FormField } from '@components/forms/FormField';
 import {
   MarkAttendanceTable,
@@ -16,6 +12,7 @@ import { useAttendanceRoster, useAttendanceTypes, useSaveAttendance } from '@hoo
 import { useClasses } from '@hooks/useClasses';
 import { useSections } from '@hooks/useSections';
 import { todayIsoDate } from '@utils/student';
+import { ModuleMarkGridPack } from '@workflow-packs';
 
 export function MarkAttendancePage() {
   const { data: classesData } = useClasses();
@@ -107,84 +104,76 @@ export function MarkAttendancePage() {
   const canMark = activeClasses.length > 0 && activeSections.length > 0 && types.length > 0;
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Mark Attendance"
-        description="Record daily attendance by class and section."
-        actions={
-          <Button
-            onClick={handleSave}
-            className="gap-1"
-            disabled={!filtersReady || rows.length === 0}
-            isLoading={saveMutation.isPending}
-          >
-            <Save className="h-4 w-4" aria-hidden="true" />
-            Save attendance
-          </Button>
-        }
+    <ModuleMarkGridPack
+      title="Mark Attendance"
+      description="Record daily attendance by class and section."
+      actions={
+        <PermissionButton
+          permission="attendance.mark"
+          onClick={handleSave}
+          className="gap-1"
+          disabled={!filtersReady || rows.length === 0}
+          isLoading={saveMutation.isPending}
+        >
+          <Save className="h-4 w-4" aria-hidden="true" />
+          Save attendance
+        </PermissionButton>
+      }
+      prerequisiteHint={
+        !canMark ? (
+          <p className="text-sm text-muted-foreground">
+            Configure active classes and sections under Academics before marking attendance.
+          </p>
+        ) : undefined
+      }
+      filters={
+        <>
+          <FormField label="Date" htmlFor="attendance_date">
+            <Input
+              id="attendance_date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </FormField>
+          <FormField label="Class" htmlFor="attendance_class">
+            <Select
+              id="attendance_class"
+              placeholder="Select class"
+              options={activeClasses.map((c) => ({ value: String(c.id), label: c.class_name }))}
+              value={classId ? String(classId) : ''}
+              onChange={(e) => setClassId(Number(e.target.value))}
+              disabled={!canMark}
+            />
+          </FormField>
+          <FormField label="Section" htmlFor="attendance_section">
+            <Select
+              id="attendance_section"
+              placeholder="Select section"
+              options={activeSections.map((s) => ({ value: String(s.id), label: s.section_name }))}
+              value={sectionId ? String(sectionId) : ''}
+              onChange={(e) => setSectionId(Number(e.target.value))}
+              disabled={!canMark}
+            />
+          </FormField>
+        </>
+      }
+      filtersReady={filtersReady}
+      isLoading={isLoading}
+      loadingMessage="Loading roster..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && rows.length === 0}
+      emptyTitle="No students in this class section"
+      emptyDescription="Enroll students in the selected class and section to mark attendance."
+    >
+      <MarkAttendanceTable
+        entries={rows}
+        types={types}
+        onStatusChange={handleStatusChange}
+        onRemarkChange={handleRemarkChange}
       />
-
-      {!canMark && (
-        <p className="text-sm text-muted-foreground">
-          Configure active classes and sections under Academics before marking attendance.
-        </p>
-      )}
-
-      <div className="grid gap-4 rounded-lg border bg-card p-4 sm:grid-cols-3">
-        <FormField label="Date" htmlFor="attendance_date">
-          <Input
-            id="attendance_date"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </FormField>
-        <FormField label="Class" htmlFor="attendance_class">
-          <Select
-            id="attendance_class"
-            placeholder="Select class"
-            options={activeClasses.map((c) => ({ value: String(c.id), label: c.class_name }))}
-            value={classId ? String(classId) : ''}
-            onChange={(e) => setClassId(Number(e.target.value))}
-            disabled={!canMark}
-          />
-        </FormField>
-        <FormField label="Section" htmlFor="attendance_section">
-          <Select
-            id="attendance_section"
-            placeholder="Select section"
-            options={activeSections.map((s) => ({ value: String(s.id), label: s.section_name }))}
-            value={sectionId ? String(sectionId) : ''}
-            onChange={(e) => setSectionId(Number(e.target.value))}
-            disabled={!canMark}
-          />
-        </FormField>
-      </div>
-
-      {filtersReady && isLoading && <LoadingState message="Loading roster..." />}
-
-      {filtersReady && isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load roster'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {filtersReady && !isLoading && !isError && rows.length === 0 && (
-        <EmptyState
-          title="No students in this class section"
-          description="Enroll students in the selected class and section to mark attendance."
-        />
-      )}
-
-      {filtersReady && !isLoading && !isError && rows.length > 0 && (
-        <MarkAttendanceTable
-          entries={rows}
-          types={types}
-          onStatusChange={handleStatusChange}
-          onRemarkChange={handleRemarkChange}
-        />
-      )}
-    </div>
+    </ModuleMarkGridPack>
   );
 }

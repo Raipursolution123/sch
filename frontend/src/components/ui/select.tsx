@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { cn } from '@utils/cn';
+import { controlHeightClassName, controlInputClassName } from '@utils/form-control';
 
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  /** @deprecated Prefer FormField wrapper for labels */
   label?: string;
   error?: string;
   options: { value: string; label: string }[];
@@ -10,18 +12,17 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, label, error, id, options, placeholder, ...props }, ref) => {
-    const selectId = id || props.name;
-
     const selectElement = (
       <select
-        id={selectId}
+        id={id}
         ref={ref}
         className={cn(
-          'flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+          controlInputClassName,
+          controlHeightClassName,
           error && 'border-destructive focus-visible:ring-destructive',
           className,
         )}
-        aria-invalid={error ? true : undefined}
+        aria-invalid={error ? true : props['aria-invalid']}
         {...props}
       >
         {placeholder && (
@@ -41,7 +42,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 
     return (
       <div className="space-y-1">
-        <label htmlFor={selectId} className="text-sm font-medium leading-none text-foreground">
+        <label htmlFor={id} className="text-sm font-medium leading-none text-foreground">
           {label}
         </label>
         {selectElement}

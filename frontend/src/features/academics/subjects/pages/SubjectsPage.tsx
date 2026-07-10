@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { SubjectFormDialog } from '@features/academics/subjects/components/SubjectFormDialog';
 import { SubjectsTable } from '@features/academics/subjects/components/SubjectsTable';
-import { Pagination } from '@components/ui/Pagination';
 import type { SubjectFormValues } from '@features/academics/subjects/schemas/subject.schema';
 import {
   useCreateSubject,
@@ -19,6 +14,7 @@ import {
 import { useClasses } from '@hooks/useClasses';
 import type { Subject } from '@app-types/academics/subject';
 import type { ActiveFlag } from '@app-types/settings/session';
+import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
 
@@ -37,7 +33,6 @@ export function SubjectsPage() {
   const { data: subjectsData, isLoading, isError, error, refetch } = useSubjects(page);
   const subjects = subjectsData?.results;
   const count = subjectsData?.count || 0;
-  const totalPages = Math.ceil(count / 10); // StandardResultsSetPagination PAGE_SIZE is 10
 
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
@@ -65,87 +60,82 @@ export function SubjectsPage() {
 
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
+  const addSubjectAction = (
+    <PermissionButton
+      permission="academics.manage"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Subject
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Subjects"
-        description="Manage subjects for timetables, exams, and attendance tracking."
-        actions={
-          <Button onClick={() => setDialogMode('create')} className="gap-1">
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Subject
-          </Button>
-        }
-      />
-
-      {isLoading && <LoadingState message="Loading subjects..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load subjects'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {!isLoading && !isError && subjects?.length === 0 && (
-        <EmptyState
-          title="No subjects configured"
-          description="Add your first subject to build the academic curriculum."
-          action={
-            <Button onClick={() => setDialogMode('create')} className="gap-1">
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              Add Subject
-            </Button>
-          }
-        />
-      )}
-
-      {!isLoading && !isError && subjects && subjects.length > 0 && (
-        <div className="space-y-4">
-          <SubjectsTable
-            subjects={subjects}
-            onEdit={(subject) => {
-              setSelectedSubject(subject);
-              setDialogMode('edit');
+    <ModuleListPack
+      title="Subjects"
+      description="Manage subjects for timetables, exams, and attendance tracking."
+      actions={addSubjectAction}
+      isLoading={isLoading}
+      loadingMessage="Loading subjects..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && subjects?.length === 0}
+      emptyTitle="No subjects configured"
+      emptyDescription="Add your first subject to build the academic curriculum."
+      emptyAction={addSubjectAction}
+      footer={
+        <>
+          <SubjectFormDialog
+            open={dialogMode !== null}
+            onOpenChange={(open) => {
+              if (!open) closeFormDialog();
             }}
-            onDelete={setDeleteTarget}
+            subject={dialogMode === 'edit' ? selectedSubject : null}
+            classes={classes}
+            onSubmit={handleFormSubmit}
+            isLoading={isFormLoading}
           />
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-        </div>
-      )}
 
-      <SubjectFormDialog
-        open={dialogMode !== null}
-        onOpenChange={(open) => {
-          if (!open) closeFormDialog();
+          <ConfirmDialog
+            open={Boolean(deleteTarget)}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete subject?"
+            description={
+              deleteTarget
+                ? `Permanently delete "${deleteTarget.name}" (${deleteTarget.code})? This cannot be undone.`
+                : ''
+            }
+            confirmLabel="Delete"
+            destructive
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, {
+                onSuccess: () => setDeleteTarget(null),
+              });
+            }}
+            isLoading={deleteMutation.isPending}
+          />
+        </>
+      }
+    >
+      <SubjectsTable
+        subjects={subjects ?? []}
+        pagination={{
+          page,
+          pageSize: 10,
+          totalCount: count,
+          onPageChange: setPage,
         }}
-        subject={dialogMode === 'edit' ? selectedSubject : null}
-        classes={classes}
-        onSubmit={handleFormSubmit}
-        isLoading={isFormLoading}
+        onEdit={(subject) => {
+          setSelectedSubject(subject);
+          setDialogMode('edit');
+        }}
+        onDelete={setDeleteTarget}
       />
-
-      <ConfirmDialog
-        open={Boolean(deleteTarget)}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-        title="Delete subject?"
-        description={
-          deleteTarget
-            ? `Permanently delete "${deleteTarget.name}" (${deleteTarget.code})? This cannot be undone.`
-            : ''
-        }
-        confirmLabel="Delete"
-        destructive
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, {
-            onSuccess: () => setDeleteTarget(null),
-          });
-        }}
-        isLoading={deleteMutation.isPending}
-      />
-    </div>
+    </ModuleListPack>
   );
 }

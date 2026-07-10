@@ -1,14 +1,16 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { Badge } from '@components/ui/badge';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import type { Subject } from '@app-types/academics/subject';
+import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { SUBJECT_TYPE_OPTIONS } from '@features/academics/subjects/constants/options';
 import { formatDate } from '@utils/format';
 
 interface SubjectsTableProps {
   subjects: Subject[];
+  pagination: DataTablePaginationConfig;
   onEdit: (subject: Subject) => void;
   onDelete: (subject: Subject) => void;
 }
@@ -63,24 +65,27 @@ const columns: DataTableColumn<Subject>[] = [
   },
 ];
 
-export function SubjectsTable({ subjects, onEdit, onDelete }: SubjectsTableProps) {
+export function SubjectsTable({ subjects, pagination, onEdit, onDelete }: SubjectsTableProps) {
   return (
     <DataTable
       data={subjects}
       columns={columns}
       getRowKey={(subject) => subject.id}
+      pagination={pagination}
       actions={(subject) => {
         return (
           <>
-            <Button
+            <PermissionButton
+              permission="academics.manage"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(subject)}
               aria-label={`Edit ${subject.name}`}
             >
               <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="academics.manage"
               variant="ghost"
               size="sm"
               onClick={() => onDelete(subject)}
@@ -88,7 +93,7 @@ export function SubjectsTable({ subjects, onEdit, onDelete }: SubjectsTableProps
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </PermissionButton>
           </>
         );
       }}

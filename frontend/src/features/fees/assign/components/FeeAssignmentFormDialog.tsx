@@ -2,19 +2,13 @@ import { useEffect, useMemo } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
-import { Switch } from '@components/ui/switch';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
 import { FormField } from '@components/forms/FormField';
+import { FormSection } from '@components/forms/FormSection';
+import { FormDateField, FormNumberField, FormSwitchField } from '@components/forms/fields';
+import { Button } from '@components/ui/button';
+import { Select } from '@components/ui/select';
 import type { SchoolClass } from '@app-types/academics/class';
 import type { FeeAssignment } from '@app-types/fees/fee-assignment';
 import type { FeeGroup } from '@app-types/fees/fee-group';
@@ -103,11 +97,9 @@ export function FeeAssignmentFormDialog({
 
   const {
     control,
-    register,
     handleSubmit,
     reset,
     watch,
-    setValue,
     formState: { errors },
   } = useForm<FeeAssignmentFormValues>({
     resolver: zodResolver(feeAssignmentFormSchema),
@@ -122,7 +114,6 @@ export function FeeAssignmentFormDialog({
 
   const { fields, append, remove } = useFieldArray({ control, name: 'lines' });
   const watchedLines = watch('lines');
-  const isActive = watch('is_active');
 
   const lineTotal = useMemo(
     () => watchedLines.reduce((sum, line) => sum + (Number(line.amount) || 0), 0),
@@ -154,208 +145,183 @@ export function FeeAssignmentFormDialog({
   ]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[90vh] flex-col sm:max-w-2xl">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-0 flex-1 flex-col">
-          <DialogHeader>
-            <DialogTitle>{isEdit ? 'Edit fee assignment' : 'Assign fees'}</DialogTitle>
-            <DialogDescription>
-              Link a fee group to a class for a session with line-item amounts.
-            </DialogDescription>
-          </DialogHeader>
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      isEdit={isEdit}
+      isLoading={isLoading}
+      size="lg"
+      scrollable
+      title={isEdit ? 'Edit fee assignment' : 'Assign fees'}
+      description="Link a fee group to a class for a session with line-item amounts."
+      submitLabel={isEdit ? 'Save changes' : 'Assign fees'}
+      submitDisabled={!hasOptions}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <FormErrorSummary errors={errors} />
 
-          <div className="min-h-0 flex-1 space-y-6 overflow-y-auto py-4 pr-1">
-            {!hasOptions && (
-              <p className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
-                Add active classes, fee groups, fee types, and sessions before assigning fees.
-              </p>
+      {!hasOptions && (
+        <p className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
+          Add active classes, fee groups, fee types, and sessions before assigning fees.
+        </p>
+      )}
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        <FormField label="Class" htmlFor="class_id" error={errors.class_id?.message} required>
+          <Controller
+            name="class_id"
+            control={control}
+            render={({ field }) => (
+              <Select
+                id="class_id"
+                placeholder="Select class"
+                options={classOptions}
+                value={field.value ? String(field.value) : ''}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                disabled={!hasOptions}
+              />
             )}
+          />
+        </FormField>
+        <FormField
+          label="Fee group"
+          htmlFor="fee_group_id"
+          error={errors.fee_group_id?.message}
+          required
+        >
+          <Controller
+            name="fee_group_id"
+            control={control}
+            render={({ field }) => (
+              <Select
+                id="fee_group_id"
+                placeholder="Select group"
+                options={groupOptions}
+                value={field.value ? String(field.value) : ''}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                disabled={!hasOptions}
+              />
+            )}
+          />
+        </FormField>
+        <FormField label="Session" htmlFor="session_id" error={errors.session_id?.message} required>
+          <Controller
+            name="session_id"
+            control={control}
+            render={({ field }) => (
+              <Select
+                id="session_id"
+                placeholder="Select session"
+                options={sessionOptions}
+                value={field.value ? String(field.value) : ''}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                disabled={!hasOptions}
+              />
+            )}
+          />
+        </FormField>
+      </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
-              <FormField label="Class" htmlFor="class_id" error={errors.class_id?.message} required>
-                <Controller
-                  name="class_id"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      id="class_id"
-                      placeholder="Select class"
-                      options={classOptions}
-                      value={field.value ? String(field.value) : ''}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      disabled={!hasOptions}
-                    />
-                  )}
-                />
-              </FormField>
+      <FormSection
+        title="Fee lines"
+        description="Add one row per fee type with amount and optional due date."
+      >
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="gap-1"
+            disabled={!hasOptions}
+            onClick={() =>
+              append({
+                feetype_id: activeFeeTypes[0]?.id ?? 0,
+                amount: 0,
+                due_date: '',
+              })
+            }
+          >
+            <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+            Add line
+          </Button>
+        </div>
+
+        {errors.lines?.message && (
+          <p className="text-sm text-destructive" role="alert">
+            {errors.lines.message}
+          </p>
+        )}
+
+        <div className="space-y-3">
+          {fields.map((field, index) => (
+            <div
+              key={field.id}
+              className="grid gap-3 rounded-md border p-3 sm:grid-cols-[1fr_120px_140px_auto]"
+            >
               <FormField
-                label="Fee group"
-                htmlFor="fee_group_id"
-                error={errors.fee_group_id?.message}
+                label={index === 0 ? 'Fee type' : ''}
+                htmlFor={`lines.${index}.feetype_id`}
+                error={errors.lines?.[index]?.feetype_id?.message}
                 required
               >
                 <Controller
-                  name="fee_group_id"
+                  name={`lines.${index}.feetype_id`}
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: lineField }) => (
                     <Select
-                      id="fee_group_id"
-                      placeholder="Select group"
-                      options={groupOptions}
-                      value={field.value ? String(field.value) : ''}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      id={`lines.${index}.feetype_id`}
+                      placeholder="Select fee type"
+                      options={feeTypeOptions}
+                      value={lineField.value ? String(lineField.value) : ''}
+                      onChange={(e) => lineField.onChange(Number(e.target.value))}
                       disabled={!hasOptions}
                     />
                   )}
                 />
               </FormField>
-              <FormField
-                label="Session"
-                htmlFor="session_id"
-                error={errors.session_id?.message}
+              <FormNumberField
+                control={control}
+                name={`lines.${index}.amount`}
+                label={index === 0 ? 'Amount' : ''}
                 required
-              >
-                <Controller
-                  name="session_id"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      id="session_id"
-                      placeholder="Select session"
-                      options={sessionOptions}
-                      value={field.value ? String(field.value) : ''}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      disabled={!hasOptions}
-                    />
-                  )}
-                />
-              </FormField>
-            </div>
-
-            <section className="space-y-3">
-              <div className="flex items-center justify-between border-b pb-2">
-                <h3 className="text-sm font-semibold text-foreground">Fee lines</h3>
+                min={0}
+                step={0.01}
+              />
+              <FormDateField
+                control={control}
+                name={`lines.${index}.due_date`}
+                label={index === 0 ? 'Due date' : ''}
+                optional
+              />
+              <div className={index === 0 ? 'flex items-end pb-0.5' : 'flex items-center'}>
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
-                  className="gap-1"
-                  disabled={!hasOptions}
-                  onClick={() =>
-                    append({
-                      feetype_id: activeFeeTypes[0]?.id ?? 0,
-                      amount: 0,
-                      due_date: '',
-                    })
-                  }
+                  disabled={fields.length <= 1}
+                  onClick={() => remove(index)}
+                  aria-label="Remove fee line"
+                  className="text-destructive hover:text-destructive"
                 >
-                  <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-                  Add line
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
+            </div>
+          ))}
+        </div>
 
-              {errors.lines?.message && (
-                <p className="text-sm text-destructive">{errors.lines.message}</p>
-              )}
+        <p className="text-right text-sm font-medium text-foreground">
+          Total: {formatAmount(lineTotal)}
+        </p>
+      </FormSection>
 
-              <div className="space-y-3">
-                {fields.map((field, index) => (
-                  <div
-                    key={field.id}
-                    className="grid gap-3 rounded-md border p-3 sm:grid-cols-[1fr_120px_140px_auto]"
-                  >
-                    <FormField
-                      label={index === 0 ? 'Fee type' : ''}
-                      htmlFor={`lines.${index}.feetype_id`}
-                      error={errors.lines?.[index]?.feetype_id?.message}
-                      required
-                    >
-                      <Controller
-                        name={`lines.${index}.feetype_id`}
-                        control={control}
-                        render={({ field: lineField }) => (
-                          <Select
-                            id={`lines.${index}.feetype_id`}
-                            placeholder="Select fee type"
-                            options={feeTypeOptions}
-                            value={lineField.value ? String(lineField.value) : ''}
-                            onChange={(e) => lineField.onChange(Number(e.target.value))}
-                            disabled={!hasOptions}
-                          />
-                        )}
-                      />
-                    </FormField>
-                    <FormField
-                      label={index === 0 ? 'Amount' : ''}
-                      htmlFor={`lines.${index}.amount`}
-                      error={errors.lines?.[index]?.amount?.message}
-                      required
-                    >
-                      <Input
-                        id={`lines.${index}.amount`}
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        {...register(`lines.${index}.amount`, { valueAsNumber: true })}
-                      />
-                    </FormField>
-                    <FormField
-                      label={index === 0 ? 'Due date' : ''}
-                      htmlFor={`lines.${index}.due_date`}
-                      error={errors.lines?.[index]?.due_date?.message}
-                    >
-                      <Input
-                        id={`lines.${index}.due_date`}
-                        type="date"
-                        {...register(`lines.${index}.due_date`)}
-                      />
-                    </FormField>
-                    <div className={index === 0 ? 'flex items-end pb-0.5' : 'flex items-center'}>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        disabled={fields.length <= 1}
-                        onClick={() => remove(index)}
-                        aria-label="Remove fee line"
-                        className="text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-right text-sm font-medium text-foreground">
-                Total: {formatAmount(lineTotal)}
-              </p>
-            </section>
-
-            <FormField label="Active assignment">
-              <div className="flex items-center gap-2 pt-1">
-                <Switch
-                  id="is_active"
-                  checked={isActive}
-                  onCheckedChange={(checked) =>
-                    setValue('is_active', checked, { shouldDirty: true })
-                  }
-                />
-                <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
-              </div>
-            </FormField>
-          </div>
-
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={isLoading} disabled={!hasOptions}>
-              {isEdit ? 'Save changes' : 'Assign fees'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <FormSwitchField
+        control={control}
+        name="is_active"
+        label="Active assignment"
+        onLabel="Yes"
+        offLabel="No"
+      />
+    </EntityFormDialog>
   );
 }

@@ -27,7 +27,9 @@ const columns: DataTableColumn<ExamGroup>[] = [
   {
     id: 'description',
     header: 'Description',
-    cellClassName: 'text-muted-foreground max-w-xs truncate',
+    wrap: true,
+    maxWidth: '20rem',
+    cellClassName: 'text-muted-foreground truncate',
     cell: (row) => row.description ?? '—',
   },
   {

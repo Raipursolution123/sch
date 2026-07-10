@@ -1,17 +1,18 @@
 import { useMemo, useState } from 'react';
-import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
-import { PageHeader } from '@components/layout/PageHeader';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
-import { EmptyState } from '@components/feedback/EmptyState';
 import { FormField } from '@components/forms/FormField';
+import { ReportSummaryGrid } from '@components/reports';
 import { AttendanceReportTable } from '@features/attendance/report/components/AttendanceReportTable';
 import { useAttendanceReport } from '@hooks/useAttendance';
 import { useClasses } from '@hooks/useClasses';
+import { useActiveSession } from '@hooks/useSessions';
 import { useSections } from '@hooks/useSections';
+import { exportToCsv } from '@utils/export-csv';
+import { formatDate } from '@utils/format';
+import { printReport } from '@utils/print-report';
 import { todayIsoDate } from '@utils/student';
+import { ModuleReportPack } from '@workflow-packs';
 
 function daysAgoIso(days: number): string {
   const date = new Date();
@@ -19,16 +20,8 @@ function daysAgoIso(days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
-function SummaryPill({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="rounded-md border bg-card px-3 py-2 text-center">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="text-lg font-semibold tabular-nums">{value}</p>
-    </div>
-  );
-}
-
 export function AttendanceReportPage() {
+  const { data: activeSession } = useActiveSession();
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
 
@@ -74,95 +67,113 @@ export function AttendanceReportPage() {
       .map((s) => ({ value: String(s.id), label: s.section_name })),
   ];
 
+  const printSubtitle = `${formatDate(fromDate)} – ${formatDate(toDate)}${
+    activeSession ? ` · Session ${activeSession.session}` : ''
+  }`;
+
+  const handleExportCsv = () => {
+    if (!report) return;
+    exportToCsv(
+      `attendance-report-${fromDate}-to-${toDate}`,
+      ['Date', 'Student', 'Class', 'Section', 'Roll', 'Status', 'Remark'],
+      report.rows.map((row) => [
+        row.date,
+        row.student_name,
+        row.class_name,
+        row.section_name,
+        row.roll_no != null ? String(row.roll_no) : '',
+        row.status_label,
+        row.remark ?? '',
+      ]),
+    );
+  };
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Attendance Report"
-        // description="Review attendance records by date range, class, and section."
-      />
-
-      <div className="grid gap-4 rounded-lg border bg-card p-4 sm:grid-cols-2 lg:grid-cols-5">
-        <FormField label="From" htmlFor="from_date">
-          <Input
-            id="from_date"
-            type="date"
-            value={fromDate}
-            onChange={(e) => {
-              setFromDate(e.target.value);
-              setSubmitted(false);
-            }}
+    <ModuleReportPack
+      title="Attendance Report"
+      description="Review attendance records by date range, class, and section."
+      printTitle="Attendance Report"
+      printSubtitle={printSubtitle}
+      onPrint={printReport}
+      onExportCsv={handleExportCsv}
+      exportDisabled={!report || report.rows.length === 0}
+      sessionLabel={activeSession?.session}
+      onApply={() => setSubmitted(true)}
+      applyDisabled={submitted && isLoading}
+      submitted={submitted}
+      hasData={Boolean(report)}
+      isLoading={isLoading}
+      loadingMessage="Loading report..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={Boolean(report && report.rows.length === 0)}
+      emptyTitle="No records found"
+      emptyDescription="Try a different date range or mark attendance for this period."
+      summary={
+        report ? (
+          <ReportSummaryGrid
+            items={[
+              { label: 'Records', value: report.total_records },
+              { label: 'Present', value: report.present, tone: 'success' },
+              { label: 'Absent', value: report.absent, tone: 'destructive' },
+              { label: 'Late', value: report.late, tone: 'warning' },
+              { label: 'Half day', value: report.half_day },
+              { label: 'Holiday', value: report.holiday },
+            ]}
           />
-        </FormField>
-        <FormField label="To" htmlFor="to_date">
-          <Input
-            id="to_date"
-            type="date"
-            value={toDate}
-            onChange={(e) => {
-              setToDate(e.target.value);
-              setSubmitted(false);
-            }}
-          />
-        </FormField>
-        <FormField label="Class" htmlFor="report_class">
-          <Select
-            id="report_class"
-            options={classOptions}
-            value={classId ? String(classId) : ''}
-            onChange={(e) => {
-              setClassId(e.target.value ? Number(e.target.value) : 0);
-              setSubmitted(false);
-            }}
-          />
-        </FormField>
-        <FormField label="Section" htmlFor="report_section">
-          <Select
-            id="report_section"
-            options={sectionOptions}
-            value={sectionId ? String(sectionId) : ''}
-            onChange={(e) => {
-              setSectionId(e.target.value ? Number(e.target.value) : 0);
-              setSubmitted(false);
-            }}
-          />
-        </FormField>
-        <div className="flex items-end">
-          <Button className="w-full" onClick={() => setSubmitted(true)}>
-            Apply filters
-          </Button>
-        </div>
-      </div>
-
-      {submitted && isLoading && <LoadingState message="Loading report..." />}
-
-      {submitted && isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load report'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {submitted && !isLoading && !isError && report && (
+        ) : undefined
+      }
+      filters={
         <>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            <SummaryPill label="Records" value={report.total_records} />
-            <SummaryPill label="Present" value={report.present} />
-            <SummaryPill label="Absent" value={report.absent} />
-            <SummaryPill label="Late" value={report.late} />
-            <SummaryPill label="Half day" value={report.half_day} />
-            <SummaryPill label="Holiday" value={report.holiday} />
-          </div>
-
-          {report.rows.length === 0 ? (
-            <EmptyState
-              title="No records found"
-              description="Try a different date range or mark attendance for this period."
+          <FormField label="From" htmlFor="from_date">
+            <Input
+              id="from_date"
+              type="date"
+              value={fromDate}
+              onChange={(e) => {
+                setFromDate(e.target.value);
+                setSubmitted(false);
+              }}
             />
-          ) : (
-            <AttendanceReportTable rows={report.rows} />
-          )}
+          </FormField>
+          <FormField label="To" htmlFor="to_date">
+            <Input
+              id="to_date"
+              type="date"
+              value={toDate}
+              onChange={(e) => {
+                setToDate(e.target.value);
+                setSubmitted(false);
+              }}
+            />
+          </FormField>
+          <FormField label="Class" htmlFor="report_class">
+            <Select
+              id="report_class"
+              options={classOptions}
+              value={classId ? String(classId) : ''}
+              onChange={(e) => {
+                setClassId(e.target.value ? Number(e.target.value) : 0);
+                setSubmitted(false);
+              }}
+            />
+          </FormField>
+          <FormField label="Section" htmlFor="report_section">
+            <Select
+              id="report_section"
+              options={sectionOptions}
+              value={sectionId ? String(sectionId) : ''}
+              onChange={(e) => {
+                setSectionId(e.target.value ? Number(e.target.value) : 0);
+                setSubmitted(false);
+              }}
+            />
+          </FormField>
         </>
-      )}
-    </div>
+      }
+    >
+      {report && report.rows.length > 0 && <AttendanceReportTable rows={report.rows} />}
+    </ModuleReportPack>
   );
 }

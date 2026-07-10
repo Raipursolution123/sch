@@ -20,6 +20,8 @@ urlpatterns = [
     path("auth/token/refresh/", CustomTokenRefreshView.as_view(), name="token_refresh"),
     # settings
     path("settings/", include("apps.settings.urls")),
+    # attendance
+    path("attendance/", include("apps.attendance.urls")),
     # academics
     path("academics/", include("apps.academics.urls")),
     # staff

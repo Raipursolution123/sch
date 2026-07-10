@@ -5,17 +5,20 @@ import type {
   FeeOverview,
   KpiMetric,
   UpcomingExam,
+  WeeklyAttendancePoint,
 } from '@app-types/dashboard/dashboard';
+import type { AttendanceReportRow } from '@app-types/attendance/attendance';
 import type { Exam } from '@app-types/examinations/exam';
 import type { FeeAssignment } from '@app-types/fees/fee-assignment';
 import type { StaffListItem } from '@app-types/staff/staff';
 import type { StudentListItem } from '@app-types/students/student';
 import { ROUTES } from '@constants/index';
+import { attendanceService } from '@services/api/attendance.service';
 import { examsService } from '@services/api/exams.service';
 import { feeAssignmentsService } from '@services/api/fee-assignments.service';
 import { staffService } from '@services/api/staff.service';
 import { studentsService } from '@services/api/students.service';
-import { formatDate } from '@utils/format';
+import { formatAmount, formatDate } from '@utils/format';
 
 // TODO: Wire GET /api/v1/dashboard/overview/ when backend exposes a dedicated overview endpoint.
 // TODO: Wire attendance KPI + weekly chart when attendance reporting API is available.
@@ -44,7 +47,85 @@ function countOverdueFeeLines(assignments: FeeAssignment[]): number {
   return count;
 }
 
-function buildKpis(studentCount: number, staffCount: number): DashboardOverview['kpis'] {
+const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
+
+function daysAgoIso(days: number): string {
+  const date = new Date();
+  date.setDate(date.getDate() - days);
+  return date.toISOString().slice(0, 10);
+}
+
+function buildWeeklyAttendancePoints(rows: AttendanceReportRow[]): WeeklyAttendancePoint[] {
+  const byDate = new Map<string, { present: number; total: number }>();
+
+  for (const row of rows) {
+    const stats = byDate.get(row.date) ?? { present: 0, total: 0 };
+    stats.total += 1;
+    if (row.status_key === 'present' || row.status_key === 'late') {
+      stats.present += 1;
+    }
+    byDate.set(row.date, stats);
+  }
+
+  const points: WeeklyAttendancePoint[] = [];
+  for (let offset = 6; offset >= 0; offset -= 1) {
+    const date = new Date();
+    date.setDate(date.getDate() - offset);
+    const iso = date.toISOString().slice(0, 10);
+    const stats = byDate.get(iso);
+    points.push({
+      label: DAY_LABELS[date.getDay()],
+      rate: stats && stats.total > 0 ? Math.round((stats.present / stats.total) * 100) : 0,
+    });
+  }
+
+  return points;
+}
+
+function computeAttendanceRate(rows: AttendanceReportRow[]): number | null {
+  if (rows.length === 0) return null;
+  let present = 0;
+  let total = 0;
+  for (const row of rows) {
+    if (row.status_key === 'holiday') continue;
+    total += 1;
+    if (row.status_key === 'present' || row.status_key === 'late') present += 1;
+  }
+  return total > 0 ? Math.round((present / total) * 100) : null;
+}
+
+function buildFeeOverviewFromAssignments(assignments: FeeAssignment[]): FeeOverview {
+  const today = new Date().toISOString().slice(0, 10);
+  let pending = 0;
+  let overdue = 0;
+
+  for (const assignment of assignments) {
+    for (const line of assignment.lines) {
+      pending += line.amount;
+      if (line.due_date && line.due_date < today) {
+        overdue += line.amount;
+      }
+    }
+  }
+
+  const collected = 0;
+  const total = pending;
+  const collectionRate = total > 0 ? (collected / total) * 100 : 0;
+
+  return {
+    collected,
+    pending: Math.max(0, pending - overdue),
+    overdue,
+    collectionRate,
+  };
+}
+
+function buildKpis(
+  studentCount: number,
+  staffCount: number,
+  feeOverview: FeeOverview,
+  attendanceRate: number | null,
+): DashboardOverview['kpis'] {
   const students: KpiMetric = {
     label: 'Total Students',
     value: studentCount.toLocaleString(),
@@ -56,25 +137,19 @@ function buildKpis(studentCount: number, staffCount: number): DashboardOverview[
   };
 
   const fees: KpiMetric = {
-    label: 'Fees Collected',
-    value: '—',
+    label: 'Fees Assigned',
+    value:
+      feeOverview.collected + feeOverview.pending + feeOverview.overdue > 0
+        ? formatAmount(feeOverview.pending + feeOverview.overdue + feeOverview.collected)
+        : '—',
   };
 
   const attendance: KpiMetric = {
     label: 'Attendance Rate',
-    value: '—',
+    value: attendanceRate != null ? `${attendanceRate}%` : '—',
   };
 
   return { students, staff, fees, attendance };
-}
-
-function buildFeeOverview(): FeeOverview {
-  return {
-    collected: 0,
-    pending: 0,
-    overdue: 0,
-    collectionRate: 0,
-  };
 }
 
 function buildAttentionItems(
@@ -201,20 +276,30 @@ function buildUpcomingExams(exams: Exam[]): UpcomingExam[] {
 
 export const dashboardService = {
   async getOverview(sessionId?: number): Promise<DashboardOverview> {
-    const [studentsPage, staffPage, examsPage, feeAssignments] = await Promise.all([
-      studentsService.listPaginated(1, RECENT_STUDENTS_PAGE_SIZE),
-      staffService.list(1),
-      examsService.list(),
-      feeAssignmentsService.list(),
-    ]);
+    const weekFrom = daysAgoIso(6);
+    const weekTo = daysAgoIso(0);
+
+    const [studentsPage, staffPage, examsPage, feeAssignments, attendanceReport] =
+      await Promise.all([
+        studentsService.listPaginated(1, RECENT_STUDENTS_PAGE_SIZE),
+        staffService.list(1),
+        examsService.list(),
+        feeAssignmentsService.list(),
+        attendanceService.getReport({ from_date: weekFrom, to_date: weekTo }).catch(() => null),
+      ]);
 
     const sessionFeeAssignments = filterBySession(feeAssignments, sessionId);
     const sessionExams = filterBySession(examsPage.results, sessionId);
+    const feeOverview = buildFeeOverviewFromAssignments(sessionFeeAssignments);
+    const weeklyAttendance = attendanceReport
+      ? buildWeeklyAttendancePoints(attendanceReport.rows)
+      : [];
+    const attendanceRate = attendanceReport ? computeAttendanceRate(attendanceReport.rows) : null;
 
     return {
-      kpis: buildKpis(studentsPage.count, staffPage.count),
-      weeklyAttendance: [],
-      feeOverview: buildFeeOverview(),
+      kpis: buildKpis(studentsPage.count, staffPage.count, feeOverview, attendanceRate),
+      weeklyAttendance,
+      feeOverview,
       attentionItems: buildAttentionItems(sessionFeeAssignments, sessionExams, staffPage.results),
       recentActivity: buildRecentActivity(
         studentsPage.results,

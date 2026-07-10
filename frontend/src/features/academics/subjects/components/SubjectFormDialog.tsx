@@ -1,19 +1,10 @@
 import { useEffect, useMemo } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
-import { Switch } from '@components/ui/switch';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
 import { FormField } from '@components/forms/FormField';
+import { FormSelectField, FormSwitchField, FormTextField } from '@components/forms/fields';
 import type { Subject } from '@app-types/academics/subject';
 import type { SchoolClass } from '@app-types/academics/class';
 import { SUBJECT_TYPE_OPTIONS } from '@features/academics/subjects/constants/options';
@@ -39,6 +30,11 @@ const defaultValues: SubjectFormValues = {
   linked_class_ids: [],
   is_active: true,
 };
+
+const subjectTypeOptions = SUBJECT_TYPE_OPTIONS.map((option) => ({
+  value: option.value,
+  label: option.label,
+}));
 
 function toFormValues(subject: Subject): SubjectFormValues {
   return {
@@ -77,7 +73,6 @@ export function SubjectFormDialog({
 
   const {
     control,
-    register,
     handleSubmit,
     reset,
     watch,
@@ -95,7 +90,6 @@ export function SubjectFormDialog({
   }, [open, subject, reset]);
 
   const linkedClassIds = watch('linked_class_ids');
-  const isActive = watch('is_active');
 
   const toggleLinkedClass = (classId: number, checked: boolean) => {
     const next = checked
@@ -105,114 +99,77 @@ export function SubjectFormDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogHeader>
-            <DialogTitle>{isEdit ? 'Edit Subject' : 'Add Subject'}</DialogTitle>
-            <DialogDescription>
-              {isEdit
-                ? 'Update subject details and class applicability.'
-                : 'Create a subject for timetables, exams, and attendance.'}
-            </DialogDescription>
-          </DialogHeader>
+    <EntityFormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      isEdit={isEdit}
+      isLoading={isLoading}
+      title={isEdit ? 'Edit Subject' : 'Add Subject'}
+      description={
+        isEdit
+          ? 'Update subject details and class applicability.'
+          : 'Create a subject for timetables, exams, and attendance.'
+      }
+      submitLabel={isEdit ? 'Save changes' : 'Create subject'}
+      onSubmit={handleSubmit(onSubmit)}
+      scrollable
+    >
+      <FormErrorSummary errors={errors} />
 
-          <div className="max-h-[60vh] space-y-4 overflow-y-auto py-4 pr-1">
-            <FormField label="Subject name" htmlFor="name" error={errors.name?.message} required>
-              <Input
-                id="name"
-                placeholder="Mathematics"
-                {...register('name')}
-                aria-invalid={Boolean(errors.name)}
-              />
-            </FormField>
+      <FormTextField
+        control={control}
+        name="name"
+        label="Subject name"
+        placeholder="Mathematics"
+        required
+      />
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <FormField label="Code" htmlFor="code" error={errors.code?.message} required>
-                <Input
-                  id="code"
-                  placeholder="MATH"
-                  {...register('code')}
-                  aria-invalid={Boolean(errors.code)}
-                />
-              </FormField>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <FormTextField control={control} name="code" label="Code" placeholder="MATH" required />
+        <FormSelectField
+          control={control}
+          name="type"
+          label="Type"
+          options={subjectTypeOptions}
+          required
+        />
+      </div>
 
-              <FormField label="Type" htmlFor="type" error={errors.type?.message} required>
-                <Controller
-                  name="type"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      id="type"
-                      options={SUBJECT_TYPE_OPTIONS.map((o) => ({
-                        value: o.value,
-                        label: o.label,
-                      }))}
-                      value={field.value}
-                      onChange={(e) => field.onChange(e.target.value)}
-                      aria-invalid={Boolean(errors.type)}
-                    />
+      <FormField label="Linked classes" hint="Optional. Restrict this subject to specific classes.">
+        {selectableClasses.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No active classes available.</p>
+        ) : (
+          <div className="max-h-36 space-y-2 overflow-y-auto rounded-md border p-3">
+            {selectableClasses.map((schoolClass) => {
+              const checked = linkedClassIds.includes(schoolClass.id);
+              return (
+                <label
+                  key={schoolClass.id}
+                  className={cn(
+                    'flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-sm',
+                    checked && 'font-medium',
                   )}
-                />
-              </FormField>
-            </div>
-
-            <FormField
-              label="Linked classes"
-              hint="Optional. Restrict this subject to specific classes."
-            >
-              {selectableClasses.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No active classes available.</p>
-              ) : (
-                <div className="max-h-36 space-y-2 overflow-y-auto rounded-md border p-3">
-                  {selectableClasses.map((schoolClass) => {
-                    const checked = linkedClassIds.includes(schoolClass.id);
-                    return (
-                      <label
-                        key={schoolClass.id}
-                        className={cn(
-                          'flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-sm',
-                          checked && 'font-medium',
-                        )}
-                      >
-                        <input
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-input"
-                          checked={checked}
-                          onChange={(e) => toggleLinkedClass(schoolClass.id, e.target.checked)}
-                        />
-                        {schoolClass.class_name}
-                      </label>
-                    );
-                  })}
-                </div>
-              )}
-            </FormField>
-
-            <FormField label="Active" hint="Inactive subjects are hidden from assignment flows.">
-              <div className="flex items-center gap-2 pt-1">
-                <Switch
-                  id="is_active"
-                  checked={isActive}
-                  onCheckedChange={(checked) =>
-                    setValue('is_active', checked, { shouldDirty: true })
-                  }
-                />
-                <span className="text-sm text-muted-foreground">{isActive ? 'Yes' : 'No'}</span>
-              </div>
-            </FormField>
+                >
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-input"
+                    checked={checked}
+                    onChange={(e) => toggleLinkedClass(schoolClass.id, e.target.checked)}
+                  />
+                  {schoolClass.class_name}
+                </label>
+              );
+            })}
           </div>
+        )}
+      </FormField>
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={isLoading}>
-              {isEdit ? 'Save changes' : 'Create subject'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <FormSwitchField
+        control={control}
+        name="is_active"
+        label="Active"
+        hint="Inactive subjects are hidden from assignment flows."
+      />
+    </EntityFormDialog>
   );
 }

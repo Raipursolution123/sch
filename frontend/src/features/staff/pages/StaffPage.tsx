@@ -1,13 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { Pagination } from '@components/ui/Pagination';
-import { ListSearch } from '@components/forms/ListSearch';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { StaffTable } from '@features/staff/components/StaffTable';
 import { StaffFormDialog } from '@features/staff/components/StaffFormDialog';
 import type { StaffFormValues } from '@features/staff/schemas/staff-form.schema';
@@ -21,6 +15,7 @@ import {
 } from '@hooks/useStaff';
 import { matchesSearch } from '@utils/search';
 import { formatDepartmentDesignation } from '@utils/staff';
+import { ModuleListPack } from '@workflow-packs';
 
 export function StaffPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,7 +24,6 @@ export function StaffPage() {
   const { data: staffData, isLoading, isError, error, refetch } = useStaff(page);
   const staff = staffData?.results;
   const count = staffData?.count || 0;
-  const totalPages = Math.ceil(count / 10); // StandardResultsSetPagination PAGE_SIZE is 10
   const { data: departments = [] } = useStaffDepartments();
   const { data: designations = [] } = useStaffDesignations();
   const createMutation = useCreateStaff();
@@ -52,86 +46,56 @@ export function StaffPage() {
     );
   }, [staff, search]);
 
-  const canAdd = true;
-
   const handleSubmit = (values: StaffFormValues) => {
     createMutation.mutate(toStaffPayload(values), {
       onSuccess: () => setFormOpen(false),
     });
   };
 
+  const addStaffAction = (
+    <PermissionButton permission="staff.create" onClick={() => setFormOpen(true)} className="gap-1">
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Staff
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Staff"
-        description="Browse staff members and open profiles for details."
-        actions={
-          <Button onClick={() => setFormOpen(true)} className="gap-1">
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Staff
-          </Button>
-        }
-      />
-
-      {isLoading && <LoadingState message="Loading staff..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load staff'}
-          onRetry={() => void refetch()}
+    <ModuleListPack
+      title="Staff"
+      description="Browse staff members and open profiles for details."
+      actions={addStaffAction}
+      isLoading={isLoading}
+      loadingMessage="Loading staff..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && staff?.length === 0}
+      emptyTitle="No staff found"
+      emptyDescription="Add your first staff member to start building employee records."
+      emptyAction={addStaffAction}
+      footer={
+        <StaffFormDialog
+          open={formOpen}
+          onOpenChange={setFormOpen}
+          departments={departments}
+          designations={designations}
+          suggestedEmployeeId={suggestedEmployeeId}
+          onSubmit={handleSubmit}
+          isLoading={createMutation.isPending}
         />
-      )}
-
-      {!isLoading && !isError && staff?.length === 0 && (
-        <EmptyState
-          title="No staff found"
-          description="Add your first staff member to start building employee records."
-          action={
-            canAdd ? (
-              <Button onClick={() => setFormOpen(true)} className="gap-1">
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                Add Staff
-              </Button>
-            ) : undefined
-          }
-        />
-      )}
-
-      {!isLoading && !isError && staff && staff.length > 0 && (
-        <>
-          <ListSearch
-            value={search}
-            onChange={setSearch}
-            placeholder="Search by name, employee ID, department..."
-          />
-          {filteredStaff.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No staff match your search.</p>
-          ) : (
-            <>
-              <StaffTable staff={filteredStaff} />
-              {totalPages > 1 && (
-                <div className="mt-4 flex justify-center">
-                  <Pagination
-                    currentPage={page}
-                    totalPages={totalPages}
-                    onPageChange={(p) => setSearchParams({ page: p.toString() })}
-                  />
-                </div>
-              )}
-            </>
-          )}
-        </>
-      )}
-
-      <StaffFormDialog
-        open={formOpen}
-        onOpenChange={setFormOpen}
-        departments={departments}
-        designations={designations}
-        suggestedEmployeeId={suggestedEmployeeId}
-        onSubmit={handleSubmit}
-        isLoading={createMutation.isPending}
+      }
+    >
+      <StaffTable
+        staff={filteredStaff}
+        searchValue={search}
+        onSearchChange={setSearch}
+        pagination={{
+          page,
+          pageSize: 10,
+          totalCount: count,
+          onPageChange: (p) => setSearchParams({ page: p.toString() }),
+        }}
       />
-    </div>
+    </ModuleListPack>
   );
 }

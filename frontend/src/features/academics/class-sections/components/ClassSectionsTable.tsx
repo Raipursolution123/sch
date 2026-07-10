@@ -1,12 +1,14 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import type { ClassSection } from '@app-types/academics/class-section';
+import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { formatDate } from '@utils/format';
 
 interface ClassSectionsTableProps {
   classSections: ClassSection[];
+  pagination: DataTablePaginationConfig;
   onEdit: (classSection: ClassSection) => void;
   onDelete: (classSection: ClassSection) => void;
 }
@@ -47,25 +49,33 @@ const columns: DataTableColumn<ClassSection>[] = [
   },
 ];
 
-export function ClassSectionsTable({ classSections, onEdit, onDelete }: ClassSectionsTableProps) {
+export function ClassSectionsTable({
+  classSections,
+  pagination,
+  onEdit,
+  onDelete,
+}: ClassSectionsTableProps) {
   return (
     <DataTable
       data={classSections}
       columns={columns}
       getRowKey={(classSection) => classSection.id}
+      pagination={pagination}
       actions={(classSection) => {
         const isActive = classSection.is_active === 'yes';
         return (
           <>
-            <Button
+            <PermissionButton
+              permission="academics.manage"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(classSection)}
               aria-label={`Edit ${classSection.class_name} ${classSection.section_name}`}
             >
               <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="academics.manage"
               variant="ghost"
               size="sm"
               disabled={isActive}
@@ -74,7 +84,7 @@ export function ClassSectionsTable({ classSections, onEdit, onDelete }: ClassSec
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </PermissionButton>
           </>
         );
       }}

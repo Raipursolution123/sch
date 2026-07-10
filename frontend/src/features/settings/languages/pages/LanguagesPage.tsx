@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { LanguageFormDialog } from '@features/settings/languages/components/LanguageFormDialog';
 import { LanguagesTable } from '@features/settings/languages/components/LanguagesTable';
 import type { LanguageFormValues } from '@features/settings/languages/schemas/language.schema';
@@ -17,6 +13,7 @@ import {
 } from '@hooks/useLanguages';
 import type { Language } from '@app-types/settings/language';
 import type { ActiveFlag } from '@app-types/settings/session';
+import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
 
@@ -59,86 +56,78 @@ export function LanguagesPage() {
 
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
+  const addLanguageAction = (
+    <PermissionButton
+      permission="settings.manage"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Language
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Languages"
-        description="Manage supported languages and locale codes for the application."
-        actions={
-          <Button onClick={() => setDialogMode('create')} className="gap-1">
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Language
-          </Button>
-        }
-      />
+    <ModuleListPack
+      title="Languages"
+      description="Manage supported languages and locale codes for the application."
+      actions={addLanguageAction}
+      isLoading={isLoading}
+      loadingMessage="Loading languages..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && languages?.length === 0}
+      emptyTitle="No languages configured"
+      emptyDescription="Add your first language to enable multilingual support."
+      emptyAction={addLanguageAction}
+      footer={
+        <>
+          <LanguageFormDialog
+            open={dialogMode !== null}
+            onOpenChange={(open) => {
+              if (!open) closeFormDialog();
+            }}
+            language={dialogMode === 'edit' ? selectedLanguage : null}
+            onSubmit={handleFormSubmit}
+            isLoading={isFormLoading}
+          />
 
-      {isLoading && <LoadingState message="Loading languages..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load languages'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {!isLoading && !isError && languages?.length === 0 && (
-        <EmptyState
-          title="No languages configured"
-          description="Add your first language to enable multilingual support."
-          action={
-            <Button onClick={() => setDialogMode('create')} className="gap-1">
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              Add Language
-            </Button>
-          }
-        />
-      )}
-
-      {!isLoading && !isError && languages && languages.length > 0 && (
-        <LanguagesTable
-          languages={languages}
-          totalCount={totalCount}
-          page={page}
-          onPageChange={setPage}
-          onEdit={(language) => {
-            setSelectedLanguage(language);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
-      )}
-
-      <LanguageFormDialog
-        open={dialogMode !== null}
-        onOpenChange={(open) => {
-          if (!open) closeFormDialog();
+          <ConfirmDialog
+            open={Boolean(deleteTarget)}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete language?"
+            description={
+              deleteTarget
+                ? `Permanently delete "${deleteTarget.language}" (${deleteTarget.short_code}-${deleteTarget.country_code})? This cannot be undone.`
+                : ''
+            }
+            confirmLabel="Delete"
+            destructive
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, {
+                onSuccess: () => setDeleteTarget(null),
+              });
+            }}
+            isLoading={deleteMutation.isPending}
+          />
+        </>
+      }
+    >
+      <LanguagesTable
+        languages={languages ?? []}
+        totalCount={totalCount}
+        page={page}
+        onPageChange={setPage}
+        onEdit={(language) => {
+          setSelectedLanguage(language);
+          setDialogMode('edit');
         }}
-        language={dialogMode === 'edit' ? selectedLanguage : null}
-        onSubmit={handleFormSubmit}
-        isLoading={isFormLoading}
+        onDelete={setDeleteTarget}
       />
-
-      <ConfirmDialog
-        open={Boolean(deleteTarget)}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-        title="Delete language?"
-        description={
-          deleteTarget
-            ? `Permanently delete "${deleteTarget.language}" (${deleteTarget.short_code}-${deleteTarget.country_code})? This cannot be undone.`
-            : ''
-        }
-        confirmLabel="Delete"
-        destructive
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, {
-            onSuccess: () => setDeleteTarget(null),
-          });
-        }}
-        isLoading={deleteMutation.isPending}
-      />
-    </div>
+    </ModuleListPack>
   );
 }

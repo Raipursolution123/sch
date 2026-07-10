@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { PageHeader } from '@components/layout/PageHeader';
-import { EmptyState } from '@components/feedback/EmptyState';
-import { LoadingState } from '@components/feedback/LoadingState';
-import { ErrorState } from '@components/feedback/ErrorState';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { FeeTypeFormDialog } from '@features/fees/fee-types/components/FeeTypeFormDialog';
 import { FeeTypesTable } from '@features/fees/fee-types/components/FeeTypesTable';
 import type { FeeTypeFormValues } from '@features/fees/fee-types/schemas/fee-type.schema';
@@ -18,6 +14,7 @@ import {
 } from '@hooks/useFeeTypes';
 import type { FeeType } from '@app-types/fees/fee-type';
 import type { ActiveFlag } from '@app-types/settings/session';
+import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
 
@@ -59,78 +56,71 @@ export function FeeTypesPage() {
 
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
+  const addFeeTypeAction = (
+    <PermissionButton
+      permission="fees.manage"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Fee Type
+    </PermissionButton>
+  );
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Fee Types"
-        // description="Define fee types and categories used when building fee packages."
-        actions={
-          <Button onClick={() => setDialogMode('create')} className="gap-1">
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Fee Type
-          </Button>
-        }
-      />
+    <ModuleListPack
+      title="Fee Types"
+      actions={addFeeTypeAction}
+      isLoading={isLoading}
+      loadingMessage="Loading fee types..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && feeTypes?.length === 0}
+      emptyTitle="No fee types configured"
+      emptyDescription="Add your first fee type to start building fee structures."
+      emptyAction={addFeeTypeAction}
+      footer={
+        <>
+          <FeeTypeFormDialog
+            open={dialogMode !== null}
+            onOpenChange={(open) => {
+              if (!open) closeFormDialog();
+            }}
+            categories={categories}
+            feeType={dialogMode === 'edit' ? selectedFeeType : null}
+            onSubmit={handleFormSubmit}
+            isLoading={isFormLoading}
+          />
 
-      {isLoading && <LoadingState message="Loading fee types..." />}
-
-      {isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load fee types'}
-          onRetry={() => void refetch()}
-        />
-      )}
-
-      {!isLoading && !isError && feeTypes?.length === 0 && (
-        <EmptyState
-          title="No fee types configured"
-          description="Add your first fee type to start building fee structures."
-          action={
-            <Button onClick={() => setDialogMode('create')} className="gap-1">
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              Add Fee Type
-            </Button>
-          }
-        />
-      )}
-
-      {!isLoading && !isError && feeTypes && feeTypes.length > 0 && (
-        <FeeTypesTable
-          feeTypes={feeTypes}
-          onEdit={(feeType) => {
-            setSelectedFeeType(feeType);
-            setDialogMode('edit');
-          }}
-          onDelete={setDeleteTarget}
-        />
-      )}
-
-      <FeeTypeFormDialog
-        open={dialogMode !== null}
-        onOpenChange={(open) => {
-          if (!open) closeFormDialog();
+          <ConfirmDialog
+            open={deleteTarget !== null}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete fee type"
+            description={
+              deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''
+            }
+            confirmLabel="Delete"
+            destructive
+            isLoading={deleteMutation.isPending}
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
+            }}
+          />
+        </>
+      }
+    >
+      <FeeTypesTable
+        feeTypes={feeTypes ?? []}
+        onEdit={(feeType) => {
+          setSelectedFeeType(feeType);
+          setDialogMode('edit');
         }}
-        categories={categories}
-        feeType={dialogMode === 'edit' ? selectedFeeType : null}
-        onSubmit={handleFormSubmit}
-        isLoading={isFormLoading}
+        onDelete={setDeleteTarget}
       />
-
-      <ConfirmDialog
-        open={deleteTarget !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-        title="Delete fee type"
-        description={deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ''}
-        confirmLabel="Delete"
-        destructive
-        isLoading={deleteMutation.isPending}
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
-        }}
-      />
-    </div>
+    </ModuleListPack>
   );
 }
