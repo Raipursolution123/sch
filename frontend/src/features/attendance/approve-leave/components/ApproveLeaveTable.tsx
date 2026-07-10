@@ -29,7 +29,7 @@ export function ApproveLeaveTable({ onEdit }: ApproveLeaveTableProps) {
     }
   };
 
-  const leaves: ApproveLeave[] = (data as any)?.results || [];
+  const leaves: ApproveLeave[] = data?.results || [];
 
   if (isLoading) {
     return (
@@ -115,7 +115,7 @@ export function ApproveLeaveTable({ onEdit }: ApproveLeaveTableProps) {
           variant="outline"
           size="sm"
           onClick={() => setPage((p) => Math.max(1, p - 1))}
-          disabled={!(data as any)?.previous}
+          disabled={!data?.previous}
         >
           Previous
         </Button>
@@ -124,7 +124,7 @@ export function ApproveLeaveTable({ onEdit }: ApproveLeaveTableProps) {
           variant="outline"
           size="sm"
           onClick={() => setPage((p) => p + 1)}
-          disabled={!(data as any)?.next}
+          disabled={!data?.next}
         >
           Next
         </Button>

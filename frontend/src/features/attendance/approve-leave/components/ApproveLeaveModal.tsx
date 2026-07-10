@@ -55,6 +55,7 @@ export function ApproveLeaveModal({ isOpen, onClose, leave }: ApproveLeaveModalP
     }
   }, [leave, reset]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     if (isEditing && leave) {
       updateMutation.mutate(
