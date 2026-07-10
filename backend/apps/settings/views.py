@@ -56,23 +56,25 @@ class LanguagesListCreateView(APIView):
             pass
 
         languages_data = []
-        for l in paginated_qs or languages_qs:
+        for language in paginated_qs or languages_qs:
             languages_data.append(
                 {
-                    "id": l.id,
-                    "language": l.language,
-                    "short_code": l.short_code,
-                    "country_code": l.country_code,
-                    "is_rtl": l.is_rtl,
-                    "is_active": l.is_active,
-                    "is_deleted": l.is_deleted,
+                    "id": language.id,
+                    "language": language.language,
+                    "short_code": language.short_code,
+                    "country_code": language.country_code,
+                    "is_rtl": language.is_rtl,
+                    "is_active": language.is_active,
+                    "is_deleted": language.is_deleted,
                     "created_at": (
-                        l.created_at.strftime("%Y-%m-%d %H:%M:%S")
-                        if l.created_at
+                        language.created_at.strftime("%Y-%m-%d %H:%M:%S")
+                        if language.created_at
                         else None
                     ),
                     "updated_at": (
-                        l.updated_at.strftime("%Y-%m-%d") if l.updated_at else None
+                        language.updated_at.strftime("%Y-%m-%d")
+                        if language.updated_at
+                        else None
                     ),
                 }
             )
