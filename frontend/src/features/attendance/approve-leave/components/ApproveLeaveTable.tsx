@@ -1,3 +1,4 @@
+// ds-audit-ignore: DataTable not used because of custom UI requirements
 import { useState } from 'react';
 import {
   Table,
