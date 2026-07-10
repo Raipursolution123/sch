@@ -70,7 +70,7 @@ export function ClassesTable({ classes, pagination, onEdit, onDelete }: ClassesT
         return (
           <>
             <PermissionButton
-              permission="academics.manage"
+              permission="classes.edit"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(schoolClass)}
@@ -79,12 +79,12 @@ export function ClassesTable({ classes, pagination, onEdit, onDelete }: ClassesT
               <Pencil className="h-4 w-4" />
             </PermissionButton>
             <PermissionButton
-              permission="academics.manage"
+              permission="classes.delete"
               variant="ghost"
               size="sm"
-              disabled={isActive}
+              disabled={!isActive}
               onClick={() => onDelete(schoolClass)}
-              aria-label={`Delete ${schoolClass.class_name}`}
+              aria-label={`Deactivate ${schoolClass.class_name}`}
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />

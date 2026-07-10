@@ -6,7 +6,6 @@ from apps.academics.domain.session_exceptions import (
     SessionInUseError,
     SessionLastError,
     SessionNotFoundError,
-    SessionValidationError,
 )
 from apps.academics.domain.session_validators import (
     ensure_unique_session_name,

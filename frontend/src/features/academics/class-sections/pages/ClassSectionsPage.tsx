@@ -52,15 +52,17 @@ export function ClassSectionsPage() {
   };
 
   const handleFormSubmit = (values: ClassSectionFormValues) => {
-    const payload = toPayload(values);
     if (dialogMode === 'edit' && selectedClassSection) {
       updateMutation.mutate(
-        { id: selectedClassSection.id, payload },
+        {
+          id: selectedClassSection.id,
+          payload: { is_active: (values.is_active ? 'yes' : 'no') as ActiveFlag },
+        },
         { onSuccess: closeFormDialog },
       );
       return;
     }
-    createMutation.mutate(payload, { onSuccess: closeFormDialog });
+    createMutation.mutate(toPayload(values), { onSuccess: closeFormDialog });
   };
 
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
@@ -69,7 +71,7 @@ export function ClassSectionsPage() {
 
   const addClassSectionAction = (
     <PermissionButton
-      permission="academics.manage"
+      permission="classes.create"
       onClick={() => setDialogMode('create')}
       className="gap-1"
       disabled={!canCreate}
@@ -120,13 +122,13 @@ export function ClassSectionsPage() {
             onOpenChange={(open) => {
               if (!open) setDeleteTarget(null);
             }}
-            title="Delete class section?"
+            title="Deactivate class section?"
             description={
               deleteTarget
-                ? `Permanently delete "${deleteTarget.class_name} — ${deleteTarget.section_name}"? This cannot be undone.`
+                ? `Deactivate "${deleteTarget.class_name} — ${deleteTarget.section_name}"? It can be reactivated later.`
                 : ''
             }
-            confirmLabel="Delete"
+            confirmLabel="Deactivate"
             destructive
             onConfirm={() => {
               if (!deleteTarget) return;

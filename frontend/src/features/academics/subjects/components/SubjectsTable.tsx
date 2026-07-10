@@ -73,10 +73,11 @@ export function SubjectsTable({ subjects, pagination, onEdit, onDelete }: Subjec
       getRowKey={(subject) => subject.id}
       pagination={pagination}
       actions={(subject) => {
+        const isActive = subject.is_active === 'yes';
         return (
           <>
             <PermissionButton
-              permission="academics.manage"
+              permission="subjects.edit"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(subject)}
@@ -85,11 +86,12 @@ export function SubjectsTable({ subjects, pagination, onEdit, onDelete }: Subjec
               <Pencil className="h-4 w-4" />
             </PermissionButton>
             <PermissionButton
-              permission="academics.manage"
+              permission="subjects.delete"
               variant="ghost"
               size="sm"
+              disabled={!isActive}
               onClick={() => onDelete(subject)}
-              aria-label={`Delete ${subject.name}`}
+              aria-label={`Deactivate ${subject.name}`}
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />

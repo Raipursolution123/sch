@@ -27,6 +27,14 @@ export const API_ENDPOINTS = {
     classSectionDetail: (id: number) => `/academics/class-sections/${id}/`,
     subjects: '/academics/subjects/',
     subjectDetail: (id: number) => `/academics/subjects/${id}/`,
+    subjectGroups: '/academics/subject-groups/',
+    subjectGroupDetail: (id: number) => `/academics/subject-groups/${id}/`,
+    subjectGroupSubjects: (id: number) => `/academics/subject-groups/${id}/subjects/`,
+    subjectGroupClassSections: (id: number) =>
+      `/academics/subject-groups/${id}/class-sections/`,
+    timetable: '/academics/timetable/',
+    timetableSubjectOptions: '/academics/timetable/subject-options/',
+    timetableDetail: (id: number) => `/academics/timetable/${id}/`,
   },
   students: {
     list: '/students/',

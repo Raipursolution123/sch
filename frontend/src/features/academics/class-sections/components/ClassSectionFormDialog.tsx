@@ -127,7 +127,7 @@ export function ClassSectionFormDialog({
       title={isEdit ? 'Edit Class Section' : 'Add Class Section'}
       description={
         isEdit
-          ? 'Update the class–section link used for enrollment and timetables.'
+          ? 'Update the active status of this class–section link.'
           : 'Link an active class with an active section to create a teachable group.'
       }
       submitLabel={isEdit ? 'Save changes' : 'Create link'}
@@ -154,7 +154,7 @@ export function ClassSectionFormDialog({
               options={classOptions}
               value={field.value ? String(field.value) : ''}
               onChange={(e) => field.onChange(Number(e.target.value))}
-              disabled={!hasOptions}
+              disabled={!hasOptions || isEdit}
               aria-invalid={Boolean(errors.class_id)}
             />
           )}
@@ -172,7 +172,7 @@ export function ClassSectionFormDialog({
               options={sectionOptions}
               value={field.value ? String(field.value) : ''}
               onChange={(e) => field.onChange(Number(e.target.value))}
-              disabled={!hasOptions}
+              disabled={!hasOptions || isEdit}
               aria-invalid={Boolean(errors.section_id)}
             />
           )}

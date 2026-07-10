@@ -1,40 +1,55 @@
 from django.urls import path
 
-from apps.academics import views
+from apps.academics.api.views.class_ import ClassDetailView, ClassListCreateView
+from apps.academics.api.views.class_section import (
+    ClassAssignedSectionsView,
+    ClassSectionBulkAssignView,
+    ClassSectionDetailView,
+    ClassSectionListCreateView,
+)
+from apps.academics.api.views.section import SectionDetailView, SectionListCreateView
 from apps.academics.api.views.session import (
     SessionActivateView,
     SessionActiveView,
     SessionDetailView,
     SessionListCreateView,
 )
+from apps.academics.api.views.subject import SubjectDetailView, SubjectListCreateView
+from apps.academics.api.views.subject_group import (
+    SubjectGroupDetailView,
+    SubjectGroupListCreateView,
+    SubjectGroupSyncClassSectionsView,
+    SubjectGroupSyncSubjectsView,
+)
+from apps.academics.api.views.timetable import (
+    TimetableDetailView,
+    TimetableListCreateView,
+    TimetableSubjectOptionsView,
+)
 
 urlpatterns = [
-    path("classes/", views.ClassesListCreateView.as_view(), name="classes_list_create"),
-    path("classes/<int:pk>/", views.ClassesDetailView.as_view(), name="classes_detail"),
-    path(
-        "sections/", views.SectionsListCreateView.as_view(), name="sections_list_create"
-    ),
-    path(
-        "sections/<int:pk>/", views.SectionsDetailView.as_view(), name="sections_detail"
-    ),
+    path("classes/", ClassListCreateView.as_view(), name="classes_list_create"),
+    path("classes/<int:pk>/", ClassDetailView.as_view(), name="classes_detail"),
+    path("sections/", SectionListCreateView.as_view(), name="sections_list_create"),
+    path("sections/<int:pk>/", SectionDetailView.as_view(), name="sections_detail"),
     path(
         "class-sections/",
-        views.ClassSectionsListView.as_view(),
+        ClassSectionListCreateView.as_view(),
         name="class_sections_list",
     ),
     path(
         "class-sections/assign/",
-        views.ClassSectionsBulkAssignView.as_view(),
+        ClassSectionBulkAssignView.as_view(),
         name="class_sections_bulk_assign",
     ),
     path(
         "classes/<int:class_id>/sections/",
-        views.ClassAssignedSectionsView.as_view(),
+        ClassAssignedSectionsView.as_view(),
         name="class_assigned_sections",
     ),
     path(
         "class-sections/<int:pk>/",
-        views.ClassSectionsDetailView.as_view(),
+        ClassSectionDetailView.as_view(),
         name="class_sections_detail",
     ),
     path("sessions/active/", SessionActiveView.as_view(), name="sessions_active"),
@@ -45,10 +60,33 @@ urlpatterns = [
         SessionActivateView.as_view(),
         name="sessions_activate",
     ),
+    path("subjects/", SubjectListCreateView.as_view(), name="subjects_list_create"),
+    path("subjects/<int:pk>/", SubjectDetailView.as_view(), name="subjects_detail"),
     path(
-        "subjects/", views.SubjectsListCreateView.as_view(), name="subjects_list_create"
+        "subject-groups/",
+        SubjectGroupListCreateView.as_view(),
+        name="subject_groups_list_create",
     ),
     path(
-        "subjects/<int:pk>/", views.SubjectsDetailView.as_view(), name="subjects_detail"
+        "subject-groups/<int:pk>/",
+        SubjectGroupDetailView.as_view(),
+        name="subject_groups_detail",
     ),
+    path(
+        "subject-groups/<int:pk>/subjects/",
+        SubjectGroupSyncSubjectsView.as_view(),
+        name="subject_groups_sync_subjects",
+    ),
+    path(
+        "subject-groups/<int:pk>/class-sections/",
+        SubjectGroupSyncClassSectionsView.as_view(),
+        name="subject_groups_sync_class_sections",
+    ),
+    path(
+        "timetable/subject-options/",
+        TimetableSubjectOptionsView.as_view(),
+        name="timetable_subject_options",
+    ),
+    path("timetable/", TimetableListCreateView.as_view(), name="timetable_list_create"),
+    path("timetable/<int:pk>/", TimetableDetailView.as_view(), name="timetable_detail"),
 ]

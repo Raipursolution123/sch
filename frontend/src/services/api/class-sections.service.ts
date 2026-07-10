@@ -147,12 +147,8 @@ export const classSectionsService = {
     if (USE_MOCK) {
       const index = mockClassSections.findIndex((cs) => cs.id === id);
       if (index === -1) throw new Error('Class section not found');
-      await validateReferences(payload.class_id, payload.section_id);
-      assertUniquePair(payload.class_id, payload.section_id, id);
       const updated: ClassSectionRecord = {
         ...mockClassSections[index],
-        class_id: payload.class_id,
-        section_id: payload.section_id,
         is_active: payload.is_active,
         updated_at: new Date().toISOString().slice(0, 10),
       };
@@ -160,7 +156,6 @@ export const classSectionsService = {
       const [enriched] = await enrich([updated]);
       return delay(enriched);
     }
-    // TODO: Wire when backend exposes PATCH /api/v1/academics/class-sections/{id}/
     const { data } = await apiClient.patch<ApiSuccessResponse<ClassSection>>(
       API_ENDPOINTS.academics.classSectionDetail(id),
       payload,
@@ -172,13 +167,13 @@ export const classSectionsService = {
     if (USE_MOCK) {
       const target = mockClassSections.find((cs) => cs.id === id);
       if (!target) throw new Error('Class section not found');
-      if (target.is_active === 'yes') {
-        throw new Error('Cannot delete an active class section. Deactivate it first.');
-      }
-      mockClassSections = mockClassSections.filter((cs) => cs.id !== id);
+      mockClassSections = mockClassSections.map((cs) =>
+        cs.id === id
+          ? { ...cs, is_active: 'no' as const, updated_at: new Date().toISOString().slice(0, 10) }
+          : cs,
+      );
       return delay(undefined);
     }
-    // TODO: Wire when backend exposes DELETE /api/v1/academics/class-sections/{id}/
     await apiClient.delete(API_ENDPOINTS.academics.classSectionDetail(id));
   },
 };

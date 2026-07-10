@@ -61,7 +61,7 @@ export function ClassesPage() {
 
   const addClassAction = (
     <PermissionButton
-      permission="academics.manage"
+      permission="classes.create"
       onClick={() => setDialogMode('create')}
       className="gap-1"
     >
@@ -102,13 +102,13 @@ export function ClassesPage() {
             onOpenChange={(open) => {
               if (!open) setDeleteTarget(null);
             }}
-            title="Delete class?"
+            title="Deactivate class?"
             description={
               deleteTarget
-                ? `Permanently delete "${deleteTarget.class_name}"? This cannot be undone.`
+                ? `Deactivate "${deleteTarget.class_name}"? It will be hidden from enrollment until reactivated.`
                 : ''
             }
-            confirmLabel="Delete"
+            confirmLabel="Deactivate"
             destructive
             onConfirm={() => {
               if (!deleteTarget) return;
