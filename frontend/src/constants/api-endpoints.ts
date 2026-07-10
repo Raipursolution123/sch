@@ -33,6 +33,7 @@ export const API_ENDPOINTS = {
     subjectGroupClassSections: (id: number) =>
       `/academics/subject-groups/${id}/class-sections/`,
     timetable: '/academics/timetable/',
+    timetableTeacher: '/academics/timetable/teacher/',
     timetableSubjectOptions: '/academics/timetable/subject-options/',
     timetableDetail: (id: number) => `/academics/timetable/${id}/`,
     classTeachers: '/academics/class-teachers/',

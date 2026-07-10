@@ -60,6 +60,12 @@ def list_periods(session_id: int, class_id: int, section_id: int):
     ).order_by("day", "start_time", "id")
 
 
+def list_periods_for_staff(session_id: int, staff_id: int):
+    return SubjectTimetable.objects.filter(
+        session_id=session_id, staff_id=staff_id
+    ).order_by("day", "start_time", "id")
+
+
 def get_active_class_section(class_id: int, section_id: int) -> ClassSections | None:
     return ClassSections.objects.filter(
         class_id=class_id, section_id=section_id, is_active="yes"

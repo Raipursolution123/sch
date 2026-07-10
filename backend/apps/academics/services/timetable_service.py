@@ -30,6 +30,16 @@ class TimetableService:
         qs = selectors.list_periods(session_id, class_id, section_id)
         return [selectors.period_to_dict(p) for p in qs]
 
+    def list_staff_periods(
+        self, session_id: int, staff_id: int
+    ) -> list[dict[str, Any]]:
+        session_id = self._require_int(session_id, "session_id")
+        staff_id = self._require_int(staff_id, "staff_id")
+        self._ensure_session_exists(session_id)
+        self._ensure_active_staff(staff_id)
+        qs = selectors.list_periods_for_staff(session_id, staff_id)
+        return [selectors.period_to_dict(p) for p in qs]
+
     def get_period(self, period_id: int) -> dict[str, Any]:
         period = selectors.get_period_by_id(period_id)
         if period is None:

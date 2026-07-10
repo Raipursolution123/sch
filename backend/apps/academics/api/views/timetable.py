@@ -102,6 +102,29 @@ class TimetableSubjectOptionsView(APIView):
             return _error_response(exc)
 
 
+class TeacherTimetableView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "teachers_time_table"
+
+    def get(self, request):
+        session_id = _parse_int_param(request, "session_id")
+        staff_id = _parse_int_param(request, "staff_id")
+        if session_id is None or staff_id is None:
+            return APIResponse.error(
+                message="session_id and staff_id are required.",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            periods = TimetableService().list_staff_periods(session_id, staff_id)
+            return APIResponse.success(
+                data={"periods": periods},
+                message="Teacher timetable retrieved successfully.",
+            )
+        except TimetableError as exc:
+            return _error_response(exc)
+
+
 class TimetableDetailView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE

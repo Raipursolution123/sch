@@ -72,6 +72,16 @@ export const queryKeys = {
           sectionId ?? 'all',
         ] as const,
     },
+    teacherTimetable: {
+      all: ['academics', 'teacher-timetable'] as const,
+      grid: (sessionId?: number, staffId?: number) =>
+        [
+          ...queryKeys.academics.teacherTimetable.all,
+          'grid',
+          sessionId ?? 'all',
+          staffId ?? 'all',
+        ] as const,
+    },
     classTeachers: {
       all: ['academics', 'class-teachers'] as const,
       list: (sessionId?: number, classId?: number, sectionId?: number) =>

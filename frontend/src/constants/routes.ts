@@ -16,6 +16,7 @@ export const ROUTES = {
     subjects: '/academics/subjects',
     subjectGroups: '/academics/subject-groups',
     timetable: '/academics/timetable',
+    teacherTimetable: '/academics/teacher-timetable',
     classTeacher: '/academics/class-teacher',
     promote: '/academics/promote',
   },

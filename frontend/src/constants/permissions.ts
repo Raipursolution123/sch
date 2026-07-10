@@ -32,6 +32,7 @@ const ALL_PERMISSIONS: Permission[] = [
   'timetable.create',
   'timetable.edit',
   'timetable.delete',
+  'teacher_timetable.view',
   'class_teacher.view',
   'class_teacher.create',
   'class_teacher.edit',

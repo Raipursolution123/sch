@@ -98,6 +98,12 @@ export const ADMIN_NAV: NavItem[] = [
         permissionKeys: ['class_timetable'],
       },
       {
+        id: 'academics-teacher-timetable',
+        label: 'Teacher Timetable',
+        path: ROUTES.academics.teacherTimetable,
+        permissionKeys: ['teachers_time_table'],
+      },
+      {
         id: 'academics-class-teacher',
         label: 'Class Teacher',
         path: ROUTES.academics.classTeacher,

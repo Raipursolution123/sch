@@ -193,17 +193,19 @@ export function TimetablePage() {
       isError={isError}
       error={error}
       onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && gridReady && (periods?.length ?? 0) === 0}
-      emptyTitle="No periods scheduled"
-      emptyDescription="Add periods to build the weekly timetable for this class section."
       prerequisiteHint={
         !gridReady ? (
           <p className="text-sm text-muted-foreground">
             Select session, class, and section to view the timetable.
           </p>
         ) : subjectOptions.length === 0 ? (
+          <p className="text-sm text-amber-700 dark:text-amber-400">
+            Assign subjects to a subject group for this class-section before scheduling
+            periods.
+          </p>
+        ) : (periods?.length ?? 0) === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Assign subjects to a subject group for this class-section before scheduling periods.
+            Use the + button on a day column to add the first period.
           </p>
         ) : undefined
       }
@@ -252,6 +254,7 @@ export function TimetablePage() {
         <TimetableGrid
           periods={periods ?? []}
           onAdd={(day) => {
+            if (subjectOptions.length === 0) return;
             setDefaultDay(day);
             setSelectedPeriod(null);
             setDialogMode('create');

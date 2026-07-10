@@ -26,6 +26,7 @@ from apps.academics.api.views.subject_group import (
     SubjectGroupSyncSubjectsView,
 )
 from apps.academics.api.views.timetable import (
+    TeacherTimetableView,
     TimetableDetailView,
     TimetableListCreateView,
     TimetableSubjectOptionsView,
@@ -85,6 +86,11 @@ urlpatterns = [
         "subject-groups/<int:pk>/class-sections/",
         SubjectGroupSyncClassSectionsView.as_view(),
         name="subject_groups_sync_class_sections",
+    ),
+    path(
+        "timetable/teacher/",
+        TeacherTimetableView.as_view(),
+        name="timetable_teacher",
     ),
     path(
         "timetable/subject-options/",

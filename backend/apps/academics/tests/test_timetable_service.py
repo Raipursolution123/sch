@@ -107,6 +107,33 @@ def test_create_period_success(service):
     tt_model.objects.create.assert_called_once()
 
 
+def test_list_staff_periods_requires_staff_id(service):
+    with pytest.raises(TimetableValidationError):
+        service.list_staff_periods(1, None)
+
+
+def test_list_staff_periods_success(service):
+    period = MagicMock()
+    with patch("apps.academics.services.timetable_service.Sessions") as sessions_model:
+        with patch("apps.academics.services.timetable_service.Staff") as staff_model:
+            sessions_model.objects.filter.return_value.exists.return_value = True
+            staff_model.objects.filter.return_value.first.return_value = MagicMock(
+                is_active=1
+            )
+            with patch(
+                "apps.academics.services.timetable_service.selectors."
+                "list_periods_for_staff",
+                return_value=[period],
+            ):
+                with patch(
+                    "apps.academics.services.timetable_service.selectors."
+                    "period_to_dict",
+                    return_value={"id": 1, "day": "Monday"},
+                ):
+                    result = service.list_staff_periods(3, 7)
+    assert result == [{"id": 1, "day": "Monday"}]
+
+
 def test_create_rejects_invalid_day(service):
     with pytest.raises(TimetableValidationError):
         service._normalize_day("Funday")
