@@ -5,6 +5,7 @@ from apps.accounts.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     is_superadmin = serializers.SerializerMethodField()
+    role = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -24,6 +25,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_superadmin(self, obj: User) -> bool:
         return obj.is_superadmin
+
+    def get_role(self, obj: User) -> str:
+        return obj.role_slug
 
 
 class LoginSerializer(serializers.Serializer):
