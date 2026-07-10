@@ -10,7 +10,7 @@ class IsSuperAdmin(BasePermission):
         user = request.user
         if not user or not getattr(user, "is_authenticated", False):
             return False
-        return Role.objects.filter(slug=user.role, is_superadmin=1).exists()
+        return user.is_superadmin
 
 
 class HasRolePermission(BasePermission):
@@ -24,11 +24,11 @@ class HasRolePermission(BasePermission):
         if not user or not getattr(user, "is_authenticated", False):
             return False
 
-        if Role.objects.filter(slug=user.role, is_superadmin=1).exists():
+        if user.is_superadmin:
             return True
 
         required_roles = getattr(view, "required_role_slugs", None)
         if not required_roles:
             return True
 
-        return user.role in set(required_roles)
+        return user.role_slug in set(required_roles)

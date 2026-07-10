@@ -37,6 +37,15 @@ def format_student_name(first, middle, last):
         parts.append(last)
     return " ".join([p.strip() for p in parts if p and p.strip()])
 
+def get_active_session():
+    from apps.settings.models.sch_settings import SchSettings
+    sch_setting = SchSettings.objects.first()
+    if sch_setting and sch_setting.session_id:
+        session = Sessions.objects.filter(id=sch_setting.session_id).first()
+        if session:
+            return session
+    return Sessions.objects.filter(is_active='yes').first()
+
 class ParentsTestView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
@@ -64,7 +73,7 @@ class StudentsListView(APIView):
         student_ids = [s.id for s in current_page]
         
         # Get active session
-        active_session = Sessions.objects.filter(is_active='yes').first()
+        active_session = get_active_session()
         
         # Get student sessions mapping
         student_sessions = []
@@ -120,7 +129,7 @@ class StudentsListView(APIView):
         if Students.objects.filter(admission_no__iexact=admission_no).exists():
             return APIResponse.error(message='A student with this admission number already exists.')
             
-        active_session = Sessions.objects.filter(is_active='yes').first()
+        active_session = get_active_session()
         if not active_session:
             return APIResponse.error(message='No active academic session found.')
             
@@ -196,6 +205,20 @@ class StudentsListView(APIView):
                     guardian_pic=""
                 )
                 
+                # Generate student user record in users table
+                User.objects.create(
+                    user_id=student.id,
+                    username=f"std{student.id}",
+                    password=hash_legacy_password(student.mobileno if student.mobileno else "123456"),
+                    childs="",
+                    role="student",
+                    lang_id=4,
+                    currency_id=1,
+                    is_active="yes",
+                    created_at=timezone.now(),
+                    verification_code=""
+                )
+
                 # Generate parent_id by creating a User record for the parent
                 parent_user = User.objects.create(
                     user_id=student.id,
@@ -238,7 +261,7 @@ class StudentDetailView(APIView):
         if not student:
             return APIResponse.error(message='Student not found.')
             
-        active_session = Sessions.objects.filter(is_active='yes').first()
+        active_session = get_active_session()
         
         class_id, section_id = None, None
         class_name, section_name = None, None
@@ -271,7 +294,7 @@ class StudentDetailView(APIView):
         if admission_no and Students.objects.exclude(id=pk).filter(admission_no__iexact=admission_no).exists():
             return APIResponse.error(message='A student with this admission number already exists.')
             
-        active_session = Sessions.objects.filter(is_active='yes').first()
+        active_session = get_active_session()
         if not active_session:
             return APIResponse.error(message='No active academic session found.')
             
@@ -465,7 +488,7 @@ class StudentFeesView(APIView):
         if not student:
             return APIResponse.error(message='Student not found.', status_code=404)
             
-        active_session = Sessions.objects.filter(is_active='yes').first()
+        active_session = get_active_session()
         if not active_session:
             return APIResponse.error(message='No active session found.')
             
@@ -483,9 +506,10 @@ class StudentFeesView(APIView):
         payments = []
         
         with connection.cursor() as cursor:
-            # Get fee groups assigned to this class and session
+            # Get fee groups assigned to this student via student_fees_master
             cursor.execute("""
                 SELECT 
+                    sfm.id as student_fees_master_id,
                     fsg.id as assignment_id, 
                     fg.name as fee_group_name,
                     fgft.id as line_id,
@@ -494,12 +518,13 @@ class StudentFeesView(APIView):
                     ft.type as feetype_name,
                     fgft.amount,
                     fgft.due_date
-                FROM fee_session_groups fsg
+                FROM student_fees_master sfm
+                JOIN fee_session_groups fsg ON sfm.fee_session_group_id = fsg.id
                 JOIN fee_groups fg ON fsg.fee_groups_id = fg.id
                 JOIN fee_groups_feetype fgft ON fgft.fee_session_group_id = fsg.id
                 JOIN feetype ft ON fgft.feetype_id = ft.id
-                WHERE fsg.class_id = %s AND fsg.is_active = 'yes'
-            """, [ss.class_id])
+                WHERE sfm.student_session_id = %s AND sfm.is_active = 'yes'
+            """, [ss.id])
             
             assigned_lines = cursor.fetchall()
             
@@ -509,70 +534,72 @@ class StudentFeesView(APIView):
             else:
                 assigned_lines = []
             
-            # Query payments from student_fees
+            # Query payments from student_fees_deposite linked via student_fees_master
             cursor.execute("""
                 SELECT
-                    id,
-                    date,
-                    amount,
-                    payment_mode,
-                    description,
-                    feemaster_id
-                FROM student_fees
-                WHERE student_session_id = %s
-                ORDER BY date DESC
+                    sfd.id as deposite_id,
+                    sfd.student_fees_master_id,
+                    sfd.fee_groups_feetype_id,
+                    sfd.amount_detail,
+                    fgft.feetype_id,
+                    ft.type as feetype_name,
+                    ft.code as feetype_code
+                FROM student_fees_deposite sfd
+                JOIN student_fees_master sfm ON sfd.student_fees_master_id = sfm.id
+                JOIN fee_groups_feetype fgft ON sfd.fee_groups_feetype_id = fgft.id
+                JOIN feetype ft ON fgft.feetype_id = ft.id
+                WHERE sfm.student_session_id = %s AND sfd.is_active = 'yes'
             """, [ss.id])
             
-            payment_rows = cursor.fetchall()
-            if payment_rows:
-                p_cols = [col[0] for col in cursor.description]
-                payment_rows = [dict(zip(p_cols, row)) for row in payment_rows]
-                
-                # Fetch feetype names for payments via feemasters table
-                if payment_rows:
-                    cursor.execute("""
-                        SELECT fm.id as feemaster_id, ft.id as feetype_id, ft.type as feetype_name 
-                        FROM feemasters fm
-                        JOIN feetype ft ON fm.feetype_id = ft.id
-                    """)
-                    feetype_map = {r[0]: {'name': r[2], 'id': r[1]} for r in cursor.fetchall()}
+            deposite_rows = cursor.fetchall()
+            if deposite_rows:
+                import json
+                for row in deposite_rows:
+                    dep_id, master_id, fgft_id, amount_detail_str, feetype_id, feetype_name, feetype_code = row
+                    if not amount_detail_str:
+                        continue
+                    try:
+                        detail_dict = json.loads(amount_detail_str)
+                    except Exception:
+                        continue
                     
-                    for p in payment_rows:
-                        ft_info = feetype_map.get(p['feemaster_id'])
-                        feetype_name = ft_info['name'] if ft_info else '—'
-                        feetype_id = ft_info['id'] if ft_info else None
-                        p['feetype_name'] = feetype_name
-                        p['feetype_id'] = feetype_id
-                        
+                    for trans_id, detail in detail_dict.items():
+                        unique_payment_id = f"dep-{dep_id}-{trans_id}"
                         payments.append({
-                            'id': p['id'],
-                            'date': safe_date_str(p['date']),
-                            'amount': float(p['amount'] or 0),
-                            'payment_mode': p['payment_mode'],
-                            'description': p['description'],
+                            'id': unique_payment_id,
+                            'deposite_id': dep_id,
+                            'trans_id': trans_id,
+                            'date': safe_date_str(detail.get('date')),
+                            'amount': float(detail.get('amount') or 0),
+                            'amount_discount': float(detail.get('amount_discount') or 0),
+                            'amount_fine': float(detail.get('amount_fine') or 0),
+                            'payment_mode': detail.get('payment_mode', 'Cash'),
+                            'description': detail.get('description', ''),
                             'feetype_name': feetype_name,
-                            'feetype_id': feetype_id
+                            'feetype_id': feetype_id,
+                            'feetype_code': feetype_code,
+                            'fgft_id': fgft_id
                         })
-                        
-            print(f"DEBUG: Retrieved {len(payments)} payments for student_session {ss.id}")
             
-        # Group lines by feetype_id to distribute payments
-        feetype_paid_map = {}
+            print(f"DEBUG: Retrieved {len(payments)} payments from student_fees_deposite for student_session {ss.id}")
+            
+        # Group lines by fee_groups_feetype_id to distribute payments
+        fgft_paid_map = {}
         for p in payments:
-            fid = p.get('feetype_id')
+            fid = p.get('fgft_id')
             if fid:
-                feetype_paid_map[fid] = feetype_paid_map.get(fid, 0) + p['amount']
+                fgft_paid_map[fid] = fgft_paid_map.get(fid, 0) + p['amount']
 
         for line in assigned_lines:
             amount = float(line['amount'] or 0)
-            fid = line['feetype_id']
+            fgft_id = line['line_id']
             
             # Distribute available paid amount to this line
-            available_paid = feetype_paid_map.get(fid, 0)
+            available_paid = fgft_paid_map.get(fgft_id, 0)
             amount_paid = min(amount, available_paid)
             
             # Subtract the used amount from the pool
-            feetype_paid_map[fid] = max(0, available_paid - amount_paid)
+            fgft_paid_map[fgft_id] = max(0, available_paid - amount_paid)
             
             balance = max(0, amount - amount_paid)
             
@@ -633,7 +660,7 @@ class StudentFeesView(APIView):
         if not student:
             return APIResponse.error(message='Student not found.', status_code=404)
             
-        active_session = Sessions.objects.filter(is_active='yes').first()
+        active_session = get_active_session()
         if not active_session:
             return APIResponse.error(message='No active session found.')
             
@@ -643,64 +670,142 @@ class StudentFeesView(APIView):
             
         try:
             with transaction.atomic():
-                # 1. We must find or create a Feemaster for this feetype_id to satisfy the FK constraint
-                from apps.fees.models.feemasters import Feemasters
-                fm = Feemasters.objects.filter(
-                    feetype_id=feetype_id,
-                    session_id=active_session.id
+                # 1. Resolve fee_groups_feetype_id (fgft_id) and fee_session_group_id (fsg_id)
+                # First check student's explicitly assigned fees
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        SELECT fgft.id, fgft.fee_session_group_id, sfm.id
+                        FROM student_fees_master sfm
+                        JOIN fee_session_groups fsg ON sfm.fee_session_group_id = fsg.id
+                        JOIN fee_groups_feetype fgft ON fgft.fee_session_group_id = fsg.id
+                        WHERE sfm.student_session_id = %s AND fgft.feetype_id = %s AND sfm.is_active = 'yes'
+                        LIMIT 1
+                    """, [ss.id, feetype_id])
+                    res = cursor.fetchone()
+
+                if res:
+                    fgft_id, fsg_id, sfm_id = res
+                    from apps.students.models.student_fees_master import StudentFeesMaster
+                    sfm = StudentFeesMaster.objects.get(id=sfm_id)
+                else:
+                    # Fallback to class level
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT fgft.id, fgft.fee_session_group_id
+                            FROM fee_groups_feetype fgft
+                            JOIN fee_session_groups fsg ON fgft.fee_session_group_id = fsg.id
+                            WHERE fsg.class_id = %s AND fgft.feetype_id = %s AND fsg.is_active = 'yes'
+                            LIMIT 1
+                        """, [ss.class_id, feetype_id])
+                        res_class = cursor.fetchone()
+                    
+                    if not res_class:
+                        return APIResponse.error(message='Fee group configuration not found for this class and feetype.')
+                    
+                    fgft_id, fsg_id = res_class
+                    
+                    from apps.students.models.student_fees_master import StudentFeesMaster
+                    sfm, created = StudentFeesMaster.objects.get_or_create(
+                        student_session_id=ss.id,
+                        fee_session_group_id=fsg_id,
+                        defaults={
+                            'is_system': 0,
+                            'amount': 0.0,
+                            'is_active': 'yes',
+                            'created_at': timezone.now()
+                        }
+                    )
+                
+                # 3. Create or Update StudentFeesDeposite
+                from apps.students.models.student_fees_deposite import StudentFeesDeposite
+                import json
+                
+                sfd = StudentFeesDeposite.objects.filter(
+                    student_fees_master_id=sfm.id,
+                    fee_groups_feetype_id=fgft_id
                 ).first()
                 
-                if not fm:
-                    # Create a dummy one if it doesn't exist
-                    fm = Feemasters.objects.create(
-                        feetype_id=feetype_id,
-                        session_id=active_session.id,
-                        class_id=ss.class_id,
-                        amount=amount,
+                new_payment = {
+                    "amount": float(amount),
+                    "amount_discount": 0.0,
+                    "amount_fine": 0.0,
+                    "date": safe_date_str(payment_date),
+                    "description": description,
+                    "collected_by": "Super Admin(9000)",
+                    "payment_mode": payment_mode.lower(),
+                    "received_by": "1"
+                }
+                
+                if sfd:
+                    try:
+                        detail_dict = json.loads(sfd.amount_detail) if sfd.amount_detail else {}
+                    except Exception:
+                        detail_dict = {}
+                        
+                    existing_keys = [int(k) for k in detail_dict.keys() if k.isdigit()]
+                    next_key = str(max(existing_keys) + 1) if existing_keys else "1"
+                    
+                    new_payment["inv_no"] = int(next_key)
+                    detail_dict[next_key] = new_payment
+                    sfd.amount_detail = json.dumps(detail_dict)
+                    sfd.save()
+                else:
+                    new_payment["inv_no"] = 1
+                    detail_dict = {"1": new_payment}
+                    sfd = StudentFeesDeposite.objects.create(
+                        student_fees_master_id=sfm.id,
+                        fee_groups_feetype_id=fgft_id,
+                        student_transport_fee_id=None,
+                        amount_detail=json.dumps(detail_dict),
+                        file="",
                         is_active='yes',
                         created_at=timezone.now()
                     )
                     
-                print(f"DEBUG: Created/Found fm with id={fm.id}")
-
-                with connection.cursor() as cursor:
-                    # Insert payment into student_fees table using the feemaster_id
-                    cursor.execute("""
-                        INSERT INTO student_fees (
-                            student_session_id, feemaster_id, amount, amount_discount, 
-                            amount_fine, description, date, payment_mode, is_active, created_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    """, [
-                        ss.id,
-                        fm.id,
-                        amount,
-                        0.0,
-                        0.0,
-                        description,
-                        payment_date,
-                        payment_mode,
-                        'yes',
-                        timezone.now()
-                    ])
-                    
             return APIResponse.success(message='Payment recorded successfully.')
         except Exception as e:
             logger.error(f"Error recording payment: {e}")
-            fm_id = fm.id if 'fm' in locals() and fm else None
-            return APIResponse.error(message=f'Failed to record payment (fm_id={fm_id}): {str(e)}')
+            return APIResponse.error(message=f'Failed to record payment: {str(e)}')
 
     def delete(self, request, pk):
         feetype_id = request.query_params.get('feetype_id')
         payment_id = request.query_params.get('payment_id')
         
         if payment_id:
-            try:
-                with connection.cursor() as cursor:
-                    cursor.execute("DELETE FROM student_fees WHERE id = %s", [payment_id])
-                return APIResponse.success(message='Payment deleted successfully.')
-            except Exception as e:
-                logger.error(f"Error deleting payment: {e}")
-                return APIResponse.error(message=f'Failed to delete payment: {str(e)}')
+            if payment_id.startswith("dep-"):
+                parts = payment_id.split("-")
+                if len(parts) == 3:
+                    dep_id = int(parts[1])
+                    trans_id = parts[2]
+                    
+                    from apps.students.models.student_fees_deposite import StudentFeesDeposite
+                    import json
+                    try:
+                        with transaction.atomic():
+                            sfd = StudentFeesDeposite.objects.filter(id=dep_id).first()
+                            if sfd:
+                                detail_dict = json.loads(sfd.amount_detail) if sfd.amount_detail else {}
+                                if trans_id in detail_dict:
+                                    del detail_dict[trans_id]
+                                    if detail_dict:
+                                        sfd.amount_detail = json.dumps(detail_dict)
+                                        sfd.save()
+                                    else:
+                                        sfd.delete()
+                                    return APIResponse.success(message='Payment deleted successfully.')
+                            return APIResponse.error(message='Payment record not found.')
+                    except Exception as e:
+                        logger.error(f"Error deleting payment: {e}")
+                        return APIResponse.error(message=f'Failed to delete payment: {str(e)}')
+            else:
+                # Legacy direct ID fallback
+                try:
+                    with connection.cursor() as cursor:
+                        cursor.execute("DELETE FROM student_fees WHERE id = %s", [payment_id])
+                    return APIResponse.success(message='Payment deleted successfully.')
+                except Exception as e:
+                    logger.error(f"Error deleting payment: {e}")
+                    return APIResponse.error(message=f'Failed to delete payment: {str(e)}')
                 
         if not feetype_id:
             return APIResponse.error(message='Fee type ID or Payment ID is required for reverting.')
@@ -709,7 +814,7 @@ class StudentFeesView(APIView):
         if not student:
             return APIResponse.error(message='Student not found.', status_code=404)
             
-        active_session = Sessions.objects.filter(is_active='yes').first()
+        active_session = get_active_session()
         if not active_session:
             return APIResponse.error(message='No active session found.')
             
@@ -718,14 +823,16 @@ class StudentFeesView(APIView):
             return APIResponse.error(message='Student is not enrolled in a class for the active session.')
             
         try:
-            with connection.cursor() as cursor:
-                cursor.execute("""
-                    DELETE FROM student_fees 
-                    WHERE student_session_id = %s 
-                    AND feemaster_id IN (
-                        SELECT id FROM feemasters WHERE feetype_id = %s
-                    )
-                """, [ss.id, feetype_id])
+            with transaction.atomic():
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        DELETE FROM student_fees_deposite 
+                        WHERE student_fees_master_id IN (
+                            SELECT id FROM student_fees_master WHERE student_session_id = %s
+                        ) AND fee_groups_feetype_id IN (
+                            SELECT id FROM fee_groups_feetype WHERE feetype_id = %s
+                        )
+                    """, [ss.id, feetype_id])
                 
             return APIResponse.success(message='Payment reverted successfully.')
         except Exception as e:

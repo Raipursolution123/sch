@@ -919,6 +919,10 @@ class SessionActivateView(APIView):
                 session_obj.updated_at = datetime.date.today()
                 session_obj.save()
 
+                # Sync with sch_settings session_id
+                from apps.settings.models.sch_settings import SchSettings
+                SchSettings.objects.all().update(session_id=session_obj.id)
+
             logger.info(f"Session '{session_obj.session}' activated by user {(request.user.username if request.user.is_authenticated else 'Unknown')}.")
             return APIResponse.success(
                 data={

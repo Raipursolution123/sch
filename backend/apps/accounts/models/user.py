@@ -84,4 +84,15 @@ class User(models.Model):
 
     @property
     def role_slug(self):
+        if self.role == "staff":
+            from apps.accounts.models.role import StaffRole
+
+            staff_role = (
+                StaffRole.objects.filter(staff_id=self.user_id, is_active=1)
+                .select_related("role")
+                .first()
+            )
+            if staff_role and staff_role.role:
+                return staff_role.role.slug or staff_role.role.name or self.role
         return self.role
+
