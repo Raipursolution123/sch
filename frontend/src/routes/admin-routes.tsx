@@ -69,6 +69,12 @@ const TimetablePage = lazy(() =>
   })),
 );
 
+const ClassTeacherPage = lazy(() =>
+  import('@features/academics/class-teacher/pages/ClassTeacherPage').then((m) => ({
+    default: m.ClassTeacherPage,
+  })),
+);
+
 const StudentsPage = lazy(() =>
   import('@features/students/pages/StudentsPage').then((m) => ({
     default: m.StudentsPage,
@@ -164,6 +170,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'subjects', element: <SubjectsPage /> },
     { path: 'subject-groups', element: <SubjectGroupsPage /> },
     { path: 'timetable', element: <TimetablePage /> },
+    { path: 'class-teacher', element: <ClassTeacherPage /> },
   ]),
 
   {

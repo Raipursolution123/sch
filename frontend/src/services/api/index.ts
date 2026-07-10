@@ -10,6 +10,7 @@ export { classSectionsService } from './class-sections.service';
 export { subjectsService } from './subjects.service';
 export { subjectGroupsService } from './subject-groups.service';
 export { timetableService } from './timetable.service';
+export { classTeachersService } from './class-teachers.service';
 export { studentsService } from './students.service';
 export { staffService } from './staff.service';
 export { feeTypesService } from './fee-types.service';

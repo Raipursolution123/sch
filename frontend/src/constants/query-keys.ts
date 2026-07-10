@@ -72,6 +72,17 @@ export const queryKeys = {
           sectionId ?? 'all',
         ] as const,
     },
+    classTeachers: {
+      all: ['academics', 'class-teachers'] as const,
+      list: (sessionId?: number, classId?: number, sectionId?: number) =>
+        [
+          ...queryKeys.academics.classTeachers.all,
+          'list',
+          sessionId ?? 'all',
+          classId ?? 'all',
+          sectionId ?? 'all',
+        ] as const,
+    },
     sessions: {
       all: ['academics', 'sessions'] as const,
       list: (page: number) => [...queryKeys.academics.sessions.all, 'list', page] as const,

@@ -7,6 +7,10 @@ from apps.academics.api.views.class_section import (
     ClassSectionDetailView,
     ClassSectionListCreateView,
 )
+from apps.academics.api.views.class_teacher import (
+    ClassTeacherDetailView,
+    ClassTeacherListCreateView,
+)
 from apps.academics.api.views.section import SectionDetailView, SectionListCreateView
 from apps.academics.api.views.session import (
     SessionActivateView,
@@ -89,4 +93,14 @@ urlpatterns = [
     ),
     path("timetable/", TimetableListCreateView.as_view(), name="timetable_list_create"),
     path("timetable/<int:pk>/", TimetableDetailView.as_view(), name="timetable_detail"),
+    path(
+        "class-teachers/",
+        ClassTeacherListCreateView.as_view(),
+        name="class_teachers_list_create",
+    ),
+    path(
+        "class-teachers/<int:pk>/",
+        ClassTeacherDetailView.as_view(),
+        name="class_teachers_detail",
+    ),
 ]
