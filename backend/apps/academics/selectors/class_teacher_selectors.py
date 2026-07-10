@@ -1,6 +1,6 @@
 from typing import Any
 
-from apps.academics.models import ClassSections, Classes, ClassTeacher, Sections
+from apps.academics.models import Classes, ClassSections, ClassTeacher, Sections
 from apps.academics.models.sessions import Sessions
 from apps.academics.selectors import class_section_selectors as cs_sel
 from apps.staff.models import Staff
