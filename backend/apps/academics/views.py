@@ -1378,12 +1378,7 @@ class SubjectsListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
-        if not is_admin:
-            return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can create subjects.',
-                status_code=status.HTTP_403_FORBIDDEN,
-            )
+
 
         data = request.data
         name = data.get('name')
@@ -1459,9 +1454,7 @@ class SubjectsDetailView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return APIResponse.error(message='Authentication required.', status_code=status.HTTP_401_UNAUTHORIZED)
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
-        if not is_admin:
-            return APIResponse.error(message='Access denied.', status_code=status.HTTP_403_FORBIDDEN)
+
 
         subject_obj = self._get_subject(pk)
         if subject_obj is None:
@@ -1498,9 +1491,7 @@ class SubjectsDetailView(APIView):
         user_role = (request.user.role if request.user.is_authenticated else None)
         if not user_role:
             return APIResponse.error(message='Authentication required.', status_code=status.HTTP_401_UNAUTHORIZED)
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
-        if not is_admin:
-            return APIResponse.error(message='Access denied.', status_code=status.HTTP_403_FORBIDDEN)
+
 
         subject_obj = self._get_subject(pk)
         if subject_obj is None:
