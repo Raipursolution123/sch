@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormTextField } from '@components/forms/fields';
-import type { AcademicSession } from '@app-types/settings/session';
+import type { AcademicSession } from '@features/academics/sessions/types/session.types';
 import { currentIndianAcademicSession } from '@utils/session';
 import {
   sessionFormSchema,
   type SessionFormValues,
-} from '@features/settings/sessions/schemas/session.schema';
+} from '@features/academics/sessions/schemas/session.schema';
 
 interface SessionFormDialogProps {
   open: boolean;

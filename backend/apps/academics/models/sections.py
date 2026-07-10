@@ -6,7 +6,7 @@ class Sections(models.Model):
 
     id = models.AutoField(primary_key=True)
     section = models.CharField(max_length=60, blank=True, null=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 

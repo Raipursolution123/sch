@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   },
   settings: {
     sessions: '/academics/sessions/',
+    sessionActive: '/academics/sessions/active/',
     sessionDetail: (id: number) => `/academics/sessions/${id}/`,
     sessionActivate: (id: number) => `/academics/sessions/${id}/activate/`,
     general: '/settings/general/',

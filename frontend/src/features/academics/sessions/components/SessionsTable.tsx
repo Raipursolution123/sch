@@ -1,8 +1,9 @@
 import { Pencil, Trash2, Zap } from 'lucide-react';
-import { Button } from '@components/ui/button';
+import { Badge } from '@components/ui/badge';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
-import type { AcademicSession } from '@app-types/settings/session';
+import type { AcademicSession } from '@features/academics/sessions/types/session.types';
 import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { formatDate } from '@utils/format';
 
@@ -26,7 +27,16 @@ const columns: DataTableColumn<AcademicSession>[] = [
   {
     id: 'status',
     header: 'Status',
-    cell: (session) => <StatusBadge isActive={session.is_active} />,
+    cell: (session) => (
+      <div className="flex flex-wrap items-center gap-2">
+        <StatusBadge isActive={session.is_active} />
+        {session.is_current ? (
+          <Badge variant="secondary" className="font-normal">
+            Current
+          </Badge>
+        ) : null}
+      </div>
+    ),
   },
   {
     id: 'created',
@@ -54,35 +64,39 @@ export function SessionsTable({
       showDensityToggle
       pagination={pagination}
       actions={(session) => {
-        const isActive = session.is_active === 'yes';
+        const isCurrent = session.is_current;
         return (
           <>
-            <Button
+            <PermissionButton
+              permission="sessions.edit"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(session)}
               aria-label={`Edit ${session.session}`}
             >
               <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="sessions.edit"
               variant="ghost"
               size="sm"
-              disabled={isActive}
+              disabled={isCurrent}
               onClick={() => onActivate(session)}
               aria-label={`Activate ${session.session}`}
             >
               <Zap className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="sessions.delete"
               variant="ghost"
               size="sm"
+              disabled={isCurrent}
               onClick={() => onDelete(session)}
               aria-label={`Delete ${session.session}`}
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </PermissionButton>
           </>
         );
       }}

@@ -7,7 +7,7 @@ class ClassSections(models.Model):
     id = models.AutoField(primary_key=True)
     class_id = models.IntegerField(blank=True, null=True, db_index=True)
     section_id = models.IntegerField(blank=True, null=True, db_index=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 

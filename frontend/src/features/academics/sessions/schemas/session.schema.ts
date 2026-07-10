@@ -6,7 +6,7 @@ export const sessionFormSchema = z.object({
     .string()
     .trim()
     .min(1, 'Session name is required')
-    .refine(isValidSessionName, 'Use format YYYY-YY (e.g. 2026-27)'),
+    .refine(isValidSessionName, 'Use consecutive years in YYYY-YY format (e.g. 2026-27)'),
 });
 
 export type SessionFormValues = z.infer<typeof sessionFormSchema>;

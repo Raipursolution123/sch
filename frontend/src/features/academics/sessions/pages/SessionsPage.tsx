@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@components/ui/button';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
-import { SessionFormDialog } from '@features/settings/sessions/components/SessionFormDialog';
-import { SessionsTable } from '@features/settings/sessions/components/SessionsTable';
+import { SessionFormDialog } from '@features/academics/sessions/components/SessionFormDialog';
+import { SessionsTable } from '@features/academics/sessions/components/SessionsTable';
 import {
   useActivateSession,
   useCreateSession,
   useDeleteSession,
   useSessions,
   useUpdateSession,
-} from '@hooks/useSessions';
-import type { AcademicSession } from '@app-types/settings/session';
+} from '@features/academics/sessions/hooks/useSessions';
+import type { AcademicSession } from '@features/academics/sessions/types/session.types';
 import { ModuleListPack } from '@workflow-packs';
 
 type DialogMode = 'create' | 'edit' | null;
@@ -50,10 +50,14 @@ export function SessionsPage() {
   const isFormLoading = createMutation.isPending || updateMutation.isPending;
 
   const addSessionAction = (
-    <Button onClick={() => setDialogMode('create')} className="gap-1">
+    <PermissionButton
+      permission="sessions.create"
+      onClick={() => setDialogMode('create')}
+      className="gap-1"
+    >
       <Plus className="h-4 w-4" aria-hidden="true" />
       Add Session
-    </Button>
+    </PermissionButton>
   );
 
   return (
@@ -90,7 +94,7 @@ export function SessionsPage() {
             title="Activate academic session?"
             description={
               activateTarget
-                ? `Switch the active session to "${activateTarget.session}"? This affects all session-scoped operations.`
+                ? `Switch the active session to "${activateTarget.session}"? This updates school-wide session context.`
                 : ''
             }
             confirmLabel="Activate"

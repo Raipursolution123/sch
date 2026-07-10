@@ -6,7 +6,9 @@ class DailyAssignment(models.Model):
 
     id = models.AutoField(primary_key=True)
     student_session_id = models.IntegerField(blank=False, null=False, db_index=True)
-    subject_group_subject_id = models.IntegerField(blank=False, null=False, db_index=True)
+    subject_group_subject_id = models.IntegerField(
+        blank=False, null=False, db_index=True
+    )
     title = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     attachment = models.CharField(max_length=255, blank=True, null=True)

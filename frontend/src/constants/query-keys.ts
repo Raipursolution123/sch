@@ -46,6 +46,12 @@ export const queryKeys = {
       list: () => [...queryKeys.academics.subjects.all, 'list'] as const,
       detail: (id: number) => [...queryKeys.academics.subjects.all, 'detail', id] as const,
     },
+    sessions: {
+      all: ['academics', 'sessions'] as const,
+      list: (page: number) => [...queryKeys.academics.sessions.all, 'list', page] as const,
+      active: () => [...queryKeys.academics.sessions.all, 'active'] as const,
+      detail: (id: number) => [...queryKeys.academics.sessions.all, 'detail', id] as const,
+    },
   },
   students: {
     all: ['students'] as const,

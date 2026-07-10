@@ -29,7 +29,12 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
     'class_timetable',
     'assign_class_teacher',
     'promote_student',
+    'session_setting',
   ],
+  'sessions.view': ['session_setting'],
+  'sessions.create': ['session_setting'],
+  'sessions.edit': ['session_setting'],
+  'sessions.delete': ['session_setting'],
   'fees.manage': [
     'collect_fees',
     'fees_master',

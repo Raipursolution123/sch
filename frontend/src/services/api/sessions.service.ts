@@ -5,7 +5,7 @@ import type {
   AcademicSession,
   CreateSessionPayload,
   UpdateSessionPayload,
-} from '@app-types/settings/session';
+} from '@features/academics/sessions/types/session.types';
 import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
 export const sessionsService = {
@@ -18,8 +18,14 @@ export const sessionsService = {
   },
 
   getActive: async (): Promise<AcademicSession | null> => {
-    const { results: sessions } = await sessionsService.list(1);
-    return sessions.find((s) => s.is_active === 'yes') ?? null;
+    try {
+      const { data } = await apiClient.get<ApiSuccessResponse<AcademicSession>>(
+        API_ENDPOINTS.settings.sessionActive,
+      );
+      return data.data ?? null;
+    } catch {
+      return null;
+    }
   },
 
   create: async (payload: CreateSessionPayload): Promise<AcademicSession> => {

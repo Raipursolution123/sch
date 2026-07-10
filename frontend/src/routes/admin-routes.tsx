@@ -10,7 +10,7 @@ import {
 } from '@routes/module-routes';
 
 const SessionsPage = lazy(() =>
-  import('@features/settings/sessions/pages/SessionsPage').then((m) => ({
+  import('@features/academics/sessions/pages/SessionsPage').then((m) => ({
     default: m.SessionsPage,
   })),
 );

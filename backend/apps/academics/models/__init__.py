@@ -19,7 +19,9 @@ from apps.academics.models.subjects import Subjects
 from apps.academics.models.submit_assignment import SubmitAssignment
 from apps.academics.models.topic import Topic
 from apps.academics.models.video_tutorial import VideoTutorial
-from apps.academics.models.video_tutorial_class_sections import VideoTutorialClassSections
+from apps.academics.models.video_tutorial_class_sections import (
+    VideoTutorialClassSections,
+)
 
 __all__ = [
     "ClassSectionTimes",

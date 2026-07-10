@@ -2,6 +2,8 @@
 
 `db_current` is the **source of truth** for all business table schemas.
 
+**Implementation rules:** [legacy-analysis/database-contract.md](legacy-analysis/database-contract.md) — frozen schema, legacy DB as contract, no new business tables, app-layer configuration only.
+
 ## Reference documents
 
 | Document | Purpose |
