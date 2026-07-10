@@ -1004,12 +1004,7 @@ class ClassesListCreateView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
-        if not is_admin:
-            return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can create classes.',
-                status_code=status.HTTP_403_FORBIDDEN,
-            )
+
 
         data = request.data
         class_name = data.get('class_name')
@@ -1159,12 +1154,7 @@ class ClassesDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
-        if not is_admin:
-            return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can modify classes.',
-                status_code=status.HTTP_403_FORBIDDEN,
-            )
+
 
         class_obj = self._get_class(pk)
         if class_obj is None:
@@ -1304,12 +1294,7 @@ class ClassesDetailView(APIView):
                 message='Authentication required. Please login first.',
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        is_admin = getattr(request.user, 'is_superadmin', False) or (user_role and str(user_role).strip().lower() in ['super admin', 'admin', 'superadmin'])
-        if not is_admin:
-            return APIResponse.error(
-                message='Access denied. Only Super Admins or Admins can delete/deactivate classes.',
-                status_code=status.HTTP_403_FORBIDDEN,
-            )
+
 
         class_obj = self._get_class(pk)
         if class_obj is None:
@@ -1318,21 +1303,28 @@ class ClassesDetailView(APIView):
                 status_code=status.HTTP_404_NOT_FOUND,
             )
 
+        if class_obj.is_active == 'yes':
+            return APIResponse.error(
+                message="Cannot delete an active class. Deactivate it first.",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         active_mappings = ClassSections.objects.filter(class_id=class_obj.id, is_active='yes').exists()
         if active_mappings:
             return APIResponse.error(
-                message="Cannot deactivate class. It is currently assigned to one or more active sections.",
+                message="Cannot delete class. It is currently assigned to one or more active sections.",
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
         try:
-            class_obj.is_active = 'no'
-            class_obj.updated_at = datetime.date.today()
-            class_obj.save()
-            logger.info(f"Class ID {pk} deactivated by user {(request.user.username if request.user.is_authenticated else 'Unknown')}.")
-            return APIResponse.success(message='Class successfully deactivated.')
+            with transaction.atomic():
+                ClassSections.objects.filter(class_id=class_obj.id).delete()
+                class_obj.delete()
+                
+            logger.info(f"Class ID {pk} deleted by user {(request.user.username if request.user.is_authenticated else 'Unknown')}.")
+            return APIResponse.success(message='Class successfully deleted.')
         except Exception as e:
-            logger.error(f"Error deactivating class ID {pk}: {str(e)}")
+            logger.error(f"Error deleting class ID {pk}: {str(e)}")
             return APIResponse.error(
                 message=f"Database error: {str(e)}",
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
