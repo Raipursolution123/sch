@@ -57,7 +57,7 @@ export function MaintenanceTab({ settings, onSave, isSaving }: MaintenanceTabPro
           footer={
             <PermissionButton
               type="submit"
-              permission="settings.manage"
+              permission="general_settings.edit"
               isLoading={isSaving}
               disabled={!isDirty && !isSaving}
             >

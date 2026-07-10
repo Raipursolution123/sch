@@ -70,7 +70,7 @@ export function RegionalTab({ settings, onSave, isSaving }: RegionalTabProps) {
           footer={
             <PermissionButton
               type="submit"
-              permission="settings.manage"
+              permission="general_settings.edit"
               isLoading={isSaving}
               disabled={!isDirty && !isSaving}
             >

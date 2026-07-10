@@ -21,6 +21,8 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
     'roles',
     'user_status',
   ],
+  'general_settings.view': ['general_setting'],
+  'general_settings.edit': ['general_setting'],
   'academics.manage': [
     'class',
     'section',

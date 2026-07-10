@@ -11,6 +11,8 @@ export type Permission =
   | 'staff.edit'
   | 'staff.delete'
   | 'settings.manage'
+  | 'general_settings.view'
+  | 'general_settings.edit'
   | 'academics.manage'
   | 'sessions.view'
   | 'sessions.create'

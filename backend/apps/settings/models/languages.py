@@ -9,8 +9,8 @@ class Languages(models.Model):
     short_code = models.CharField(max_length=255)
     country_code = models.CharField(max_length=255)
     is_rtl = models.IntegerField()
-    is_deleted = models.CharField(max_length=10, default='yes')
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_deleted = models.CharField(max_length=10, default="yes")
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 
