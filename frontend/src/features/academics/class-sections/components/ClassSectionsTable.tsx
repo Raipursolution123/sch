@@ -78,9 +78,9 @@ export function ClassSectionsTable({
               permission="classes.delete"
               variant="ghost"
               size="sm"
-              disabled={isActive}
+              disabled={!isActive}
               onClick={() => onDelete(classSection)}
-              aria-label={`Delete section mapping ${classSection.class_name} - ${classSection.section_name}`}
+              aria-label={`Deactivate ${classSection.class_name} ${classSection.section_name}`}
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />

@@ -65,9 +65,9 @@ export function SectionsTable({ sections, pagination, onEdit, onDelete }: Sectio
               permission="sections.delete"
               variant="ghost"
               size="sm"
-              disabled={isActive}
+              disabled={!isActive}
               onClick={() => onDelete(section)}
-              aria-label={`Delete section ${section.section_name}`}
+              aria-label={`Deactivate section ${section.section_name}`}
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />

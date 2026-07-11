@@ -96,13 +96,13 @@ export function SectionsPage() {
             onOpenChange={(open) => {
               if (!open) setDeleteTarget(null);
             }}
-            title="Delete section?"
+            title="Deactivate section?"
             description={
               deleteTarget
-                ? `Delete section "${deleteTarget.section_name}" permanently? This action cannot be undone.`
+                ? `Deactivate section "${deleteTarget.section_name}"? It will be hidden from assignment until reactivated.`
                 : ''
             }
-            confirmLabel="Delete"
+            confirmLabel="Deactivate"
             destructive
             onConfirm={() => {
               if (!deleteTarget) return;
