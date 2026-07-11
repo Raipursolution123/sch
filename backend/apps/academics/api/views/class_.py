@@ -14,14 +14,14 @@ from apps.academics.selectors.class_selectors import (
 from apps.academics.services.class_service import ClassService
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
-
+from core.permissions.legacy_privilege import HasLegacyPrivilege
 
 MODULE = "academics"
 CATEGORY = "class"
 
 
 class ClassListCreateView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
@@ -56,7 +56,7 @@ class ClassListCreateView(APIView):
 
 
 class ClassDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 

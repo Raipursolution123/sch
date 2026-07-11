@@ -26,17 +26,16 @@ from apps.academics.selectors.session_selectors import (
 from apps.academics.services.session_service import SessionService
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
-
+from core.permissions.legacy_privilege import HasLegacyPrivilege
 
 logger = logging.getLogger(__name__)
-
 
 SESSION_MODULE = "system_settings"
 SESSION_CATEGORY = "session_setting"
 
 
 class SessionListCreateView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = SESSION_MODULE
     legacy_permission_category = SESSION_CATEGORY
 
@@ -93,7 +92,7 @@ class SessionActiveView(APIView):
 
 
 class SessionDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = SESSION_MODULE
     legacy_permission_category = SESSION_CATEGORY
 
@@ -134,7 +133,7 @@ class SessionDetailView(APIView):
 
 
 class SessionActivateView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = SESSION_MODULE
     legacy_permission_category = SESSION_CATEGORY
     legacy_permission_action = "can_edit"
