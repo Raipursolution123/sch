@@ -122,7 +122,8 @@ export const queryKeys = {
   },
   students: {
     all: ['students'] as const,
-    list: () => [...queryKeys.students.all, 'list'] as const,
+    list: (status: 'active' | 'disabled' | 'all' = 'active') =>
+      [...queryKeys.students.all, 'list', status] as const,
     detail: (id: number) => [...queryKeys.students.all, 'detail', id] as const,
     fees: (id: number) => [...queryKeys.students.all, 'fees', id] as const,
     suggestAdmissionNo: () => [...queryKeys.students.all, 'suggest-admission-no'] as const,

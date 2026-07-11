@@ -10,8 +10,15 @@ import { getApiErrorMessage } from '@utils/session';
 
 export function useStudents() {
   return useQuery({
-    queryKey: queryKeys.students.list(),
-    queryFn: studentsService.list,
+    queryKey: queryKeys.students.list('active'),
+    queryFn: () => studentsService.list('active'),
+  });
+}
+
+export function useDisabledStudents() {
+  return useQuery({
+    queryKey: queryKeys.students.list('disabled'),
+    queryFn: () => studentsService.list('disabled'),
   });
 }
 
@@ -78,5 +85,18 @@ export function useDisableStudent() {
       toast.success('Student disabled successfully');
     },
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to disable student')),
+  });
+}
+
+export function useEnableStudent() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => studentsService.enable(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.students.all });
+      toast.success('Student re-enabled successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to re-enable student')),
   });
 }

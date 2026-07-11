@@ -99,6 +99,12 @@ const StudentProfilePage = lazy(() =>
   })),
 );
 
+const DisabledStudentsPage = lazy(() =>
+  import('@features/students/pages/DisabledStudentsPage').then((m) => ({
+    default: m.DisabledStudentsPage,
+  })),
+);
+
 const StaffPage = lazy(() =>
   import('@features/staff/pages/StaffPage').then((m) => ({
     default: m.StaffPage,
@@ -192,6 +198,7 @@ export const adminRoutes: RouteObject[] = [
     element: <ModuleLayout />,
     children: [
       { index: true, element: <StudentsPage /> },
+      { path: 'disabled', element: <DisabledStudentsPage /> },
       { path: ':studentId', element: <StudentProfilePage /> },
       ...buildPlaceholderChildren('/students'),
     ],

@@ -275,6 +275,36 @@ class StudentService:
             "Student disabled id=%s reason_id=%s", student_id, reason.id
         )
 
+    def enable_student(self, student_id: int) -> None:
+        student = selectors.get_student_by_id(student_id)
+        if student is None:
+            raise StudentNotFoundError()
+
+        if student.is_active == "yes":
+            raise StudentValidationError("Student is already active.")
+
+        with transaction.atomic():
+            student.is_active = "yes"
+            student.dis_reason = 0
+            student.dis_note = ""
+            student.disable_at = None
+            student.updated_at = selectors.today_date()
+            student.save(
+                update_fields=[
+                    "is_active",
+                    "dis_reason",
+                    "dis_note",
+                    "disable_at",
+                    "updated_at",
+                ]
+            )
+
+            User.objects.filter(
+                user_id=student.id, role__in=["student", "parent"]
+            ).update(is_active="yes")
+
+        logger.info("Student re-enabled id=%s", student_id)
+
     def list_disable_reasons(self) -> list[dict[str, Any]]:
         return selectors.list_disable_reasons()
 

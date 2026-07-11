@@ -45,6 +45,7 @@ export const API_ENDPOINTS = {
     detail: (id: number) => `/students/${id}/`,
     fees: (id: number) => `/students/${id}/fees/`,
     disableReasons: '/students/disable-reasons/',
+    enable: (id: number) => `/students/${id}/enable/`,
   },
   staff: {
     list: '/staff/',

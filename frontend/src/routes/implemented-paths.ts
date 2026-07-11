@@ -9,6 +9,7 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.academics.classSections,
   ROUTES.academics.subjects,
   ROUTES.students.root,
+  ROUTES.students.disabled,
   ROUTES.staff.root,
   ROUTES.fees.feeTypes,
   ROUTES.fees.feeGroups,

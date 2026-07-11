@@ -14,20 +14,23 @@ import type {
 import { suggestAdmissionNumber } from '@utils/student';
 import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
+export type StudentListStatus = 'active' | 'disabled' | 'all';
+
 export const studentsService = {
   listPaginated: async (
     page = 1,
     pageSize = 20,
+    status: StudentListStatus = 'active',
   ): Promise<{ results: StudentListItem[]; count: number }> => {
     const { data } = await apiClient.get<BackendPayload>(
-      `${API_ENDPOINTS.students.list}?page=${page}&page_size=${pageSize}`,
+      `${API_ENDPOINTS.students.list}?page=${page}&page_size=${pageSize}&status=${status}`,
     );
     const results = extractList<StudentListItem>(data);
     return { results, count: extractCount(data, results.length) };
   },
 
-  list: async (): Promise<StudentListItem[]> => {
-    const { results } = await studentsService.listPaginated(1);
+  list: async (status: StudentListStatus = 'active'): Promise<StudentListItem[]> => {
+    const { results } = await studentsService.listPaginated(1, 20, status);
     return results;
   },
 
@@ -68,5 +71,9 @@ export const studentsService = {
       API_ENDPOINTS.students.disableReasons,
     );
     return data.data;
+  },
+
+  enable: async (id: number): Promise<void> => {
+    await apiClient.post(API_ENDPOINTS.students.enable(id));
   },
 };

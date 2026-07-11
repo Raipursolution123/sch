@@ -35,6 +35,14 @@ class StudentListCreateView(APIView):
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
+    def initial(self, request, *args, **kwargs):
+        status_filter = request.query_params.get("status", "active")
+        if status_filter == "disabled":
+            self.legacy_permission_category = DISABLE_CATEGORY
+        else:
+            self.legacy_permission_category = CATEGORY
+        super().initial(request, *args, **kwargs)
+
     def get(self, request):
         service = StudentService()
         status_filter = request.query_params.get("status", "active")
@@ -129,6 +137,21 @@ class StudentDisableReasonListView(APIView):
             data=StudentService().list_disable_reasons(),
             message="Disable reasons retrieved successfully.",
         )
+
+
+class StudentEnableView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = DISABLE_CATEGORY
+    legacy_method_actions = {"POST": "can_edit"}
+
+    def post(self, request, pk):
+        try:
+            with transaction.atomic():
+                StudentService().enable_student(pk)
+            return APIResponse.success(message="Student re-enabled successfully.")
+        except StudentError as exc:
+            return _error_response(exc)
 
 
 def _error_response(exc: StudentError) -> Response:

@@ -3,6 +3,7 @@ from django.urls import path
 from apps.students.api.views.student import (
     StudentDetailView,
     StudentDisableReasonListView,
+    StudentEnableView,
     StudentListCreateView,
 )
 from apps.students.api.views.student_fee import StudentFeesView
@@ -12,6 +13,7 @@ urlpatterns = [
     path("test-parents/", ParentsTestView.as_view(), name="test-parents"),
     path("", StudentListCreateView.as_view(), name="students-list"),
     path("disable-reasons/", StudentDisableReasonListView.as_view(), name="student-disable-reasons"),
+    path("<int:pk>/enable/", StudentEnableView.as_view(), name="student-enable"),
     path("<int:pk>/", StudentDetailView.as_view(), name="student-detail"),
     path("<int:pk>/fees/", StudentFeesView.as_view(), name="student-fees"),
     path(

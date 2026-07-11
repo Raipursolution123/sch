@@ -99,3 +99,22 @@ def test_disable_student_requires_reason(service):
     ):
         with pytest.raises(StudentValidationError, match="Disable reason"):
             service.disable_student(1, {})
+
+
+def test_enable_student_not_found(service):
+    with patch(
+        "apps.students.services.student_service.selectors.get_student_by_id",
+        return_value=None,
+    ):
+        with pytest.raises(StudentNotFoundError):
+            service.enable_student(999)
+
+
+def test_enable_student_already_active(service):
+    student = MagicMock(id=1, is_active="yes")
+    with patch(
+        "apps.students.services.student_service.selectors.get_student_by_id",
+        return_value=student,
+    ):
+        with pytest.raises(StudentValidationError, match="already active"):
+            service.enable_student(1)
