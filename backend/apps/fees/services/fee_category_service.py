@@ -44,7 +44,9 @@ class FeeCategoryService:
             cursor.execute("SELECT * FROM categories WHERE id = %s", [new_id])
             return selectors.category_to_dict(selectors.dictfetchall(cursor)[0])
 
-    def update_category(self, category_id: int, payload: dict[str, Any]) -> dict[str, Any]:
+    def update_category(
+        self, category_id: int, payload: dict[str, Any]
+    ) -> dict[str, Any]:
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM categories WHERE id = %s", [category_id])
             rows = selectors.dictfetchall(cursor)

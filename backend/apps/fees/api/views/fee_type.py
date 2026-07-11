@@ -26,7 +26,9 @@ class FeeTypesListView(APIView):
         data = service.enrich_list(rows)
         if page is not None:
             return paginator.get_paginated_response(data)
-        return APIResponse.success(data=data, message="Fee types retrieved successfully.")
+        return APIResponse.success(
+            data=data, message="Fee types retrieved successfully."
+        )
 
     def post(self, request):
         try:

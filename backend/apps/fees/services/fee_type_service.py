@@ -53,7 +53,11 @@ class FeeTypeService:
             code = str(payload.get("code", "")).strip().upper()
             if not code:
                 raise FeeValidationError("Fee type code cannot be empty.")
-            if Feetype.objects.exclude(id=feetype_id).filter(code__iexact=code).exists():
+            if (
+                Feetype.objects.exclude(id=feetype_id)
+                .filter(code__iexact=code)
+                .exists()
+            ):
                 raise FeeConflictError("A fee type with this code already exists.")
             ft.code = code
 

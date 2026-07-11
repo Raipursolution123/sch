@@ -60,7 +60,9 @@ def fee_group_to_dict(group: FeeGroups) -> dict[str, Any]:
     }
 
 
-def fee_type_to_dict(ft: Feetype, category_map: dict[int, str] | None = None) -> dict[str, Any]:
+def fee_type_to_dict(
+    ft: Feetype, category_map: dict[int, str] | None = None
+) -> dict[str, Any]:
     if category_map is None:
         category_map = {}
     return {
@@ -77,7 +79,9 @@ def fee_type_to_dict(ft: Feetype, category_map: dict[int, str] | None = None) ->
 
 
 def assignment_to_dict(fsg: FeeSessionGroups) -> dict[str, Any]:
-    lines_qs = FeeGroupsFeetype.objects.filter(fee_session_group_id=fsg.id).order_by("id")
+    lines_qs = FeeGroupsFeetype.objects.filter(fee_session_group_id=fsg.id).order_by(
+        "id"
+    )
     fee_group = FeeGroups.objects.filter(id=fsg.fee_groups_id).first()
     school_class = Classes.objects.filter(id=fsg.class_id).first()
     session = Sessions.objects.filter(id=fsg.session_id).first()

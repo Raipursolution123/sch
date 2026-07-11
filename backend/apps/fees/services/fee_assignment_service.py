@@ -38,10 +38,14 @@ class FeeAssignmentService:
                 is_active=is_active,
                 created_at=selectors.now_datetime(),
             )
-            self._create_lines(fsg, lines, fee_group_id, session_id, class_id, is_active)
+            self._create_lines(
+                fsg, lines, fee_group_id, session_id, class_id, is_active
+            )
         return selectors.assignment_to_dict(fsg)
 
-    def update_assignment(self, assignment_id: int, payload: dict[str, Any]) -> dict[str, Any]:
+    def update_assignment(
+        self, assignment_id: int, payload: dict[str, Any]
+    ) -> dict[str, Any]:
         fsg = FeeSessionGroups.objects.filter(id=assignment_id).first()
         if fsg is None:
             raise FeeNotFoundError("Fee assignment not found.")
@@ -61,7 +65,9 @@ class FeeAssignmentService:
 
             if lines is not None:
                 FeeGroupsFeetype.objects.filter(fee_session_group_id=fsg.id).delete()
-                self._create_lines(fsg, lines, fee_group_id, session_id, class_id, is_active)
+                self._create_lines(
+                    fsg, lines, fee_group_id, session_id, class_id, is_active
+                )
 
         return selectors.assignment_to_dict(fsg)
 

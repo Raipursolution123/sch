@@ -51,7 +51,11 @@ class FeeGroupService:
             name = str(payload.get("name", "")).strip()
             if not name:
                 raise FeeValidationError("Fee group name cannot be empty.")
-            if FeeGroups.objects.exclude(id=group_id).filter(name__iexact=name).exists():
+            if (
+                FeeGroups.objects.exclude(id=group_id)
+                .filter(name__iexact=name)
+                .exists()
+            ):
                 raise FeeConflictError("A fee group with this name already exists.")
             group.name = name
 

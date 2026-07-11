@@ -26,7 +26,9 @@ class FeeGroupsListView(APIView):
         data = [fee_group_to_dict(group) for group in rows]
         if page is not None:
             return paginator.get_paginated_response(data)
-        return APIResponse.success(data=data, message="Fee groups retrieved successfully.")
+        return APIResponse.success(
+            data=data, message="Fee groups retrieved successfully."
+        )
 
     def post(self, request):
         try:
