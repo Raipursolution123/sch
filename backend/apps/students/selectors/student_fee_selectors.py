@@ -35,7 +35,15 @@ def resolve_class_section_names(
     return class_name, section_name
 
 
-def fetch_assigned_fee_lines(student_session_id: int) -> list[dict[str, Any]]:
+def _cursor_rows_to_dicts(cursor) -> list[dict[str, Any]]:
+    rows = cursor.fetchall()
+    if not rows:
+        return []
+    cols = [col[0] for col in cursor.description]
+    return [dict(zip(cols, row)) for row in rows]
+
+
+def _fetch_student_fee_master_lines(student_session_id: int) -> list[dict[str, Any]]:
     with connection.cursor() as cursor:
         cursor.execute(
             """
@@ -54,15 +62,57 @@ def fetch_assigned_fee_lines(student_session_id: int) -> list[dict[str, Any]]:
             JOIN fee_groups fg ON fsg.fee_groups_id = fg.id
             JOIN fee_groups_feetype fgft ON fgft.fee_session_group_id = fsg.id
             JOIN feetype ft ON fgft.feetype_id = ft.id
-            WHERE sfm.student_session_id = %s AND sfm.is_active = 'yes'
+            WHERE sfm.student_session_id = %s
+              AND sfm.is_active = 'yes'
+              AND fgft.is_active = 'yes'
             """,
             [student_session_id],
         )
-        rows = cursor.fetchall()
-        if not rows:
-            return []
-        cols = [col[0] for col in cursor.description]
-        return [dict(zip(cols, row)) for row in rows]
+        return _cursor_rows_to_dicts(cursor)
+
+
+def _fetch_class_fee_lines(class_id: int, session_id: int) -> list[dict[str, Any]]:
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT
+                NULL as student_fees_master_id,
+                fsg.id as assignment_id,
+                fg.name as fee_group_name,
+                fgft.id as line_id,
+                fgft.feetype_id,
+                ft.code as feetype_code,
+                ft.type as feetype_name,
+                fgft.amount,
+                fgft.due_date
+            FROM fee_session_groups fsg
+            JOIN fee_groups fg ON fsg.fee_groups_id = fg.id
+            JOIN fee_groups_feetype fgft ON fgft.fee_session_group_id = fsg.id
+            JOIN feetype ft ON fgft.feetype_id = ft.id
+            WHERE fsg.class_id = %s
+              AND fsg.session_id = %s
+              AND fsg.is_active = 'yes'
+              AND fgft.is_active = 'yes'
+            """,
+            [class_id, session_id],
+        )
+        return _cursor_rows_to_dicts(cursor)
+
+
+def fetch_assigned_fee_lines(student_session_id: int) -> list[dict[str, Any]]:
+    lines = _fetch_student_fee_master_lines(student_session_id)
+    if lines:
+        return lines
+
+    student_session = StudentSession.objects.filter(id=student_session_id).first()
+    if (
+        not student_session
+        or not student_session.class_id
+        or not student_session.session_id
+    ):
+        return []
+
+    return _fetch_class_fee_lines(student_session.class_id, student_session.session_id)
 
 
 def fetch_deposite_payments(student_session_id: int) -> list[dict[str, Any]]:
@@ -174,7 +224,10 @@ def build_fee_lines(
 
 
 def resolve_fee_master_for_payment(
-    student_session_id: int, class_id: int, feetype_id: int
+    student_session_id: int,
+    class_id: int,
+    feetype_id: int,
+    session_id: int | None = None,
 ) -> tuple[int, int, int] | None:
     with connection.cursor() as cursor:
         cursor.execute(
@@ -186,6 +239,7 @@ def resolve_fee_master_for_payment(
             WHERE sfm.student_session_id = %s
               AND fgft.feetype_id = %s
               AND sfm.is_active = 'yes'
+              AND fgft.is_active = 'yes'
             LIMIT 1
             """,
             [student_session_id, feetype_id],
@@ -194,17 +248,27 @@ def resolve_fee_master_for_payment(
         if row:
             return row[0], row[1], row[2]
 
+        if not session_id:
+            student_session = StudentSession.objects.filter(
+                id=student_session_id
+            ).first()
+            session_id = student_session.session_id if student_session else None
+        if not session_id:
+            return None
+
         cursor.execute(
             """
             SELECT fgft.id, fgft.fee_session_group_id
             FROM fee_groups_feetype fgft
             JOIN fee_session_groups fsg ON fgft.fee_session_group_id = fsg.id
             WHERE fsg.class_id = %s
+              AND fsg.session_id = %s
               AND fgft.feetype_id = %s
               AND fsg.is_active = 'yes'
+              AND fgft.is_active = 'yes'
             LIMIT 1
             """,
-            [class_id, feetype_id],
+            [class_id, session_id, feetype_id],
         )
         row = cursor.fetchone()
         if row:

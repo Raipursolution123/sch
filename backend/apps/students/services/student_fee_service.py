@@ -101,7 +101,10 @@ class StudentFeeService:
             )
 
         resolved = fee_selectors.resolve_fee_master_for_payment(
-            student_session.id, student_session.class_id, int(feetype_id)
+            student_session.id,
+            student_session.class_id,
+            int(feetype_id),
+            student_session.session_id,
         )
         if not resolved:
             raise StudentFeeValidationError(
@@ -245,6 +248,4 @@ class StudentFeeService:
                 cursor.execute("DELETE FROM student_fees WHERE id = %s", [payment_id])
         except Exception as exc:
             logger.error("Error deleting legacy payment %s: %s", payment_id, exc)
-            raise StudentFeeValidationError(
-                f"Failed to delete payment: {exc}"
-            ) from exc
+            raise StudentFeeValidationError(f"Failed to delete payment: {exc}") from exc
