@@ -24,6 +24,25 @@ def is_module_active(module_short_code: str) -> bool:
     ).exists()
 
 
+def resolve_user_role(user) -> Role | None:
+    """
+    Resolve the legacy role for API RBAC.
+
+    Staff accounts authenticate with users.role='staff'; privileges come from
+    staff_roles -> roles (exposed on User.role_slug).
+    """
+    if not user or not getattr(user, "is_authenticated", False):
+        return None
+
+    role_key = getattr(user, "role_slug", None) or getattr(user, "role", None)
+    if not role_key:
+        return None
+
+    return Role.objects.filter(
+        Q(slug__iexact=role_key) | Q(name__iexact=role_key)
+    ).first()
+
+
 def user_has_privilege(user, category_short_code: str, action: str) -> bool:
     if action not in PRIVILEGE_ACTIONS:
         return False
@@ -32,11 +51,7 @@ def user_has_privilege(user, category_short_code: str, action: str) -> bool:
     if is_superadmin_user(user):
         return True
 
-    role_slug = getattr(user, "role", None)
-    if not role_slug:
-        return False
-
-    role = Role.objects.filter(Q(slug=role_slug) | Q(name=role_slug)).first()
+    role = resolve_user_role(user)
     if role is None:
         return False
     if role.is_superadmin:
@@ -73,12 +88,7 @@ def get_user_legacy_permissions(user) -> dict[str, dict[str, bool]]:
             if cat.short_code
         }
 
-    role_slug = getattr(user, "role", None)
-    role = (
-        Role.objects.filter(Q(slug=role_slug) | Q(name=role_slug)).first()
-        if role_slug
-        else None
-    )
+    role = resolve_user_role(user)
     if role is None:
         return {}
 
