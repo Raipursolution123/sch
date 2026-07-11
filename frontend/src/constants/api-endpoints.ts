@@ -65,6 +65,8 @@ export const API_ENDPOINTS = {
     assignments: '/fees/assignments/',
     assignmentDetail: (id: number) => `/fees/assignments/${id}/`,
     collectRoster: '/fees/collect/roster/',
+    searchDue: '/fees/search/due/',
+    searchPayments: '/fees/search/payments/',
   },
   attendance: {
     types: '/attendance/types/',

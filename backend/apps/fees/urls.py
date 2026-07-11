@@ -10,10 +10,13 @@ from apps.fees.api.views.fee_category import (
 )
 from apps.fees.api.views.fee_group import FeeGroupDetailView, FeeGroupsListView
 from apps.fees.api.views.fee_collect import FeeCollectRosterView
+from apps.fees.api.views.fee_search import FeeDueSearchView, FeePaymentSearchView
 from apps.fees.api.views.fee_type import FeeTypeDetailView, FeeTypesListView
 
 urlpatterns = [
     path("collect/roster/", FeeCollectRosterView.as_view(), name="fee-collect-roster"),
+    path("search/due/", FeeDueSearchView.as_view(), name="fee-due-search"),
+    path("search/payments/", FeePaymentSearchView.as_view(), name="fee-payment-search"),
     path("categories/", FeeCategoriesListView.as_view(), name="fee-categories-list"),
     path(
         "categories/<int:pk>/",

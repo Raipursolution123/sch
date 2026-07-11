@@ -153,6 +153,42 @@ export const queryKeys = {
       roster: (classId: number, sectionId: number) =>
         [...queryKeys.fees.all, 'collect', 'roster', classId, sectionId] as const,
     },
+    search: {
+      due: (filters: {
+        class_id?: number;
+        section_id?: number;
+        q?: string;
+        min_balance?: number;
+      }) =>
+        [
+          ...queryKeys.fees.all,
+          'search',
+          'due',
+          filters.class_id ?? 'all',
+          filters.section_id ?? 'all',
+          filters.q ?? '',
+          filters.min_balance ?? 'default',
+        ] as const,
+      payments: (filters: {
+        from_date: string;
+        to_date: string;
+        class_id?: number;
+        section_id?: number;
+        q?: string;
+        payment_mode?: string;
+      }) =>
+        [
+          ...queryKeys.fees.all,
+          'search',
+          'payments',
+          filters.from_date,
+          filters.to_date,
+          filters.class_id ?? 'all',
+          filters.section_id ?? 'all',
+          filters.q ?? '',
+          filters.payment_mode ?? 'all',
+        ] as const,
+    },
   },
   attendance: {
     all: ['attendance'] as const,

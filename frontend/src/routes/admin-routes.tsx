@@ -141,6 +141,18 @@ const CollectFeesPage = lazy(() =>
   })),
 );
 
+const DueFeesSearchPage = lazy(() =>
+  import('@features/fees/due-search/pages/DueFeesSearchPage').then((m) => ({
+    default: m.DueFeesSearchPage,
+  })),
+);
+
+const PaymentSearchPage = lazy(() =>
+  import('@features/fees/payment-search/pages/PaymentSearchPage').then((m) => ({
+    default: m.PaymentSearchPage,
+  })),
+);
+
 const MarkAttendancePage = lazy(() =>
   import('@features/attendance/mark/pages/MarkAttendancePage').then((m) => ({
     default: m.MarkAttendancePage,
@@ -228,6 +240,8 @@ export const adminRoutes: RouteObject[] = [
 
   createModuleRoutes('/fees', ROUTES.fees.feeTypes, [
     { path: 'collect', element: <CollectFeesPage /> },
+    { path: 'due-search', element: <DueFeesSearchPage /> },
+    { path: 'payment-search', element: <PaymentSearchPage /> },
     { path: 'fee-types', element: <FeeTypesPage /> },
     { path: 'fee-groups', element: <FeeGroupsPage /> },
     { path: 'assign', element: <FeeAssignPage /> },
