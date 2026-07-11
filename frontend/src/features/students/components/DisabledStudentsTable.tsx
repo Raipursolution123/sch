@@ -34,7 +34,9 @@ export function DisabledStudentsTable({
         enableSorting: true,
         sortValue: (row) => row.admission_no,
         cell: (row) => (
-          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.admission_no}</code>
+          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+            {row.admission_no}
+          </code>
         ),
       },
       {

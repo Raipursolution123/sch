@@ -16,11 +16,7 @@ export function sectionOptionsForClass(
     if (row.class_id !== classId) continue;
     seen.set(row.section_id, row.section_name);
   }
-  if (
-    fallback?.section_id &&
-    fallback.section_name &&
-    !seen.has(fallback.section_id)
-  ) {
+  if (fallback?.section_id && fallback.section_name && !seen.has(fallback.section_id)) {
     seen.set(fallback.section_id, fallback.section_name);
   }
   return Array.from(seen.entries())

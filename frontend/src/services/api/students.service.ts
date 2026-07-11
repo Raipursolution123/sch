@@ -7,10 +7,7 @@ import type {
   CreateStudentPayload,
   UpdateStudentPayload,
 } from '@app-types/students/student';
-import type {
-  DisableReason,
-  DisableStudentPayload,
-} from '@app-types/students/disable-reason';
+import type { DisableReason, DisableStudentPayload } from '@app-types/students/disable-reason';
 import { suggestAdmissionNumber } from '@utils/student';
 import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 

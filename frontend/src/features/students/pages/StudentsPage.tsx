@@ -67,8 +67,7 @@ export function StudentsPage() {
       prerequisiteHint={
         !canAdmit && !isLoading ? (
           <p className="text-sm text-muted-foreground">
-            Assign active class sections under Academics → Class Sections before admitting
-            students.
+            Assign active class sections under Academics → Class Sections before admitting students.
           </p>
         ) : undefined
       }

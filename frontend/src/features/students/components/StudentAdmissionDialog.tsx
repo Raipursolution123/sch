@@ -253,8 +253,8 @@ export function StudentAdmissionDialog({
 
       {!hasClassSectionOptions && !mappingsLoading && (
         <p className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
-          Assign at least one active class section under Academics → Class Sections before
-          admitting a student.
+          Assign at least one active class section under Academics → Class Sections before admitting
+          a student.
         </p>
       )}
 
@@ -326,9 +326,7 @@ export function StudentAdmissionDialog({
               render={({ field }) => (
                 <Select
                   id="section_id"
-                  placeholder={
-                    selectedClassId ? 'Select section' : 'Select a class first'
-                  }
+                  placeholder={selectedClassId ? 'Select section' : 'Select a class first'}
                   options={sectionOptions}
                   value={field.value ? String(field.value) : ''}
                   onChange={(e) => field.onChange(Number(e.target.value))}
