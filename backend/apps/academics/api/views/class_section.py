@@ -23,7 +23,7 @@ CATEGORY = "class"
 
 
 class ClassSectionListCreateView(APIView):
-    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    permission_classes = [IsAuthenticated]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
@@ -73,7 +73,7 @@ class ClassSectionListCreateView(APIView):
 
 
 class ClassSectionDetailView(APIView):
-    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    permission_classes = [IsAuthenticated]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
@@ -103,16 +103,16 @@ class ClassSectionDetailView(APIView):
     def delete(self, request, pk):
         try:
             with transaction.atomic():
-                ClassSectionService().deactivate_mapping(pk)
+                ClassSectionService().delete_mapping(pk)
             return APIResponse.success(
-                message="Class-Section mapping successfully deactivated."
+                message="Class-Section mapping successfully deleted."
             )
         except AcademicStructureError as exc:
             return _error_response(exc)
 
 
 class ClassSectionBulkAssignView(APIView):
-    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    permission_classes = [IsAuthenticated]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
     legacy_permission_action = "can_edit"
@@ -134,7 +134,7 @@ class ClassSectionBulkAssignView(APIView):
 
 
 class ClassAssignedSectionsView(APIView):
-    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    permission_classes = [IsAuthenticated]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 

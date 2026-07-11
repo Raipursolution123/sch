@@ -87,6 +87,23 @@ class ClassSectionService:
         mapping.updated_at = selectors.today_date()
         mapping.save(update_fields=["is_active", "updated_at"])
 
+    def delete_mapping(self, mapping_id: int) -> None:
+        import django.db.utils
+        mapping = selectors.get_mapping_by_id(mapping_id)
+        if mapping is None:
+            raise AcademicStructureNotFoundError("Class-Section mapping not found.")
+            
+        if mapping.is_active != "no":
+            raise AcademicStructureValidationError("Only inactive mappings can be deleted.")
+            
+        try:
+            mapping.delete()
+            logger.info("Class-Section mapping id=%s deleted permanently.", mapping_id)
+        except django.db.utils.IntegrityError:
+            raise AcademicStructureInUseError(
+                "Cannot delete mapping. It is referenced by existing academic records."
+            )
+
     def bulk_assign(self, class_id: int, section_ids: list[int]) -> None:
         try:
             class_obj = Classes.objects.get(pk=class_id)

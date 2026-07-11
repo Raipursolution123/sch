@@ -77,6 +77,23 @@ class SectionService:
         section.save(update_fields=["is_active", "updated_at"])
         logger.info("Section id=%s deactivated.", section_id)
 
+    def delete_section(self, section_id: int) -> None:
+        import django.db.utils
+        section = selectors.get_section_by_id(section_id)
+        if section is None:
+            raise AcademicStructureNotFoundError("Section not found.")
+        
+        if section.is_active != "no":
+            raise AcademicStructureValidationError("Only inactive sections can be deleted.")
+            
+        try:
+            section.delete()
+            logger.info("Section id=%s deleted permanently.", section_id)
+        except django.db.utils.IntegrityError:
+            raise AcademicStructureInUseError(
+                "Cannot delete section. It is referenced by existing academic records."
+            )
+
     def _assert_can_deactivate(self, section_id: int) -> None:
         if has_active_class_section_for_section(section_id):
             raise AcademicStructureInUseError(
