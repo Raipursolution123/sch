@@ -329,18 +329,20 @@ class ApproveLeaveDetailView(APIView):
                         record.save()
 
                     # Create StudentApplyleave record to keep it in the list persistently
-                    StudentApplyleave.objects.create(
+                    new_leave = StudentApplyleave.objects.create(
                         student_session_id=record.student_session_id,
                         from_date=record.date,
                         to_date=record.date,
                         apply_date=record.date,
                         status=new_status,
                         reason=f"Teacher Marked: {old_label}" + (f" - {record.remark}" if record.remark and not record.remark.startswith('[Rejected]') else ""),
-                        approve_by=staff.id if staff else None,
                         approve_date=timezone.now().date(),
                         request_type=99,
                         created_at=timezone.now()
                     )
+                    if staff:
+                        new_leave.approve_by = staff.id
+                        new_leave.save()
 
                     return APIResponse.success(message='Attendance exception processed successfully.')
                 return APIResponse.success(message='No changes made to attendance exception.')
@@ -348,7 +350,8 @@ class ApproveLeaveDetailView(APIView):
                 if 'status' in data:
                     record.status = int(data['status'])
                     staff = Staff.objects.filter(user_id=request.user.id).first() if hasattr(request, 'user') else None
-                    record.approve_by = staff.id if staff else None
+                    if staff:
+                        record.approve_by = staff.id
                     record.approve_date = timezone.now().date()
                 if 'reason' in data:
                     record.reason = data['reason']
