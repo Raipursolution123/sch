@@ -12,7 +12,7 @@ class CycStaffPayrollIncrement(models.Model):
     increment = models.FloatField()
     date = models.DateField()
     entry_by = models.IntegerField()
-    status = models.CharField(max_length=44, default='pending')
+    status = models.CharField(max_length=44, default="pending")
     action_by = models.IntegerField()
     action_date = models.DateField()
 
