@@ -90,4 +90,3 @@ class ClassDetailView(APIView):
             return APIResponse.success(message="Class successfully deactivated.")
         except AcademicStructureError as exc:
             return _error_response(exc)
-    

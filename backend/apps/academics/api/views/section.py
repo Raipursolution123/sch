@@ -30,7 +30,7 @@ CATEGORY = "section"
 
 
 class SectionListCreateView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
@@ -64,7 +64,7 @@ class SectionListCreateView(APIView):
 
 
 class SectionDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
@@ -95,8 +95,8 @@ class SectionDetailView(APIView):
     def delete(self, request, pk):
         try:
             with transaction.atomic():
-                SectionService().delete_section(pk)
-            return APIResponse.success(message="Section successfully deleted.")
+                SectionService().deactivate_section(pk)
+            return APIResponse.success(message="Section successfully deactivated.")
         except AcademicStructureError as exc:
             return _error_response(exc)
 
