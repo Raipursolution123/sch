@@ -17,6 +17,7 @@ export { feeTypesService } from './fee-types.service';
 export { feeGroupsService } from './fee-groups.service';
 export { feeAssignmentsService } from './fee-assignments.service';
 export { studentFeesService } from './student-fees.service';
+export { collectFeesService } from './collect-fees.service';
 export { attendanceService } from './attendance.service';
 export { examGroupsService } from './exam-groups.service';
 export { examsService } from './exams.service';

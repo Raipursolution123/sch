@@ -149,6 +149,10 @@ export const queryKeys = {
     assignments: {
       list: () => [...queryKeys.fees.all, 'assignments', 'list'] as const,
     },
+    collect: {
+      roster: (classId: number, sectionId: number) =>
+        [...queryKeys.fees.all, 'collect', 'roster', classId, sectionId] as const,
+    },
   },
   attendance: {
     all: ['attendance'] as const,
