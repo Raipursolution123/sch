@@ -27,7 +27,6 @@ class SubjectService:
         name = self._normalize_name(payload.get("name"))
         code = self._normalize_code(payload.get("code"))
         subject_type = self._normalize_type(payload.get("type"))
-        self._ensure_unique_code(code)
         linked_class = self._normalize_linked_class(payload)
         is_active = self._normalize_active(payload.get("is_active", "yes"))
 
@@ -58,7 +57,6 @@ class SubjectService:
 
         if "code" in payload:
             code = self._normalize_code(payload["code"])
-            self._ensure_unique_code(code, exclude_id=subject_id)
             subject.code = code
             update_fields.append("code")
 
@@ -119,14 +117,6 @@ class SubjectService:
         if len(code) > 100:
             raise SubjectValidationError("Subject code must be at most 100 characters.")
         return code
-
-    @staticmethod
-    def _ensure_unique_code(code: str, exclude_id: int | None = None) -> None:
-        qs = Subjects.objects.filter(code__iexact=code)
-        if exclude_id is not None:
-            qs = qs.exclude(pk=exclude_id)
-        if qs.exists():
-            raise SubjectValidationError(f"Subject code '{code}' already exists.")
 
     @staticmethod
     def _normalize_type(raw) -> str:

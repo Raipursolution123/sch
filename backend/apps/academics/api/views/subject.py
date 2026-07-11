@@ -18,7 +18,6 @@ from apps.academics.selectors.subject_selectors import subject_to_dict
 from apps.academics.services.subject_service import SubjectService
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
-from core.permissions.legacy_privilege import HasLegacyPrivilege
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +26,7 @@ CATEGORY = "subject"
 
 
 class SubjectListCreateView(APIView):
-    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    permission_classes = [IsAuthenticated]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
@@ -57,10 +56,15 @@ class SubjectListCreateView(APIView):
             )
         except SubjectError as exc:
             return _error_response(exc)
+        except Exception as exc:
+            return APIResponse.error(
+                message=f"Detailed Error: {type(exc).__name__}: {str(exc)}",
+                status_code=500
+            )
 
 
 class SubjectDetailView(APIView):
-    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    permission_classes = [IsAuthenticated]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
@@ -87,6 +91,11 @@ class SubjectDetailView(APIView):
             )
         except SubjectError as exc:
             return _error_response(exc)
+        except Exception as exc:
+            return APIResponse.error(
+                message=f"Detailed Error: {type(exc).__name__}: {str(exc)}",
+                status_code=500
+            )
 
     def delete(self, request, pk):
         try:
