@@ -6,8 +6,12 @@ class Lesson(models.Model):
 
     id = models.AutoField(primary_key=True)
     session_id = models.IntegerField(blank=False, null=False, db_index=True)
-    subject_group_subject_id = models.IntegerField(blank=False, null=False, db_index=True)
-    subject_group_class_sections_id = models.IntegerField(blank=False, null=False, db_index=True)
+    subject_group_subject_id = models.IntegerField(
+        blank=False, null=False, db_index=True
+    )
+    subject_group_class_sections_id = models.IntegerField(
+        blank=False, null=False, db_index=True
+    )
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField()
 

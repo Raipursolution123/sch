@@ -56,7 +56,7 @@ export function SectionsPage() {
 
   const addSectionAction = (
     <PermissionButton
-      permission="academics.manage"
+      permission="sections.create"
       onClick={() => setDialogMode('create')}
       className="gap-1"
     >
@@ -96,13 +96,13 @@ export function SectionsPage() {
             onOpenChange={(open) => {
               if (!open) setDeleteTarget(null);
             }}
-            title="Delete section?"
+            title="Deactivate section?"
             description={
               deleteTarget
-                ? `Permanently delete section "${deleteTarget.section_name}"? This cannot be undone.`
+                ? `Deactivate section "${deleteTarget.section_name}"? It will be hidden from assignment until reactivated.`
                 : ''
             }
-            confirmLabel="Delete"
+            confirmLabel="Deactivate"
             destructive
             onConfirm={() => {
               if (!deleteTarget) return;

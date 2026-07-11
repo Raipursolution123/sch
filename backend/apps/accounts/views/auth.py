@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from apps.accounts.serializers import LoginSerializer, UserSerializer
+from apps.accounts.services.legacy_rbac import get_user_legacy_permissions
 from common.responses import APIResponse
 
 
@@ -165,7 +166,9 @@ class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return APIResponse.success(data=UserSerializer(request.user).data)
+        user_data = UserSerializer(request.user).data
+        user_data["legacy_permissions"] = get_user_legacy_permissions(request.user)
+        return APIResponse.success(data=user_data)
 
 
 class LogoutView(APIView):

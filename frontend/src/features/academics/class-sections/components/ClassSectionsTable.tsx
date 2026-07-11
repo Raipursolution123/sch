@@ -66,7 +66,7 @@ export function ClassSectionsTable({
         return (
           <>
             <PermissionButton
-              permission="academics.manage"
+              permission="classes.edit"
               variant="ghost"
               size="sm"
               onClick={() => onEdit(classSection)}
@@ -75,12 +75,12 @@ export function ClassSectionsTable({
               <Pencil className="h-4 w-4" />
             </PermissionButton>
             <PermissionButton
-              permission="academics.manage"
+              permission="classes.delete"
               variant="ghost"
               size="sm"
-              disabled={isActive}
+              disabled={!isActive}
               onClick={() => onDelete(classSection)}
-              aria-label={`Delete ${classSection.class_name} ${classSection.section_name}`}
+              aria-label={`Deactivate ${classSection.class_name} ${classSection.section_name}`}
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />

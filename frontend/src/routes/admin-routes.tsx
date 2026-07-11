@@ -10,7 +10,7 @@ import {
 } from '@routes/module-routes';
 
 const SessionsPage = lazy(() =>
-  import('@features/settings/sessions/pages/SessionsPage').then((m) => ({
+  import('@features/academics/sessions/pages/SessionsPage').then((m) => ({
     default: m.SessionsPage,
   })),
 );
@@ -54,6 +54,36 @@ const ClassSectionsPage = lazy(() =>
 const SubjectsPage = lazy(() =>
   import('@features/academics/subjects/pages/SubjectsPage').then((m) => ({
     default: m.SubjectsPage,
+  })),
+);
+
+const SubjectGroupsPage = lazy(() =>
+  import('@features/academics/subject-groups/pages/SubjectGroupsPage').then((m) => ({
+    default: m.SubjectGroupsPage,
+  })),
+);
+
+const TimetablePage = lazy(() =>
+  import('@features/academics/timetable/pages/TimetablePage').then((m) => ({
+    default: m.TimetablePage,
+  })),
+);
+
+const TeacherTimetablePage = lazy(() =>
+  import('@features/academics/teacher-timetable/pages/TeacherTimetablePage').then((m) => ({
+    default: m.TeacherTimetablePage,
+  })),
+);
+
+const ClassTeacherPage = lazy(() =>
+  import('@features/academics/class-teacher/pages/ClassTeacherPage').then((m) => ({
+    default: m.ClassTeacherPage,
+  })),
+);
+
+const PromoteStudentsPage = lazy(() =>
+  import('@features/academics/promote/pages/PromoteStudentsPage').then((m) => ({
+    default: m.PromoteStudentsPage,
   })),
 );
 
@@ -150,6 +180,11 @@ export const adminRoutes: RouteObject[] = [
     { path: 'sections', element: <SectionsPage /> },
     { path: 'class-sections', element: <ClassSectionsPage /> },
     { path: 'subjects', element: <SubjectsPage /> },
+    { path: 'subject-groups', element: <SubjectGroupsPage /> },
+    { path: 'timetable', element: <TimetablePage /> },
+    { path: 'teacher-timetable', element: <TeacherTimetablePage /> },
+    { path: 'class-teacher', element: <ClassTeacherPage /> },
+    { path: 'promote', element: <PromoteStudentsPage /> },
   ]),
 
   {

@@ -58,7 +58,7 @@ export function SchoolProfileTab({ settings, onSave, isSaving }: SchoolProfileTa
           footer={
             <PermissionButton
               type="submit"
-              permission="settings.manage"
+              permission="general_settings.edit"
               isLoading={isSaving}
               disabled={!isDirty && !isSaving}
             >

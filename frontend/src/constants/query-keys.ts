@@ -46,6 +46,79 @@ export const queryKeys = {
       list: () => [...queryKeys.academics.subjects.all, 'list'] as const,
       detail: (id: number) => [...queryKeys.academics.subjects.all, 'detail', id] as const,
     },
+    subjectGroups: {
+      all: ['academics', 'subject-groups'] as const,
+      list: (sessionId?: number) =>
+        [...queryKeys.academics.subjectGroups.all, 'list', sessionId ?? 'all'] as const,
+      detail: (id: number) => [...queryKeys.academics.subjectGroups.all, 'detail', id] as const,
+    },
+    timetable: {
+      all: ['academics', 'timetable'] as const,
+      grid: (sessionId?: number, classId?: number, sectionId?: number) =>
+        [
+          ...queryKeys.academics.timetable.all,
+          'grid',
+          sessionId ?? 'all',
+          classId ?? 'all',
+          sectionId ?? 'all',
+        ] as const,
+      subjectOptions: (sessionId?: number, classId?: number, sectionId?: number) =>
+        [
+          ...queryKeys.academics.timetable.all,
+          'subject-options',
+          sessionId ?? 'all',
+          classId ?? 'all',
+          sectionId ?? 'all',
+        ] as const,
+    },
+    teacherTimetable: {
+      all: ['academics', 'teacher-timetable'] as const,
+      grid: (sessionId?: number, staffId?: number) =>
+        [
+          ...queryKeys.academics.teacherTimetable.all,
+          'grid',
+          sessionId ?? 'all',
+          staffId ?? 'all',
+        ] as const,
+    },
+    classTeachers: {
+      all: ['academics', 'class-teachers'] as const,
+      list: (sessionId?: number, classId?: number, sectionId?: number) =>
+        [
+          ...queryKeys.academics.classTeachers.all,
+          'list',
+          sessionId ?? 'all',
+          classId ?? 'all',
+          sectionId ?? 'all',
+        ] as const,
+    },
+    promote: {
+      all: ['academics', 'promote'] as const,
+      preview: (params: {
+        from_session_id: number;
+        from_class_id: number;
+        from_section_id: number;
+        to_session_id: number;
+        to_class_id: number;
+        to_section_id: number;
+      }) =>
+        [
+          ...queryKeys.academics.promote.all,
+          'preview',
+          params.from_session_id,
+          params.from_class_id,
+          params.from_section_id,
+          params.to_session_id,
+          params.to_class_id,
+          params.to_section_id,
+        ] as const,
+    },
+    sessions: {
+      all: ['academics', 'sessions'] as const,
+      list: (page: number) => [...queryKeys.academics.sessions.all, 'list', page] as const,
+      active: () => [...queryKeys.academics.sessions.all, 'active'] as const,
+      detail: (id: number) => [...queryKeys.academics.sessions.all, 'detail', id] as const,
+    },
   },
   students: {
     all: ['students'] as const,

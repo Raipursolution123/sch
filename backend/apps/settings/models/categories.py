@@ -6,7 +6,7 @@ class Categories(models.Model):
 
     id = models.AutoField(primary_key=True)
     category = models.CharField(max_length=100, blank=True, null=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 

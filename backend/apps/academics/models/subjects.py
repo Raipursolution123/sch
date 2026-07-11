@@ -8,7 +8,7 @@ class Subjects(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     code = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     linked_class = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)

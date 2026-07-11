@@ -62,7 +62,7 @@ export function SubjectsPage() {
 
   const addSubjectAction = (
     <PermissionButton
-      permission="academics.manage"
+      permission="subjects.create"
       onClick={() => setDialogMode('create')}
       className="gap-1"
     >
@@ -103,13 +103,13 @@ export function SubjectsPage() {
             onOpenChange={(open) => {
               if (!open) setDeleteTarget(null);
             }}
-            title="Delete subject?"
+            title="Deactivate subject?"
             description={
               deleteTarget
-                ? `Permanently delete "${deleteTarget.name}" (${deleteTarget.code})? This cannot be undone.`
+                ? `Deactivate "${deleteTarget.name}" (${deleteTarget.code})? It will be hidden from assignment until reactivated.`
                 : ''
             }
-            confirmLabel="Delete"
+            confirmLabel="Deactivate"
             destructive
             onConfirm={() => {
               if (!deleteTarget) return;

@@ -54,7 +54,7 @@ export function AttendanceTab({ settings, onSave, isSaving }: AttendanceTabProps
           footer={
             <PermissionButton
               type="submit"
-              permission="settings.manage"
+              permission="general_settings.edit"
               isLoading={isSaving}
               disabled={!isDirty && !isSaving}
             >

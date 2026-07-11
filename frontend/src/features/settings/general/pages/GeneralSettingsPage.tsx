@@ -34,7 +34,11 @@ export function GeneralSettingsPage() {
   return (
     <ModuleSettingsPack
       title="General Settings"
-      description="Configure school profile, regional preferences, attendance, fees, and system access."
+      description={
+        settings?.session
+          ? `Configure school profile, regional preferences, attendance, fees, and system access. Current session: ${settings.session}.`
+          : 'Configure school profile, regional preferences, attendance, fees, and system access.'
+      }
       isLoading={isLoading}
       loadingMessage="Loading general settings..."
       isError={isError || !settings}
