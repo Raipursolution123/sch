@@ -14,7 +14,6 @@ import {
 } from '@components/forms/fields';
 import { Select } from '@components/ui/select';
 import type { SchoolClass } from '@app-types/academics/class';
-import type { Section } from '@app-types/academics/section';
 import type { StudentDetail } from '@app-types/students/student';
 import {
   BLOOD_GROUP_OPTIONS,
@@ -26,14 +25,18 @@ import {
   studentAdmissionSchema,
   type StudentAdmissionFormValues,
 } from '@features/students/schemas/student-admission.schema';
-import { todayIsoDate } from '@utils/student';
+import {
+  firstSectionIdForClass,
+  sectionOptionsForClass,
+} from '@features/students/utils/class-section-options';
 import { studentToFormValues } from '@features/students/utils/student-payload';
+import { useClassSections } from '@hooks/useClassSections';
+import { todayIsoDate } from '@utils/student';
 
 interface StudentAdmissionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   classes: SchoolClass[];
-  sections: Section[];
   suggestedAdmissionNo?: string;
   student?: StudentDetail | null;
   onSubmit: (values: StudentAdmissionFormValues) => void;
@@ -74,40 +77,66 @@ export function StudentAdmissionDialog({
   open,
   onOpenChange,
   classes,
-  sections,
   suggestedAdmissionNo = '',
   student = null,
   onSubmit,
   isLoading,
 }: StudentAdmissionDialogProps) {
   const isEdit = student != null;
-  const activeClasses = useMemo(
-    () => classes.filter((c) => c.is_active === 'yes').sort((a, b) => a.sort_order - b.sort_order),
-    [classes],
+  const { data: classSectionsData, isLoading: mappingsLoading } = useClassSections(1, {
+    enabled: open,
+  });
+
+  const activeMappings = useMemo(
+    () => (classSectionsData?.results ?? []).filter((m) => m.is_active === 'yes'),
+    [classSectionsData],
   );
-  const activeSections = useMemo(
-    () =>
-      [...sections]
-        .filter((s) => s.is_active === 'yes')
-        .sort((a, b) => a.section_name.localeCompare(b.section_name)),
-    [sections],
+
+  const admissibleClassIds = useMemo(
+    () => new Set(activeMappings.map((m) => m.class_id)),
+    [activeMappings],
   );
+
+  const activeClasses = useMemo(() => {
+    const filtered = classes
+      .filter((c) => c.is_active === 'yes' && admissibleClassIds.has(c.id))
+      .sort((a, b) => a.sort_order - b.sort_order);
+
+    if (
+      isEdit &&
+      student?.class_id &&
+      student.class_name &&
+      !filtered.some((c) => c.id === student.class_id)
+    ) {
+      return [
+        ...filtered,
+        {
+          id: student.class_id,
+          class_name: student.class_name,
+          is_active: 'yes' as const,
+          sort_order: 0,
+          created_at: '',
+          updated_at: null,
+        },
+      ];
+    }
+
+    return filtered;
+  }, [classes, admissibleClassIds, isEdit, student]);
 
   const classOptions = useMemo(
     () => toSelectOptions(activeClasses, (c) => c.class_name),
     [activeClasses],
   );
-  const sectionOptions = useMemo(
-    () => toSelectOptions(activeSections, (s) => s.section_name),
-    [activeSections],
-  );
 
-  const hasClassSectionOptions = classOptions.length > 0 && sectionOptions.length > 0;
+  const hasClassSectionOptions = classOptions.length > 0 && activeMappings.length > 0;
 
   const {
     control,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<StudentAdmissionFormValues>({
     resolver: zodResolver(studentAdmissionSchema),
@@ -137,6 +166,29 @@ export function StudentAdmissionDialog({
     },
   });
 
+  const selectedClassId = watch('class_id');
+  const selectedSectionId = watch('section_id');
+
+  const sectionOptions = useMemo(() => {
+    if (!selectedClassId) return [];
+    return sectionOptionsForClass(
+      activeMappings,
+      selectedClassId,
+      isEdit && student
+        ? { section_id: student.section_id ?? 0, section_name: student.section_name }
+        : undefined,
+    );
+  }, [activeMappings, selectedClassId, isEdit, student]);
+
+  useEffect(() => {
+    if (!open || !selectedClassId || sectionOptions.length === 0) return;
+
+    const validSectionIds = new Set(sectionOptions.map((o) => Number(o.value)));
+    if (!validSectionIds.has(selectedSectionId)) {
+      setValue('section_id', Number(sectionOptions[0].value));
+    }
+  }, [open, selectedClassId, selectedSectionId, sectionOptions, setValue]);
+
   useEffect(() => {
     if (!open) return;
 
@@ -144,6 +196,11 @@ export function StudentAdmissionDialog({
       reset(studentToFormValues(student));
       return;
     }
+
+    const defaultClassId = activeClasses[0]?.id ?? 0;
+    const defaultSectionId = defaultClassId
+      ? (firstSectionIdForClass(activeMappings, defaultClassId) ?? 0)
+      : 0;
 
     reset({
       admission_no: suggestedAdmissionNo,
@@ -153,8 +210,8 @@ export function StudentAdmissionDialog({
       lastname: '',
       gender: 'Male',
       dob: '',
-      class_id: activeClasses[0]?.id ?? 0,
-      section_id: activeSections[0]?.id ?? 0,
+      class_id: defaultClassId,
+      section_id: defaultSectionId,
       roll_no: '',
       mobileno: '',
       email: '',
@@ -169,14 +226,17 @@ export function StudentAdmissionDialog({
       rte: 'No',
       is_active: true,
     });
-  }, [open, isEdit, student, suggestedAdmissionNo, activeClasses, activeSections, reset]);
+  }, [open, isEdit, student, suggestedAdmissionNo, activeClasses, activeMappings, reset]);
+
+  const sectionSelectDisabled =
+    !hasClassSectionOptions || !selectedClassId || sectionOptions.length === 0;
 
   return (
     <EntityFormDialog
       open={open}
       onOpenChange={onOpenChange}
       isEdit={isEdit}
-      isLoading={isLoading}
+      isLoading={isLoading || mappingsLoading}
       title={isEdit ? 'Edit student' : 'Admit student'}
       description={
         isEdit
@@ -184,16 +244,17 @@ export function StudentAdmissionDialog({
           : 'Register a new student. Required fields are marked with an asterisk.'
       }
       submitLabel={isEdit ? 'Save changes' : 'Admit student'}
-      submitDisabled={!hasClassSectionOptions}
+      submitDisabled={!hasClassSectionOptions || sectionSelectDisabled}
       onSubmit={handleSubmit(onSubmit)}
       size="lg"
       scrollable
     >
       <FormErrorSummary errors={errors} />
 
-      {!hasClassSectionOptions && (
+      {!hasClassSectionOptions && !mappingsLoading && (
         <p className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
-          Add at least one active class and section before admitting a student.
+          Assign at least one active class section under Academics → Class Sections before
+          admitting a student.
         </p>
       )}
 
@@ -242,7 +303,12 @@ export function StudentAdmissionDialog({
                   placeholder="Select class"
                   options={classOptions}
                   value={field.value ? String(field.value) : ''}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  onChange={(e) => {
+                    const newClassId = Number(e.target.value);
+                    field.onChange(newClassId);
+                    const nextSectionId = firstSectionIdForClass(activeMappings, newClassId);
+                    setValue('section_id', nextSectionId ?? 0);
+                  }}
                   disabled={!hasClassSectionOptions}
                 />
               )}
@@ -260,11 +326,13 @@ export function StudentAdmissionDialog({
               render={({ field }) => (
                 <Select
                   id="section_id"
-                  placeholder="Select section"
+                  placeholder={
+                    selectedClassId ? 'Select section' : 'Select a class first'
+                  }
                   options={sectionOptions}
                   value={field.value ? String(field.value) : ''}
                   onChange={(e) => field.onChange(Number(e.target.value))}
-                  disabled={!hasClassSectionOptions}
+                  disabled={sectionSelectDisabled}
                 />
               )}
             />

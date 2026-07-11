@@ -7,7 +7,7 @@ import type { StudentAdmissionFormValues } from '@features/students/schemas/stud
 import { toStudentPayload } from '@features/students/utils/student-payload';
 import { useCreateStudent, useStudents, useSuggestedAdmissionNo } from '@hooks/useStudents';
 import { useClasses } from '@hooks/useClasses';
-import { useSections } from '@hooks/useSections';
+import { useClassSections } from '@hooks/useClassSections';
 import { matchesSearch } from '@utils/search';
 import { formatClassSection } from '@utils/student';
 import { ModuleListPack } from '@workflow-packs';
@@ -17,8 +17,7 @@ export function StudentsPage() {
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
 
-  const { data: sectionsData } = useSections();
-  const sections = sectionsData?.results || [];
+  const { data: classSectionsData } = useClassSections();
   const createMutation = useCreateStudent();
 
   const [admissionOpen, setAdmissionOpen] = useState(false);
@@ -40,8 +39,7 @@ export function StudentsPage() {
     );
   }, [students, search]);
 
-  const canAdmit =
-    classes.some((c) => c.is_active === 'yes') && sections.some((s) => s.is_active === 'yes');
+  const canAdmit = (classSectionsData?.results ?? []).some((m) => m.is_active === 'yes');
 
   const handleSubmit = (values: StudentAdmissionFormValues) => {
     createMutation.mutate(toStudentPayload(values), {
@@ -55,7 +53,7 @@ export function StudentsPage() {
       onClick={() => setAdmissionOpen(true)}
       className="gap-1"
       disabled={!canAdmit}
-      title={canAdmit ? undefined : 'Add active classes and sections first'}
+      title={canAdmit ? undefined : 'Add active class sections first'}
     >
       <Plus className="h-4 w-4" aria-hidden="true" />
       Add Student
@@ -69,7 +67,8 @@ export function StudentsPage() {
       prerequisiteHint={
         !canAdmit && !isLoading ? (
           <p className="text-sm text-muted-foreground">
-            Configure active classes and sections under Academics before admitting students.
+            Assign active class sections under Academics → Class Sections before admitting
+            students.
           </p>
         ) : undefined
       }
@@ -87,7 +86,6 @@ export function StudentsPage() {
           open={admissionOpen}
           onOpenChange={setAdmissionOpen}
           classes={classes}
-          sections={sections}
           suggestedAdmissionNo={suggestedAdmissionNo}
           onSubmit={handleSubmit}
           isLoading={createMutation.isPending}

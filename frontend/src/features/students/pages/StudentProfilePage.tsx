@@ -12,7 +12,6 @@ import type { StudentAdmissionFormValues } from '@features/students/schemas/stud
 import { toStudentPayload } from '@features/students/utils/student-payload';
 import { useStudent, useUpdateStudent, useDeleteStudent } from '@hooks/useStudents';
 import { useClasses } from '@hooks/useClasses';
-import { useSections } from '@hooks/useSections';
 import { ROUTES } from '@constants/index';
 import { ModuleProfilePack } from '@workflow-packs';
 
@@ -39,9 +38,6 @@ export function StudentProfilePage() {
   const { data: student, isLoading, isError, error, refetch } = useStudent(id);
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-
-  const { data: sectionsData } = useSections();
-  const sections = sectionsData?.results || [];
   const updateMutation = useUpdateStudent(id);
   const deleteMutation = useDeleteStudent();
 
@@ -117,7 +113,6 @@ export function StudentProfilePage() {
               open={editOpen}
               onOpenChange={setEditOpen}
               classes={classes}
-              sections={sections}
               student={student}
               onSubmit={handleEditSubmit}
               isLoading={updateMutation.isPending}
