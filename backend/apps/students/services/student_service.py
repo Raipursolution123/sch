@@ -73,8 +73,8 @@ ADMISSION_FIELDS = frozenset(
 
 
 class StudentService:
-    def list_students(self):
-        return selectors.list_students_qs()
+    def list_students(self, *, status: str = "active"):
+        return selectors.list_students_qs(status=status)
 
     def get_student(self, student_id: int) -> dict[str, Any]:
         student = selectors.get_student_by_id(student_id)
@@ -233,16 +233,50 @@ class StudentService:
             section_name=section_name,
         )
 
-    def delete_student(self, student_id: int) -> None:
+    def disable_student(self, student_id: int, payload: dict[str, Any]) -> None:
         student = selectors.get_student_by_id(student_id)
         if student is None:
             raise StudentNotFoundError()
 
-        with transaction.atomic():
-            StudentSession.objects.filter(student_id=student.id).delete()
-            student.delete()
+        if student.is_active != "yes":
+            raise StudentValidationError("Student is already disabled.")
 
-        logger.info("Student deleted id=%s", student_id)
+        reason_id = payload.get("disable_reason_id")
+        if not reason_id:
+            raise StudentValidationError("Disable reason is required.")
+
+        reason = selectors.get_disable_reason_by_id(int(reason_id))
+        if reason is None:
+            raise StudentValidationError("Selected disable reason is not valid.")
+
+        dis_note = str(payload.get("dis_note", "")).strip()
+
+        with transaction.atomic():
+            student.is_active = "no"
+            student.dis_reason = reason.id
+            student.dis_note = dis_note
+            student.disable_at = selectors.today_date()
+            student.updated_at = selectors.today_date()
+            student.save(
+                update_fields=[
+                    "is_active",
+                    "dis_reason",
+                    "dis_note",
+                    "disable_at",
+                    "updated_at",
+                ]
+            )
+
+            User.objects.filter(
+                user_id=student.id, role__in=["student", "parent"]
+            ).update(is_active="no")
+
+        logger.info(
+            "Student disabled id=%s reason_id=%s", student_id, reason.id
+        )
+
+    def list_disable_reasons(self) -> list[dict[str, Any]]:
+        return selectors.list_disable_reasons()
 
     @staticmethod
     def enrich_list_page(students) -> list[dict[str, Any]]:

@@ -4,12 +4,13 @@ import { Eye, Trash2 } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
-import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { DisableStudentDialog } from '@features/students/components/DisableStudentDialog';
+import type { DisableStudentFormValues } from '@features/students/schemas/disable-student.schema';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import type { StudentListItem } from '@app-types/students/student';
 import { ROUTES } from '@constants/index';
 import { formatClassSection, formatGender } from '@utils/student';
-import { useDeleteStudent } from '@hooks/useStudents';
+import { useDisableStudent } from '@hooks/useStudents';
 
 interface StudentsTableProps {
   students: StudentListItem[];
@@ -71,15 +72,21 @@ const columns: DataTableColumn<StudentListItem>[] = [
 
 export function StudentsTable({ students, searchValue, onSearchChange }: StudentsTableProps) {
   const navigate = useNavigate();
-  const [studentToDelete, setStudentToDelete] = useState<StudentListItem | null>(null);
-  const deleteMutation = useDeleteStudent();
+  const [studentToDisable, setStudentToDisable] = useState<StudentListItem | null>(null);
+  const disableMutation = useDisableStudent();
 
-  const handleDelete = () => {
-    if (studentToDelete) {
-      deleteMutation.mutate(studentToDelete.id, {
-        onSuccess: () => setStudentToDelete(null),
-      });
-    }
+  const handleDisable = (values: DisableStudentFormValues) => {
+    if (!studentToDisable) return;
+    disableMutation.mutate(
+      {
+        id: studentToDisable.id,
+        payload: {
+          disable_reason_id: values.disable_reason_id,
+          dis_note: values.dis_note,
+        },
+      },
+      { onSuccess: () => setStudentToDisable(null) },
+    );
   };
 
   return (
@@ -108,8 +115,8 @@ export function StudentsTable({ students, searchValue, onSearchChange }: Student
               permission="students.delete"
               variant="ghost"
               size="sm"
-              onClick={() => setStudentToDelete(student)}
-              aria-label={`Delete ${student.full_name}`}
+              onClick={() => setStudentToDisable(student)}
+              aria-label={`Disable ${student.full_name}`}
               className="text-destructive hover:bg-destructive/10 hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
@@ -119,15 +126,12 @@ export function StudentsTable({ students, searchValue, onSearchChange }: Student
         actionsHeader="Actions"
       />
 
-      <ConfirmDialog
-        open={studentToDelete !== null}
-        onOpenChange={(open) => !open && setStudentToDelete(null)}
-        title="Delete student"
-        description={`Are you sure you want to delete ${studentToDelete?.full_name}? This action cannot be undone.`}
-        confirmLabel="Delete"
-        destructive
-        isLoading={deleteMutation.isPending}
-        onConfirm={handleDelete}
+      <DisableStudentDialog
+        open={studentToDisable !== null}
+        onOpenChange={(open) => !open && setStudentToDisable(null)}
+        studentName={studentToDisable?.full_name ?? ''}
+        onSubmit={handleDisable}
+        isLoading={disableMutation.isPending}
       />
     </>
   );

@@ -19,6 +19,10 @@ export interface StudentListItem {
   section_name: string | null;
   admission_date: string | null;
   created_at: string;
+  disable_reason_id?: number | null;
+  disable_reason_name?: string | null;
+  disable_note?: string | null;
+  disabled_at?: string | null;
 }
 
 export interface StudentDetail extends StudentListItem {

@@ -11,6 +11,7 @@ from apps.students.api.serializers.student import (
     StudentCreateSerializer,
     StudentUpdateSerializer,
 )
+from apps.students.api.serializers.student_disable import StudentDisableSerializer
 from apps.students.domain.student_exceptions import (
     StudentConflictError,
     StudentError,
@@ -26,6 +27,7 @@ logger = logging.getLogger(__name__)
 
 MODULE = "student_information"
 CATEGORY = "student"
+DISABLE_CATEGORY = "disable_student"
 
 
 class StudentListCreateView(APIView):
@@ -35,7 +37,13 @@ class StudentListCreateView(APIView):
 
     def get(self, request):
         service = StudentService()
-        students_qs = service.list_students()
+        status_filter = request.query_params.get("status", "active")
+        if status_filter not in {"active", "disabled", "all"}:
+            return APIResponse.error(
+                message="Invalid status filter. Use active, disabled, or all.",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        students_qs = service.list_students(status=status_filter)
 
         paginator = StandardResultsSetPagination()
         page = paginator.paginate_queryset(students_qs, request, view=self)
@@ -69,6 +77,13 @@ class StudentDetailView(APIView):
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
+    def initial(self, request, *args, **kwargs):
+        if request.method == "DELETE":
+            self.legacy_permission_category = DISABLE_CATEGORY
+        else:
+            self.legacy_permission_category = CATEGORY
+        super().initial(request, *args, **kwargs)
+
     def get(self, request, pk):
         try:
             return APIResponse.success(
@@ -94,12 +109,26 @@ class StudentDetailView(APIView):
             return _error_response(exc)
 
     def delete(self, request, pk):
+        serializer = StudentDisableSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         try:
             with transaction.atomic():
-                StudentService().delete_student(pk)
-            return APIResponse.success(message="Student deleted successfully.")
+                StudentService().disable_student(pk, serializer.validated_data)
+            return APIResponse.success(message="Student disabled successfully.")
         except StudentError as exc:
             return _error_response(exc)
+
+
+class StudentDisableReasonListView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = DISABLE_CATEGORY
+
+    def get(self, request):
+        return APIResponse.success(
+            data=StudentService().list_disable_reasons(),
+            message="Disable reasons retrieved successfully.",
+        )
 
 
 def _error_response(exc: StudentError) -> Response:

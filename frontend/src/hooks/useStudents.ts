@@ -5,6 +5,7 @@ import { queryKeys } from '@constants/query-keys';
 import { ROUTES } from '@constants/index';
 import { studentsService } from '@services/api';
 import type { CreateStudentPayload, UpdateStudentPayload } from '@app-types/students/student';
+import type { DisableStudentPayload } from '@app-types/students/disable-reason';
 import { getApiErrorMessage } from '@utils/session';
 
 export function useStudents() {
@@ -58,15 +59,24 @@ export function useUpdateStudent(id: number) {
   });
 }
 
-export function useDeleteStudent() {
+export function useDisableReasons(enabled = true) {
+  return useQuery({
+    queryKey: queryKeys.students.disableReasons(),
+    queryFn: studentsService.listDisableReasons,
+    enabled,
+  });
+}
+
+export function useDisableStudent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => studentsService.delete(id),
+    mutationFn: ({ id, payload }: { id: number; payload: DisableStudentPayload }) =>
+      studentsService.disable(id, payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.students.all });
-      toast.success('Student deleted successfully');
+      toast.success('Student disabled successfully');
     },
-    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete student')),
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to disable student')),
   });
 }

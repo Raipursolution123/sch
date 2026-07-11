@@ -7,6 +7,10 @@ import type {
   CreateStudentPayload,
   UpdateStudentPayload,
 } from '@app-types/students/student';
+import type {
+  DisableReason,
+  DisableStudentPayload,
+} from '@app-types/students/disable-reason';
 import { suggestAdmissionNumber } from '@utils/student';
 import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
@@ -55,7 +59,14 @@ export const studentsService = {
     return data.data;
   },
 
-  delete: async (id: number): Promise<void> => {
-    await apiClient.delete(API_ENDPOINTS.students.detail(id));
+  disable: async (id: number, payload: DisableStudentPayload): Promise<void> => {
+    await apiClient.delete(API_ENDPOINTS.students.detail(id), { data: payload });
+  },
+
+  listDisableReasons: async (): Promise<DisableReason[]> => {
+    const { data } = await apiClient.get<ApiSuccessResponse<DisableReason[]>>(
+      API_ENDPOINTS.students.disableReasons,
+    );
+    return data.data;
   },
 };

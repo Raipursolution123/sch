@@ -82,10 +82,20 @@ def test_get_student_not_found(service):
             service.get_student(999)
 
 
-def test_delete_student_not_found(service):
+def test_disable_student_not_found(service):
     with patch(
         "apps.students.services.student_service.selectors.get_student_by_id",
         return_value=None,
     ):
         with pytest.raises(StudentNotFoundError):
-            service.delete_student(999)
+            service.disable_student(999, {"disable_reason_id": 1})
+
+
+def test_disable_student_requires_reason(service):
+    student = MagicMock(id=1, is_active="yes")
+    with patch(
+        "apps.students.services.student_service.selectors.get_student_by_id",
+        return_value=student,
+    ):
+        with pytest.raises(StudentValidationError, match="Disable reason"):
+            service.disable_student(1, {})

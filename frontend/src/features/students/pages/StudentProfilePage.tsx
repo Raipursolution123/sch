@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
-import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { StudentOverviewTab } from '@features/students/components/StudentOverviewTab';
 import { StudentAcademicTab } from '@features/students/components/StudentAcademicTab';
@@ -9,8 +8,10 @@ import { StudentFeesTab } from '@features/students/components/StudentFeesTab';
 import { StudentGuardiansTab } from '@features/students/components/StudentGuardiansTab';
 import { StudentAdmissionDialog } from '@features/students/components/StudentAdmissionDialog';
 import type { StudentAdmissionFormValues } from '@features/students/schemas/student-admission.schema';
+import { DisableStudentDialog } from '@features/students/components/DisableStudentDialog';
+import type { DisableStudentFormValues } from '@features/students/schemas/disable-student.schema';
 import { toStudentPayload } from '@features/students/utils/student-payload';
-import { useStudent, useUpdateStudent, useDeleteStudent } from '@hooks/useStudents';
+import { useStudent, useUpdateStudent, useDisableStudent } from '@hooks/useStudents';
 import { useClasses } from '@hooks/useClasses';
 import { ROUTES } from '@constants/index';
 import { ModuleProfilePack } from '@workflow-packs';
@@ -33,13 +34,13 @@ export function StudentProfilePage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [editOpen, setEditOpen] = useState(false);
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [disableOpen, setDisableOpen] = useState(false);
   const id = Number(studentId);
   const { data: student, isLoading, isError, error, refetch } = useStudent(id);
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
   const updateMutation = useUpdateStudent(id);
-  const deleteMutation = useDeleteStudent();
+  const disableMutation = useDisableStudent();
 
   const activeTab = searchParams.get('tab');
   const currentTab = isProfileTab(activeTab) ? activeTab : 'overview';
@@ -50,13 +51,22 @@ export function StudentProfilePage() {
     });
   };
 
-  const handleDeleteSubmit = () => {
-    deleteMutation.mutate(id, {
-      onSuccess: () => {
-        setDeleteConfirmOpen(false);
-        navigate(ROUTES.students.root);
+  const handleDisableSubmit = (values: DisableStudentFormValues) => {
+    disableMutation.mutate(
+      {
+        id,
+        payload: {
+          disable_reason_id: values.disable_reason_id,
+          dis_note: values.dis_note,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          setDisableOpen(false);
+          navigate(ROUTES.students.root);
+        },
+      },
+    );
   };
 
   return (
@@ -75,11 +85,11 @@ export function StudentProfilePage() {
             permission="students.delete"
             variant="destructive"
             size="sm"
-            onClick={() => setDeleteConfirmOpen(true)}
+            onClick={() => setDisableOpen(true)}
             className="gap-2"
           >
             <Trash2 className="h-4 w-4" />
-            Delete Student
+            Disable Student
           </PermissionButton>
         ) : undefined
       }
@@ -118,15 +128,12 @@ export function StudentProfilePage() {
               isLoading={updateMutation.isPending}
             />
 
-            <ConfirmDialog
-              open={deleteConfirmOpen}
-              onOpenChange={setDeleteConfirmOpen}
-              title="Delete student"
-              description={`Are you sure you want to delete ${student.full_name}? This action cannot be undone.`}
-              confirmLabel="Delete"
-              destructive
-              isLoading={deleteMutation.isPending}
-              onConfirm={handleDeleteSubmit}
+            <DisableStudentDialog
+              open={disableOpen}
+              onOpenChange={setDisableOpen}
+              studentName={student.full_name}
+              onSubmit={handleDisableSubmit}
+              isLoading={disableMutation.isPending}
             />
           </>
         ) : undefined

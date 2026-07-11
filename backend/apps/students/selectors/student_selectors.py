@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from apps.academics.models import Classes, ClassSections, Sections, Sessions
 from apps.academics.selectors.session_selectors import get_current_session_id
+from apps.students.models.disable_reason import DisableReason
 from apps.students.models.student_session import StudentSession
 from apps.students.models.students import Students
 
@@ -45,8 +46,24 @@ def get_active_session() -> Sessions | None:
     return Sessions.objects.filter(is_active="yes").first()
 
 
-def list_students_qs():
-    return Students.objects.all().order_by("-id")
+def list_students_qs(*, status: str = "active"):
+    qs = Students.objects.all()
+    if status == "active":
+        qs = qs.filter(is_active="yes")
+    elif status == "disabled":
+        qs = qs.exclude(is_active="yes")
+    return qs.order_by("-id")
+
+
+def get_disable_reason_by_id(reason_id: int) -> DisableReason | None:
+    return DisableReason.objects.filter(id=reason_id).first()
+
+
+def list_disable_reasons() -> list[dict[str, Any]]:
+    return [
+        {"id": row.id, "reason": row.reason}
+        for row in DisableReason.objects.all().order_by("reason")
+    ]
 
 
 def get_student_by_id(student_id: int) -> Students | None:
@@ -85,6 +102,13 @@ def class_section_mapping_active(class_id: int, section_id: int) -> bool:
     return mapping is not None
 
 
+def disable_reason_name(reason_id: int | None) -> str | None:
+    if not reason_id:
+        return None
+    reason = DisableReason.objects.filter(id=reason_id).first()
+    return reason.reason if reason else None
+
+
 def student_list_item(
     student: Students,
     *,
@@ -114,6 +138,10 @@ def student_list_item(
         "section_name": section_name,
         "admission_date": safe_date_str(student.admission_date),
         "created_at": safe_date_str(student.created_at, "%Y-%m-%dT%H:%M:%SZ"),
+        "disable_reason_id": student.dis_reason or None,
+        "disable_reason_name": disable_reason_name(student.dis_reason),
+        "disable_note": student.dis_note or None,
+        "disabled_at": safe_date_str(student.disable_at),
     }
 
 
