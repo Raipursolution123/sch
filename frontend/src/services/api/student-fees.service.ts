@@ -12,7 +12,7 @@ import { feeAssignmentsService } from './fee-assignments.service';
 import { sessionsService } from './sessions.service';
 
 interface PaymentRecord {
-  id: number;
+  id: string;
   student_id: number;
   feetype_id: number;
   amount: number;
@@ -24,7 +24,7 @@ interface PaymentRecord {
 // TODO: Remove mock store when GET /api/v1/students/{id}/fees/ is available
 const mockPayments: PaymentRecord[] = [
   {
-    id: 1,
+    id: '1',
     student_id: 1,
     feetype_id: 1,
     amount: 10000,
@@ -33,7 +33,7 @@ const mockPayments: PaymentRecord[] = [
     description: 'Partial tuition payment',
   },
   {
-    id: 2,
+    id: '2',
     student_id: 1,
     feetype_id: 2,
     amount: 12000,
@@ -42,7 +42,7 @@ const mockPayments: PaymentRecord[] = [
     description: 'Transport fee — full',
   },
   {
-    id: 3,
+    id: '3',
     student_id: 2,
     feetype_id: 1,
     amount: 25000,
@@ -51,7 +51,7 @@ const mockPayments: PaymentRecord[] = [
     description: 'Tuition fee — full',
   },
   {
-    id: 4,
+    id: '4',
     student_id: 2,
     feetype_id: 4,
     amount: 1500,
@@ -182,7 +182,9 @@ export const studentFeesService = {
   revertFee: async (studentId: number, feetypeId: number): Promise<void> => {
     await apiClient.delete(`${API_ENDPOINTS.students.fees(studentId)}?feetype_id=${feetypeId}`);
   },
-  deletePayment: async (studentId: number, paymentId: number): Promise<void> => {
-    await apiClient.delete(`${API_ENDPOINTS.students.fees(studentId)}?payment_id=${paymentId}`);
+  deletePayment: async (studentId: number, paymentId: string): Promise<void> => {
+    await apiClient.delete(
+      `${API_ENDPOINTS.students.fees(studentId)}?payment_id=${encodeURIComponent(paymentId)}`,
+    );
   },
 };

@@ -14,7 +14,7 @@ export interface StudentFeeLine {
 }
 
 export interface StudentFeePayment {
-  id: number;
+  id: string;
   date: string;
   amount: number;
   payment_mode: string;

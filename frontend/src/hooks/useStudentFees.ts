@@ -42,7 +42,7 @@ export function useDeletePayment(studentId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (paymentId: number) => studentFeesService.deletePayment(studentId, paymentId),
+    mutationFn: (paymentId: string) => studentFeesService.deletePayment(studentId, paymentId),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.students.fees(studentId) });
     },

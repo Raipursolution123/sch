@@ -1,0 +1,212 @@
+import json
+from typing import Any
+
+from django.db import connection
+
+from apps.academics.models import Classes, Sections
+from apps.students.models.student_session import StudentSession
+from apps.students.selectors.student_selectors import (
+    get_active_session,
+    safe_date_str,
+    today_date,
+)
+
+
+def get_active_student_session(student_id: int) -> StudentSession | None:
+    active_session = get_active_session()
+    if not active_session:
+        return None
+    return StudentSession.objects.filter(
+        session_id=active_session.id, student_id=student_id
+    ).first()
+
+
+def resolve_class_section_names(
+    student_session: StudentSession,
+) -> tuple[str, str]:
+    school_class = Classes.objects.filter(id=student_session.class_id).first()
+    section = (
+        Sections.objects.filter(id=student_session.section_id).first()
+        if student_session.section_id
+        else None
+    )
+    class_name = school_class.class_field if school_class else "—"
+    section_name = section.section if section else "—"
+    return class_name, section_name
+
+
+def fetch_assigned_fee_lines(student_session_id: int) -> list[dict[str, Any]]:
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT
+                sfm.id as student_fees_master_id,
+                fsg.id as assignment_id,
+                fg.name as fee_group_name,
+                fgft.id as line_id,
+                fgft.feetype_id,
+                ft.code as feetype_code,
+                ft.type as feetype_name,
+                fgft.amount,
+                fgft.due_date
+            FROM student_fees_master sfm
+            JOIN fee_session_groups fsg ON sfm.fee_session_group_id = fsg.id
+            JOIN fee_groups fg ON fsg.fee_groups_id = fg.id
+            JOIN fee_groups_feetype fgft ON fgft.fee_session_group_id = fsg.id
+            JOIN feetype ft ON fgft.feetype_id = ft.id
+            WHERE sfm.student_session_id = %s AND sfm.is_active = 'yes'
+            """,
+            [student_session_id],
+        )
+        rows = cursor.fetchall()
+        if not rows:
+            return []
+        cols = [col[0] for col in cursor.description]
+        return [dict(zip(cols, row)) for row in rows]
+
+
+def fetch_deposite_payments(student_session_id: int) -> list[dict[str, Any]]:
+    payments: list[dict[str, Any]] = []
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT
+                sfd.id as deposite_id,
+                sfd.student_fees_master_id,
+                sfd.fee_groups_feetype_id,
+                sfd.amount_detail,
+                fgft.feetype_id,
+                ft.type as feetype_name,
+                ft.code as feetype_code
+            FROM student_fees_deposite sfd
+            JOIN student_fees_master sfm ON sfd.student_fees_master_id = sfm.id
+            JOIN fee_groups_feetype fgft ON sfd.fee_groups_feetype_id = fgft.id
+            JOIN feetype ft ON fgft.feetype_id = ft.id
+            WHERE sfm.student_session_id = %s AND sfd.is_active = 'yes'
+            """,
+            [student_session_id],
+        )
+        for row in cursor.fetchall():
+            (
+                dep_id,
+                _master_id,
+                fgft_id,
+                amount_detail_str,
+                feetype_id,
+                feetype_name,
+                feetype_code,
+            ) = row
+            if not amount_detail_str:
+                continue
+            try:
+                detail_dict = json.loads(amount_detail_str)
+            except (json.JSONDecodeError, TypeError):
+                continue
+
+            for trans_id, detail in detail_dict.items():
+                payments.append(
+                    {
+                        "id": f"dep-{dep_id}-{trans_id}",
+                        "deposite_id": dep_id,
+                        "trans_id": trans_id,
+                        "date": safe_date_str(detail.get("date")),
+                        "amount": float(detail.get("amount") or 0),
+                        "amount_discount": float(detail.get("amount_discount") or 0),
+                        "amount_fine": float(detail.get("amount_fine") or 0),
+                        "payment_mode": detail.get("payment_mode", "Cash"),
+                        "description": detail.get("description", ""),
+                        "feetype_name": feetype_name,
+                        "feetype_id": feetype_id,
+                        "feetype_code": feetype_code,
+                        "fgft_id": fgft_id,
+                    }
+                )
+    return payments
+
+
+def resolve_fee_line_status(
+    amount: float, amount_paid: float, due_date_str: str | None
+) -> str:
+    balance = max(0, amount - amount_paid)
+    if balance <= 0:
+        return "paid"
+    if amount_paid > 0:
+        return "partial"
+    if due_date_str and due_date_str < today_date().isoformat():
+        return "overdue"
+    return "pending"
+
+
+def build_fee_lines(
+    assigned_lines: list[dict[str, Any]], payments: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    fgft_paid_map: dict[int, float] = {}
+    for payment in payments:
+        fgft_id = payment.get("fgft_id")
+        if fgft_id:
+            fgft_paid_map[fgft_id] = fgft_paid_map.get(fgft_id, 0) + payment["amount"]
+
+    lines: list[dict[str, Any]] = []
+    for line in assigned_lines:
+        amount = float(line["amount"] or 0)
+        fgft_id = line["line_id"]
+        available_paid = fgft_paid_map.get(fgft_id, 0)
+        amount_paid = min(amount, available_paid)
+        fgft_paid_map[fgft_id] = max(0, available_paid - amount_paid)
+        balance = max(0, amount - amount_paid)
+        due_date_str = safe_date_str(line["due_date"])
+
+        lines.append(
+            {
+                "id": f"{line['assignment_id']}-{line['line_id']}",
+                "feetype_id": line["feetype_id"],
+                "feetype_code": line["feetype_code"],
+                "feetype_name": line["feetype_name"],
+                "fee_group_name": line["fee_group_name"],
+                "amount": amount,
+                "amount_paid": amount_paid,
+                "balance": balance,
+                "due_date": due_date_str,
+                "status": resolve_fee_line_status(amount, amount_paid, due_date_str),
+            }
+        )
+    return lines
+
+
+def resolve_fee_master_for_payment(
+    student_session_id: int, class_id: int, feetype_id: int
+) -> tuple[int, int, int] | None:
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT fgft.id, fgft.fee_session_group_id, sfm.id
+            FROM student_fees_master sfm
+            JOIN fee_session_groups fsg ON sfm.fee_session_group_id = fsg.id
+            JOIN fee_groups_feetype fgft ON fgft.fee_session_group_id = fsg.id
+            WHERE sfm.student_session_id = %s
+              AND fgft.feetype_id = %s
+              AND sfm.is_active = 'yes'
+            LIMIT 1
+            """,
+            [student_session_id, feetype_id],
+        )
+        row = cursor.fetchone()
+        if row:
+            return row[0], row[1], row[2]
+
+        cursor.execute(
+            """
+            SELECT fgft.id, fgft.fee_session_group_id
+            FROM fee_groups_feetype fgft
+            JOIN fee_session_groups fsg ON fgft.fee_session_group_id = fsg.id
+            WHERE fsg.class_id = %s
+              AND fgft.feetype_id = %s
+              AND fsg.is_active = 'yes'
+            LIMIT 1
+            """,
+            [class_id, feetype_id],
+        )
+        row = cursor.fetchone()
+        if row:
+            return row[0], row[1], None
+    return None

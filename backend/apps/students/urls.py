@@ -1,11 +1,8 @@
 from django.urls import path
 
 from apps.students.api.views.student import StudentDetailView, StudentListCreateView
-from apps.students.views import (
-    ParentsTestView,
-    StudentAcademicSessionsView,
-    StudentFeesView,
-)
+from apps.students.api.views.student_fee import StudentFeesView
+from apps.students.views import ParentsTestView, StudentAcademicSessionsView
 
 urlpatterns = [
     path("test-parents/", ParentsTestView.as_view(), name="test-parents"),
