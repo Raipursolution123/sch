@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.academics.models import Sessions
 from apps.students.api.serializers.student import (
     StudentCreateSerializer,
     StudentUpdateSerializer,
@@ -18,6 +19,8 @@ from apps.students.domain.student_exceptions import (
     StudentNotFoundError,
     StudentValidationError,
 )
+from apps.students.models.student_session import StudentSession
+from apps.students.selectors import student_selectors as selectors
 from apps.students.services.student_service import StudentService
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
@@ -152,6 +155,57 @@ class StudentEnableView(APIView):
             return APIResponse.success(message="Student re-enabled successfully.")
         except StudentError as exc:
             return _error_response(exc)
+
+
+class StudentAcademicSessionsView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = CATEGORY
+
+    def get(self, request, student_id):
+        if not selectors.get_student_by_id(student_id):
+            return APIResponse.error(
+                message="Student not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
+
+        session_ids = (
+            StudentSession.objects.filter(student_id=student_id)
+            .values_list("session_id", flat=True)
+            .distinct()
+        )
+        sessions = Sessions.objects.filter(id__in=session_ids).order_by("id")
+
+        from apps.settings.models.sch_settings import SchSettings
+
+        sch_setting = SchSettings.objects.first()
+        active_session_id = sch_setting.session_id if sch_setting else 0
+
+        sessions_data = []
+        for session in sessions:
+            sessions_data.append(
+                {
+                    "id": session.id,
+                    "session": session.session,
+                    "is_active": session.is_active,
+                    "active": session.id if session.id == active_session_id else 0,
+                    "created_at": (
+                        session.created_at.strftime("%Y-%m-%d %H:%M:%S")
+                        if session.created_at
+                        else None
+                    ),
+                    "updated_at": (
+                        session.updated_at.strftime("%Y-%m-%d")
+                        if session.updated_at
+                        else None
+                    ),
+                }
+            )
+
+        return APIResponse.success(
+            data={"sessions": sessions_data},
+            message="Student academic sessions retrieved successfully.",
+        )
 
 
 def _error_response(exc: StudentError) -> Response:

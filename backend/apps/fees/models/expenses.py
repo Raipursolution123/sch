@@ -12,8 +12,8 @@ class Expenses(models.Model):
     amount = models.FloatField(blank=True, null=True)
     documents = models.CharField(max_length=255, blank=True, null=True)
     note = models.TextField(blank=True, null=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='yes')
-    is_deleted = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="yes")
+    is_deleted = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 

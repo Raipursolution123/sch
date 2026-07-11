@@ -11,7 +11,7 @@ from apps.attendance.domain.attendance_exceptions import (
 )
 from apps.attendance.models import AttendenceType
 from apps.attendance.selectors.attendance_selectors import ATTENDANCE_TYPE_KEY_MAP
-from apps.students.models import StudentAttendences, StudentSession, Students
+from apps.students.models import StudentAttendences, Students, StudentSession
 
 logger = logging.getLogger(__name__)
 

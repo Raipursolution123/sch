@@ -3,9 +3,9 @@ from typing import Any
 
 from django.db import transaction
 
+from apps.academics.models import Classes, Sections
 from apps.accounts.models import User
 from apps.accounts.services.legacy_password import hash_legacy_password
-from apps.academics.models import Classes, Sections
 from apps.students.domain.student_exceptions import (
     StudentConflictError,
     StudentNotFoundError,
@@ -271,9 +271,7 @@ class StudentService:
                 user_id=student.id, role__in=["student", "parent"]
             ).update(is_active="no")
 
-        logger.info(
-            "Student disabled id=%s reason_id=%s", student_id, reason.id
-        )
+        logger.info("Student disabled id=%s reason_id=%s", student_id, reason.id)
 
     def enable_student(self, student_id: int) -> None:
         student = selectors.get_student_by_id(student_id)

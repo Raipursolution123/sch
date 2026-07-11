@@ -12,12 +12,12 @@ class FeeGroupsFeetype(models.Model):
     session_id = models.IntegerField(blank=True, null=True, db_index=True)
     class_id = models.IntegerField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    fine_type = models.CharField(max_length=50, default='none')
+    fine_type = models.CharField(max_length=50, default="none")
     due_date = models.DateField(blank=True, null=True)
     fine_percentage = models.FloatField(default=0.00)
     fine_amount = models.FloatField(default=0.00)
     collection_type = models.IntegerField()
-    is_active = models.CharField(max_length=10, default='no')
+    is_active = models.CharField(max_length=10, default="no")
     created_at = models.DateTimeField()
 
     class Meta:

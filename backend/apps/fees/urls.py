@@ -8,8 +8,8 @@ from apps.fees.api.views.fee_category import (
     FeeCategoriesListView,
     FeeCategoryDetailView,
 )
-from apps.fees.api.views.fee_group import FeeGroupDetailView, FeeGroupsListView
 from apps.fees.api.views.fee_collect import FeeCollectRosterView
+from apps.fees.api.views.fee_group import FeeGroupDetailView, FeeGroupsListView
 from apps.fees.api.views.fee_search import FeeDueSearchView, FeePaymentSearchView
 from apps.fees.api.views.fee_type import FeeTypeDetailView, FeeTypesListView
 

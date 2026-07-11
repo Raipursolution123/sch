@@ -12,7 +12,7 @@ class FeesDiscounts(models.Model):
     percentage = models.FloatField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    is_active = models.CharField(max_length=10, default='no')
+    is_active = models.CharField(max_length=10, default="no")
     created_at = models.DateTimeField()
 
     class Meta:

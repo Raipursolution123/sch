@@ -16,8 +16,8 @@ from apps.students.domain.student_fee_exceptions import (
 )
 from apps.students.models.student_fees_deposite import StudentFeesDeposite
 from apps.students.models.student_fees_master import StudentFeesMaster
-from apps.students.selectors import student_selectors as selectors
 from apps.students.selectors import student_fee_selectors as fee_selectors
+from apps.students.selectors import student_selectors as selectors
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +109,24 @@ class StudentFeeService:
         if not resolved:
             raise StudentFeeValidationError(
                 "Fee group configuration not found for this class and fee type."
+            )
+
+        payment_amount = float(amount)
+        assigned_lines = fee_selectors.fetch_assigned_fee_lines(student_session.id)
+        payments = fee_selectors.fetch_deposite_payments(student_session.id)
+        fee_lines = fee_selectors.build_fee_lines(assigned_lines, payments)
+        fee_line = next(
+            (line for line in fee_lines if line["feetype_id"] == int(feetype_id)),
+            None,
+        )
+        if not fee_line:
+            raise StudentFeeValidationError(
+                "Fee line not found for this student and fee type."
+            )
+        if payment_amount > fee_line["balance"]:
+            raise StudentFeeValidationError(
+                f"Payment amount cannot exceed outstanding balance of "
+                f"{fee_line['balance']:.2f}."
             )
 
         fgft_id, fsg_id, sfm_id = resolved

@@ -8,8 +8,8 @@ class StudentFeesMaster(models.Model):
     is_system = models.IntegerField(default=0)
     student_session_id = models.IntegerField(blank=True, null=True, db_index=True)
     fee_session_group_id = models.IntegerField(blank=True, null=True, db_index=True)
-    amount = models.FloatField(blank=True, null=True, default='0.00')
-    is_active = models.CharField(max_length=10, default='no')
+    amount = models.FloatField(blank=True, null=True, default="0.00")
+    is_active = models.CharField(max_length=10, default="no")
     created_at = models.DateTimeField()
 
     class Meta:

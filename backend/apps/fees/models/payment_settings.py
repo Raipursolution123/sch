@@ -15,7 +15,7 @@ class PaymentSettings(models.Model):
     api_email = models.CharField(max_length=200, blank=True, null=True)
     paypal_demo = models.CharField(max_length=100)
     account_no = models.CharField(max_length=200)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     gateway_mode = models.IntegerField()
     paytm_website = models.CharField(max_length=255)
     paytm_industrytype = models.CharField(max_length=255)

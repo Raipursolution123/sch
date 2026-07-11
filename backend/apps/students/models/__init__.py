@@ -4,7 +4,9 @@ from apps.students.models.disable_reason import DisableReason
 from apps.students.models.student_applyleave import StudentApplyleave
 from apps.students.models.student_attendences import StudentAttendences
 from apps.students.models.student_attendences_hostel import StudentAttendencesHostel
-from apps.students.models.student_attendences_transport import StudentAttendencesTransport
+from apps.students.models.student_attendences_transport import (
+    StudentAttendencesTransport,
+)
 from apps.students.models.student_behaviour import StudentBehaviour
 from apps.students.models.student_doc import StudentDoc
 from apps.students.models.student_edit_fields import StudentEditFields

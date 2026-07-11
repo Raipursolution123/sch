@@ -33,3 +33,23 @@ export function usePayStudentFeeFromCollect(studentId: number, classId: number, 
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to record payment')),
   });
 }
+
+export function useRevertStudentFeeFromCollect(
+  studentId: number,
+  classId: number,
+  sectionId: number,
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (feetypeId: number) => studentFeesService.revertFee(studentId, feetypeId),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.students.fees(studentId) });
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.fees.collect.roster(classId, sectionId),
+      });
+      toast.success('Payment reverted');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to revert payment')),
+  });
+}

@@ -6,14 +6,13 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@components/ui/drawer';
-import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { CollectFeeDialog } from '@features/students/components/CollectFeeDialog';
 import { FeeLineStatusBadge } from '@features/students/components/FeeLineStatusBadge';
-import { usePayStudentFeeFromCollect } from '@hooks/useCollectFees';
+import { usePayStudentFeeFromCollect, useRevertStudentFeeFromCollect } from '@hooks/useCollectFees';
 import { useStudentFees } from '@hooks/useStudentFees';
 import type { FeeCollectRosterStudent } from '@app-types/fees/fee-collect';
 import type { StudentFeeLine } from '@app-types/students/student-fees';
@@ -52,6 +51,7 @@ export function CollectFeesStudentDrawer({
   const studentId = student?.student_id ?? 0;
   const { data: fees, isLoading, isError, error, refetch } = useStudentFees(studentId);
   const payFeeMutation = usePayStudentFeeFromCollect(studentId, classId, sectionId);
+  const revertFeeMutation = useRevertStudentFeeFromCollect(studentId, classId, sectionId);
 
   const [collectDialogOpen, setCollectDialogOpen] = useState(false);
   const [selectedFeeLine, setSelectedFeeLine] = useState<StudentFeeLine | null>(null);
@@ -105,13 +105,21 @@ export function CollectFeesStudentDrawer({
               Paid
             </PermissionButton>
           ) : (
-            <Button variant="ghost" size="sm" disabled>
-              Paid
-            </Button>
+            <PermissionButton
+              permission="fees.manage"
+              variant="outline"
+              size="sm"
+              disabled={revertFeeMutation.isPending}
+              onClick={() => {
+                revertFeeMutation.mutate(row.feetype_id);
+              }}
+            >
+              Revert
+            </PermissionButton>
           ),
       },
     ],
-    [payFeeMutation.isPending],
+    [payFeeMutation.isPending, revertFeeMutation],
   );
 
   return (

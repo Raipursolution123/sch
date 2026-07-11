@@ -13,7 +13,7 @@ class StudentFees(models.Model):
     description = models.TextField(blank=True, null=True)
     date = models.DateField(blank=True, null=True)
     payment_mode = models.CharField(max_length=50)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 

@@ -9,7 +9,7 @@ class Feetype(models.Model):
     feecategory_id = models.IntegerField(blank=True, null=True)
     type = models.CharField(max_length=50, blank=True, null=True)
     code = models.CharField(max_length=100)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)

@@ -53,7 +53,7 @@ class Students(models.Model):
     guardian_pic = models.CharField(max_length=200)
     father_aadhar = models.CharField(max_length=50, blank=True, null=True)
     mother_aadhar = models.CharField(max_length=50, blank=True, null=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='yes')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="yes")
     previous_school = models.TextField(blank=True, null=True)
     height = models.CharField(max_length=100)
     weight = models.CharField(max_length=100)

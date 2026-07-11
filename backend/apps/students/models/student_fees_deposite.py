@@ -10,7 +10,7 @@ class StudentFeesDeposite(models.Model):
     student_transport_fee_id = models.IntegerField(blank=True, null=True, db_index=True)
     amount_detail = models.TextField(blank=True, null=True)
     file = models.TextField(blank=True, null=True)
-    is_active = models.CharField(max_length=10, default='no')
+    is_active = models.CharField(max_length=10, default="no")
     created_at = models.DateTimeField()
 
     class Meta:

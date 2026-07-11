@@ -1,3 +1,4 @@
+from datetime import date
 from unittest.mock import patch
 
 import pytest
@@ -5,7 +6,6 @@ import pytest
 from apps.fees.domain.fee_exceptions import FeeValidationError
 from apps.fees.services.fee_due_search_service import FeeDueSearchService
 from apps.fees.services.fee_payment_search_service import FeePaymentSearchService
-from datetime import date
 
 
 def test_due_search_requires_active_session():

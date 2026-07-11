@@ -5,8 +5,6 @@ from datetime import timedelta
 import django.db.utils
 from django.utils import timezone
 
-from common.pagination.standard import StandardResultsSetPagination
-
 from apps.academics.models import Classes, Sections, Sessions
 from apps.attendance.domain.attendance_exceptions import (
     AttendanceNotFoundError,
@@ -17,9 +15,10 @@ from apps.staff.models import Staff
 from apps.students.models import (
     StudentApplyleave,
     StudentAttendences,
-    StudentSession,
     Students,
+    StudentSession,
 )
+from common.pagination.standard import StandardResultsSetPagination
 
 logger = logging.getLogger(__name__)
 

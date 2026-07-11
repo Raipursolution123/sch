@@ -8,7 +8,7 @@ class FeeGroups(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     is_system = models.IntegerField(default=0)
     description = models.TextField(blank=True, null=True)
-    is_active = models.CharField(max_length=10, default='no')
+    is_active = models.CharField(max_length=10, default="no")
     created_at = models.DateTimeField()
 
     class Meta:
