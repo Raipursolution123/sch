@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { SettingsCard } from '@components/forms/SettingsCard';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { FeeLineStatusBadge } from '@features/students/components/FeeLineStatusBadge';
 import { CollectFeeDialog } from '@features/students/components/CollectFeeDialog';
 import {
@@ -72,7 +72,8 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
         header: '',
         cellClassName: 'text-right',
         cell: (row) => (
-          <Button
+          <PermissionButton
+            permission="fees.manage"
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-muted-foreground hover:text-destructive"
@@ -82,7 +83,7 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
           >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Delete</span>
-          </Button>
+          </PermissionButton>
         ),
       },
     ],
@@ -143,7 +144,8 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
         cellClassName: 'text-right',
         cell: (row) =>
           row.status !== 'paid' ? (
-            <Button
+            <PermissionButton
+              permission="fees.manage"
               variant="outline"
               size="sm"
               disabled={payFeeMutation.isPending}
@@ -153,9 +155,10 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
               }}
             >
               Paid
-            </Button>
+            </PermissionButton>
           ) : (
-            <Button
+            <PermissionButton
+              permission="fees.manage"
               variant="outline"
               size="sm"
               disabled={revertFeeMutation.isPending}
@@ -164,7 +167,7 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
               }}
             >
               Revert
-            </Button>
+            </PermissionButton>
           ),
       },
     ],
