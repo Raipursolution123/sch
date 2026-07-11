@@ -98,6 +98,16 @@ class RegisterView(APIView):
             )
 
             user = ensure_staff_user_bridge(staff)
+
+            from apps.accounts.models import Role, StaffRole
+
+            admin_role = Role.objects.filter(name="ADMIN").first()
+            if admin_role:
+                StaffRole.objects.get_or_create(
+                    staff_id=staff.id,
+                    role=admin_role,
+                    defaults={"is_active": 1, "created_at": now},
+                )
         except Exception as e:
             return APIResponse.error(
                 message=f"Database creation error: {str(e)}",

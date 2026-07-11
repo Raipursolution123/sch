@@ -109,6 +109,9 @@ echo "==> Running school initialization (if not already done)..."
 docker compose -f "$COMPOSE_FILE" run --rm backend python manage.py initial_setup \
   --base-url "https://${DOMAIN}" || true
 
+echo "==> Ensuring School Admin legacy permissions..."
+docker compose -f "$COMPOSE_FILE" exec -T backend python manage.py ensure_admin_permissions || true
+
 if should_skip_ssl; then
   echo "==> Skipping Docker SSL bootstrap (shared VPS / SKIP_SSL_BOOTSTRAP / non-default HTTP_PUBLISH_PORT)."
   echo "    Host Apache/Nginx should terminate TLS and proxy to Docker nginx, e.g.:"

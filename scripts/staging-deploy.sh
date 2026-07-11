@@ -51,6 +51,11 @@ docker compose -f "$COMPOSE_FILE" exec -T backend python manage.py migrate --noi
   echo "WARN: migrate had issues — check logs (legacy schema uses SQL seeds, not Django migrations)."
 }
 
+echo "==> Ensuring School Admin legacy permissions..."
+docker compose -f "$COMPOSE_FILE" exec -T backend python manage.py ensure_admin_permissions || {
+  echo "WARN: ensure_admin_permissions had issues — check backend logs."
+}
+
 echo "==> Health check..."
 bash "$ROOT_DIR/scripts/staging-healthcheck.sh"
 

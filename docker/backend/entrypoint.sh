@@ -39,6 +39,9 @@ if [ "${STAGING_DEPLOY:-false}" = "true" ]; then
         python manage.py migrate sessions --noinput
     }
     python manage.py collectstatic --noinput --clear
+    python manage.py ensure_admin_permissions || {
+        echo "WARN: ensure_admin_permissions failed; School Admin may lack session/general settings access."
+    }
 else
     python manage.py migrate --noinput || {
         echo "Full migrate failed; applying framework migrations only..."
