@@ -195,9 +195,17 @@ def validate_and_normalize(payload: dict[str, Any]) -> dict[str, Any]:
 
     if "start_month" in payload:
         start_month = _as_str(payload["start_month"], "start_month")
-        if start_month not in MONTH_ALLOWLIST:
+        month_name_map = {
+            "January": "1", "February": "2", "March": "3", "April": "4",
+            "May": "5", "June": "6", "July": "7", "August": "8",
+            "September": "9", "October": "10", "November": "11", "December": "12",
+        }
+        if start_month in month_name_map.values():
+            cleaned["start_month"] = start_month
+        elif start_month in month_name_map:
+            cleaned["start_month"] = month_name_map[start_month]
+        else:
             raise GeneralSettingsValidationError("Invalid start month.")
-        cleaned["start_month"] = start_month
 
     if "start_week" in payload:
         start_week = _as_str(payload["start_week"], "start_week")

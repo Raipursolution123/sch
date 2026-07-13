@@ -28,7 +28,12 @@ interface SubjectGroupFormDialogProps {
   subjects: Subject[];
   classSections: ClassSection[];
   defaultSessionId?: number;
-  onCreate: (values: SubjectGroupDetailsValues) => void;
+  onCreate: (
+    values: SubjectGroupDetailsValues & {
+      subject_ids?: number[];
+      class_section_ids?: number[];
+    },
+  ) => void;
   onUpdateDetails: (values: SubjectGroupDetailsValues) => void;
   onSyncSubjects: (subjectIds: number[]) => void;
   onSyncClassSections: (classSectionIds: number[]) => void;
@@ -67,6 +72,8 @@ export function SubjectGroupFormDialog({
   const [tab, setTab] = useState<TabId>('details');
   const [subjectIds, setSubjectIds] = useState<number[]>([]);
   const [classSectionIds, setClassSectionIds] = useState<number[]>([]);
+  const [classFilter, setClassFilter] = useState<string>('all');
+  const [sectionFilter, setSectionFilter] = useState<string>('all');
 
   const activeSubjects = useMemo(
     () =>
@@ -83,6 +90,26 @@ export function SubjectGroupFormDialog({
         ),
     [classSections],
   );
+
+  const classFilterOptions = useMemo(() => {
+    const classes = [...new Set(activeClassSections.map((cs) => cs.class_name).filter(Boolean))];
+    classes.sort();
+    return [{ value: 'all', label: 'All Classes' }, ...classes.map((c) => ({ value: c!, label: c! }))];
+  }, [activeClassSections]);
+
+  const sectionFilterOptions = useMemo(() => {
+    const sections = [...new Set(activeClassSections.map((cs) => cs.section_name).filter(Boolean))];
+    sections.sort();
+    return [{ value: 'all', label: 'All Sections' }, ...sections.map((s) => ({ value: s!, label: s! }))];
+  }, [activeClassSections]);
+
+  const filteredClassSections = useMemo(() => {
+    return activeClassSections.filter((cs) => {
+      const matchClass = classFilter === 'all' || cs.class_name === classFilter;
+      const matchSection = sectionFilter === 'all' || cs.section_name === sectionFilter;
+      return matchClass && matchSection;
+    });
+  }, [activeClassSections, classFilter, sectionFilter]);
 
   const {
     control,
@@ -101,6 +128,8 @@ export function SubjectGroupFormDialog({
   useEffect(() => {
     if (!open) return;
     setTab('details');
+    setClassFilter('all');
+    setSectionFilter('all');
     if (group) {
       reset(toDetailsValues(group, defaultSessionId));
       setSubjectIds(group.subject_ids ?? []);
@@ -118,18 +147,33 @@ export function SubjectGroupFormDialog({
 
   const tabs: { id: TabId; label: string; editOnly?: boolean }[] = [
     { id: 'details', label: 'Details' },
-    { id: 'subjects', label: 'Subjects', editOnly: true },
-    { id: 'class-sections', label: 'Class sections', editOnly: true },
+    { id: 'subjects', label: 'Subjects' },
+    { id: 'class-sections', label: 'Class sections' },
   ];
 
   const visibleTabs = tabs.filter((t) => !t.editOnly || isEdit);
+
+  const getTabIndex = (id: TabId) => tabs.findIndex((t) => t.id === id);
+  const currentIdx = getTabIndex(tab);
 
   const toggleId = (ids: number[], id: number, checked: boolean) =>
     checked ? [...new Set([...ids, id])] : ids.filter((value) => value !== id);
 
   const handlePrimarySubmit = handleSubmit((values) => {
     if (!isEdit) {
-      onCreate(values);
+      if (tab === 'details') {
+        setTab('subjects');
+        return;
+      }
+      if (tab === 'subjects') {
+        setTab('class-sections');
+        return;
+      }
+      onCreate({
+        ...values,
+        subject_ids: subjectIds,
+        class_section_ids: classSectionIds,
+      });
       return;
     }
     if (tab === 'details') {
@@ -144,7 +188,9 @@ export function SubjectGroupFormDialog({
   });
 
   const submitLabel = !isEdit
-    ? 'Create group'
+    ? tab === 'details' || tab === 'subjects'
+      ? 'Next'
+      : 'Create group'
     : tab === 'details'
       ? 'Save details'
       : tab === 'subjects'
@@ -168,19 +214,24 @@ export function SubjectGroupFormDialog({
       scrollable
       size="lg"
     >
-      {isEdit && visibleTabs.length > 1 ? (
+      {visibleTabs.length > 1 ? (
         <div className="flex flex-wrap gap-2 border-b pb-3">
-          {visibleTabs.map((item) => (
-            <Button
-              key={item.id}
-              type="button"
-              size="sm"
-              variant={tab === item.id ? 'default' : 'outline'}
-              onClick={() => setTab(item.id)}
-            >
-              {item.label}
-            </Button>
-          ))}
+          {visibleTabs.map((item) => {
+            const itemIdx = getTabIndex(item.id);
+            const disabled = !isEdit && itemIdx > currentIdx;
+            return (
+              <Button
+                key={item.id}
+                type="button"
+                size="sm"
+                variant={tab === item.id ? 'default' : 'outline'}
+                onClick={() => setTab(item.id)}
+                disabled={disabled}
+              >
+                {item.label}
+              </Button>
+            );
+          })}
         </div>
       ) : null}
 
@@ -243,7 +294,7 @@ export function SubjectGroupFormDialog({
         </>
       ) : null}
 
-      {tab === 'subjects' && isEdit ? (
+      {tab === 'subjects' ? (
         <FormField
           label="Subjects"
           hint="Active subjects included in this group for timetables and exams."
@@ -282,7 +333,7 @@ export function SubjectGroupFormDialog({
         </FormField>
       ) : null}
 
-      {tab === 'class-sections' && isEdit ? (
+      {tab === 'class-sections' ? (
         <FormField
           label="Class sections"
           hint="Which class–section combinations use this subject group."
@@ -290,30 +341,63 @@ export function SubjectGroupFormDialog({
           {activeClassSections.length === 0 ? (
             <p className="text-sm text-muted-foreground">No active class sections available.</p>
           ) : (
-            <div className="max-h-56 space-y-2 overflow-y-auto rounded-md border p-3">
-              {activeClassSections.map((mapping) => {
-                const checked = classSectionIds.includes(mapping.id);
-                return (
-                  <label
-                    key={mapping.id}
-                    className={cn(
-                      'flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-sm',
-                      checked && 'font-medium',
-                    )}
-                  >
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-input"
-                      checked={checked}
-                      onChange={(e) =>
-                        setClassSectionIds(toggleId(classSectionIds, mapping.id, e.target.checked))
-                      }
-                    />
-                    {mapping.class_name} — {mapping.section_name}
+            <>
+              <div className="mb-4 grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <label htmlFor="class-filter" className="text-xs font-medium text-muted-foreground">
+                    Filter by Class
                   </label>
-                );
-              })}
-            </div>
+                  <Select
+                    id="class-filter"
+                    options={classFilterOptions}
+                    value={classFilter}
+                    onChange={(e) => setClassFilter(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label htmlFor="section-filter" className="text-xs font-medium text-muted-foreground">
+                    Filter by Section
+                  </label>
+                  <Select
+                    id="section-filter"
+                    options={sectionFilterOptions}
+                    value={sectionFilter}
+                    onChange={(e) => setSectionFilter(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {filteredClassSections.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-4 text-center border rounded-md border-dashed">
+                  No matching class sections found.
+                </p>
+              ) : (
+                <div className="max-h-56 space-y-2 overflow-y-auto rounded-md border p-3">
+                  {filteredClassSections.map((mapping) => {
+                    const checked = classSectionIds.includes(mapping.id);
+                    return (
+                      <label
+                        key={mapping.id}
+                        className={cn(
+                          'flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-sm',
+                          checked && 'font-medium',
+                        )}
+                      >
+                        <input
+                          type="checkbox"
+                          className="h-4 w-4 rounded border-input"
+                          checked={checked}
+                          onChange={(e) =>
+                            setClassSectionIds(toggleId(classSectionIds, mapping.id, e.target.checked))
+                          }
+                        />
+                        {mapping.class_name} — {mapping.section_name}
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
+            </>
           )}
         </FormField>
       ) : null}

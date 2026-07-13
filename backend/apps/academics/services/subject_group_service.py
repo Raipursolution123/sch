@@ -1,5 +1,6 @@
 import logging
 from typing import Any
+from django.db import transaction
 
 from apps.academics.checks.subject_group_dependencies import subject_group_is_in_use
 from apps.academics.domain.subject_group_exceptions import (
@@ -37,13 +38,23 @@ class SubjectGroupService:
         self._ensure_unique_name(name, session_id)
         description = self._normalize_description(payload.get("description"))
 
-        group = SubjectGroups.objects.create(
-            name=name,
-            session_id=session_id,
-            description=description,
-            parent_subject_group_id=None,
-            created_at=selectors.now_datetime(),
-        )
+        with transaction.atomic():
+            group = SubjectGroups.objects.create(
+                name=name,
+                session_id=session_id,
+                description=description,
+                parent_subject_group_id=None,
+                created_at=selectors.now_datetime(),
+            )
+            
+            subject_ids = payload.get("subject_ids")
+            if subject_ids:
+                self.sync_subjects(group.id, subject_ids)
+                
+            class_section_ids = payload.get("class_section_ids")
+            if class_section_ids:
+                self.sync_class_sections(group.id, class_section_ids)
+
         logger.info("Subject group '%s' created (id=%s).", name, group.id)
         return selectors.group_detail_dict(group)
 

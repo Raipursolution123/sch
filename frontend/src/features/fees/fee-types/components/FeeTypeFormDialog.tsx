@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
@@ -51,7 +51,15 @@ export function FeeTypeFormDialog({
   isLoading,
 }: FeeTypeFormDialogProps) {
   const isEdit = Boolean(feeType);
-  const categoryOptions = categories.map((c) => ({ value: String(c.id), label: c.name }));
+  const [tempCategory, setTempCategory] = useState<{ id: number; name: string } | null>(null);
+
+  const categoryOptions = useMemo(() => {
+    const options = categories.map((c) => ({ value: String(c.id), label: c.name }));
+    if (tempCategory && !categories.some((c) => c.id === tempCategory.id)) {
+      options.push({ value: String(tempCategory.id), label: tempCategory.name });
+    }
+    return options;
+  }, [categories, tempCategory]);
 
   const {
     control,
@@ -66,6 +74,7 @@ export function FeeTypeFormDialog({
 
   useEffect(() => {
     if (!open) return;
+    setTempCategory(null);
     if (isEdit && feeType) {
       reset(toFormValues(feeType));
       return;
@@ -93,6 +102,7 @@ export function FeeTypeFormDialog({
         onSuccess: (newCat) => {
           setIsCreatingCategory(false);
           setNewCategoryName('');
+          setTempCategory({ id: newCat.id, name: newCat.name });
           setValue('feecategory_id', newCat.id, { shouldValidate: true, shouldDirty: true });
         },
       },

@@ -87,18 +87,23 @@ export function SubjectGroupsPage() {
     setSelectedGroupId(null);
   };
 
-  const handleCreate = (values: SubjectGroupDetailsValues) => {
+  const handleCreate = (
+    values: SubjectGroupDetailsValues & {
+      subject_ids?: number[];
+      class_section_ids?: number[];
+    },
+  ) => {
     createMutation.mutate(
       {
         name: values.name,
         session_id: values.session_id,
         description: values.description || null,
+        subject_ids: values.subject_ids,
+        class_section_ids: values.class_section_ids,
       },
       {
-        onSuccess: (created) => {
+        onSuccess: () => {
           closeDialog();
-          setSelectedGroupId(created.id);
-          setDialogMode('edit');
         },
       },
     );

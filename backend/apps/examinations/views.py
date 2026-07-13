@@ -13,6 +13,9 @@ from apps.examinations.models.exam_group_class_batch_exams import (
 from apps.examinations.models.exam_group_class_batch_exam_subjects import (
     ExamGroupClassBatchExamSubjects,
 )
+from apps.examinations.models.exam_group_exam_connections import (
+    ExamGroupExamConnections,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -261,6 +264,17 @@ class ExamsListCreateView(APIView):
                 updated_at=timezone.now().date(),
             )
 
+            # Create connection record matching the PHP relational flow
+            if exam.exam_group_id:
+                ExamGroupExamConnections.objects.create(
+                    exam_group_id=exam.exam_group_id,
+                    exam_group_class_batch_exams_id=exam.id,
+                    exam_weightage=0.00,
+                    is_active=is_active_val,
+                    created_at=timezone.now(),
+                    updated_at=timezone.now().date(),
+                )
+
             return APIResponse.success(
                 data=serialize_exam(exam),
                 message="Exam created successfully.",
@@ -298,6 +312,8 @@ class ExamsDetailView(APIView):
 
             data = request.data
 
+            old_exam_group_id = exam.exam_group_id
+
             if "name" in data:
                 exam.exam = data["name"]
             if "exam_group_id" in data:
@@ -324,6 +340,30 @@ class ExamsDetailView(APIView):
             exam.updated_at = timezone.now().date()
             exam.save()
 
+            # Sync connection record if exam_group_id or active status changed
+            if "exam_group_id" in data or "is_active" in data:
+                # Get or create/update the connection
+                connection = ExamGroupExamConnections.objects.filter(
+                    exam_group_class_batch_exams_id=exam.id
+                ).first()
+                if connection:
+                    if exam.exam_group_id:
+                        connection.exam_group_id = exam.exam_group_id
+                        connection.is_active = exam.is_active
+                        connection.updated_at = timezone.now().date()
+                        connection.save()
+                    else:
+                        connection.delete()
+                elif exam.exam_group_id:
+                    ExamGroupExamConnections.objects.create(
+                        exam_group_id=exam.exam_group_id,
+                        exam_group_class_batch_exams_id=exam.id,
+                        exam_weightage=0.00,
+                        is_active=exam.is_active,
+                        created_at=timezone.now(),
+                        updated_at=timezone.now().date(),
+                    )
+
             return APIResponse.success(
                 data=serialize_exam(exam), message="Exam updated successfully."
             )
@@ -338,6 +378,11 @@ class ExamsDetailView(APIView):
             exam = self.get_object(pk)
             if not exam:
                 return APIResponse.error(message="Exam not found.", status_code=404)
+
+            # Delete any associated connections first
+            ExamGroupExamConnections.objects.filter(
+                exam_group_class_batch_exams_id=exam.id
+            ).delete()
 
             exam.delete()
             return APIResponse.success(message="Exam deleted successfully.")
