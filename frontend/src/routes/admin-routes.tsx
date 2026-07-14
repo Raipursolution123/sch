@@ -111,6 +111,24 @@ const StaffPage = lazy(() =>
   })),
 );
 
+const LeaveTypesPage = lazy(() =>
+  import('@features/staff/leave-types/pages/LeaveTypesPage').then((m) => ({
+    default: m.LeaveTypesPage,
+  })),
+);
+
+const StaffLeaveRequestsPage = lazy(() =>
+  import('@features/staff/leave-requests/pages/StaffLeaveRequestsPage').then((m) => ({
+    default: m.StaffLeaveRequestsPage,
+  })),
+);
+
+const StaffLeaveAllotmentsPage = lazy(() =>
+  import('@features/staff/leave-allotments/pages/StaffLeaveAllotmentsPage').then((m) => ({
+    default: m.StaffLeaveAllotmentsPage,
+  })),
+);
+
 const StaffProfilePage = lazy(() =>
   import('@features/staff/pages/StaffProfilePage').then((m) => ({
     default: m.StaffProfilePage,
@@ -213,6 +231,12 @@ const GradesPage = lazy(() =>
   })),
 );
 
+const MarkDivisionsPage = lazy(() =>
+  import('@features/examinations/divisions/pages/MarkDivisionsPage').then((m) => ({
+    default: m.MarkDivisionsPage,
+  })),
+);
+
 const ExamResultsPage = lazy(() =>
   import('@features/examinations/results/pages/ExamResultsPage').then((m) => ({
     default: m.ExamResultsPage,
@@ -263,6 +287,9 @@ export const adminRoutes: RouteObject[] = [
     element: <ModuleLayout />,
     children: [
       { index: true, element: <StaffPage /> },
+      { path: 'leave-types', element: <LeaveTypesPage /> },
+      { path: 'leave', element: <StaffLeaveRequestsPage /> },
+      { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
       { path: ':staffId', element: <StaffProfilePage /> },
       ...buildPlaceholderChildren('/staff'),
     ],
@@ -293,6 +320,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'schedule', element: <ExamSchedulePage /> },
     { path: 'results', element: <ExamResultsPage /> },
     { path: 'grades', element: <GradesPage /> },
+    { path: 'divisions', element: <MarkDivisionsPage /> },
   ]),
 
   createModuleRoutes('/settings', ROUTES.settings.general, [

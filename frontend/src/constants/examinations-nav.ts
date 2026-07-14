@@ -14,4 +14,5 @@ export const EXAMINATIONS_NAV: ExaminationsNavItem[] = [
   { label: 'Schedule', path: ROUTES.examinations.schedule },
   { label: 'Exam Results', path: ROUTES.examinations.results },
   { label: 'Marks Grade', path: ROUTES.examinations.grades },
+  { label: 'Marks Division', path: ROUTES.examinations.divisions },
 ];

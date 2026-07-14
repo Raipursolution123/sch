@@ -35,6 +35,7 @@ export const ROUTES = {
     payroll: '/staff/payroll',
     leave: '/staff/leave',
     leaveTypes: '/staff/leave-types',
+    leaveAllotments: '/staff/leave-allotments',
     departments: '/staff/departments',
     designations: '/staff/designations',
     detail: (id: number | string) => `/staff/${id}`,

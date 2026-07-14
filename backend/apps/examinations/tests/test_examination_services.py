@@ -212,3 +212,33 @@ def test_unenroll_not_found():
         filter_mock.return_value.first.return_value = None
         with pytest.raises(ExaminationNotFoundError):
             ExamEnrollmentService().unenroll(999)
+
+
+def test_create_division_requires_name():
+    from apps.examinations.services.mark_division_service import MarkDivisionService
+
+    with pytest.raises(ExaminationValidationError, match="Division name is required"):
+        MarkDivisionService().create_division(
+            {"percentage_from": 60, "percentage_to": 100}
+        )
+
+
+def test_create_division_rejects_inverted_range():
+    from apps.examinations.services.mark_division_service import MarkDivisionService
+
+    with pytest.raises(ExaminationValidationError, match="Percentage from cannot"):
+        MarkDivisionService().create_division(
+            {"name": "First", "percentage_from": 80, "percentage_to": 60}
+        )
+
+
+def test_delete_division_requires_inactive():
+    from apps.examinations.services.mark_division_service import MarkDivisionService
+
+    division = MagicMock(is_active=1)
+    with patch(
+        "apps.examinations.services.mark_division_service.MarkDivisions.objects.filter"
+    ) as filter_mock:
+        filter_mock.return_value.first.return_value = division
+        with pytest.raises(ExaminationValidationError, match="Deactivate"):
+            MarkDivisionService().delete_division(1)

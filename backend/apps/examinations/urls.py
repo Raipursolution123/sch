@@ -19,6 +19,10 @@ from apps.examinations.api.views.exam_schedules import (
     ExamSchedulesListCreateView,
 )
 from apps.examinations.api.views.grades import GradesDetailView, GradesListCreateView
+from apps.examinations.api.views.mark_divisions import (
+    MarkDivisionsDetailView,
+    MarkDivisionsListCreateView,
+)
 
 app_name = "examinations"
 
@@ -39,6 +43,16 @@ urlpatterns = [
     ),
     path("grades/", GradesListCreateView.as_view(), name="grades_list_create"),
     path("grades/<int:pk>/", GradesDetailView.as_view(), name="grades_detail"),
+    path(
+        "divisions/",
+        MarkDivisionsListCreateView.as_view(),
+        name="mark_divisions_list_create",
+    ),
+    path(
+        "divisions/<int:pk>/",
+        MarkDivisionsDetailView.as_view(),
+        name="mark_divisions_detail",
+    ),
     path(
         "results/roster/",
         ExamResultRosterView.as_view(),

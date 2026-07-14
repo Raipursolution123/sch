@@ -202,6 +202,12 @@ export const ADMIN_NAV: NavItem[] = [
         permissionKeys: ['leave_types'],
       },
       {
+        id: 'staff-leave-allotments',
+        label: 'Leave Allotments',
+        path: ROUTES.staff.leaveAllotments,
+        permissionKeys: ['staff'],
+      },
+      {
         id: 'staff-departments',
         label: 'Departments',
         path: ROUTES.staff.departments,

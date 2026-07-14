@@ -6,6 +6,7 @@ import { PermissionButton } from '@components/rbac/PermissionButton';
 import { StaffOverviewTab } from '@features/staff/components/StaffOverviewTab';
 import { StaffEmploymentTab } from '@features/staff/components/StaffEmploymentTab';
 import { StaffPayrollTab } from '@features/staff/components/StaffPayrollTab';
+import { StaffLeaveTab } from '@features/staff/components/StaffLeaveTab';
 import { StaffDocumentsTab } from '@features/staff/components/StaffDocumentsTab';
 import { StaffFormDialog, type StaffFormSection } from '@features/staff/components/StaffFormDialog';
 import type { StaffFormValues } from '@features/staff/schemas/staff-form.schema';
@@ -24,6 +25,7 @@ const PROFILE_TABS = [
   { id: 'overview', label: 'Overview', enabled: true },
   { id: 'employment', label: 'Employment', enabled: true },
   { id: 'payroll', label: 'Payroll', enabled: true },
+  { id: 'leave', label: 'Leave', enabled: true },
   { id: 'documents', label: 'Documents', enabled: true },
 ] as const;
 
@@ -53,6 +55,7 @@ export function StaffProfilePage() {
     overview: 'all',
     employment: 'employment',
     payroll: 'payroll',
+    leave: 'all',
     documents: 'all',
   };
   const editSection = tabToSection[currentTab] ?? 'all';
@@ -85,7 +88,7 @@ export function StaffProfilePage() {
       headerActions={
         staff ? (
           <div className="flex gap-2">
-            {currentTab !== 'documents' && (
+            {currentTab !== 'documents' && currentTab !== 'leave' && (
               <PermissionButton
                 permission="staff.edit"
                 variant="outline"
@@ -122,6 +125,8 @@ export function StaffProfilePage() {
                   <StaffEmploymentTab staff={staff} />
                 ) : tab.id === 'payroll' ? (
                   <StaffPayrollTab staff={staff} />
+                ) : tab.id === 'leave' ? (
+                  <StaffLeaveTab staffId={staff.id} />
                 ) : (
                   <StaffDocumentsTab staff={staff} />
                 ),
