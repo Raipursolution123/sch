@@ -1029,7 +1029,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'settings-languages',
         label: 'Languages',
         path: ROUTES.settings.languages,
-        permissionKeys: ['language'],
+        permissionKeys: ['languages'],
       },
       {
         id: 'settings-currency',
