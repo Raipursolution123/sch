@@ -84,5 +84,17 @@ export const API_ENDPOINTS = {
     schedules: '/examinations/schedules/',
     scheduleDetail: (id: number) => `/examinations/schedules/${id}/`,
   },
+  transport: {
+    fees: '/transport/fees/',
+    feeDetail: (id: number) => `/transport/fees/${id}/`,
+    pickupPoints: '/transport/pickup-points/',
+    pickupPointDetail: (id: number) => `/transport/pickup-points/${id}/`,
+    routes: '/transport/routes/',
+    routeDetail: (id: number) => `/transport/routes/${id}/`,
+    vehicles: '/transport/vehicles/',
+    vehicleDetail: (id: number) => `/transport/vehicles/${id}/`,
+    assignVehicles: '/transport/assign-vehicles/',
+    assignVehicleDetail: (id: number) => `/transport/assign-vehicles/${id}/`,
+  },
   health: '/health/',
 } as const;

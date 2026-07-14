@@ -32,4 +32,7 @@ urlpatterns = [
     path("examinations/", include("apps.examinations.urls")),
     # fees
     path("fees/", include("apps.fees.urls")),
+    # transport
+    path("transport/", include("apps.transport.urls")),
 ]
+

@@ -26,3 +26,13 @@ export { examSchedulesService } from './exam-schedules.service';
 export { dashboardService } from './dashboard.service';
 export { notificationsService } from './notifications.service';
 export { workflowService } from './workflow.service';
+export { transportFeesService } from './transport-fees.service';
+export { pickupPointsService } from './pickup-points.service';
+export { routesService } from './routes.service';
+export { vehiclesService } from './vehicles.service';
+export { vehicleRoutesService } from './vehicle-routes.service';
+
+
+
+
+

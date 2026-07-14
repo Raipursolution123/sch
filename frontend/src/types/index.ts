@@ -12,3 +12,22 @@ export type {
   GeneralSettingsUpdatePayload,
   RtlMode,
 } from './settings/general';
+
+export type {
+  TransportFeeMaster,
+  CreateTransportFeeMasterPayload,
+  UpdateTransportFeeMasterPayload,
+  PickupPoint,
+  CreatePickupPointPayload,
+  UpdatePickupPointPayload,
+  TransportRoute,
+  CreateTransportRoutePayload,
+  UpdateTransportRoutePayload,
+  Vehicle,
+  CreateVehiclePayload,
+  UpdateVehiclePayload,
+  VehicleRouteAssignment,
+  CreateVehicleRouteAssignmentPayload,
+  UpdateVehicleRouteAssignmentPayload,
+} from './transport';
+
