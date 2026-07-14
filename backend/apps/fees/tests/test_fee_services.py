@@ -101,3 +101,64 @@ def test_delete_discount_requires_inactive(discount_service):
         filter_mock.return_value.first.return_value = discount
         with pytest.raises(FeeValidationError, match="Deactivate"):
             discount_service.delete_discount(1)
+
+
+def test_assign_discount_requires_students():
+    from apps.fees.services.fee_discount_assign_service import FeeDiscountAssignService
+
+    with pytest.raises(FeeValidationError, match="at least one student"):
+        FeeDiscountAssignService().assign(fees_discount_id=1, student_session_ids=[])
+
+
+def test_assign_discount_requires_active_discount():
+    from apps.fees.services.fee_discount_assign_service import FeeDiscountAssignService
+
+    service = FeeDiscountAssignService()
+    session = MagicMock(id=10, session="2026-27")
+    discount = MagicMock(id=1, is_active="no", session_id=10)
+    with patch(
+        "apps.fees.services.fee_discount_assign_service.selectors.get_active_session",
+        return_value=session,
+    ):
+        with patch(
+            "apps.fees.services.fee_discount_assign_service."
+            "FeesDiscounts.objects.filter"
+        ) as filter_mock:
+            filter_mock.return_value.first.return_value = discount
+            with pytest.raises(FeeValidationError, match="not active"):
+                service.assign(fees_discount_id=1, student_session_ids=[101])
+
+
+def test_unassign_not_found():
+    from apps.fees.services.fee_discount_assign_service import FeeDiscountAssignService
+
+    with patch(
+        "apps.fees.services.fee_discount_assign_service."
+        "StudentFeesDiscounts.objects.filter"
+    ) as filter_mock:
+        filter_mock.return_value.first.return_value = None
+        with pytest.raises(FeeNotFoundError):
+            FeeDiscountAssignService().unassign(999)
+
+
+def test_update_reminder_not_found():
+    from apps.fees.services.fee_reminder_service import FeeReminderService
+
+    with patch(
+        "apps.fees.services.fee_reminder_service.FeesReminder.objects.filter"
+    ) as filter_mock:
+        filter_mock.return_value.first.return_value = None
+        with pytest.raises(FeeNotFoundError):
+            FeeReminderService().update_reminder(1, {"day": 3})
+
+
+def test_update_reminder_rejects_negative_day():
+    from apps.fees.services.fee_reminder_service import FeeReminderService
+
+    reminder = MagicMock(id=1, day=5, is_active=1)
+    with patch(
+        "apps.fees.services.fee_reminder_service.FeesReminder.objects.filter"
+    ) as filter_mock:
+        filter_mock.return_value.first.return_value = reminder
+        with pytest.raises(FeeValidationError, match="cannot be negative"):
+            FeeReminderService().update_reminder(1, {"day": -1})

@@ -1,7 +1,9 @@
-import { Pencil, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Pencil, Trash2, UserPlus } from 'lucide-react';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
+import { ROUTES } from '@constants/routes';
 import type { FeeDiscount } from '@app-types/fees/fee-discount';
 import { formatAmount, formatDate } from '@utils/format';
 
@@ -62,6 +64,8 @@ const columns: DataTableColumn<FeeDiscount>[] = [
 ];
 
 export function FeeDiscountsTable({ discounts, onEdit, onDelete }: FeeDiscountsTableProps) {
+  const navigate = useNavigate();
+
   return (
     <DataTable
       data={discounts}
@@ -71,6 +75,19 @@ export function FeeDiscountsTable({ discounts, onEdit, onDelete }: FeeDiscountsT
         const isActive = discount.is_active === 'yes';
         return (
           <>
+            {isActive ? (
+              <PermissionButton
+                permission="fees.manage"
+                variant="ghost"
+                size="sm"
+                onClick={() =>
+                  navigate(`${ROUTES.fees.discountsAssign}?discount_id=${discount.id}`)
+                }
+                aria-label={`Assign ${discount.name}`}
+              >
+                <UserPlus className="h-4 w-4" />
+              </PermissionButton>
+            ) : null}
             <PermissionButton
               permission="fees.manage"
               variant="ghost"

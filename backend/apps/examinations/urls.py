@@ -1,14 +1,24 @@
 from django.urls import path
 
 from apps.examinations.api.views.exam import ExamsDetailView, ExamsListCreateView
+from apps.examinations.api.views.exam_enrollment import (
+    ExamEnrollmentAssignView,
+    ExamEnrollmentRosterView,
+    ExamEnrollmentUnassignView,
+)
 from apps.examinations.api.views.exam_groups import (
     ExamGroupsDetailView,
     ExamGroupsListCreateView,
+)
+from apps.examinations.api.views.exam_results import (
+    ExamResultRosterView,
+    ExamResultsSaveView,
 )
 from apps.examinations.api.views.exam_schedules import (
     ExamSchedulesDetailView,
     ExamSchedulesListCreateView,
 )
+from apps.examinations.api.views.grades import GradesDetailView, GradesListCreateView
 
 app_name = "examinations"
 
@@ -26,5 +36,28 @@ urlpatterns = [
         "schedules/<int:pk>/",
         ExamSchedulesDetailView.as_view(),
         name="exam_schedules_detail",
+    ),
+    path("grades/", GradesListCreateView.as_view(), name="grades_list_create"),
+    path("grades/<int:pk>/", GradesDetailView.as_view(), name="grades_detail"),
+    path(
+        "results/roster/",
+        ExamResultRosterView.as_view(),
+        name="exam_results_roster",
+    ),
+    path("results/", ExamResultsSaveView.as_view(), name="exam_results_save"),
+    path(
+        "enrollments/roster/",
+        ExamEnrollmentRosterView.as_view(),
+        name="exam_enrollments_roster",
+    ),
+    path(
+        "enrollments/",
+        ExamEnrollmentAssignView.as_view(),
+        name="exam_enrollments_assign",
+    ),
+    path(
+        "enrollments/<int:pk>/",
+        ExamEnrollmentUnassignView.as_view(),
+        name="exam_enrollments_unassign",
     ),
 ]

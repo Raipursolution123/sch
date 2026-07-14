@@ -306,6 +306,12 @@ export const ADMIN_NAV: NavItem[] = [
         permissionKeys: ['fees_discount'],
       },
       {
+        id: 'fees-discounts-assign',
+        label: 'Assign Discounts',
+        path: ROUTES.fees.discountsAssign,
+        permissionKeys: ['fees_discount'],
+      },
+      {
         id: 'fees-carry-forward',
         label: 'Carry Forward',
         path: ROUTES.fees.carryForward,
@@ -343,6 +349,12 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'exams-list',
         label: 'Exams',
         path: ROUTES.examinations.exams,
+        permissionKeys: ['exam_group'],
+      },
+      {
+        id: 'exams-enroll',
+        label: 'Enroll Students',
+        path: ROUTES.examinations.enroll,
         permissionKeys: ['exam_group'],
       },
       {

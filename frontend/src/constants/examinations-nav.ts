@@ -10,5 +10,8 @@ export interface ExaminationsNavItem {
 export const EXAMINATIONS_NAV: ExaminationsNavItem[] = [
   { label: 'Exam Groups', path: ROUTES.examinations.groups },
   { label: 'Exams', path: ROUTES.examinations.exams },
+  { label: 'Enroll Students', path: ROUTES.examinations.enroll },
   { label: 'Schedule', path: ROUTES.examinations.schedule },
+  { label: 'Exam Results', path: ROUTES.examinations.results },
+  { label: 'Marks Grade', path: ROUTES.examinations.grades },
 ];

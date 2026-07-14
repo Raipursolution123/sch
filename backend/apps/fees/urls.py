@@ -10,7 +10,13 @@ from apps.fees.api.views.fee_category import (
 )
 from apps.fees.api.views.fee_collect import FeeCollectRosterView
 from apps.fees.api.views.fee_discount import FeeDiscountDetailView, FeeDiscountsListView
+from apps.fees.api.views.fee_discount_assign import (
+    FeeDiscountAssignRosterView,
+    FeeDiscountAssignView,
+    FeeDiscountUnassignView,
+)
 from apps.fees.api.views.fee_group import FeeGroupDetailView, FeeGroupsListView
+from apps.fees.api.views.fee_reminder import FeeReminderDetailView, FeeRemindersListView
 from apps.fees.api.views.fee_search import FeeDueSearchView, FeePaymentSearchView
 from apps.fees.api.views.fee_type import FeeTypeDetailView, FeeTypesListView
 
@@ -34,10 +40,31 @@ urlpatterns = [
         FeeDiscountDetailView.as_view(),
         name="fee-discount-detail",
     ),
+    path(
+        "discount-assignments/roster/",
+        FeeDiscountAssignRosterView.as_view(),
+        name="fee-discount-assign-roster",
+    ),
+    path(
+        "discount-assignments/",
+        FeeDiscountAssignView.as_view(),
+        name="fee-discount-assign",
+    ),
+    path(
+        "discount-assignments/<int:pk>/",
+        FeeDiscountUnassignView.as_view(),
+        name="fee-discount-unassign",
+    ),
     path("assignments/", FeeAssignmentsListView.as_view(), name="fee-assignments-list"),
     path(
         "assignments/<int:pk>/",
         FeeAssignmentDetailView.as_view(),
         name="fee-assignment-detail",
+    ),
+    path("reminders/", FeeRemindersListView.as_view(), name="fee-reminders-list"),
+    path(
+        "reminders/<int:pk>/",
+        FeeReminderDetailView.as_view(),
+        name="fee-reminder-detail",
     ),
 ]

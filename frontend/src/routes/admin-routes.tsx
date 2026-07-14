@@ -135,6 +135,12 @@ const FeeDiscountsPage = lazy(() =>
   })),
 );
 
+const AssignDiscountsPage = lazy(() =>
+  import('@features/fees/discounts/pages/AssignDiscountsPage').then((m) => ({
+    default: m.AssignDiscountsPage,
+  })),
+);
+
 const FeeAssignPage = lazy(() =>
   import('@features/fees/assign/pages/FeeAssignPage').then((m) => ({
     default: m.FeeAssignPage,
@@ -156,6 +162,12 @@ const DueFeesSearchPage = lazy(() =>
 const PaymentSearchPage = lazy(() =>
   import('@features/fees/payment-search/pages/PaymentSearchPage').then((m) => ({
     default: m.PaymentSearchPage,
+  })),
+);
+
+const FeeRemindersPage = lazy(() =>
+  import('@features/fees/reminders/pages/FeeRemindersPage').then((m) => ({
+    default: m.FeeRemindersPage,
   })),
 );
 
@@ -192,6 +204,24 @@ const ExamsPage = lazy(() =>
 const ExamSchedulePage = lazy(() =>
   import('@features/examinations/schedule/pages/ExamSchedulePage').then((m) => ({
     default: m.ExamSchedulePage,
+  })),
+);
+
+const GradesPage = lazy(() =>
+  import('@features/examinations/grades/pages/GradesPage').then((m) => ({
+    default: m.GradesPage,
+  })),
+);
+
+const ExamResultsPage = lazy(() =>
+  import('@features/examinations/results/pages/ExamResultsPage').then((m) => ({
+    default: m.ExamResultsPage,
+  })),
+);
+
+const ExamEnrollPage = lazy(() =>
+  import('@features/examinations/enroll/pages/ExamEnrollPage').then((m) => ({
+    default: m.ExamEnrollPage,
   })),
 );
 
@@ -251,13 +281,18 @@ export const adminRoutes: RouteObject[] = [
     { path: 'fee-types', element: <FeeTypesPage /> },
     { path: 'fee-groups', element: <FeeGroupsPage /> },
     { path: 'discounts', element: <FeeDiscountsPage /> },
+    { path: 'discounts/assign', element: <AssignDiscountsPage /> },
     { path: 'assign', element: <FeeAssignPage /> },
+    { path: 'reminders', element: <FeeRemindersPage /> },
   ]),
 
   createModuleRoutes('/examinations', ROUTES.examinations.groups, [
     { path: 'groups', element: <ExamGroupsPage /> },
     { path: 'exams', element: <ExamsPage /> },
+    { path: 'enroll', element: <ExamEnrollPage /> },
     { path: 'schedule', element: <ExamSchedulePage /> },
+    { path: 'results', element: <ExamResultsPage /> },
+    { path: 'grades', element: <GradesPage /> },
   ]),
 
   createModuleRoutes('/settings', ROUTES.settings.general, [
