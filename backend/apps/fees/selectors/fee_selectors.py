@@ -60,6 +60,23 @@ def fee_group_to_dict(group: FeeGroups) -> dict[str, Any]:
     }
 
 
+def fee_discount_to_dict(discount, session_name: str | None = None) -> dict[str, Any]:
+    amount = discount.amount
+    return {
+        "id": discount.id,
+        "session_id": discount.session_id,
+        "session_name": session_name,
+        "name": discount.name or "",
+        "code": discount.code or "",
+        "type": discount.type or "",
+        "percentage": discount.percentage,
+        "amount": float(amount) if amount is not None else None,
+        "description": discount.description,
+        "is_active": discount.is_active,
+        "created_at": safe_date_str(discount.created_at),
+    }
+
+
 def fee_type_to_dict(
     ft: Feetype, category_map: dict[int, str] | None = None
 ) -> dict[str, Any]:

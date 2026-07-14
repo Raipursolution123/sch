@@ -15,6 +15,7 @@ export { studentsService } from './students.service';
 export { staffService } from './staff.service';
 export { feeTypesService } from './fee-types.service';
 export { feeGroupsService } from './fee-groups.service';
+export { feeDiscountsService } from './fee-discounts.service';
 export { feeAssignmentsService } from './fee-assignments.service';
 export { studentFeesService } from './student-fees.service';
 export { collectFeesService } from './collect-fees.service';

@@ -13,6 +13,7 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.staff.root,
   ROUTES.fees.feeTypes,
   ROUTES.fees.feeGroups,
+  ROUTES.fees.discounts,
   ROUTES.fees.assign,
   ROUTES.fees.collect,
   ROUTES.fees.dueSearch,

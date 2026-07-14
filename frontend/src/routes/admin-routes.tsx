@@ -129,6 +129,12 @@ const FeeGroupsPage = lazy(() =>
   })),
 );
 
+const FeeDiscountsPage = lazy(() =>
+  import('@features/fees/discounts/pages/FeeDiscountsPage').then((m) => ({
+    default: m.FeeDiscountsPage,
+  })),
+);
+
 const FeeAssignPage = lazy(() =>
   import('@features/fees/assign/pages/FeeAssignPage').then((m) => ({
     default: m.FeeAssignPage,
@@ -244,6 +250,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'payment-search', element: <PaymentSearchPage /> },
     { path: 'fee-types', element: <FeeTypesPage /> },
     { path: 'fee-groups', element: <FeeGroupsPage /> },
+    { path: 'discounts', element: <FeeDiscountsPage /> },
     { path: 'assign', element: <FeeAssignPage /> },
   ]),
 

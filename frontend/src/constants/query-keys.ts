@@ -146,6 +146,9 @@ export const queryKeys = {
     feeGroups: {
       list: () => [...queryKeys.fees.all, 'fee-groups', 'list'] as const,
     },
+    discounts: {
+      list: () => [...queryKeys.fees.all, 'discounts', 'list'] as const,
+    },
     assignments: {
       list: () => [...queryKeys.fees.all, 'assignments', 'list'] as const,
     },
