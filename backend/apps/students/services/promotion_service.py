@@ -118,7 +118,7 @@ class PromotionService:
         mark_alumni = bool(payload.get("mark_alumni", False))
         student_ids_filter = payload.get("student_ids")
 
-        target_cs_id = self._validate_scope(
+        self._validate_scope(
             from_session_id,
             from_class_id,
             from_section_id,
