@@ -6,7 +6,7 @@ class CbseTemplate(models.Model):
 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200, blank=True, null=True, db_index=True)
-    orientation = models.CharField(max_length=1, default='P')
+    orientation = models.CharField(max_length=1, default="P")
     description = models.CharField(max_length=255)
     gradeexam_id = models.IntegerField(blank=True, null=True, db_index=True)
     remarkexam_id = models.IntegerField(blank=True, null=True, db_index=True)

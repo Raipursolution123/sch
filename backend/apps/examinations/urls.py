@@ -1,11 +1,13 @@
 from django.urls import path
-from apps.examinations.views import (
-    ExamGroupsListCreateView,
+
+from apps.examinations.api.views.exam import ExamsDetailView, ExamsListCreateView
+from apps.examinations.api.views.exam_groups import (
     ExamGroupsDetailView,
-    ExamsListCreateView,
-    ExamsDetailView,
-    ExamSchedulesListView,
+    ExamGroupsListCreateView,
+)
+from apps.examinations.api.views.exam_schedules import (
     ExamSchedulesDetailView,
+    ExamSchedulesListCreateView,
 )
 
 app_name = "examinations"
@@ -16,7 +18,9 @@ urlpatterns = [
     path("exams/", ExamsListCreateView.as_view(), name="exams_list_create"),
     path("exams/<int:pk>/", ExamsDetailView.as_view(), name="exams_detail"),
     path(
-        "schedules/", ExamSchedulesListView.as_view(), name="exam_schedules_list_create"
+        "schedules/",
+        ExamSchedulesListCreateView.as_view(),
+        name="exam_schedules_list_create",
     ),
     path(
         "schedules/<int:pk>/",

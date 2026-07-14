@@ -5,7 +5,9 @@ class CbseExamAssessmentTypes(models.Model):
     """Maps to `cbse_exam_assessment_types` in db_current."""
 
     id = models.AutoField(primary_key=True)
-    cbse_exam_assessment_id = models.IntegerField(blank=False, null=False, db_index=True)
+    cbse_exam_assessment_id = models.IntegerField(
+        blank=False, null=False, db_index=True
+    )
     name = models.CharField(max_length=255, db_index=True)
     code = models.CharField(max_length=100, db_index=True)
     maximum_marks = models.TextField()

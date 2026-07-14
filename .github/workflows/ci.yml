@@ -30,13 +30,13 @@ jobs:
         run: pip install -r requirements/dev.txt
 
       - name: Black
-        run: black --check apps/accounts apps/settings apps/academics apps/fees apps/staff apps/attendance apps/students api core common config
+        run: black --check apps/accounts apps/settings apps/academics apps/fees apps/staff apps/attendance apps/students apps/examinations api core common config
 
       - name: isort
-        run: isort --check-only apps/accounts apps/settings apps/academics apps/fees apps/staff apps/attendance apps/students api core common config
+        run: isort --check-only apps/accounts apps/settings apps/academics apps/fees apps/staff apps/attendance apps/students apps/examinations api core common config
 
       - name: Flake8
-        run: flake8 --extend-ignore=E501 apps/accounts apps/settings apps/academics apps/fees apps/staff apps/attendance apps/students api core common config
+        run: flake8 --extend-ignore=E501 apps/accounts apps/settings apps/academics apps/fees apps/staff apps/attendance apps/students apps/examinations api core common config
 
   backend-test:
     name: Backend Test

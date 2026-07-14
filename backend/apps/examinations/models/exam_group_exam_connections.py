@@ -6,7 +6,9 @@ class ExamGroupExamConnections(models.Model):
 
     id = models.AutoField(primary_key=True)
     exam_group_id = models.IntegerField(blank=True, null=True, db_index=True)
-    exam_group_class_batch_exams_id = models.IntegerField(blank=True, null=True, db_index=True)
+    exam_group_class_batch_exams_id = models.IntegerField(
+        blank=True, null=True, db_index=True
+    )
     exam_weightage = models.FloatField(blank=True, null=True, default=0.00)
     is_active = models.IntegerField(blank=True, null=True, default=0)
     created_at = models.DateTimeField()

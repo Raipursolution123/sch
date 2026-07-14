@@ -11,7 +11,7 @@ class Grades(models.Model):
     mark_from = models.FloatField(blank=True, null=True)
     mark_upto = models.FloatField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 
