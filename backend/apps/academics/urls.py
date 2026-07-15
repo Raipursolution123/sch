@@ -26,6 +26,19 @@ from apps.academics.api.views.subject_group import (
     SubjectGroupSyncClassSectionsView,
     SubjectGroupSyncSubjectsView,
 )
+from apps.academics.api.views.lesson_plan import (
+    LessonListCreateView,
+    LessonDetailView,
+    TopicListCreateView,
+    TopicDetailView,
+    SyllabusListCreateView,
+    SyllabusDetailView,
+    SyllabusCommentListCreateView,
+)
+from apps.academics.api.views.syllabus_status import (
+    SyllabusStatusListCreateView,
+    SyllabusStatusDetailView,
+)
 from apps.academics.api.views.timetable import (
     TeacherTimetableView,
     TimetableDetailView,
@@ -87,6 +100,27 @@ urlpatterns = [
         "subject-groups/<int:pk>/class-sections/",
         SubjectGroupSyncClassSectionsView.as_view(),
         name="subject_groups_sync_class_sections",
+    ),
+    path("lessons/", LessonListCreateView.as_view(), name="lessons_list_create"),
+    path("lessons/<int:pk>/", LessonDetailView.as_view(), name="lessons_detail"),
+    path("topics/", TopicListCreateView.as_view(), name="topics_list_create"),
+    path("topics/<int:pk>/", TopicDetailView.as_view(), name="topics_detail"),
+    path("syllabus/", SyllabusListCreateView.as_view(), name="syllabus_list_create"),
+    path("syllabus/<int:pk>/", SyllabusDetailView.as_view(), name="syllabus_detail"),
+    path(
+        "syllabus/<int:syllabus_id>/comments/",
+        SyllabusCommentListCreateView.as_view(),
+        name="syllabus_comments_list_create",
+    ),
+    path(
+        "syllabus-status/",
+        SyllabusStatusListCreateView.as_view(),
+        name="syllabus_status_list_create",
+    ),
+    path(
+        "syllabus-status/<int:pk>/",
+        SyllabusStatusDetailView.as_view(),
+        name="syllabus_status_detail",
     ),
     path(
         "timetable/teacher/",
