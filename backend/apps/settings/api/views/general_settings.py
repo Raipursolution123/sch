@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from apps.settings.api.serializers.general_settings import (
     GeneralSettingsUpdateSerializer,
 )
+from apps.settings.api.views.common import SETTINGS_MODULE
 from apps.settings.domain.general_settings_exceptions import (
     GeneralSettingsError,
     GeneralSettingsReadOnlyError,
@@ -22,7 +23,6 @@ from core.permissions.legacy_privilege import HasLegacyPrivilege
 
 logger = logging.getLogger(__name__)
 
-SETTINGS_MODULE = "system_settings"
 SETTINGS_CATEGORY = "general_setting"
 
 

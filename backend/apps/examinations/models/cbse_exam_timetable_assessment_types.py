@@ -6,7 +6,9 @@ class CbseExamTimetableAssessmentTypes(models.Model):
 
     id = models.AutoField(primary_key=True)
     cbse_exam_timetable_id = models.IntegerField(blank=True, null=True, db_index=True)
-    cbse_exam_assessment_type_id = models.IntegerField(blank=True, null=True, db_index=True)
+    cbse_exam_assessment_type_id = models.IntegerField(
+        blank=True, null=True, db_index=True
+    )
     created_at = models.DateTimeField()
 
     class Meta:

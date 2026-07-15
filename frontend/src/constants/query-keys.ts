@@ -136,6 +136,16 @@ export const queryKeys = {
     departments: () => [...queryKeys.staff.all, 'departments'] as const,
     designations: () => [...queryKeys.staff.all, 'designations'] as const,
     suggestEmployeeId: () => [...queryKeys.staff.all, 'suggest-employee-id'] as const,
+    leaveTypes: {
+      list: () => [...queryKeys.staff.all, 'leave-types', 'list'] as const,
+    },
+    leaveRequests: {
+      list: () => [...queryKeys.staff.all, 'leave-requests', 'list'] as const,
+    },
+    leaveAllotments: {
+      roster: (staffId: number) =>
+        [...queryKeys.staff.all, 'leave-allotments', 'roster', staffId] as const,
+    },
   },
   fees: {
     all: ['fees'] as const,
@@ -145,6 +155,24 @@ export const queryKeys = {
     },
     feeGroups: {
       list: () => [...queryKeys.fees.all, 'fee-groups', 'list'] as const,
+    },
+    discounts: {
+      list: () => [...queryKeys.fees.all, 'discounts', 'list'] as const,
+    },
+    discountAssignments: {
+      all: () => [...queryKeys.fees.all, 'discount-assignments'] as const,
+      roster: (classId: number, sectionId: number, feesDiscountId: number) =>
+        [
+          ...queryKeys.fees.all,
+          'discount-assignments',
+          'roster',
+          classId,
+          sectionId,
+          feesDiscountId,
+        ] as const,
+    },
+    reminders: {
+      list: () => [...queryKeys.fees.all, 'reminders', 'list'] as const,
     },
     assignments: {
       list: () => [...queryKeys.fees.all, 'assignments', 'list'] as const,
@@ -225,6 +253,29 @@ export const queryKeys = {
     },
     schedules: {
       list: () => [...queryKeys.examinations.all, 'schedules', 'list'] as const,
+    },
+    grades: {
+      list: () => [...queryKeys.examinations.all, 'grades', 'list'] as const,
+    },
+    divisions: {
+      list: () => [...queryKeys.examinations.all, 'divisions', 'list'] as const,
+    },
+    results: {
+      all: () => [...queryKeys.examinations.all, 'results'] as const,
+      roster: (examId: number, scheduleId: number) =>
+        [...queryKeys.examinations.all, 'results', 'roster', examId, scheduleId] as const,
+    },
+    enrollments: {
+      all: () => [...queryKeys.examinations.all, 'enrollments'] as const,
+      roster: (examId: number, classId: number, sectionId: number) =>
+        [
+          ...queryKeys.examinations.all,
+          'enrollments',
+          'roster',
+          examId,
+          classId,
+          sectionId,
+        ] as const,
     },
   },
   dashboard: {

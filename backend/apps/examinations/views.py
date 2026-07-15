@@ -132,7 +132,7 @@ class ExamGroupsDetailView(APIView):
                 data=serialize_exam_group(exam_group),
                 message="Exam group retrieved successfully.",
             )
-        except Exception as e:
+        except Exception as e:  
             logger.error(f"Error fetching exam group: {e}")
             return APIResponse.error(message=f"Failed to fetch exam group: {str(e)}")
 
@@ -166,6 +166,7 @@ class ExamGroupsDetailView(APIView):
                 data=serialize_exam_group(exam_group),
                 message="Exam group updated successfully.",
             )
+        
         except Exception as e:
             logger.error(f"Error updating exam group: {e}")
             return APIResponse.error(message=f"Failed to update exam group: {str(e)}")

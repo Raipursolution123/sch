@@ -202,6 +202,12 @@ export const ADMIN_NAV: NavItem[] = [
         permissionKeys: ['leave_types'],
       },
       {
+        id: 'staff-leave-allotments',
+        label: 'Leave Allotments',
+        path: ROUTES.staff.leaveAllotments,
+        permissionKeys: ['staff'],
+      },
+      {
         id: 'staff-departments',
         label: 'Departments',
         path: ROUTES.staff.departments,
@@ -306,6 +312,12 @@ export const ADMIN_NAV: NavItem[] = [
         permissionKeys: ['fees_discount'],
       },
       {
+        id: 'fees-discounts-assign',
+        label: 'Assign Discounts',
+        path: ROUTES.fees.discountsAssign,
+        permissionKeys: ['fees_discount'],
+      },
+      {
         id: 'fees-carry-forward',
         label: 'Carry Forward',
         path: ROUTES.fees.carryForward,
@@ -343,6 +355,12 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'exams-list',
         label: 'Exams',
         path: ROUTES.examinations.exams,
+        permissionKeys: ['exam_group'],
+      },
+      {
+        id: 'exams-enroll',
+        label: 'Enroll Students',
+        path: ROUTES.examinations.enroll,
         permissionKeys: ['exam_group'],
       },
       {
@@ -1029,7 +1047,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'settings-languages',
         label: 'Languages',
         path: ROUTES.settings.languages,
-        permissionKeys: ['language'],
+        permissionKeys: ['languages'],
       },
       {
         id: 'settings-currency',

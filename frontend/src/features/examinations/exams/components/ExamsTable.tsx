@@ -1,8 +1,10 @@
-import { Pencil, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Pencil, Trash2, UserPlus } from 'lucide-react';
 import { Badge } from '@components/ui/badge';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import { PermissionButton } from '@components/rbac/PermissionButton';
+import { ROUTES } from '@constants/routes';
 import type { Exam } from '@app-types/examinations/exam';
 import { formatDate } from '@utils/format';
 
@@ -72,6 +74,8 @@ const columns: DataTableColumn<Exam>[] = [
 ];
 
 export function ExamsTable({ exams, onEdit, onDelete }: ExamsTableProps) {
+  const navigate = useNavigate();
+
   return (
     <DataTable
       data={exams}
@@ -81,6 +85,17 @@ export function ExamsTable({ exams, onEdit, onDelete }: ExamsTableProps) {
         const isActive = exam.is_active === 'yes';
         return (
           <>
+            {isActive ? (
+              <PermissionButton
+                permission="exams.create"
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate(`${ROUTES.examinations.enroll}?exam_id=${exam.id}`)}
+                aria-label={`Enroll students for ${exam.name}`}
+              >
+                <UserPlus className="h-4 w-4" />
+              </PermissionButton>
+            ) : null}
             <PermissionButton
               permission="exams.edit"
               variant="ghost"

@@ -5,7 +5,9 @@ class ExamGroupClassBatchExamStudents(models.Model):
     """Maps to `exam_group_class_batch_exam_students` in db_current."""
 
     id = models.AutoField(primary_key=True)
-    exam_group_class_batch_exam_id = models.IntegerField(blank=False, null=False, db_index=True)
+    exam_group_class_batch_exam_id = models.IntegerField(
+        blank=False, null=False, db_index=True
+    )
     student_id = models.IntegerField(blank=False, null=False, db_index=True)
     student_session_id = models.IntegerField(blank=False, null=False, db_index=True)
     roll_no = models.IntegerField(blank=True, null=True)

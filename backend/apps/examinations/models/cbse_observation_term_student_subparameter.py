@@ -6,7 +6,9 @@ class CbseObservationTermStudentSubparameter(models.Model):
 
     id = models.AutoField(primary_key=True)
     cbse_ovservation_term_id = models.IntegerField(blank=True, null=True, db_index=True)
-    cbse_observation_subparameter_id = models.IntegerField(blank=True, null=True, db_index=True)
+    cbse_observation_subparameter_id = models.IntegerField(
+        blank=True, null=True, db_index=True
+    )
     student_session_id = models.IntegerField(blank=True, null=True, db_index=True)
     obtain_marks = models.FloatField()
     created_at = models.DateTimeField()

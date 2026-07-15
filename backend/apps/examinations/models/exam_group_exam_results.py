@@ -5,8 +5,12 @@ class ExamGroupExamResults(models.Model):
     """Maps to `exam_group_exam_results` in db_current."""
 
     id = models.AutoField(primary_key=True)
-    exam_group_class_batch_exam_student_id = models.IntegerField(blank=False, null=False, db_index=True)
-    exam_group_class_batch_exam_subject_id = models.IntegerField(blank=True, null=True, db_index=True)
+    exam_group_class_batch_exam_student_id = models.IntegerField(
+        blank=False, null=False, db_index=True
+    )
+    exam_group_class_batch_exam_subject_id = models.IntegerField(
+        blank=True, null=True, db_index=True
+    )
     exam_group_student_id = models.IntegerField(blank=True, null=True, db_index=True)
     attendence = models.CharField(max_length=10, blank=True, null=True)
     get_marks = models.FloatField(blank=True, null=True, default=0.00)

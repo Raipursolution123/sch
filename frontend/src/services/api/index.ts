@@ -13,8 +13,14 @@ export { timetableService } from './timetable.service';
 export { classTeachersService } from './class-teachers.service';
 export { studentsService } from './students.service';
 export { staffService } from './staff.service';
+export { leaveTypesService } from './leave-types.service';
+export { staffLeaveRequestsService } from './staff-leave-requests.service';
+export { staffLeaveAllotmentsService } from './staff-leave-allotments.service';
 export { feeTypesService } from './fee-types.service';
 export { feeGroupsService } from './fee-groups.service';
+export { feeDiscountsService } from './fee-discounts.service';
+export { feeDiscountAssignmentsService } from './fee-discount-assignments.service';
+export { feeRemindersService } from './fee-reminders.service';
 export { feeAssignmentsService } from './fee-assignments.service';
 export { studentFeesService } from './student-fees.service';
 export { collectFeesService } from './collect-fees.service';
@@ -23,6 +29,10 @@ export { attendanceService } from './attendance.service';
 export { examGroupsService } from './exam-groups.service';
 export { examsService } from './exams.service';
 export { examSchedulesService } from './exam-schedules.service';
+export { examResultsService } from './exam-results.service';
+export { examEnrollmentsService } from './exam-enrollments.service';
+export { gradesService } from './grades.service';
+export { markDivisionsService } from './mark-divisions.service';
 export { dashboardService } from './dashboard.service';
 export { notificationsService } from './notifications.service';
 export { workflowService } from './workflow.service';
@@ -31,8 +41,3 @@ export { pickupPointsService } from './pickup-points.service';
 export { routesService } from './routes.service';
 export { vehiclesService } from './vehicles.service';
 export { vehicleRoutesService } from './vehicle-routes.service';
-
-
-
-
-
