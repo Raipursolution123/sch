@@ -40,4 +40,5 @@ export { transportFeesService } from './transport-fees.service';
 export { pickupPointsService } from './pickup-points.service';
 export { routesService } from './routes.service';
 export { vehiclesService } from './vehicles.service';
+export { syllabusStatusService } from './syllabus-status.service';
 export { vehicleRoutesService } from './vehicle-routes.service';
