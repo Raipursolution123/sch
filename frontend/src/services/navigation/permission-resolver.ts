@@ -16,7 +16,7 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'settings.manage': [
     'general_setting',
     'session_setting',
-    'language',
+    'languages',
     'currency',
     'roles',
     'user_status',

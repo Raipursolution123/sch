@@ -8,7 +8,7 @@ class Exams(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     sesion_id = models.IntegerField(blank=False, null=False, db_index=True)
     note = models.TextField(blank=True, null=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 

@@ -18,7 +18,7 @@ class Onlineexam(models.Model):
     passing_percentage = models.TextField(default=0)
     description = models.TextField(blank=True, null=True)
     publish_result = models.IntegerField(default=0)
-    answer_word_count = models.IntegerField(default='-1')
+    answer_word_count = models.IntegerField(default="-1")
     is_active = models.CharField(max_length=1, blank=True, null=True, default=0)
     is_marks_display = models.IntegerField(default=0)
     is_neg_marking = models.IntegerField(default=0)

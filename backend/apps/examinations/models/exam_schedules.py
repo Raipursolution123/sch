@@ -15,7 +15,7 @@ class ExamSchedules(models.Model):
     full_marks = models.IntegerField(blank=True, null=True)
     passing_marks = models.IntegerField(blank=True, null=True)
     note = models.TextField(blank=True, null=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 

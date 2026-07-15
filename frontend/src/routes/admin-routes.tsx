@@ -111,6 +111,24 @@ const StaffPage = lazy(() =>
   })),
 );
 
+const LeaveTypesPage = lazy(() =>
+  import('@features/staff/leave-types/pages/LeaveTypesPage').then((m) => ({
+    default: m.LeaveTypesPage,
+  })),
+);
+
+const StaffLeaveRequestsPage = lazy(() =>
+  import('@features/staff/leave-requests/pages/StaffLeaveRequestsPage').then((m) => ({
+    default: m.StaffLeaveRequestsPage,
+  })),
+);
+
+const StaffLeaveAllotmentsPage = lazy(() =>
+  import('@features/staff/leave-allotments/pages/StaffLeaveAllotmentsPage').then((m) => ({
+    default: m.StaffLeaveAllotmentsPage,
+  })),
+);
+
 const StaffProfilePage = lazy(() =>
   import('@features/staff/pages/StaffProfilePage').then((m) => ({
     default: m.StaffProfilePage,
@@ -126,6 +144,18 @@ const FeeTypesPage = lazy(() =>
 const FeeGroupsPage = lazy(() =>
   import('@features/fees/fee-groups/pages/FeeGroupsPage').then((m) => ({
     default: m.FeeGroupsPage,
+  })),
+);
+
+const FeeDiscountsPage = lazy(() =>
+  import('@features/fees/discounts/pages/FeeDiscountsPage').then((m) => ({
+    default: m.FeeDiscountsPage,
+  })),
+);
+
+const AssignDiscountsPage = lazy(() =>
+  import('@features/fees/discounts/pages/AssignDiscountsPage').then((m) => ({
+    default: m.AssignDiscountsPage,
   })),
 );
 
@@ -150,6 +180,12 @@ const DueFeesSearchPage = lazy(() =>
 const PaymentSearchPage = lazy(() =>
   import('@features/fees/payment-search/pages/PaymentSearchPage').then((m) => ({
     default: m.PaymentSearchPage,
+  })),
+);
+
+const FeeRemindersPage = lazy(() =>
+  import('@features/fees/reminders/pages/FeeRemindersPage').then((m) => ({
+    default: m.FeeRemindersPage,
   })),
 );
 
@@ -186,6 +222,30 @@ const ExamsPage = lazy(() =>
 const ExamSchedulePage = lazy(() =>
   import('@features/examinations/schedule/pages/ExamSchedulePage').then((m) => ({
     default: m.ExamSchedulePage,
+  })),
+);
+
+const GradesPage = lazy(() =>
+  import('@features/examinations/grades/pages/GradesPage').then((m) => ({
+    default: m.GradesPage,
+  })),
+);
+
+const MarkDivisionsPage = lazy(() =>
+  import('@features/examinations/divisions/pages/MarkDivisionsPage').then((m) => ({
+    default: m.MarkDivisionsPage,
+  })),
+);
+
+const ExamResultsPage = lazy(() =>
+  import('@features/examinations/results/pages/ExamResultsPage').then((m) => ({
+    default: m.ExamResultsPage,
+  })),
+);
+
+const ExamEnrollPage = lazy(() =>
+  import('@features/examinations/enroll/pages/ExamEnrollPage').then((m) => ({
+    default: m.ExamEnrollPage,
   })),
 );
 
@@ -227,6 +287,9 @@ export const adminRoutes: RouteObject[] = [
     element: <ModuleLayout />,
     children: [
       { index: true, element: <StaffPage /> },
+      { path: 'leave-types', element: <LeaveTypesPage /> },
+      { path: 'leave', element: <StaffLeaveRequestsPage /> },
+      { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
       { path: ':staffId', element: <StaffProfilePage /> },
       ...buildPlaceholderChildren('/staff'),
     ],
@@ -244,13 +307,20 @@ export const adminRoutes: RouteObject[] = [
     { path: 'payment-search', element: <PaymentSearchPage /> },
     { path: 'fee-types', element: <FeeTypesPage /> },
     { path: 'fee-groups', element: <FeeGroupsPage /> },
+    { path: 'discounts', element: <FeeDiscountsPage /> },
+    { path: 'discounts/assign', element: <AssignDiscountsPage /> },
     { path: 'assign', element: <FeeAssignPage /> },
+    { path: 'reminders', element: <FeeRemindersPage /> },
   ]),
 
   createModuleRoutes('/examinations', ROUTES.examinations.groups, [
     { path: 'groups', element: <ExamGroupsPage /> },
     { path: 'exams', element: <ExamsPage /> },
+    { path: 'enroll', element: <ExamEnrollPage /> },
     { path: 'schedule', element: <ExamSchedulePage /> },
+    { path: 'results', element: <ExamResultsPage /> },
+    { path: 'grades', element: <GradesPage /> },
+    { path: 'divisions', element: <MarkDivisionsPage /> },
   ]),
 
   createModuleRoutes('/settings', ROUTES.settings.general, [
