@@ -53,10 +53,29 @@ LABEL org.opencontainers.image.source="${SOURCE_URL}" \
 
 # Official nginx:alpine ships optional modules pinned to an older nginx-rX
 # rebuild. Drop unused modules and upgrade nginx to a patched Alpine package.
-RUN apk upgrade --no-cache \
+# apk overwrites Docker's nginx.conf with Alpine's layout (conf.d at root
+# context + http.d for vhosts), which breaks our SPA server block — restore it.
+# Alpine also tightens /var/lib/nginx to 0700/0750; with compose cap_drop:ALL
+# the master process loses DAC_OVERRIDE and cannot prepare temp/log paths.
+RUN cp /etc/nginx/nginx.conf /tmp/nginx.conf.docker \
+    && apk upgrade --no-cache \
     && apk del --no-network nginx-module-acme nginx-module-geoip \
          nginx-module-image-filter nginx-module-njs nginx-module-xslt \
-    && apk add --no-cache --upgrade 'nginx>=1.28.3-r4'
+    && apk add --no-cache --upgrade 'nginx>=1.28.3-r4' \
+    && mv /tmp/nginx.conf.docker /etc/nginx/nginx.conf \
+    && rm -rf /etc/nginx/http.d \
+    && mkdir -p /var/log/nginx \
+         /var/lib/nginx/tmp/client_body \
+         /var/lib/nginx/tmp/proxy \
+         /var/lib/nginx/tmp/fastcgi \
+         /var/lib/nginx/tmp/uwsgi \
+         /var/lib/nginx/tmp/scgi \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log \
+    && chown -R root:root /var/lib/nginx \
+    && chown -R nginx:nginx /var/lib/nginx/tmp /var/log/nginx \
+    && chmod 755 /var/lib/nginx /var/lib/nginx/tmp \
+    && chmod -R 755 /var/lib/nginx/tmp
 
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx/frontend-spa.conf /etc/nginx/conf.d/default.conf

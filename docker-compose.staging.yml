@@ -26,7 +26,10 @@ x-security-nginx: &security-nginx
   cap_drop:
     - ALL
   cap_add:
+    # Bind :80/:443, and allow master→worker setuid/setgid (user nginx;)
     - NET_BIND_SERVICE
+    - SETUID
+    - SETGID
 
 services:
   mysql:
