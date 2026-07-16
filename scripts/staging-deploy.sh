@@ -7,7 +7,11 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 
 COMPOSE_FILE="docker-compose.staging.yml"
-IMAGE_TAG="${1:-latest}"
+IMAGE_TAG="${1:-$(git rev-parse --short HEAD 2>/dev/null || true)}"
+if [[ -z "$IMAGE_TAG" ]]; then
+  echo "ERROR: IMAGE_TAG is required. Pass a git commit SHA: ./scripts/staging-deploy.sh <tag>"
+  exit 1
+fi
 DEPLOY_DIR="$ROOT_DIR/.deploy"
 
 mkdir -p "$DEPLOY_DIR"
@@ -49,6 +53,11 @@ docker compose -f "$COMPOSE_FILE" up -d --remove-orphans --wait backend frontend
 echo "==> Running framework migrations..."
 docker compose -f "$COMPOSE_FILE" exec -T backend python manage.py migrate --noinput || {
   echo "WARN: migrate had issues — check logs (legacy schema uses SQL seeds, not Django migrations)."
+}
+
+echo "==> Collecting static files..."
+docker compose -f "$COMPOSE_FILE" exec -T backend python manage.py collectstatic --noinput --clear || {
+  echo "WARN: collectstatic had issues — check backend logs."
 }
 
 echo "==> Ensuring School Admin legacy permissions..."

@@ -29,28 +29,32 @@ PYEOF
 echo "Checking onboarding prerequisites..."
 python manage.py check_onboarding || true
 
-echo "Running migrations..."
-if [ "${STAGING_DEPLOY:-false}" = "true" ]; then
+# Migrations / collectstatic are gated so Celery replicas and scaled backends
+# do not race. Staging/prod deploy scripts run migrate explicitly.
+if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
+    echo "Running migrations..."
     python manage.py migrate --noinput || {
-        echo "WARN: Full migrate failed on staging; applying framework migrations only..."
+        echo "WARN: Full migrate failed; applying framework migrations only..."
         python manage.py migrate contenttypes --noinput
         python manage.py migrate django_celery_results --noinput
         python manage.py migrate django_celery_beat --noinput
         python manage.py migrate sessions --noinput
     }
+else
+    echo "Skipping migrations (RUN_MIGRATIONS!=true)."
+fi
+
+if [ "${RUN_COLLECTSTATIC:-false}" = "true" ]; then
+    echo "Collecting static files..."
     python manage.py collectstatic --noinput --clear
+else
+    echo "Skipping collectstatic (RUN_COLLECTSTATIC!=true)."
+fi
+
+if [ "${RUN_ENSURE_ADMIN:-false}" = "true" ]; then
     python manage.py ensure_admin_permissions || {
         echo "WARN: ensure_admin_permissions failed; School Admin may lack session/general settings access."
     }
-else
-    python manage.py migrate --noinput || {
-        echo "Full migrate failed; applying framework migrations only..."
-        python manage.py migrate contenttypes --noinput
-        python manage.py migrate django_celery_results --noinput
-        python manage.py migrate django_celery_beat --noinput
-        python manage.py migrate sessions --noinput
-    }
-    python manage.py collectstatic --noinput --clear 2>/dev/null || true
 fi
 
 exec "$@"

@@ -21,6 +21,7 @@ GitHub (main) → CI workflow → Deploy Staging workflow
 | Nginx (HTTPS) | `nginx/nginx.staging.conf` |
 | Nginx (HTTP bootstrap) | `nginx/nginx.staging.http-only.conf` |
 | Env template | `.env.staging.example` |
+| Prep / validate `.env` | `scripts/staging-prep.sh` |
 | First-time setup | `scripts/staging-bootstrap.sh` |
 | Deploy | `scripts/staging-deploy.sh` |
 | Rollback | `scripts/staging-rollback.sh` |
@@ -77,8 +78,26 @@ cd /opt/school-erp
 
 ```bash
 cp .env.staging.example .env
-nano .env   # set SECRET_KEY, DB passwords, CERTBOT_EMAIL
+nano .env   # set SECRET_KEY, DB passwords, REDIS_PASSWORD, CERTBOT_EMAIL, IMAGE_TAG
 chmod 600 .env
+```
+
+**Required after Docker hardening (Redis auth + immutable tags):**
+
+| Variable | Notes |
+|----------|--------|
+| `REDIS_PASSWORD` | Strong password; must match the password embedded in Redis URLs |
+| `REDIS_URL` | `redis://:<password>@redis:6379/0` |
+| `CELERY_BROKER_URL` | `redis://:<password>@redis:6379/1` |
+| `CELERY_RESULT_BACKEND` | `redis://:<password>@redis:6379/2` |
+| `IMAGE_TAG` | Short git SHA from CI (never `latest`) |
+
+Validate before deploy:
+
+```bash
+chmod +x scripts/staging-*.sh
+./scripts/staging-prep.sh          # check only
+./scripts/staging-prep.sh --apply  # recreate redis + backend/celery after checks pass
 ```
 
 ### 4. GHCR access (private packages)
@@ -146,7 +165,8 @@ Or on the server:
 
 ```bash
 cd /home/raipu622/apps/school-erp
-./scripts/staging-deploy.sh latest
+./scripts/staging-prep.sh                 # validate .env first
+./scripts/staging-deploy.sh <short-sha>   # e.g. a1b2c3d — never "latest"
 ```
 
 ## Database strategy
@@ -201,7 +221,7 @@ Staging uses **rolling container recreation** (not blue-green):
 | `GET /health/` | Liveness — always 200 if Django is up |
 | `GET /health/ready/` | Readiness — DB + onboarding status |
 
-Docker healthchecks are configured on backend, frontend, and nginx.
+Docker healthchecks are configured on backend, frontend, nginx, celery worker, and celery beat.
 
 ```bash
 ./scripts/staging-healthcheck.sh
@@ -240,6 +260,7 @@ docker compose -f docker-compose.staging.yml exec nginx nginx -s reload
 | 502 Bad Gateway | `docker compose -f docker-compose.staging.yml ps` — wait for backend healthy |
 | `/health/ready/` 503 | Run `docker compose ... exec backend python manage.py check_onboarding` |
 | SSL cert missing | `./scripts/staging-init-ssl.sh` |
+| Redis AUTH / NOAUTH | Set `REDIS_PASSWORD` and update Redis URLs; run `./scripts/staging-prep.sh --apply` |
 | Wrong nginx config | Set `NGINX_STAGING_CONF=nginx.staging.http-only.conf` in `.env` for HTTP-only |
 
 ## What is intentionally relaxed (vs production)
@@ -248,7 +269,6 @@ docker compose -f docker-compose.staging.yml exec nginx nginx -s reload
 - Browsable API enabled in staging settings
 - Default demo admin may exist
 - Media files served without auth
-- No Redis password
 - Shorter HSTS, no preload
 
 These are acceptable for a shared dev/staging server and should be tightened before a production launch.

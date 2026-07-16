@@ -2,19 +2,26 @@
 
 FROM node:22-alpine AS base
 
+ARG GIT_SHA=unknown
+ARG SOURCE_URL=https://github.com/Raipursolution123/sch
+
+LABEL org.opencontainers.image.source="${SOURCE_URL}" \
+      org.opencontainers.image.revision="${GIT_SHA}" \
+      org.opencontainers.image.title="school-erp-frontend" \
+      org.opencontainers.image.description="School ERP React SPA"
+
 WORKDIR /app
 
 # --- Dependencies ---
 FROM base AS deps
 
 COPY frontend/package.json frontend/package-lock.json* ./
-RUN npm ci
+RUN npm ci && npm cache clean --force
 
 # --- Development ---
-FROM base AS development
-
-COPY frontend/package.json frontend/package-lock.json* ./
-RUN npm install
+# Runs as root for Docker Desktop bind-mount compatibility (Vite writes under
+# /app/node_modules). Production SPA serves via nginx:alpine (non-root nginx user).
+FROM deps AS development
 
 COPY frontend/ .
 
@@ -35,6 +42,14 @@ RUN npm run build
 
 # --- Production static server ---
 FROM nginx:1.27-alpine AS production
+
+ARG GIT_SHA=unknown
+ARG SOURCE_URL=https://github.com/Raipursolution123/sch
+
+LABEL org.opencontainers.image.source="${SOURCE_URL}" \
+      org.opencontainers.image.revision="${GIT_SHA}" \
+      org.opencontainers.image.title="school-erp-frontend" \
+      org.opencontainers.image.description="School ERP React SPA"
 
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx/frontend-spa.conf /etc/nginx/conf.d/default.conf

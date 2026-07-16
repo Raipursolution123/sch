@@ -96,7 +96,11 @@ if should_skip_ssl; then
 else
   export NGINX_STAGING_CONF=nginx.staging.http-only.conf
 fi
-export IMAGE_TAG="${IMAGE_TAG:-latest}"
+export IMAGE_TAG="${IMAGE_TAG:-$(git rev-parse --short HEAD 2>/dev/null || true)}"
+if [[ -z "$IMAGE_TAG" ]]; then
+  echo "ERROR: Set IMAGE_TAG in .env to a git commit SHA before bootstrap."
+  exit 1
+fi
 
 if should_skip_ssl; then
   echo "==> Building and starting application stack (shared VPS — host reverse proxy)..."

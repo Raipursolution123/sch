@@ -169,6 +169,12 @@ jobs:
           file: docker/backend/Dockerfile
           target: production
           push: false
+          load: true
+          tags: school-erp-backend:ci
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+          cache-from: type=gha,scope=backend-ci
+          cache-to: type=gha,mode=max,scope=backend-ci
 
       - name: Build frontend image
         uses: docker/build-push-action@v6
@@ -177,3 +183,28 @@ jobs:
           file: docker/frontend/Dockerfile
           target: production
           push: false
+          load: true
+          tags: school-erp-frontend:ci
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+            VITE_API_BASE_URL=/api/v1
+          cache-from: type=gha,scope=frontend-ci
+          cache-to: type=gha,mode=max,scope=frontend-ci
+
+      - name: Scan backend image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: school-erp-backend:ci
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+
+      - name: Scan frontend image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: school-erp-frontend:ci
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
