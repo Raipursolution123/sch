@@ -8,7 +8,7 @@ export const LESSON_KEYS = {
   details: () => [...LESSON_KEYS.all, 'detail'] as const,
 };
 
-export const useLessonList = (params?: Record<string, any>) => {
+export const useLessonList = (params?: Record<string, unknown>) => {
   return useQuery({
     queryKey: [...LESSON_KEYS.lists(), params],
     queryFn: () => lessonService.getLessonList(params),

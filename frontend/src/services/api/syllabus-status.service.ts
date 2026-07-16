@@ -9,7 +9,7 @@ import type {
 const BASE_PATH = '/academics/syllabus-status';
 
 export const syllabusStatusService = {
-  getSyllabusStatusList: async (params?: Record<string, any>) => {
+  getSyllabusStatusList: async (params?: Record<string, unknown>) => {
     const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<SyllabusStatus>>>(
       `${BASE_PATH}/`,
       { params },

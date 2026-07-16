@@ -5,7 +5,7 @@ import type { Topic, TopicCreatePayload, TopicUpdatePayload } from '@/types/acad
 const BASE_PATH = '/academics/topics';
 
 export const topicService = {
-  getTopicList: async (params?: Record<string, any>) => {
+  getTopicList: async (params?: Record<string, unknown>) => {
     const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<Topic>>>(
       `${BASE_PATH}/`,
       { params },
