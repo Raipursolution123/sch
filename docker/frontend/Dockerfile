@@ -51,8 +51,12 @@ LABEL org.opencontainers.image.source="${SOURCE_URL}" \
       org.opencontainers.image.title="school-erp-frontend" \
       org.opencontainers.image.description="School ERP React SPA"
 
-# Pull latest Alpine security fixes for packages bundled in the base image.
-RUN apk upgrade --no-cache
+# Official nginx:alpine ships optional modules pinned to an older nginx-rX
+# rebuild. Drop unused modules and upgrade nginx to a patched Alpine package.
+RUN apk upgrade --no-cache \
+    && apk del --no-network nginx-module-acme nginx-module-geoip \
+         nginx-module-image-filter nginx-module-njs nginx-module-xslt \
+    && apk add --no-cache --upgrade 'nginx>=1.28.3-r4'
 
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx/frontend-spa.conf /etc/nginx/conf.d/default.conf
