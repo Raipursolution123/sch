@@ -314,8 +314,6 @@ class ExamsDetailView(APIView):
 
             data = request.data
 
-            old_exam_group_id = exam.exam_group_id
-
             if "name" in data:
                 exam.exam = data["name"]
             if "exam_group_id" in data:

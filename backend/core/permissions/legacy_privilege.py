@@ -1,7 +1,5 @@
 from rest_framework.permissions import BasePermission
 
-from apps.accounts.services.legacy_rbac import is_module_active, user_has_privilege
-
 
 class HasLegacyPrivilege(BasePermission):
     """
