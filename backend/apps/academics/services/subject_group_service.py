@@ -1,5 +1,6 @@
 import logging
 from typing import Any
+
 from django.db import transaction
 
 from apps.academics.checks.subject_group_dependencies import subject_group_is_in_use

@@ -2,21 +2,20 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from common.responses.api import APIResponse
-from common.pagination.standard import StandardResultsSetPagination
-from core.permissions.legacy_privilege import HasLegacyPrivilege
-
+from apps.academics.api.serializers.lesson_plan import (
+    SubjectSyllabusCreateSerializer,
+    SubjectSyllabusSerializer,
+    SubjectSyllabusUpdateSerializer,
+)
 from apps.academics.domain.lesson_plan_exceptions import (
     LessonPlanError,
     LessonPlanNotFoundError,
     LessonPlanValidationError,
 )
 from apps.academics.services.lesson_plan_service import LessonPlanService
-from apps.academics.api.serializers.lesson_plan import (
-    SubjectSyllabusSerializer,
-    SubjectSyllabusCreateSerializer,
-    SubjectSyllabusUpdateSerializer,
-)
+from common.pagination.standard import StandardResultsSetPagination
+from common.responses.api import APIResponse
+from core.permissions.legacy_privilege import HasLegacyPrivilege
 
 
 def _handle_exception(exc: Exception):

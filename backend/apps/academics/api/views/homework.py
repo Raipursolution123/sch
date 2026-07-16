@@ -1,18 +1,17 @@
-from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics
 from rest_framework.filters import SearchFilter
 
-from apps.academics.models.homework import Homework
-from apps.academics.models.homework_evaluation import HomeworkEvaluation
-from apps.academics.models.daily_assignment import DailyAssignment
-from apps.academics.models.submit_assignment import SubmitAssignment
-
 from apps.academics.api.serializers.homework import (
-    HomeworkSerializer,
-    HomeworkEvaluationSerializer,
     DailyAssignmentSerializer,
+    HomeworkEvaluationSerializer,
+    HomeworkSerializer,
     SubmitAssignmentSerializer,
 )
+from apps.academics.models.daily_assignment import DailyAssignment
+from apps.academics.models.homework import Homework
+from apps.academics.models.homework_evaluation import HomeworkEvaluation
+from apps.academics.models.submit_assignment import SubmitAssignment
 
 
 class HomeworkListCreateView(generics.ListCreateAPIView):

@@ -71,12 +71,12 @@ class LessonSerializer(serializers.Serializer):
         return group.name if group else None
 
     def get_class_section_name(self, obj):
-        from apps.academics.models.subject_group_class_sections import (
-            SubjectGroupClassSections,
-        )
         from apps.academics.models.class_sections import ClassSections
         from apps.academics.models.classes import Classes
         from apps.academics.models.sections import Sections
+        from apps.academics.models.subject_group_class_sections import (
+            SubjectGroupClassSections,
+        )
 
         sgcs = SubjectGroupClassSections.objects.filter(
             id=obj.subject_group_class_sections_id
@@ -178,12 +178,12 @@ class TopicSerializer(serializers.Serializer):
         lesson = self._get_parent_lesson(obj)
         if not lesson:
             return None
-        from apps.academics.models.subject_group_class_sections import (
-            SubjectGroupClassSections,
-        )
         from apps.academics.models.class_sections import ClassSections
         from apps.academics.models.classes import Classes
         from apps.academics.models.sections import Sections
+        from apps.academics.models.subject_group_class_sections import (
+            SubjectGroupClassSections,
+        )
 
         sgcs = SubjectGroupClassSections.objects.filter(
             id=lesson.subject_group_class_sections_id
@@ -291,8 +291,8 @@ class SubjectSyllabusSerializer(serializers.Serializer):
         return topic.name if topic else None
 
     def _get_parent_lesson(self, obj):
-        from apps.academics.models.topic import Topic
         from apps.academics.models.lesson import Lesson
+        from apps.academics.models.topic import Topic
 
         topic = Topic.objects.filter(id=obj.topic_id).first()
         if not topic:

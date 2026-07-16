@@ -1,16 +1,17 @@
 import logging
 from typing import Any
-from django.utils import timezone
+
 from django.db import IntegrityError
+from django.utils import timezone
 
 from apps.academics.domain.lesson_plan_exceptions import (
     LessonPlanNotFoundError,
     LessonPlanValidationError,
 )
 from apps.academics.models.lesson import Lesson
-from apps.academics.models.topic import Topic
-from apps.academics.models.subject_syllabus import SubjectSyllabus
 from apps.academics.models.lesson_plan_forum import LessonPlanForum
+from apps.academics.models.subject_syllabus import SubjectSyllabus
+from apps.academics.models.topic import Topic
 
 logger = logging.getLogger(__name__)
 
@@ -25,11 +26,11 @@ class LessonPlanService:
         qs = Lesson.objects.all().order_by("-id")
 
         if subject_group_id or subject_id or class_section_id:
-            from apps.academics.models.subject_group_subjects import (
-                SubjectGroupSubjects,
-            )
             from apps.academics.models.subject_group_class_sections import (
                 SubjectGroupClassSections,
+            )
+            from apps.academics.models.subject_group_subjects import (
+                SubjectGroupSubjects,
             )
 
             sgs_qs = SubjectGroupSubjects.objects.all()
@@ -62,10 +63,10 @@ class LessonPlanService:
             raise LessonPlanValidationError("Lesson name is required.")
 
         from apps.academics.models.sessions import Sessions
-        from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
         from apps.academics.models.subject_group_class_sections import (
             SubjectGroupClassSections,
         )
+        from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
 
         session_id = data.get("session_id", 1)
         if not Sessions.objects.filter(id=session_id).exists():
@@ -176,8 +177,8 @@ class LessonPlanService:
         if not data.get("name"):
             raise LessonPlanValidationError("Topic name is required.")
 
-        from apps.academics.models.sessions import Sessions
         from apps.academics.models.lesson import Lesson
+        from apps.academics.models.sessions import Sessions
 
         first_session = Sessions.objects.first()
         first_lesson = Lesson.objects.first()

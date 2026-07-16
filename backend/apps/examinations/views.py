@@ -1,21 +1,22 @@
 import logging
+
 from django.utils import timezone
-from rest_framework.views import APIView
+
 from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
 
-from apps.examinations.models.exam_groups import ExamGroups
-from common.pagination.standard import StandardResultsSetPagination
-from common.responses.api import APIResponse
-
-from apps.examinations.models.exam_group_class_batch_exams import (
-    ExamGroupClassBatchExams,
-)
 from apps.examinations.models.exam_group_class_batch_exam_subjects import (
     ExamGroupClassBatchExamSubjects,
+)
+from apps.examinations.models.exam_group_class_batch_exams import (
+    ExamGroupClassBatchExams,
 )
 from apps.examinations.models.exam_group_exam_connections import (
     ExamGroupExamConnections,
 )
+from apps.examinations.models.exam_groups import ExamGroups
+from common.pagination.standard import StandardResultsSetPagination
+from common.responses.api import APIResponse
 
 logger = logging.getLogger(__name__)
 

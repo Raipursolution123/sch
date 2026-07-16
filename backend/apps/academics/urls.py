@@ -11,6 +11,25 @@ from apps.academics.api.views.class_teacher import (
     ClassTeacherDetailView,
     ClassTeacherListCreateView,
 )
+from apps.academics.api.views.homework import (
+    DailyAssignmentDetailView,
+    DailyAssignmentListCreateView,
+    HomeworkDetailView,
+    HomeworkEvaluationDetailView,
+    HomeworkEvaluationListCreateView,
+    HomeworkListCreateView,
+    SubmitAssignmentDetailView,
+    SubmitAssignmentListCreateView,
+)
+from apps.academics.api.views.lesson_plan import (
+    LessonDetailView,
+    LessonListCreateView,
+    SyllabusCommentListCreateView,
+    SyllabusDetailView,
+    SyllabusListCreateView,
+    TopicDetailView,
+    TopicListCreateView,
+)
 from apps.academics.api.views.promote import PromoteExecuteView, PromotePreviewView
 from apps.academics.api.views.section import SectionDetailView, SectionListCreateView
 from apps.academics.api.views.session import (
@@ -26,18 +45,9 @@ from apps.academics.api.views.subject_group import (
     SubjectGroupSyncClassSectionsView,
     SubjectGroupSyncSubjectsView,
 )
-from apps.academics.api.views.lesson_plan import (
-    LessonListCreateView,
-    LessonDetailView,
-    TopicListCreateView,
-    TopicDetailView,
-    SyllabusListCreateView,
-    SyllabusDetailView,
-    SyllabusCommentListCreateView,
-)
 from apps.academics.api.views.syllabus_status import (
-    SyllabusStatusListCreateView,
     SyllabusStatusDetailView,
+    SyllabusStatusListCreateView,
 )
 from apps.academics.api.views.timetable import (
     TeacherTimetableView,
@@ -45,17 +55,6 @@ from apps.academics.api.views.timetable import (
     TimetableListCreateView,
     TimetableSubjectOptionsView,
 )
-from apps.academics.api.views.homework import (
-    HomeworkListCreateView,
-    HomeworkDetailView,
-    HomeworkEvaluationListCreateView,
-    HomeworkEvaluationDetailView,
-    DailyAssignmentListCreateView,
-    DailyAssignmentDetailView,
-    SubmitAssignmentListCreateView,
-    SubmitAssignmentDetailView,
-)
-
 
 urlpatterns = [
     path("classes/", ClassListCreateView.as_view(), name="classes_list_create"),
