@@ -192,7 +192,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=frontend-ci
 
       - name: Scan backend image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: school-erp-backend:ci
           format: table
@@ -201,7 +201,7 @@ jobs:
           ignore-unfixed: true
 
       - name: Scan frontend image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: school-erp-frontend:ci
           format: table
