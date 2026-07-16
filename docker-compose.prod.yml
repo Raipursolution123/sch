@@ -193,7 +193,7 @@ services:
 
   nginx:
     <<: *security-nginx
-    image: nginx:1.27-alpine
+    image: nginx:1.28-alpine
     container_name: school_erp_nginx
     restart: always
     cpus: "0.25"

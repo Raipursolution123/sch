@@ -41,7 +41,7 @@ COPY frontend/ .
 RUN npm run build
 
 # --- Production static server ---
-FROM nginx:1.27-alpine AS production
+FROM nginx:1.28-alpine AS production
 
 ARG GIT_SHA=unknown
 ARG SOURCE_URL=https://github.com/Raipursolution123/sch
@@ -50,6 +50,9 @@ LABEL org.opencontainers.image.source="${SOURCE_URL}" \
       org.opencontainers.image.revision="${GIT_SHA}" \
       org.opencontainers.image.title="school-erp-frontend" \
       org.opencontainers.image.description="School ERP React SPA"
+
+# Pull latest Alpine security fixes for packages bundled in the base image.
+RUN apk upgrade --no-cache
 
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx/frontend-spa.conf /etc/nginx/conf.d/default.conf
