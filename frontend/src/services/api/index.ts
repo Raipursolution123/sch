@@ -42,3 +42,4 @@ export { routesService } from './routes.service';
 export { vehiclesService } from './vehicles.service';
 export { syllabusStatusService } from './syllabus-status.service';
 export { vehicleRoutesService } from './vehicle-routes.service';
+export { ledgersService } from './ledgers.service';

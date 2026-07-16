@@ -9,6 +9,13 @@ import {
   createPlaceholderModule,
 } from '@routes/module-routes';
 
+// Finance
+const LedgersPage = lazy(() =>
+  import('@features/finance/ledgers/pages/LedgersPage').then((m) => ({
+    default: m.LedgersPage,
+  })),
+);
+
 const SessionsPage = lazy(() =>
   import('@features/academics/sessions/pages/SessionsPage').then((m) => ({
     default: m.SessionsPage,
@@ -368,7 +375,9 @@ export const adminRoutes: RouteObject[] = [
   createPlaceholderModule('/online-examinations', ROUTES.onlineExams.exams),
   createPlaceholderModule('/income', ROUTES.income.list),
   createPlaceholderModule('/expense', ROUTES.expense.list),
-  createPlaceholderModule('/finance', ROUTES.finance.chartOfAccounts),
+  createModuleRoutes('/finance', ROUTES.finance.chartOfAccounts, [
+    { path: 'ledgers', element: <LedgersPage /> },
+  ]),
   createPlaceholderModule('/reports', ROUTES.reports.students),
   createPlaceholderModule('/certificates', ROUTES.certificates.templates),
   createPlaceholderModule('/alumni', ROUTES.alumni.list),
