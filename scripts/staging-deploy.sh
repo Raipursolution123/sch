@@ -49,9 +49,9 @@ fi
 echo "==> Using image tag: ${IMAGE_TAG}"
 
 echo "==> Pulling container images..."
-if ! docker compose -f "$COMPOSE_FILE" pull backend frontend celery_worker celery_beat 2>/dev/null; then
+if ! docker compose -f "$COMPOSE_FILE" pull backend frontend nginx celery_worker celery_beat 2>/dev/null; then
   echo "    Registry pull failed — building images locally..."
-  docker compose -f "$COMPOSE_FILE" build backend frontend
+  docker compose -f "$COMPOSE_FILE" build backend frontend nginx
 fi
 
 rollback() {
@@ -60,6 +60,10 @@ rollback() {
   docker compose -f "$COMPOSE_FILE" ps frontend || true
   docker compose -f "$COMPOSE_FILE" logs --tail=80 frontend || true
   docker inspect --format '{{json .State.Health}}' "$(docker compose -f "$COMPOSE_FILE" ps -q frontend 2>/dev/null)" 2>/dev/null || true
+  echo "==> Nginx container diagnostics:"
+  docker compose -f "$COMPOSE_FILE" ps nginx || true
+  docker compose -f "$COMPOSE_FILE" logs --tail=80 nginx || true
+  docker inspect --format '{{json .State.Health}}' "$(docker compose -f "$COMPOSE_FILE" ps -q nginx 2>/dev/null)" 2>/dev/null || true
   bash "$ROOT_DIR/scripts/staging-rollback.sh" || true
   exit 1
 }

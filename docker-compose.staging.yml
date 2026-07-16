@@ -194,7 +194,12 @@ services:
 
   nginx:
     <<: *security-nginx
-    image: nginx:1.28-alpine
+    image: ${IMAGE_REGISTRY:-ghcr.io/raipursolution123/sch}/nginx:${IMAGE_TAG}
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+      args:
+        GIT_SHA: ${GIT_SHA:-unknown}
     restart: unless-stopped
     cpus: "0.25"
     mem_limit: 128m
