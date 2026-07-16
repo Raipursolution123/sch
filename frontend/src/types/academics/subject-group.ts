@@ -32,6 +32,8 @@ export interface CreateSubjectGroupPayload {
   name: string;
   session_id: number;
   description?: string | null;
+  subject_ids?: number[];
+  class_section_ids?: number[];
 }
 
 export interface UpdateSubjectGroupPayload {

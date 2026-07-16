@@ -53,6 +53,18 @@ const ALL_PERMISSIONS: Permission[] = [
   'attendance.mark',
   'attendance.report',
   'notifications.view',
+  'manage_syllabus_status.view',
+  'manage_syllabus_status.create',
+  'manage_syllabus_status.edit',
+  'manage_syllabus_status.delete',
+  'manage_lesson.view',
+  'manage_lesson.create',
+  'manage_lesson.edit',
+  'manage_lesson.delete',
+  'manage_topic.view',
+  'manage_topic.create',
+  'manage_topic.edit',
+  'manage_topic.delete',
 ];
 
 export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {

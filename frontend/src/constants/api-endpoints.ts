@@ -107,5 +107,17 @@ export const API_ENDPOINTS = {
     enrollments: '/examinations/enrollments/',
     enrollmentDetail: (id: number) => `/examinations/enrollments/${id}/`,
   },
+  transport: {
+    fees: '/transport/fees/',
+    feeDetail: (id: number) => `/transport/fees/${id}/`,
+    pickupPoints: '/transport/pickup-points/',
+    pickupPointDetail: (id: number) => `/transport/pickup-points/${id}/`,
+    routes: '/transport/routes/',
+    routeDetail: (id: number) => `/transport/routes/${id}/`,
+    vehicles: '/transport/vehicles/',
+    vehicleDetail: (id: number) => `/transport/vehicles/${id}/`,
+    assignVehicles: '/transport/assign-vehicles/',
+    assignVehicleDetail: (id: number) => `/transport/assign-vehicles/${id}/`,
+  },
   health: '/health/',
 } as const;

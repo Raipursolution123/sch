@@ -87,6 +87,18 @@ const PromoteStudentsPage = lazy(() =>
   })),
 );
 
+const LessonPage = lazy(() =>
+  import('@features/academics/lessons/pages/LessonPage').then((m) => ({
+    default: m.LessonPage,
+  })),
+);
+
+const SyllabusStatusPage = lazy(() =>
+  import('@features/academics/syllabus-status/pages/SyllabusStatusPage').then((m) => ({
+    default: m.SyllabusStatusPage,
+  })),
+);
+
 const StudentsPage = lazy(() =>
   import('@features/students/pages/StudentsPage').then((m) => ({
     default: m.StudentsPage,
@@ -337,7 +349,22 @@ export const adminRoutes: RouteObject[] = [
   createPlaceholderModule('/homework', ROUTES.homework.assignments),
   createPlaceholderModule('/communicate', ROUTES.communicate.notices),
   createPlaceholderModule('/download-center', ROUTES.downloadCenter.contentTypes),
-  createPlaceholderModule('/lesson-plan', ROUTES.lessonPlan.syllabusStatus),
+  createModuleRoutes('/lesson-plan', ROUTES.lessonPlan.syllabusStatus, [
+    {
+      path: 'syllabus-status',
+      element: <SyllabusStatusPage />,
+      handle: {
+        page: { title: 'Syllabus Status', description: 'Manage syllabus status' },
+      },
+    },
+    {
+      path: 'lessons',
+      element: <LessonPage />,
+      handle: {
+        page: { title: 'Lessons', description: 'Manage lessons' },
+      },
+    },
+  ]),
   createPlaceholderModule('/online-examinations', ROUTES.onlineExams.exams),
   createPlaceholderModule('/income', ROUTES.income.list),
   createPlaceholderModule('/expense', ROUTES.expense.list),

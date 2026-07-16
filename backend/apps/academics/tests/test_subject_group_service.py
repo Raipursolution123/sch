@@ -20,6 +20,7 @@ def test_create_group_requires_session(service):
         service.create_group({"name": "Science Group"})
 
 
+@pytest.mark.django_db
 def test_create_group_success(service):
     with patch("apps.academics.services.subject_group_service.SubjectGroups") as model:
         with patch(

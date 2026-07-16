@@ -7,6 +7,13 @@ class SubjectGroupCreateSerializer(serializers.Serializer):
     description = serializers.CharField(
         required=False, allow_blank=True, allow_null=True
     )
+    subject_ids = serializers.ListField(
+        child=serializers.IntegerField(), required=False, allow_empty=True
+    )
+    class_section_ids = serializers.ListField(
+        child=serializers.IntegerField(), required=False, allow_empty=True
+    )
+
 
 
 class SubjectGroupUpdateSerializer(serializers.Serializer):

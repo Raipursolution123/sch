@@ -82,12 +82,16 @@ def fee_type_to_dict(
 ) -> dict[str, Any]:
     if category_map is None:
         category_map = {}
+    category_name = category_map.get(ft.feecategory_id)
+    if not category_name and ft.feecategory_id:
+        category_name = "General"
+
     return {
         "id": ft.id,
         "code": ft.code or "",
         "name": ft.type or "",
         "feecategory_id": ft.feecategory_id,
-        "category_name": category_map.get(ft.feecategory_id),
+        "category_name": category_name,
         "description": ft.description,
         "is_active": ft.is_active,
         "created_at": safe_date_str(ft.created_at),

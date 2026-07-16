@@ -18,6 +18,14 @@ def resolve_session_label(session_id: int | None) -> str | None:
 
 def settings_to_dict(settings: SchSettings) -> dict[str, Any]:
     session_id = settings.session_id
+    db_month = settings.start_month
+    month_name_map = {
+        "1": "January", "2": "February", "3": "March", "4": "April",
+        "5": "May", "6": "June", "7": "July", "8": "August",
+        "9": "September", "10": "October", "11": "November", "12": "December",
+    }
+    start_month = month_name_map.get(db_month, db_month) if db_month else "April"
+
     return {
         "id": settings.id,
         "name": settings.name or "",
@@ -28,7 +36,7 @@ def settings_to_dict(settings: SchSettings) -> dict[str, Any]:
         "timezone": settings.timezone or "UTC",
         "date_format": settings.date_format or "d-m-Y",
         "time_format": settings.time_format or "12-hour",
-        "start_month": settings.start_month or "April",
+        "start_month": start_month,
         "start_week": settings.start_week or "Monday",
         "day_off": settings.day_off or "",
         "is_rtl": settings.is_rtl or "disabled",
