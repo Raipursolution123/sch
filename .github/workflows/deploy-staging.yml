@@ -98,8 +98,20 @@ jobs:
           script: |
             set -euo pipefail
             cd ${{ secrets.STAGING_APP_PATH }}
+            TAG="${{ needs.build-and-push.outputs.short_sha }}"
+            # Pull the fixed deploy script before running it (server copy may be stale).
+            git fetch origin main
+            git reset --hard origin/main
             chmod +x scripts/staging-*.sh
-            ./scripts/staging-deploy.sh "${{ needs.build-and-push.outputs.short_sha }}"
+            # Keep .env in sync so compose and manual deploys use the CI SHA, not "latest".
+            if [[ -f .env ]]; then
+              if grep -q '^IMAGE_TAG=' .env; then
+                sed -i.bak "s/^IMAGE_TAG=.*/IMAGE_TAG=${TAG}/" .env
+              else
+                echo "IMAGE_TAG=${TAG}" >> .env
+              fi
+            fi
+            ./scripts/staging-deploy.sh "${TAG}"
 
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.2.0
