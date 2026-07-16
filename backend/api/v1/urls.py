@@ -36,5 +36,7 @@ urlpatterns = [
     path("transport/", include("apps.transport.urls")),
     # hostel
     path("hostel/", include("apps.hostel.urls")),
+    # cyc_extensions (Finance / accounting)
+    path("", include("apps.cyc_extensions.urls")),
 ]
 
