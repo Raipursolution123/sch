@@ -13,21 +13,37 @@ from apps.academics.domain.lesson_plan_exceptions import (
 )
 from apps.academics.services.lesson_plan_service import LessonPlanService
 from apps.academics.api.serializers.lesson_plan import (
-    LessonSerializer, LessonCreateSerializer, LessonUpdateSerializer,
-    TopicSerializer, TopicCreateSerializer, TopicUpdateSerializer,
-    SubjectSyllabusSerializer, SubjectSyllabusCreateSerializer, SubjectSyllabusUpdateSerializer,
-    LessonPlanForumSerializer, LessonPlanForumCreateSerializer,
+    LessonSerializer,
+    LessonCreateSerializer,
+    LessonUpdateSerializer,
+    TopicSerializer,
+    TopicCreateSerializer,
+    TopicUpdateSerializer,
+    SubjectSyllabusSerializer,
+    SubjectSyllabusCreateSerializer,
+    SubjectSyllabusUpdateSerializer,
+    LessonPlanForumSerializer,
+    LessonPlanForumCreateSerializer,
 )
 
 
 def _handle_exception(exc: Exception):
     if isinstance(exc, LessonPlanValidationError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+        )
     if isinstance(exc, LessonPlanNotFoundError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_404_NOT_FOUND)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_404_NOT_FOUND
+        )
     if isinstance(exc, LessonPlanError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
-    return APIResponse.error(message="An unexpected error occurred.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+        )
+    return APIResponse.error(
+        message="An unexpected error occurred.",
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    )
 
 
 class LessonListCreateView(APIView):
@@ -41,9 +57,7 @@ class LessonListCreateView(APIView):
 
         service = LessonPlanService()
         qs = service.list_lessons(
-            subject_group_id=sg_id,
-            subject_id=subj_id,
-            class_section_id=cs_id
+            subject_group_id=sg_id, subject_id=subj_id, class_section_id=cs_id
         )
         paginator = StandardResultsSetPagination()
         page = paginator.paginate_queryset(qs, request, view=self)
@@ -64,8 +78,12 @@ class LessonListCreateView(APIView):
     def post(self, request):
         serializer = LessonCreateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(message="Invalid data", data=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
-        
+            return APIResponse.error(
+                message="Invalid data",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         service = LessonPlanService()
         try:
             lesson = service.create_lesson(serializer.validated_data)
@@ -96,7 +114,11 @@ class LessonDetailView(APIView):
     def put(self, request, pk):
         serializer = LessonUpdateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(message="Invalid data", data=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message="Invalid data",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         service = LessonPlanService()
         try:
@@ -146,8 +168,12 @@ class TopicListCreateView(APIView):
     def post(self, request):
         serializer = TopicCreateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(message="Invalid data", data=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
-        
+            return APIResponse.error(
+                message="Invalid data",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         service = LessonPlanService()
         try:
             topic = service.create_topic(serializer.validated_data)
@@ -178,7 +204,11 @@ class TopicDetailView(APIView):
     def put(self, request, pk):
         serializer = TopicUpdateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(message="Invalid data", data=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message="Invalid data",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         service = LessonPlanService()
         try:
@@ -222,13 +252,19 @@ class SyllabusListCreateView(APIView):
                 },
                 message="Syllabus retrieved successfully.",
             )
-        return APIResponse.success(data=data, message="Syllabus retrieved successfully.")
+        return APIResponse.success(
+            data=data, message="Syllabus retrieved successfully."
+        )
 
     def post(self, request):
         serializer = SubjectSyllabusCreateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(message="Invalid data", data=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
-        
+            return APIResponse.error(
+                message="Invalid data",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         service = LessonPlanService()
         try:
             syllabus = service.create_syllabus(serializer.validated_data)
@@ -259,7 +295,11 @@ class SyllabusDetailView(APIView):
     def put(self, request, pk):
         serializer = SubjectSyllabusUpdateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(message="Invalid data", data=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message="Invalid data",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         service = LessonPlanService()
         try:
@@ -303,16 +343,24 @@ class SyllabusCommentListCreateView(APIView):
                 },
                 message="Comments retrieved successfully.",
             )
-        return APIResponse.success(data=data, message="Comments retrieved successfully.")
+        return APIResponse.success(
+            data=data, message="Comments retrieved successfully."
+        )
 
     def post(self, request, syllabus_id):
         serializer = LessonPlanForumCreateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(message="Invalid data", data=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
-        
+            return APIResponse.error(
+                message="Invalid data",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         service = LessonPlanService()
         try:
-            comment = service.create_forum_comment(syllabus_id, serializer.validated_data)
+            comment = service.create_forum_comment(
+                syllabus_id, serializer.validated_data
+            )
             return APIResponse.success(
                 data=LessonPlanForumSerializer(comment).data,
                 message="Comment created successfully.",

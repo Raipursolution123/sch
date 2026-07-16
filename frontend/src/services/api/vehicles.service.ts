@@ -1,11 +1,7 @@
 import { apiClient } from '@services/api/client';
 import { API_ENDPOINTS } from '@constants/index';
 import type { ApiSuccessResponse } from '@app-types/api';
-import type {
-  Vehicle,
-  CreateVehiclePayload,
-  UpdateVehiclePayload,
-} from '@app-types/index';
+import type { Vehicle, CreateVehiclePayload, UpdateVehiclePayload } from '@app-types/index';
 import { type BackendPayload, extractList } from '@utils/api-response';
 
 export const vehiclesService = {

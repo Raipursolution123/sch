@@ -13,20 +13,29 @@ from apps.academics.domain.lesson_plan_exceptions import (
 )
 from apps.academics.services.lesson_plan_service import LessonPlanService
 from apps.academics.api.serializers.lesson_plan import (
-    SubjectSyllabusSerializer, 
-    SubjectSyllabusCreateSerializer, 
+    SubjectSyllabusSerializer,
+    SubjectSyllabusCreateSerializer,
     SubjectSyllabusUpdateSerializer,
 )
 
 
 def _handle_exception(exc: Exception):
     if isinstance(exc, LessonPlanValidationError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+        )
     if isinstance(exc, LessonPlanNotFoundError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_404_NOT_FOUND)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_404_NOT_FOUND
+        )
     if isinstance(exc, LessonPlanError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
-    return APIResponse.error(message="An unexpected error occurred.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+        )
+    return APIResponse.error(
+        message="An unexpected error occurred.",
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    )
 
 
 class SyllabusStatusListCreateView(APIView):
@@ -51,13 +60,19 @@ class SyllabusStatusListCreateView(APIView):
                 },
                 message="Syllabus Status list retrieved successfully.",
             )
-        return APIResponse.success(data=data, message="Syllabus Status list retrieved successfully.")
+        return APIResponse.success(
+            data=data, message="Syllabus Status list retrieved successfully."
+        )
 
     def post(self, request):
         serializer = SubjectSyllabusCreateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(message="Invalid data", data=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
-        
+            return APIResponse.error(
+                message="Invalid data",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         service = LessonPlanService()
         try:
             syllabus = service.create_syllabus(serializer.validated_data)
@@ -88,7 +103,11 @@ class SyllabusStatusDetailView(APIView):
     def put(self, request, pk):
         serializer = SubjectSyllabusUpdateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(message="Invalid data", data=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message="Invalid data",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         service = LessonPlanService()
         try:

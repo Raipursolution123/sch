@@ -11,55 +11,81 @@ class LessonSerializer(serializers.Serializer):
     subject_group_class_sections_id = serializers.IntegerField()
     name = serializers.CharField(max_length=255)
     created_at = serializers.DateTimeField()
-    
+
     subject_name = serializers.SerializerMethodField()
     subject_group_name = serializers.SerializerMethodField()
     class_section_name = serializers.SerializerMethodField()
-    
+
     subject_group_id = serializers.SerializerMethodField()
     subject_id = serializers.SerializerMethodField()
     class_section_id = serializers.SerializerMethodField()
 
     def get_subject_group_id(self, obj):
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
-        sgs = SubjectGroupSubjects.objects.filter(id=obj.subject_group_subject_id).first()
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=obj.subject_group_subject_id
+        ).first()
         return sgs.subject_group_id if sgs else None
 
     def get_subject_id(self, obj):
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
-        sgs = SubjectGroupSubjects.objects.filter(id=obj.subject_group_subject_id).first()
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=obj.subject_group_subject_id
+        ).first()
         return sgs.subject_id if sgs else None
 
     def get_class_section_id(self, obj):
-        from apps.academics.models.subject_group_class_sections import SubjectGroupClassSections
-        sgcs = SubjectGroupClassSections.objects.filter(id=obj.subject_group_class_sections_id).first()
+        from apps.academics.models.subject_group_class_sections import (
+            SubjectGroupClassSections,
+        )
+
+        sgcs = SubjectGroupClassSections.objects.filter(
+            id=obj.subject_group_class_sections_id
+        ).first()
         return sgcs.class_section_id if sgcs else None
 
     def get_subject_name(self, obj):
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
         from apps.academics.models.subjects import Subjects
-        sgs = SubjectGroupSubjects.objects.filter(id=obj.subject_group_subject_id).first()
-        if not sgs: return None
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=obj.subject_group_subject_id
+        ).first()
+        if not sgs:
+            return None
         subject = Subjects.objects.filter(id=sgs.subject_id).first()
         return subject.name if subject else None
 
     def get_subject_group_name(self, obj):
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
         from apps.academics.models.subject_groups import SubjectGroups
-        sgs = SubjectGroupSubjects.objects.filter(id=obj.subject_group_subject_id).first()
-        if not sgs: return None
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=obj.subject_group_subject_id
+        ).first()
+        if not sgs:
+            return None
         group = SubjectGroups.objects.filter(id=sgs.subject_group_id).first()
         return group.name if group else None
 
     def get_class_section_name(self, obj):
-        from apps.academics.models.subject_group_class_sections import SubjectGroupClassSections
+        from apps.academics.models.subject_group_class_sections import (
+            SubjectGroupClassSections,
+        )
         from apps.academics.models.class_sections import ClassSections
         from apps.academics.models.classes import Classes
         from apps.academics.models.sections import Sections
-        sgcs = SubjectGroupClassSections.objects.filter(id=obj.subject_group_class_sections_id).first()
-        if not sgcs: return None
+
+        sgcs = SubjectGroupClassSections.objects.filter(
+            id=obj.subject_group_class_sections_id
+        ).first()
+        if not sgcs:
+            return None
         cs = ClassSections.objects.filter(id=sgcs.class_section_id).first()
-        if not cs: return None
+        if not cs:
+            return None
         c = Classes.objects.filter(id=cs.class_id).first()
         s = Sections.objects.filter(id=cs.section_id).first()
         if c and s:
@@ -104,20 +130,28 @@ class TopicSerializer(serializers.Serializer):
     class_section_id = serializers.SerializerMethodField()
 
     def _get_parent_lesson(self, obj):
-        if not hasattr(self, '_lesson_cache'):
+        if not hasattr(self, "_lesson_cache"):
             self._lesson_cache = {}
         if obj.lesson_id not in self._lesson_cache:
             from apps.academics.models.lesson import Lesson
-            self._lesson_cache[obj.lesson_id] = Lesson.objects.filter(id=obj.lesson_id).first()
+
+            self._lesson_cache[obj.lesson_id] = Lesson.objects.filter(
+                id=obj.lesson_id
+            ).first()
         return self._lesson_cache[obj.lesson_id]
 
     def get_subject_name(self, obj):
         lesson = self._get_parent_lesson(obj)
-        if not lesson: return None
+        if not lesson:
+            return None
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
         from apps.academics.models.subjects import Subjects
-        sgs = SubjectGroupSubjects.objects.filter(id=lesson.subject_group_subject_id).first()
-        if not sgs: return None
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=lesson.subject_group_subject_id
+        ).first()
+        if not sgs:
+            return None
         subject = Subjects.objects.filter(id=sgs.subject_id).first()
         return subject.name if subject else None
 
@@ -127,25 +161,38 @@ class TopicSerializer(serializers.Serializer):
 
     def get_subject_group_name(self, obj):
         lesson = self._get_parent_lesson(obj)
-        if not lesson: return None
+        if not lesson:
+            return None
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
         from apps.academics.models.subject_groups import SubjectGroups
-        sgs = SubjectGroupSubjects.objects.filter(id=lesson.subject_group_subject_id).first()
-        if not sgs: return None
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=lesson.subject_group_subject_id
+        ).first()
+        if not sgs:
+            return None
         group = SubjectGroups.objects.filter(id=sgs.subject_group_id).first()
         return group.name if group else None
 
     def get_class_section_name(self, obj):
         lesson = self._get_parent_lesson(obj)
-        if not lesson: return None
-        from apps.academics.models.subject_group_class_sections import SubjectGroupClassSections
+        if not lesson:
+            return None
+        from apps.academics.models.subject_group_class_sections import (
+            SubjectGroupClassSections,
+        )
         from apps.academics.models.class_sections import ClassSections
         from apps.academics.models.classes import Classes
         from apps.academics.models.sections import Sections
-        sgcs = SubjectGroupClassSections.objects.filter(id=lesson.subject_group_class_sections_id).first()
-        if not sgcs: return None
+
+        sgcs = SubjectGroupClassSections.objects.filter(
+            id=lesson.subject_group_class_sections_id
+        ).first()
+        if not sgcs:
+            return None
         cs = ClassSections.objects.filter(id=sgcs.class_section_id).first()
-        if not cs: return None
+        if not cs:
+            return None
         c = Classes.objects.filter(id=cs.class_id).first()
         s = Sections.objects.filter(id=cs.section_id).first()
         if c and s:
@@ -154,24 +201,39 @@ class TopicSerializer(serializers.Serializer):
 
     def get_subject_group_id(self, obj):
         lesson = self._get_parent_lesson(obj)
-        if not lesson: return None
+        if not lesson:
+            return None
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
-        sgs = SubjectGroupSubjects.objects.filter(id=lesson.subject_group_subject_id).first()
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=lesson.subject_group_subject_id
+        ).first()
         return sgs.subject_group_id if sgs else None
 
     def get_subject_id(self, obj):
         lesson = self._get_parent_lesson(obj)
-        if not lesson: return None
+        if not lesson:
+            return None
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
-        sgs = SubjectGroupSubjects.objects.filter(id=lesson.subject_group_subject_id).first()
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=lesson.subject_group_subject_id
+        ).first()
         return sgs.subject_id if sgs else None
 
     def get_class_section_id(self, obj):
         lesson = self._get_parent_lesson(obj)
-        if not lesson: return None
-        from apps.academics.models.subject_group_class_sections import SubjectGroupClassSections
-        sgcs = SubjectGroupClassSections.objects.filter(id=lesson.subject_group_class_sections_id).first()
+        if not lesson:
+            return None
+        from apps.academics.models.subject_group_class_sections import (
+            SubjectGroupClassSections,
+        )
+
+        sgcs = SubjectGroupClassSections.objects.filter(
+            id=lesson.subject_group_class_sections_id
+        ).first()
         return sgcs.class_section_id if sgcs else None
+
 
 class TopicCreateSerializer(serializers.Serializer):
     session_id = serializers.IntegerField(required=True)
@@ -208,8 +270,12 @@ class SubjectSyllabusSerializer(serializers.Serializer):
     time_to = serializers.CharField(max_length=255)
     presentation = serializers.CharField(allow_blank=True, allow_null=True)
     attachment = serializers.CharField(allow_blank=True, allow_null=True)
-    lacture_youtube_url = serializers.CharField(max_length=255, allow_blank=True, allow_null=True)
-    lacture_video = serializers.CharField(max_length=255, allow_blank=True, allow_null=True)
+    lacture_youtube_url = serializers.CharField(
+        max_length=255, allow_blank=True, allow_null=True
+    )
+    lacture_video = serializers.CharField(
+        max_length=255, allow_blank=True, allow_null=True
+    )
     sub_topic = serializers.CharField(allow_blank=True, allow_null=True)
     teaching_method = serializers.CharField(allow_blank=True, allow_null=True)
     general_objectives = serializers.CharField(allow_blank=True, allow_null=True)
@@ -220,14 +286,17 @@ class SubjectSyllabusSerializer(serializers.Serializer):
 
     def get_topic_name(self, obj):
         from apps.academics.models.topic import Topic
+
         topic = Topic.objects.filter(id=obj.topic_id).first()
         return topic.name if topic else None
 
     def _get_parent_lesson(self, obj):
         from apps.academics.models.topic import Topic
         from apps.academics.models.lesson import Lesson
+
         topic = Topic.objects.filter(id=obj.topic_id).first()
-        if not topic: return None
+        if not topic:
+            return None
         return Lesson.objects.filter(id=topic.lesson_id).first()
 
     def get_lesson_id(self, obj):
@@ -236,23 +305,37 @@ class SubjectSyllabusSerializer(serializers.Serializer):
 
     def get_class_section_id(self, obj):
         lesson = self._get_parent_lesson(obj)
-        if not lesson: return None
-        from apps.academics.models.subject_group_class_sections import SubjectGroupClassSections
-        sgcs = SubjectGroupClassSections.objects.filter(id=lesson.subject_group_class_sections_id).first()
+        if not lesson:
+            return None
+        from apps.academics.models.subject_group_class_sections import (
+            SubjectGroupClassSections,
+        )
+
+        sgcs = SubjectGroupClassSections.objects.filter(
+            id=lesson.subject_group_class_sections_id
+        ).first()
         return sgcs.class_section_id if sgcs else None
 
     def get_subject_id(self, obj):
         lesson = self._get_parent_lesson(obj)
-        if not lesson: return None
+        if not lesson:
+            return None
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
-        sgs = SubjectGroupSubjects.objects.filter(id=lesson.subject_group_subject_id).first()
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=lesson.subject_group_subject_id
+        ).first()
         return sgs.subject_id if sgs else None
 
     def get_subject_group_id(self, obj):
         lesson = self._get_parent_lesson(obj)
-        if not lesson: return None
+        if not lesson:
+            return None
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
-        sgs = SubjectGroupSubjects.objects.filter(id=lesson.subject_group_subject_id).first()
+
+        sgs = SubjectGroupSubjects.objects.filter(
+            id=lesson.subject_group_subject_id
+        ).first()
         return sgs.subject_group_id if sgs else None
 
 
@@ -266,8 +349,12 @@ class SubjectSyllabusCreateSerializer(serializers.Serializer):
     time_to = serializers.CharField(max_length=255, required=False, allow_blank=True)
     presentation = serializers.CharField(required=False, allow_blank=True)
     attachment = serializers.CharField(required=False, allow_blank=True)
-    lacture_youtube_url = serializers.CharField(max_length=255, required=False, allow_blank=True)
-    lacture_video = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    lacture_youtube_url = serializers.CharField(
+        max_length=255, required=False, allow_blank=True
+    )
+    lacture_video = serializers.CharField(
+        max_length=255, required=False, allow_blank=True
+    )
     sub_topic = serializers.CharField(required=False, allow_blank=True)
     teaching_method = serializers.CharField(required=False, allow_blank=True)
     general_objectives = serializers.CharField(required=False, allow_blank=True)
@@ -286,8 +373,12 @@ class SubjectSyllabusUpdateSerializer(serializers.Serializer):
     time_to = serializers.CharField(max_length=255, required=False, allow_blank=True)
     presentation = serializers.CharField(required=False, allow_blank=True)
     attachment = serializers.CharField(required=False, allow_blank=True)
-    lacture_youtube_url = serializers.CharField(max_length=255, required=False, allow_blank=True)
-    lacture_video = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    lacture_youtube_url = serializers.CharField(
+        max_length=255, required=False, allow_blank=True
+    )
+    lacture_video = serializers.CharField(
+        max_length=255, required=False, allow_blank=True
+    )
     sub_topic = serializers.CharField(required=False, allow_blank=True)
     teaching_method = serializers.CharField(required=False, allow_blank=True)
     general_objectives = serializers.CharField(required=False, allow_blank=True)

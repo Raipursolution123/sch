@@ -94,13 +94,19 @@ export function SubjectGroupFormDialog({
   const classFilterOptions = useMemo(() => {
     const classes = [...new Set(activeClassSections.map((cs) => cs.class_name).filter(Boolean))];
     classes.sort();
-    return [{ value: 'all', label: 'All Classes' }, ...classes.map((c) => ({ value: c!, label: c! }))];
+    return [
+      { value: 'all', label: 'All Classes' },
+      ...classes.map((c) => ({ value: c!, label: c! })),
+    ];
   }, [activeClassSections]);
 
   const sectionFilterOptions = useMemo(() => {
     const sections = [...new Set(activeClassSections.map((cs) => cs.section_name).filter(Boolean))];
     sections.sort();
-    return [{ value: 'all', label: 'All Sections' }, ...sections.map((s) => ({ value: s!, label: s! }))];
+    return [
+      { value: 'all', label: 'All Sections' },
+      ...sections.map((s) => ({ value: s!, label: s! })),
+    ];
   }, [activeClassSections]);
 
   const filteredClassSections = useMemo(() => {
@@ -344,7 +350,10 @@ export function SubjectGroupFormDialog({
             <>
               <div className="mb-4 grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label htmlFor="class-filter" className="text-xs font-medium text-muted-foreground">
+                  <label
+                    htmlFor="class-filter"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
                     Filter by Class
                   </label>
                   <Select
@@ -355,7 +364,10 @@ export function SubjectGroupFormDialog({
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label htmlFor="section-filter" className="text-xs font-medium text-muted-foreground">
+                  <label
+                    htmlFor="section-filter"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
                     Filter by Section
                   </label>
                   <Select
@@ -368,7 +380,7 @@ export function SubjectGroupFormDialog({
               </div>
 
               {filteredClassSections.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-4 text-center border rounded-md border-dashed">
+                <p className="rounded-md border border-dashed py-4 text-center text-sm text-muted-foreground">
                   No matching class sections found.
                 </p>
               ) : (
@@ -388,7 +400,9 @@ export function SubjectGroupFormDialog({
                           className="h-4 w-4 rounded border-input"
                           checked={checked}
                           onChange={(e) =>
-                            setClassSectionIds(toggleId(classSectionIds, mapping.id, e.target.checked))
+                            setClassSectionIds(
+                              toggleId(classSectionIds, mapping.id, e.target.checked),
+                            )
                           }
                         />
                         {mapping.class_name} — {mapping.section_name}

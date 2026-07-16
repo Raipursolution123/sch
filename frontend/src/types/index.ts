@@ -30,4 +30,3 @@ export type {
   CreateVehicleRouteAssignmentPayload,
   UpdateVehicleRouteAssignmentPayload,
 } from './transport';
-

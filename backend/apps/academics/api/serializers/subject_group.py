@@ -15,7 +15,6 @@ class SubjectGroupCreateSerializer(serializers.Serializer):
     )
 
 
-
 class SubjectGroupUpdateSerializer(serializers.Serializer):
     name = serializers.CharField(required=False, allow_blank=True, max_length=250)
     description = serializers.CharField(

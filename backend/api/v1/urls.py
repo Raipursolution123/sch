@@ -37,4 +37,3 @@ urlpatterns = [
     # hostel
     path("hostel/", include("apps.hostel.urls")),
 ]
-

@@ -19,30 +19,36 @@ class LessonPlanService:
     # ---------------------------------------------------------
     # Lessons
     # ---------------------------------------------------------
-    def list_lessons(self, subject_group_id=None, subject_id=None, class_section_id=None):
+    def list_lessons(
+        self, subject_group_id=None, subject_id=None, class_section_id=None
+    ):
         qs = Lesson.objects.all().order_by("-id")
-        
+
         if subject_group_id or subject_id or class_section_id:
-            from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
-            from apps.academics.models.subject_group_class_sections import SubjectGroupClassSections
-            
+            from apps.academics.models.subject_group_subjects import (
+                SubjectGroupSubjects,
+            )
+            from apps.academics.models.subject_group_class_sections import (
+                SubjectGroupClassSections,
+            )
+
             sgs_qs = SubjectGroupSubjects.objects.all()
             if subject_group_id:
                 sgs_qs = sgs_qs.filter(subject_group_id=subject_group_id)
             if subject_id:
                 sgs_qs = sgs_qs.filter(subject_id=subject_id)
-                
+
             sgcs_qs = SubjectGroupClassSections.objects.all()
             if subject_group_id:
                 sgcs_qs = sgcs_qs.filter(subject_group_id=subject_group_id)
             if class_section_id:
                 sgcs_qs = sgcs_qs.filter(class_section_id=class_section_id)
-                
+
             qs = qs.filter(
                 subject_group_subject_id__in=sgs_qs.values("id"),
-                subject_group_class_sections_id__in=sgcs_qs.values("id")
+                subject_group_class_sections_id__in=sgcs_qs.values("id"),
             )
-            
+
         return qs
 
     def get_lesson(self, lesson_id: int):
@@ -54,10 +60,12 @@ class LessonPlanService:
     def create_lesson(self, data: dict[str, Any]) -> Lesson:
         if not data.get("name"):
             raise LessonPlanValidationError("Lesson name is required.")
-        
+
         from apps.academics.models.sessions import Sessions
         from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
-        from apps.academics.models.subject_group_class_sections import SubjectGroupClassSections
+        from apps.academics.models.subject_group_class_sections import (
+            SubjectGroupClassSections,
+        )
 
         session_id = data.get("session_id", 1)
         if not Sessions.objects.filter(id=session_id).exists():
@@ -68,15 +76,25 @@ class LessonPlanService:
         cs_id = data.get("class_section_id")
 
         if not sg_id or not subj_id or not cs_id:
-            raise LessonPlanValidationError("subject_group_id, subject_id, and class_section_id are required.")
+            raise LessonPlanValidationError(
+                "subject_group_id, subject_id, and class_section_id are required."
+            )
 
-        sgs = SubjectGroupSubjects.objects.filter(subject_group_id=sg_id, subject_id=subj_id).first()
+        sgs = SubjectGroupSubjects.objects.filter(
+            subject_group_id=sg_id, subject_id=subj_id
+        ).first()
         if not sgs:
-            raise LessonPlanValidationError(f"Invalid Subject mapping for Group {sg_id} and Subject {subj_id}.")
+            raise LessonPlanValidationError(
+                f"Invalid Subject mapping for Group {sg_id} and Subject {subj_id}."
+            )
 
-        sgcs = SubjectGroupClassSections.objects.filter(subject_group_id=sg_id, class_section_id=cs_id).first()
+        sgcs = SubjectGroupClassSections.objects.filter(
+            subject_group_id=sg_id, class_section_id=cs_id
+        ).first()
         if not sgcs:
-            raise LessonPlanValidationError(f"Invalid Class/Section mapping for Group {sg_id} and ClassSection {cs_id}.")
+            raise LessonPlanValidationError(
+                f"Invalid Class/Section mapping for Group {sg_id} and ClassSection {cs_id}."
+            )
 
         try:
             lesson = Lesson.objects.create(
@@ -101,23 +119,33 @@ class LessonPlanService:
             lesson.name = data["name"]
         if "session_id" in data:
             lesson.session_id = data["session_id"]
-            
+
         sg_id = data.get("subject_group_id")
         subj_id = data.get("subject_id")
         cs_id = data.get("class_section_id")
-        
+
         if sg_id and subj_id:
-            from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
-            sgs = SubjectGroupSubjects.objects.filter(subject_group_id=sg_id, subject_id=subj_id).first()
+            from apps.academics.models.subject_group_subjects import (
+                SubjectGroupSubjects,
+            )
+
+            sgs = SubjectGroupSubjects.objects.filter(
+                subject_group_id=sg_id, subject_id=subj_id
+            ).first()
             if sgs:
                 lesson.subject_group_subject_id = sgs.id
 
         if sg_id and cs_id:
-            from apps.academics.models.subject_group_class_sections import SubjectGroupClassSections
-            sgcs = SubjectGroupClassSections.objects.filter(subject_group_id=sg_id, class_section_id=cs_id).first()
+            from apps.academics.models.subject_group_class_sections import (
+                SubjectGroupClassSections,
+            )
+
+            sgcs = SubjectGroupClassSections.objects.filter(
+                subject_group_id=sg_id, class_section_id=cs_id
+            ).first()
             if sgcs:
                 lesson.subject_group_class_sections_id = sgcs.id
-        
+
         lesson.save()
         return lesson
 
@@ -147,7 +175,7 @@ class LessonPlanService:
     def create_topic(self, data: dict[str, Any]) -> Topic:
         if not data.get("name"):
             raise LessonPlanValidationError("Topic name is required.")
-        
+
         from apps.academics.models.sessions import Sessions
         from apps.academics.models.lesson import Lesson
 
@@ -192,7 +220,7 @@ class LessonPlanService:
             topic.status = data["status"]
         if "complete_date" in data:
             topic.complete_date = data["complete_date"]
-            
+
         topic.save()
         return topic
 
@@ -263,14 +291,28 @@ class LessonPlanService:
                 "Could not create Syllabus because the referenced Topic, Session, or Staff ID does not exist in the database."
             )
 
-    def update_syllabus(self, syllabus_id: int, data: dict[str, Any]) -> SubjectSyllabus:
+    def update_syllabus(
+        self, syllabus_id: int, data: dict[str, Any]
+    ) -> SubjectSyllabus:
         syllabus = self.get_syllabus(syllabus_id)
         fields = [
-            "topic_id", "session_id", "created_by", "created_for", "date",
-            "time_from", "time_to", "presentation", "attachment",
-            "lacture_youtube_url", "lacture_video", "sub_topic",
-            "teaching_method", "general_objectives", "previous_knowledge",
-            "comprehensive_questions", "status"
+            "topic_id",
+            "session_id",
+            "created_by",
+            "created_for",
+            "date",
+            "time_from",
+            "time_to",
+            "presentation",
+            "attachment",
+            "lacture_youtube_url",
+            "lacture_video",
+            "sub_topic",
+            "teaching_method",
+            "general_objectives",
+            "previous_knowledge",
+            "comprehensive_questions",
+            "status",
         ]
         for field in fields:
             if field in data:
@@ -286,7 +328,9 @@ class LessonPlanService:
     # Lesson Plan Forum (Comments)
     # ---------------------------------------------------------
     def list_forum_comments(self, syllabus_id: int):
-        return LessonPlanForum.objects.filter(subject_syllabus_id=syllabus_id).order_by("-id")
+        return LessonPlanForum.objects.filter(subject_syllabus_id=syllabus_id).order_by(
+            "-id"
+        )
 
     def get_forum_comment(self, comment_id: int):
         comment = LessonPlanForum.objects.filter(id=comment_id).first()
@@ -294,11 +338,15 @@ class LessonPlanService:
             raise LessonPlanNotFoundError(f"LessonPlanForum {comment_id} not found.")
         return comment
 
-    def create_forum_comment(self, syllabus_id: int, data: dict[str, Any]) -> LessonPlanForum:
+    def create_forum_comment(
+        self, syllabus_id: int, data: dict[str, Any]
+    ) -> LessonPlanForum:
         if not data.get("message"):
             raise LessonPlanValidationError("Comment message is required.")
         if not data.get("type"):
-            raise LessonPlanValidationError("Comment type (e.g. 'staff' or 'student') is required.")
+            raise LessonPlanValidationError(
+                "Comment type (e.g. 'staff' or 'student') is required."
+            )
 
         comment = LessonPlanForum.objects.create(
             subject_syllabus_id=syllabus_id,

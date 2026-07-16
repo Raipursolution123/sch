@@ -131,7 +131,3 @@ export interface CreateVehicleRouteAssignmentPayload {
 }
 
 export type UpdateVehicleRouteAssignmentPayload = Partial<CreateVehicleRouteAssignmentPayload>;
-
-
-
-
