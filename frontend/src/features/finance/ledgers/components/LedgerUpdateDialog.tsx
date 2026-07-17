@@ -96,7 +96,7 @@ export const LedgerUpdateDialog = ({ ledger, open, onOpenChange }: LedgerUpdateD
     };
 
     updateLedger(
-      { id: ledger.id, data: payload },
+      { id: ledger.id, payload: payload },
       {
         onSuccess: () => {
           onOpenChange(false);

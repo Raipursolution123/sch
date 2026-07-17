@@ -24,6 +24,8 @@ from apps.examinations.api.views.mark_divisions import (
     MarkDivisionsDetailView,
     MarkDivisionsListCreateView,
 )
+from apps.examinations.api.views.cbse_exam import CbseExamsListCreateView
+
 
 app_name = "examinations"
 

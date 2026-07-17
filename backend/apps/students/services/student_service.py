@@ -132,6 +132,7 @@ class StudentService:
                 student_id=student.id,
                 class_id=school_class.id,
                 section_id=section.id,
+                is_active="yes",
                 is_alumni=0,
                 created_at=selectors.now_datetime(),
             )
@@ -207,6 +208,7 @@ class StudentService:
                     student_id=student.id,
                     class_id=school_class.id,
                     section_id=section.id,
+                    is_active="yes",
                     is_alumni=0,
                     created_at=selectors.now_datetime(),
                 )
