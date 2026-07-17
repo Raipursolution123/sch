@@ -45,6 +45,17 @@ from apps.academics.api.views.timetable import (
     TimetableListCreateView,
     TimetableSubjectOptionsView,
 )
+from apps.academics.api.views.homework import (
+    HomeworkListCreateView,
+    HomeworkDetailView,
+    HomeworkEvaluationListCreateView,
+    HomeworkEvaluationDetailView,
+    DailyAssignmentListCreateView,
+    DailyAssignmentDetailView,
+    SubmitAssignmentListCreateView,
+    SubmitAssignmentDetailView,
+)
+
 
 urlpatterns = [
     path("classes/", ClassListCreateView.as_view(), name="classes_list_create"),
@@ -146,4 +157,14 @@ urlpatterns = [
     ),
     path("promote/preview/", PromotePreviewView.as_view(), name="promote_preview"),
     path("promote/", PromoteExecuteView.as_view(), name="promote_execute"),
+    # Homework and Assignment endpoints
+    path("homework/", HomeworkListCreateView.as_view(), name="homework_list_create"),
+    path("homework/<int:pk>/", HomeworkDetailView.as_view(), name="homework_detail"),
+    path("homework-evaluations/", HomeworkEvaluationListCreateView.as_view(), name="homework_evaluations_list_create"),
+    path("homework-evaluations/<int:pk>/", HomeworkEvaluationDetailView.as_view(), name="homework_evaluations_detail"),
+    path("daily-assignments/", DailyAssignmentListCreateView.as_view(), name="daily_assignments_list_create"),
+    path("daily-assignments/<int:pk>/", DailyAssignmentDetailView.as_view(), name="daily_assignments_detail"),
+    path("submit-assignments/", SubmitAssignmentListCreateView.as_view(), name="submit_assignments_list_create"),
+    path("submit-assignments/<int:pk>/", SubmitAssignmentDetailView.as_view(), name="submit_assignments_detail"),
 ]
+
