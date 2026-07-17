@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { Button } from '@components/ui/button';
+import { formatErrorForLog } from '@utils/error-message';
 
 interface Props {
   children: ReactNode;
@@ -22,7 +23,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught:', error, errorInfo);
+    console.error('ErrorBoundary caught:', formatErrorForLog(error), errorInfo);
   }
 
   render() {

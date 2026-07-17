@@ -15,3 +15,21 @@ X_FRAME_OPTIONS = "DENY"
 REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (  # noqa: F405
     "rest_framework.renderers.JSONRenderer",
 )
+
+# Optional Sentry — enable by setting SENTRY_DSN in the environment.
+SENTRY_DSN = env("SENTRY_DSN", default="")  # noqa: F405
+if SENTRY_DSN:
+    try:
+        import sentry_sdk
+        from sentry_sdk.integrations.django import DjangoIntegration
+
+        sentry_sdk.init(
+            dsn=SENTRY_DSN,
+            integrations=[DjangoIntegration()],
+            environment=env("SENTRY_ENVIRONMENT", default="production"),  # noqa: F405
+            traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.0),  # noqa: F405
+            send_default_pii=False,
+        )
+    except ImportError:
+        # sentry_sdk is optional until added to production requirements.
+        pass

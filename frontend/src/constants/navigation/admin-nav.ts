@@ -335,6 +335,12 @@ export const ADMIN_NAV: NavItem[] = [
         path: ROUTES.fees.offlinePayments,
         permissionKeys: ['offline_bank_payments'],
       },
+      {
+        id: 'fees-payment-gateways',
+        label: 'Payment Gateways',
+        path: ROUTES.fees.paymentGateways,
+        permissionKeys: ['offline_bank_payments'],
+      },
     ],
   },
   {
@@ -398,6 +404,12 @@ export const ADMIN_NAV: NavItem[] = [
         label: 'Marks Division',
         path: ROUTES.examinations.divisions,
         permissionKeys: ['marks_division'],
+      },
+      {
+        id: 'exams-cbse',
+        label: 'CBSE Exams',
+        path: ROUTES.examinations.cbseExams,
+        permissionKeys: ['exam_group'],
       },
     ],
   },

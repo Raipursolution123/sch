@@ -261,6 +261,84 @@ const ExamEnrollPage = lazy(() =>
   })),
 );
 
+const EnquiryPage = lazy(() =>
+  import('@features/front-office/enquiry/pages/EnquiryPage').then((m) => ({
+    default: m.EnquiryPage,
+  })),
+);
+
+const OnlineAdmissionsPage = lazy(() =>
+  import('@features/admissions/pages/OnlineAdmissionsPage').then((m) => ({
+    default: m.OnlineAdmissionsPage,
+  })),
+);
+
+const CbseExamsPage = lazy(() =>
+  import('@features/examinations/cbse-exams/pages/CbseExamsPage').then((m) => ({
+    default: m.CbseExamsPage,
+  })),
+);
+
+const HostelsPage = lazy(() =>
+  import('@features/hostel/buildings/pages/HostelsPage').then((m) => ({
+    default: m.HostelsPage,
+  })),
+);
+
+const HostelRoomsPage = lazy(() =>
+  import('@features/hostel/rooms/pages/HostelRoomsPage').then((m) => ({
+    default: m.HostelRoomsPage,
+  })),
+);
+
+const RoomTypesPage = lazy(() =>
+  import('@features/hostel/room-types/pages/RoomTypesPage').then((m) => ({
+    default: m.RoomTypesPage,
+  })),
+);
+
+const PaymentGatewaysPage = lazy(() =>
+  import('@features/fees/payment-gateways/pages/PaymentGatewaysPage').then((m) => ({
+    default: m.PaymentGatewaysPage,
+  })),
+);
+
+const NoticesPage = lazy(() =>
+  import('@features/communications/notices/pages/NoticesPage').then((m) => ({
+    default: m.NoticesPage,
+  })),
+);
+
+const TransportFeesPage = lazy(() =>
+  import('@features/transport/fees/pages/TransportFeesPage').then((m) => ({
+    default: m.TransportFeesPage,
+  })),
+);
+
+const PickupPointsPage = lazy(() =>
+  import('@features/transport/pickup-points/pages/PickupPointsPage').then((m) => ({
+    default: m.PickupPointsPage,
+  })),
+);
+
+const TransportRoutesPage = lazy(() =>
+  import('@features/transport/routes/pages/TransportRoutesPage').then((m) => ({
+    default: m.TransportRoutesPage,
+  })),
+);
+
+const VehiclesPage = lazy(() =>
+  import('@features/transport/vehicles/pages/VehiclesPage').then((m) => ({
+    default: m.VehiclesPage,
+  })),
+);
+
+const VehicleRouteAssignPage = lazy(() =>
+  import('@features/transport/assign-vehicle/pages/VehicleRouteAssignPage').then((m) => ({
+    default: m.VehicleRouteAssignPage,
+  })),
+);
+
 /** Authenticated admin routes mounted under DashboardLayout. */
 export const adminRoutes: RouteObject[] = [
   { path: 'dashboard', element: <DashboardPage /> },
@@ -289,6 +367,7 @@ export const adminRoutes: RouteObject[] = [
     children: [
       { index: true, element: <StudentsPage /> },
       { path: 'disabled', element: <DisabledStudentsPage /> },
+      { path: 'online-admission', element: <OnlineAdmissionsPage /> },
       { path: ':studentId', element: <StudentProfilePage /> },
       ...buildPlaceholderChildren('/students'),
     ],
@@ -323,6 +402,8 @@ export const adminRoutes: RouteObject[] = [
     { path: 'discounts/assign', element: <AssignDiscountsPage /> },
     { path: 'assign', element: <FeeAssignPage /> },
     { path: 'reminders', element: <FeeRemindersPage /> },
+    { path: 'payment-gateways', element: <PaymentGatewaysPage /> },
+    { path: 'offline-payments', element: <PaymentGatewaysPage /> },
   ]),
 
   createModuleRoutes('/examinations', ROUTES.examinations.groups, [
@@ -333,6 +414,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'results', element: <ExamResultsPage /> },
     { path: 'grades', element: <GradesPage /> },
     { path: 'divisions', element: <MarkDivisionsPage /> },
+    { path: 'cbse-exams', element: <CbseExamsPage /> },
   ]),
 
   createModuleRoutes('/settings', ROUTES.settings.general, [
@@ -341,13 +423,27 @@ export const adminRoutes: RouteObject[] = [
     { path: 'currency', element: <CurrencyPage /> },
   ]),
 
-  createPlaceholderModule('/front-office', ROUTES.frontOffice.enquiry),
+  createModuleRoutes('/front-office', ROUTES.frontOffice.enquiry, [
+    { path: 'enquiry', element: <EnquiryPage /> },
+  ]),
   createPlaceholderModule('/library', ROUTES.library.books),
-  createPlaceholderModule('/transport', ROUTES.transport.fees),
-  createPlaceholderModule('/hostel', ROUTES.hostel.rooms),
+  createModuleRoutes('/transport', ROUTES.transport.fees, [
+    { path: 'fees', element: <TransportFeesPage /> },
+    { path: 'pickup-points', element: <PickupPointsPage /> },
+    { path: 'routes', element: <TransportRoutesPage /> },
+    { path: 'vehicles', element: <VehiclesPage /> },
+    { path: 'assign-vehicle', element: <VehicleRouteAssignPage /> },
+  ]),
+  createModuleRoutes('/hostel', ROUTES.hostel.rooms, [
+    { path: 'buildings', element: <HostelsPage /> },
+    { path: 'rooms', element: <HostelRoomsPage /> },
+    { path: 'room-types', element: <RoomTypesPage /> },
+  ]),
   createPlaceholderModule('/inventory', ROUTES.inventory.issue),
   createPlaceholderModule('/homework', ROUTES.homework.assignments),
-  createPlaceholderModule('/communicate', ROUTES.communicate.notices),
+  createModuleRoutes('/communicate', ROUTES.communicate.notices, [
+    { path: 'notices', element: <NoticesPage /> },
+  ]),
   createPlaceholderModule('/download-center', ROUTES.downloadCenter.contentTypes),
   createModuleRoutes('/lesson-plan', ROUTES.lessonPlan.syllabusStatus, [
     {

@@ -5,6 +5,7 @@ import { PermissionButton } from '@components/rbac/PermissionButton';
 import { StudentOverviewTab } from '@features/students/components/StudentOverviewTab';
 import { StudentAcademicTab } from '@features/students/components/StudentAcademicTab';
 import { StudentFeesTab } from '@features/students/components/StudentFeesTab';
+import { StudentTransportTab } from '@features/students/components/StudentTransportTab';
 import { StudentGuardiansTab } from '@features/students/components/StudentGuardiansTab';
 import { StudentAdmissionDialog } from '@features/students/components/StudentAdmissionDialog';
 import type { StudentAdmissionFormValues } from '@features/students/schemas/student-admission.schema';
@@ -21,6 +22,7 @@ const PROFILE_TABS = [
   { id: 'academic', label: 'Academic', enabled: true },
   { id: 'guardians', label: 'Guardians', enabled: true },
   { id: 'fees', label: 'Fees', enabled: true },
+  { id: 'transport', label: 'Transport', enabled: true },
 ] as const;
 
 type ProfileTabId = (typeof PROFILE_TABS)[number]['id'];
@@ -106,6 +108,8 @@ export function StudentProfilePage() {
                   <StudentAcademicTab student={student} />
                 ) : tab.id === 'fees' ? (
                   <StudentFeesTab student={student} />
+                ) : tab.id === 'transport' ? (
+                  <StudentTransportTab student={student} />
                 ) : (
                   <StudentGuardiansTab student={student} />
                 ),

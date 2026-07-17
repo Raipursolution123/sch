@@ -14,4 +14,5 @@ export const FEES_NAV: FeesNavItem[] = [
   { label: 'Assign Discounts', path: ROUTES.fees.discountsAssign },
   { label: 'Assign Fees', path: ROUTES.fees.assign },
   { label: 'Fee Reminders', path: ROUTES.fees.reminders },
+  { label: 'Payment Gateways', path: ROUTES.fees.paymentGateways },
 ];

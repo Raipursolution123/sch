@@ -15,4 +15,5 @@ export const EXAMINATIONS_NAV: ExaminationsNavItem[] = [
   { label: 'Exam Results', path: ROUTES.examinations.results },
   { label: 'Marks Grade', path: ROUTES.examinations.grades },
   { label: 'Marks Division', path: ROUTES.examinations.divisions },
+  { label: 'CBSE Exams', path: ROUTES.examinations.cbseExams },
 ];

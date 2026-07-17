@@ -7,3 +7,4 @@ export {
   getApiErrorMessage,
   isValidSessionName,
 } from './session';
+export { formatErrorForLog } from './error-message';

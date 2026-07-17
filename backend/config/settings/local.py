@@ -5,6 +5,8 @@ from .base import *  # noqa: F401, F403
 
 DEBUG = True
 
+ALLOW_REGISTRATION = env.bool("ALLOW_REGISTRATION", default=True)  # noqa: F405
+
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "backend"]
 
 CORS_ALLOWED_ORIGINS = [

@@ -14,7 +14,9 @@ class SmsConfig(models.Model):
     username = models.CharField(max_length=150, blank=True, null=True)
     url = models.CharField(max_length=150, blank=True, null=True)
     password = models.CharField(max_length=150, blank=True, null=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='disabled')
+    is_active = models.CharField(
+        max_length=255, blank=True, null=True, default="disabled"
+    )
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 

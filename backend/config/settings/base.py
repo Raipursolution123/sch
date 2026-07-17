@@ -22,6 +22,9 @@ DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
+# Public registration is disabled by default; enable only in local/dev via .env.
+ALLOW_REGISTRATION = env.bool("ALLOW_REGISTRATION", default=False)
+
 DJANGO_APPS = [
     # "django.contrib.admin",  # Disabled: LogEntry references AUTH_USER_MODEL but the legacy User is unmanaged
     "django.contrib.auth",
@@ -34,6 +37,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "django_filters",
     "django_celery_beat",
@@ -205,8 +209,8 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(
         days=env.int("JWT_REFRESH_TOKEN_LIFETIME_DAYS", default=7)
     ),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": False,  # Legacy `users` table has no last_login column
     "AUTH_HEADER_TYPES": ("Bearer",),
     "USER_ID_FIELD": "id",

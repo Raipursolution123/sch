@@ -131,3 +131,31 @@ export interface CreateVehicleRouteAssignmentPayload {
 }
 
 export type UpdateVehicleRouteAssignmentPayload = Partial<CreateVehicleRouteAssignmentPayload>;
+
+export interface StudentTransportPickupPoint {
+  id: number;
+  route_id: number;
+  pickup_point_id: number;
+  name: string;
+  fees?: number | null;
+  pickup_time?: string | null;
+}
+
+export interface StudentTransportAssignment {
+  student_session_id: number;
+  session_id: number;
+  vehroute_id?: number | null;
+  route_pickup_point_id?: number | null;
+  transport_fees: number;
+  route_title?: string | null;
+  vehicle_no?: string | null;
+  registration_number?: string | null;
+  pickup_point_name?: string | null;
+  pickup_points: StudentTransportPickupPoint[];
+}
+
+export interface UpdateStudentTransportPayload {
+  vehroute_id?: number | null;
+  route_pickup_point_id?: number | null;
+  transport_fees?: number;
+}

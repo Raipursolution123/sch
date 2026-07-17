@@ -19,6 +19,7 @@ from apps.fees.api.views.fee_group import FeeGroupDetailView, FeeGroupsListView
 from apps.fees.api.views.fee_reminder import FeeReminderDetailView, FeeRemindersListView
 from apps.fees.api.views.fee_search import FeeDueSearchView, FeePaymentSearchView
 from apps.fees.api.views.fee_type import FeeTypeDetailView, FeeTypesListView
+from apps.fees.api.views.payment_settings import PaymentGatewaysListView
 
 urlpatterns = [
     path("collect/roster/", FeeCollectRosterView.as_view(), name="fee-collect-roster"),
@@ -66,5 +67,10 @@ urlpatterns = [
         "reminders/<int:pk>/",
         FeeReminderDetailView.as_view(),
         name="fee-reminder-detail",
+    ),
+    path(
+        "payment-gateways/",
+        PaymentGatewaysListView.as_view(),
+        name="payment-gateways-list",
     ),
 ]

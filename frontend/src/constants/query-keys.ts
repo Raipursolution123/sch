@@ -126,6 +126,7 @@ export const queryKeys = {
       [...queryKeys.students.all, 'list', status] as const,
     detail: (id: number) => [...queryKeys.students.all, 'detail', id] as const,
     fees: (id: number) => [...queryKeys.students.all, 'fees', id] as const,
+    transport: (id: number) => [...queryKeys.students.all, 'transport', id] as const,
     suggestAdmissionNo: () => [...queryKeys.students.all, 'suggest-admission-no'] as const,
     disableReasons: () => [...queryKeys.students.all, 'disable-reasons'] as const,
   },
@@ -174,6 +175,9 @@ export const queryKeys = {
     reminders: {
       list: () => [...queryKeys.fees.all, 'reminders', 'list'] as const,
     },
+    paymentGateways: {
+      list: () => [...queryKeys.fees.all, 'payment-gateways', 'list'] as const,
+    },
     assignments: {
       list: () => [...queryKeys.fees.all, 'assignments', 'list'] as const,
     },
@@ -217,6 +221,14 @@ export const queryKeys = {
           filters.payment_mode ?? 'all',
         ] as const,
     },
+  },
+  transport: {
+    all: ['transport'] as const,
+    fees: (sessionId?: number) => [...queryKeys.transport.all, 'fees', sessionId ?? 'all'] as const,
+    pickupPoints: () => [...queryKeys.transport.all, 'pickup-points'] as const,
+    routes: () => [...queryKeys.transport.all, 'routes'] as const,
+    vehicles: () => [...queryKeys.transport.all, 'vehicles'] as const,
+    vehicleRoutes: () => [...queryKeys.transport.all, 'vehicle-routes'] as const,
   },
   attendance: {
     all: ['attendance'] as const,
@@ -276,6 +288,40 @@ export const queryKeys = {
           classId,
           sectionId,
         ] as const,
+    },
+    cbseExams: {
+      list: () => [...queryKeys.examinations.all, 'cbse-exams', 'list'] as const,
+    },
+  },
+  hostel: {
+    all: ['hostel'] as const,
+    hostels: {
+      list: () => [...queryKeys.hostel.all, 'hostels', 'list'] as const,
+    },
+    rooms: {
+      list: (hostelId?: number) =>
+        [...queryKeys.hostel.all, 'rooms', 'list', hostelId ?? 'all'] as const,
+    },
+    roomTypes: {
+      list: () => [...queryKeys.hostel.all, 'room-types', 'list'] as const,
+    },
+  },
+  communications: {
+    all: ['communications'] as const,
+    notices: {
+      list: () => [...queryKeys.communications.all, 'notices', 'list'] as const,
+    },
+  },
+  frontOffice: {
+    all: ['front-office'] as const,
+    enquiries: {
+      list: () => [...queryKeys.frontOffice.all, 'enquiries', 'list'] as const,
+    },
+  },
+  admissions: {
+    all: ['admissions'] as const,
+    online: {
+      list: () => [...queryKeys.admissions.all, 'online', 'list'] as const,
     },
   },
   dashboard: {

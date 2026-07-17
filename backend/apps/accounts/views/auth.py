@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.contrib.auth import authenticate
 
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -25,6 +27,12 @@ class RegisterView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        if not getattr(settings, "ALLOW_REGISTRATION", False):
+            return APIResponse.error(
+                message="Registration is disabled on this environment.",
+                status_code=status.HTTP_403_FORBIDDEN,
+            )
+
         from apps.accounts.serializers import RegisterSerializer
 
         serializer = RegisterSerializer(data=request.data)
@@ -185,5 +193,14 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        # Legacy schema has no JWT blacklist table; client discards tokens.
+        refresh_token = request.data.get("refresh")
+        if refresh_token:
+            try:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+            except TokenError:
+                return APIResponse.error(
+                    message="Invalid or expired refresh token.",
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
         return APIResponse.success(message="Logged out successfully")

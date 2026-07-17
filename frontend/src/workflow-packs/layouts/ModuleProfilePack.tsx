@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
+import { getApiErrorMessage } from '@utils/error-message';
 
 export interface ProfileTab {
   id: string;
@@ -52,7 +53,7 @@ export function ModuleProfilePack({
     return (
       <ErrorState
         title={errorTitle}
-        message={error instanceof Error ? error.message : 'Could not load profile'}
+        message={getApiErrorMessage(error, 'Could not load profile')}
         onRetry={onRetry}
       />
     );

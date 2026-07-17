@@ -15,7 +15,7 @@ class EmailConfig(models.Model):
     api_key = models.CharField(max_length=255, blank=True, null=True)
     api_secret = models.CharField(max_length=255, blank=True, null=True)
     region = models.CharField(max_length=255, blank=True, null=True)
-    is_active = models.CharField(max_length=10, default='no')
+    is_active = models.CharField(max_length=10, default="no")
     created_at = models.DateTimeField()
 
     class Meta:
