@@ -1,0 +1,137 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type deploy to confirm production release'
+        required: true
+        default: ''
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push:
+    name: Build & Push Images
+    if: github.event.inputs.confirm == 'deploy'
+    runs-on: ubuntu-latest
+    outputs:
+      short_sha: ${{ steps.sha.outputs.short }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set image names (GHCR requires lowercase)
+        run: |
+          repo="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')"
+          echo "BACKEND_IMAGE=${repo}/backend" >> "$GITHUB_ENV"
+          echo "FRONTEND_IMAGE=${repo}/frontend" >> "$GITHUB_ENV"
+          echo "NGINX_IMAGE=${repo}/nginx" >> "$GITHUB_ENV"
+
+      - name: Set short SHA
+        id: sha
+        run: echo "short=$(echo ${{ github.sha }} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & push backend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/backend/Dockerfile
+          target: production
+          push: true
+          tags: |
+            ${{ env.BACKEND_IMAGE }}:${{ steps.sha.outputs.short }}
+            ${{ env.BACKEND_IMAGE }}:prod-latest
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+          cache-from: type=gha,scope=backend-prod
+          cache-to: type=gha,mode=max,scope=backend-prod
+
+      - name: Build & push frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/frontend/Dockerfile
+          target: production
+          push: true
+          tags: |
+            ${{ env.FRONTEND_IMAGE }}:${{ steps.sha.outputs.short }}
+            ${{ env.FRONTEND_IMAGE }}:prod-latest
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+            VITE_API_BASE_URL=/api/v1
+            VITE_APP_NAME=School ERP
+          cache-from: type=gha,scope=frontend-prod
+          cache-to: type=gha,mode=max,scope=frontend-prod
+
+      - name: Build & push nginx
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/nginx/Dockerfile
+          push: true
+          tags: |
+            ${{ env.NGINX_IMAGE }}:${{ steps.sha.outputs.short }}
+            ${{ env.NGINX_IMAGE }}:prod-latest
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+          cache-from: type=gha,scope=nginx-prod
+          cache-to: type=gha,mode=max,scope=nginx-prod
+
+  deploy:
+    name: Deploy to Production Server
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          port: ${{ secrets.PRODUCTION_SSH_PORT || 22 }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd ${{ secrets.PRODUCTION_APP_PATH }}
+            TAG="${{ needs.build-and-push.outputs.short_sha }}"
+            git fetch origin main
+            git reset --hard origin/main
+            chmod +x scripts/prod-*.sh
+            if [[ -f .env ]]; then
+              if grep -q '^IMAGE_TAG=' .env; then
+                sed -i.bak "s/^IMAGE_TAG=.*/IMAGE_TAG=${TAG}/" .env
+              else
+                echo "IMAGE_TAG=${TAG}" >> .env
+              fi
+            fi
+            ./scripts/prod-deploy.sh "${TAG}"
+
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          port: ${{ secrets.PRODUCTION_SSH_PORT || 22 }}
+          script: |
+            cd ${{ secrets.PRODUCTION_APP_PATH }}
+            curl -fsS "http://127.0.0.1:${HTTP_PORT:-80}/health/" || curl -fsSk "https://127.0.0.1/health/"

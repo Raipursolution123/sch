@@ -1,6 +1,5 @@
-import type { AxiosError } from 'axios';
-import type { ApiErrorResponse } from '@app-types/api';
 import { formatDate } from '@utils/format';
+export { getApiErrorMessage, formatErrorForLog } from '@utils/error-message';
 
 /** Indian academic session label, e.g. "2026-27" (April–March). */
 export function currentIndianAcademicSession(date = new Date()): string {
@@ -28,13 +27,4 @@ export function isValidSessionName(value: string): boolean {
 
 export function formatSessionDate(iso: string | null): string {
   return formatDate(iso);
-}
-
-export function getApiErrorMessage(error: unknown, fallback = 'Something went wrong'): string {
-  const axiosError = error as AxiosError<ApiErrorResponse>;
-  if (axiosError.isAxiosError && axiosError.response?.data?.error?.message) {
-    return axiosError.response.data.error.message;
-  }
-  if (error instanceof Error && error.message) return error.message;
-  return fallback;
 }

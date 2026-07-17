@@ -77,4 +77,14 @@ docker compose -f docker-compose.dev.yml exec mysql mysql -u school_erp -p schoo
 - Multi-stage builds for backend and frontend
 - Alpine-based Node and Nginx images
 - Slim Python base image
-- `.dockerignore` excludes dev artifacts
+- `.dockerignore` excludes docs, scripts, tests, and other non-runtime artifacts
+
+## Entrypoint flags (backend image)
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `RUN_MIGRATIONS` | `false` | Run `migrate` on container start (dev backend only) |
+| `RUN_COLLECTSTATIC` | `false` | Run `collectstatic` on start (staging/prod backend) |
+| `RUN_ENSURE_ADMIN` | `false` | Run `ensure_admin_permissions` on start |
+
+Celery services leave these off. Staging/prod migrations run from `scripts/staging-deploy.sh` (or a one-off `exec`).

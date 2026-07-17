@@ -1,14 +1,20 @@
+from django.conf import settings
 from django.contrib.auth import authenticate
 
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from apps.accounts.serializers import LoginSerializer, UserSerializer
 from apps.accounts.services.legacy_rbac import get_user_legacy_permissions
 from common.responses import APIResponse
+from core.auth.jwt_blacklist import (
+    blacklist_refresh_token,
+    is_refresh_token_blacklisted,
+)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -18,6 +24,30 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 class CustomTokenRefreshView(TokenRefreshView):
     permission_classes = [AllowAny]
 
+    def post(self, request, *args, **kwargs):
+        refresh = request.data.get("refresh")
+        if refresh and is_refresh_token_blacklisted(refresh):
+            return APIResponse.error(
+                message="Token is blacklisted",
+                status_code=status.HTTP_401_UNAUTHORIZED,
+            )
+        try:
+            response = super().post(request, *args, **kwargs)
+        except (InvalidToken, TokenError) as exc:
+            return APIResponse.error(
+                message=str(exc),
+                status_code=status.HTTP_401_UNAUTHORIZED,
+            )
+        # Rotate: invalidate the presented refresh token after a successful refresh.
+        if refresh and getattr(settings, "SIMPLE_JWT", {}).get(
+            "ROTATE_REFRESH_TOKENS", False
+        ):
+            try:
+                blacklist_refresh_token(refresh)
+            except TokenError:
+                pass
+        return response
+
 
 class RegisterView(APIView):
     """Registration for admins via API."""
@@ -25,6 +55,12 @@ class RegisterView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        if not getattr(settings, "ALLOW_REGISTRATION", False):
+            return APIResponse.error(
+                message="Registration is disabled on this environment.",
+                status_code=status.HTTP_403_FORBIDDEN,
+            )
+
         from apps.accounts.serializers import RegisterSerializer
 
         serializer = RegisterSerializer(data=request.data)
@@ -185,5 +221,13 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        # Legacy schema has no JWT blacklist table; client discards tokens.
+        refresh_token = request.data.get("refresh")
+        if refresh_token:
+            try:
+                blacklist_refresh_token(refresh_token)
+            except TokenError:
+                return APIResponse.error(
+                    message="Invalid or expired refresh token.",
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
         return APIResponse.success(message="Logged out successfully")

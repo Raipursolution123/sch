@@ -43,3 +43,12 @@ export { vehiclesService } from './vehicles.service';
 export { syllabusStatusService } from './syllabus-status.service';
 export { vehicleRoutesService } from './vehicle-routes.service';
 export { ledgersService } from './ledgers.service';
+export { enquiryService } from './enquiry.service';
+export { onlineAdmissionsService } from './online-admissions.service';
+export { hostelService } from './hostel.service';
+export { hostelRoomsService } from './hostel-rooms.service';
+export { roomTypesService } from './room-types.service';
+export { cbseExamsService } from './cbse-exams.service';
+export { paymentGatewaysService } from './payment-gateways.service';
+export { noticesService } from './notices.service';
+

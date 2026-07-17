@@ -8,6 +8,7 @@ from apps.students.api.views.student import (
     StudentListCreateView,
 )
 from apps.students.api.views.student_fee import StudentFeesView
+from apps.students.api.views.student_transport import StudentTransportView
 
 urlpatterns = [
     path("", StudentListCreateView.as_view(), name="students-list"),
@@ -19,6 +20,11 @@ urlpatterns = [
     path("<int:pk>/enable/", StudentEnableView.as_view(), name="student-enable"),
     path("<int:pk>/", StudentDetailView.as_view(), name="student-detail"),
     path("<int:pk>/fees/", StudentFeesView.as_view(), name="student-fees"),
+    path(
+        "<int:pk>/transport/",
+        StudentTransportView.as_view(),
+        name="student-transport",
+    ),
     path(
         "<int:student_id>/academic-sessions/",
         StudentAcademicSessionsView.as_view(),

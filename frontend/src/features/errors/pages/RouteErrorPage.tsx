@@ -1,6 +1,7 @@
 import { isRouteErrorResponse, useRouteError, useNavigate } from 'react-router-dom';
 import { Button } from '@components/ui/button';
 import { ROUTES } from '@constants/index';
+import { getApiErrorMessage } from '@utils/error-message';
 
 export function RouteErrorPage() {
   const navigate = useNavigate();
@@ -11,9 +12,9 @@ export function RouteErrorPage() {
 
   if (isRouteErrorResponse(error)) {
     title = `${error.status} ${error.statusText}`;
-    message = error.data?.message ?? message;
-  } else if (error instanceof Error) {
-    message = error.message;
+    message = getApiErrorMessage(error.data, error.statusText || message);
+  } else {
+    message = getApiErrorMessage(error, message);
   }
 
   return (

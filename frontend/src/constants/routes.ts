@@ -61,6 +61,7 @@ export const ROUTES = {
     carryForward: '/fees/carry-forward',
     reminders: '/fees/reminders',
     offlinePayments: '/fees/offline-payments',
+    paymentGateways: '/fees/payment-gateways',
   },
   examinations: {
     root: '/examinations',
@@ -73,6 +74,7 @@ export const ROUTES = {
     marksheet: '/examinations/marksheet',
     grades: '/examinations/grades',
     divisions: '/examinations/divisions',
+    cbseExams: '/examinations/cbse-exams',
   },
   frontOffice: {
     root: '/front-office',

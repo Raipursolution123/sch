@@ -12,7 +12,7 @@ class OnlineAdmissions(models.Model):
     firstname = models.CharField(max_length=100, blank=True, null=True)
     middlename = models.CharField(max_length=255)
     lastname = models.CharField(max_length=100, blank=True, null=True)
-    rte = models.CharField(max_length=20, default='No')
+    rte = models.CharField(max_length=20, default="No")
     image = models.CharField(max_length=255, blank=True, null=True)
     mobileno = models.CharField(max_length=100, blank=True, null=True)
     email = models.CharField(max_length=100, blank=True, null=True)

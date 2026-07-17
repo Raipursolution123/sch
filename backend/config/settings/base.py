@@ -22,6 +22,9 @@ DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
+# Public registration is disabled by default; enable only in local/dev via .env.
+ALLOW_REGISTRATION = env.bool("ALLOW_REGISTRATION", default=False)
+
 DJANGO_APPS = [
     # "django.contrib.admin",  # Disabled: LogEntry references AUTH_USER_MODEL but the legacy User is unmanaged
     "django.contrib.auth",
@@ -34,7 +37,11 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
+    # token_blacklist omitted: its migrations FK to AUTH_USER_MODEL/`users`,
+    # which is unmanaged legacy schema. Logout/refresh use cache blacklist
+    # (core.auth.jwt_blacklist) instead.
     "corsheaders",
+    "django_filters",
     "django_celery_beat",
     "django_celery_results",
 ]
@@ -204,7 +211,8 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(
         days=env.int("JWT_REFRESH_TOKEN_LIFETIME_DAYS", default=7)
     ),
-    "ROTATE_REFRESH_TOKENS": False,
+    "ROTATE_REFRESH_TOKENS": True,
+    # DB blacklist disabled; CustomTokenRefreshView blacklists old refresh in cache.
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,  # Legacy `users` table has no last_login column
     "AUTH_HEADER_TYPES": ("Bearer",),

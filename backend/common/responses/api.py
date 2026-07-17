@@ -12,11 +12,11 @@ class APIResponse:
         )
 
     @staticmethod
-    def error(message="Error", details=None, status_code=400):
+    def error(message="Error", details=None, data=None, status_code=400):
         return Response(
             {
                 "success": False,
-                "error": {"message": message, "details": details},
+                "error": {"message": message, "details": details or data},
             },
             status=status_code,
         )

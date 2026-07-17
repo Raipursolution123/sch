@@ -2,6 +2,7 @@ import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { env } from '@constants/env';
 import { API_ENDPOINTS, STORAGE_KEYS } from '@constants/index';
 import { useAuthStore } from '@store/index';
+import { getApiErrorMessage } from '@utils/error-message';
 
 export const apiClient = axios.create({
   baseURL: env.apiBaseUrl,
@@ -95,7 +96,10 @@ apiClient.interceptors.response.use(
     }
 
     const responseData = error.response?.data as { error?: { message?: string } } | undefined;
-    if (responseData?.error?.message) {
+    const normalizedMessage = getApiErrorMessage(error, '');
+    if (normalizedMessage) {
+      error.message = normalizedMessage;
+    } else if (responseData?.error?.message) {
       error.message = responseData.error.message;
     }
 

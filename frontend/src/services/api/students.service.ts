@@ -8,6 +8,10 @@ import type {
   UpdateStudentPayload,
 } from '@app-types/students/student';
 import type { DisableReason, DisableStudentPayload } from '@app-types/students/disable-reason';
+import type {
+  StudentTransportAssignment,
+  UpdateStudentTransportPayload,
+} from '@app-types/transport';
 import { suggestAdmissionNumber } from '@utils/student';
 import { type BackendPayload, extractCount, extractList } from '@utils/api-response';
 
@@ -34,6 +38,24 @@ export const studentsService = {
   getById: async (id: number): Promise<StudentDetail> => {
     const { data } = await apiClient.get<ApiSuccessResponse<StudentDetail>>(
       API_ENDPOINTS.students.detail(id),
+    );
+    return data.data;
+  },
+
+  getTransport: async (id: number): Promise<StudentTransportAssignment> => {
+    const { data } = await apiClient.get<ApiSuccessResponse<StudentTransportAssignment>>(
+      API_ENDPOINTS.students.transport(id),
+    );
+    return data.data;
+  },
+
+  updateTransport: async (
+    id: number,
+    payload: UpdateStudentTransportPayload,
+  ): Promise<StudentTransportAssignment> => {
+    const { data } = await apiClient.patch<ApiSuccessResponse<StudentTransportAssignment>>(
+      API_ENDPOINTS.students.transport(id),
+      payload,
     );
     return data.data;
   },

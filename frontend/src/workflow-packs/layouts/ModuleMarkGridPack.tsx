@@ -3,6 +3,7 @@ import { PageHeader } from '@components/layout/PageHeader';
 import { EmptyState } from '@components/feedback/EmptyState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
+import { getApiErrorMessage } from '@utils/error-message';
 
 interface ModuleMarkGridPackProps {
   title: string;
@@ -51,10 +52,7 @@ export function ModuleMarkGridPack({
       {filtersReady && isLoading && <LoadingState message={loadingMessage} />}
 
       {filtersReady && isError && (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load data'}
-          onRetry={onRetry}
-        />
+        <ErrorState message={getApiErrorMessage(error, 'Could not load data')} onRetry={onRetry} />
       )}
 
       {filtersReady && !isLoading && !isError && isEmpty && (

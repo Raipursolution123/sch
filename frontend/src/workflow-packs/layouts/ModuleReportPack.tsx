@@ -3,6 +3,7 @@ import { ReportFilterBar, ReportHeader, ReportPrintShell } from '@components/rep
 import { EmptyState } from '@components/feedback/EmptyState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
+import { getApiErrorMessage } from '@utils/error-message';
 
 interface ModuleReportPackProps {
   title: string;
@@ -74,7 +75,7 @@ export function ModuleReportPack({
 
       {submitted && isError && (
         <ErrorState
-          message={error instanceof Error ? error.message : 'Could not load report'}
+          message={getApiErrorMessage(error, 'Could not load report')}
           onRetry={onRetry}
         />
       )}

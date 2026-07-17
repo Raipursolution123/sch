@@ -5,7 +5,7 @@ import type { Lesson, LessonCreatePayload, LessonUpdatePayload } from '@/types/a
 const BASE_PATH = '/academics/lessons';
 
 export const lessonService = {
-  getLessonList: async (params?: Record<string, any>) => {
+  getLessonList: async (params?: Record<string, unknown>) => {
     const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<Lesson>>>(
       `${BASE_PATH}/`,
       { params },

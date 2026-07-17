@@ -3,6 +3,7 @@ import { PageHeader } from '@components/layout/PageHeader';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
+import { getApiErrorMessage } from '@utils/error-message';
 
 export interface SettingsTab {
   id: string;
@@ -47,7 +48,7 @@ export function ModuleSettingsPack({
   if (isError) {
     return (
       <ErrorState
-        message={error instanceof Error ? error.message : 'Could not load settings'}
+        message={getApiErrorMessage(error, 'Could not load settings')}
         onRetry={onRetry}
       />
     );

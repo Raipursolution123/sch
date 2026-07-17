@@ -1,5 +1,6 @@
 import logging
 from typing import Any
+
 from django.db import transaction
 
 from apps.academics.checks.subject_group_dependencies import subject_group_is_in_use
@@ -46,11 +47,11 @@ class SubjectGroupService:
                 parent_subject_group_id=None,
                 created_at=selectors.now_datetime(),
             )
-            
+
             subject_ids = payload.get("subject_ids")
             if subject_ids:
                 self.sync_subjects(group.id, subject_ids)
-                
+
             class_section_ids = payload.get("class_section_ids")
             if class_section_ids:
                 self.sync_class_sections(group.id, class_section_ids)

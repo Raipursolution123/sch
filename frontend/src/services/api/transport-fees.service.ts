@@ -24,7 +24,10 @@ export const transportFeesService = {
     return data.data;
   },
 
-  update: async (id: number, payload: UpdateTransportFeeMasterPayload): Promise<TransportFeeMaster> => {
+  update: async (
+    id: number,
+    payload: UpdateTransportFeeMasterPayload,
+  ): Promise<TransportFeeMaster> => {
     const { data } = await apiClient.patch<ApiSuccessResponse<TransportFeeMaster>>(
       API_ENDPOINTS.transport.feeDetail(id),
       payload,

@@ -23,6 +23,7 @@ import { useDashboardOverview } from '@hooks/useDashboard';
 import { useActiveSession } from '@hooks/useSessions';
 import { useAuthStore } from '@store/index';
 import { cn } from '@utils/cn';
+import { getApiErrorMessage } from '@utils/error-message';
 
 function getGreeting(name: string): string {
   const hour = new Date().getHours();
@@ -49,7 +50,7 @@ export function DashboardPage() {
   if (isError || !data) {
     return (
       <ErrorState
-        message={error instanceof Error ? error.message : 'Could not load dashboard'}
+        message={getApiErrorMessage(error, 'Could not load dashboard')}
         onRetry={() => void refetch()}
       />
     );

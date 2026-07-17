@@ -44,6 +44,7 @@ export const API_ENDPOINTS = {
     list: '/students/',
     detail: (id: number) => `/students/${id}/`,
     fees: (id: number) => `/students/${id}/fees/`,
+    transport: (id: number) => `/students/${id}/transport/`,
     disableReasons: '/students/disable-reasons/',
     enable: (id: number) => `/students/${id}/enable/`,
   },
@@ -81,6 +82,7 @@ export const API_ENDPOINTS = {
     searchPayments: '/fees/search/payments/',
     reminders: '/fees/reminders/',
     reminderDetail: (id: number) => `/fees/reminders/${id}/`,
+    paymentGateways: '/fees/payment-gateways/',
   },
   attendance: {
     types: '/attendance/types/',
@@ -106,6 +108,19 @@ export const API_ENDPOINTS = {
     enrollmentsRoster: '/examinations/enrollments/roster/',
     enrollments: '/examinations/enrollments/',
     enrollmentDetail: (id: number) => `/examinations/enrollments/${id}/`,
+    cbseExams: '/examinations/cbse-exams/',
+  },
+  hostel: {
+    hostels: '/hostel/hostels/',
+    hostelDetail: (id: number) => `/hostel/hostels/${id}/`,
+    rooms: '/hostel/rooms/',
+    roomDetail: (id: number) => `/hostel/rooms/${id}/`,
+    roomTypes: '/hostel/room-types/',
+    roomTypeDetail: (id: number) => `/hostel/room-types/${id}/`,
+  },
+  communications: {
+    notices: '/communications/notices/',
+    noticeDetail: (id: number) => `/communications/notices/${id}/`,
   },
   transport: {
     fees: '/transport/fees/',
@@ -118,6 +133,15 @@ export const API_ENDPOINTS = {
     vehicleDetail: (id: number) => `/transport/vehicles/${id}/`,
     assignVehicles: '/transport/assign-vehicles/',
     assignVehicleDetail: (id: number) => `/transport/assign-vehicles/${id}/`,
+  },
+  frontOffice: {
+    enquiries: '/front-office/enquiries/',
+    enquiryDetail: (id: number) => `/front-office/enquiries/${id}/`,
+  },
+  admissions: {
+    online: '/admissions/online/',
+    onlineDetail: (id: number) => `/admissions/online/${id}/`,
+    convert: (id: number) => `/admissions/online/${id}/convert/`,
   },
   health: '/health/',
 } as const;

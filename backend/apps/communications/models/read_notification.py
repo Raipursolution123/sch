@@ -9,7 +9,7 @@ class ReadNotification(models.Model):
     parent_id = models.IntegerField(blank=True, null=True)
     staff_id = models.IntegerField(blank=True, null=True, db_index=True)
     notification_id = models.IntegerField(blank=True, null=True, db_index=True)
-    is_active = models.CharField(max_length=255, blank=True, null=True, default='no')
+    is_active = models.CharField(max_length=255, blank=True, null=True, default="no")
     created_at = models.DateTimeField()
     updated_at = models.DateField(blank=True, null=True)
 

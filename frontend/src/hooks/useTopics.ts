@@ -8,7 +8,7 @@ export const TOPIC_KEYS = {
   details: () => [...TOPIC_KEYS.all, 'detail'] as const,
 };
 
-export const useTopicList = (params?: Record<string, any>) => {
+export const useTopicList = (params?: Record<string, unknown>) => {
   return useQuery({
     queryKey: [...TOPIC_KEYS.lists(), params],
     queryFn: () => topicService.getTopicList(params),

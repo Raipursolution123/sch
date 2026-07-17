@@ -5,7 +5,7 @@ class Conferences(models.Model):
     """Maps to `conferences` in db_current."""
 
     id = models.AutoField(primary_key=True)
-    purpose = models.CharField(max_length=20, default='class')
+    purpose = models.CharField(max_length=20, default="class")
     staff_id = models.IntegerField(blank=True, null=True, db_index=True)
     created_id = models.IntegerField(blank=False, null=False, db_index=True)
     title = models.TextField(blank=True, null=True)

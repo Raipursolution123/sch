@@ -22,7 +22,10 @@ export const vehicleRoutesService = {
     return data.data;
   },
 
-  update: async (id: number, payload: UpdateVehicleRouteAssignmentPayload): Promise<VehicleRouteAssignment> => {
+  update: async (
+    id: number,
+    payload: UpdateVehicleRouteAssignmentPayload,
+  ): Promise<VehicleRouteAssignment> => {
     const { data } = await apiClient.patch<ApiSuccessResponse<VehicleRouteAssignment>>(
       API_ENDPOINTS.transport.assignVehicleDetail(id),
       payload,

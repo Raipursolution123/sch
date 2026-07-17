@@ -37,6 +37,7 @@ jobs:
           repo="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')"
           echo "BACKEND_IMAGE=${repo}/backend" >> "$GITHUB_ENV"
           echo "FRONTEND_IMAGE=${repo}/frontend" >> "$GITHUB_ENV"
+          echo "NGINX_IMAGE=${repo}/nginx" >> "$GITHUB_ENV"
 
       - name: Set short SHA
         id: sha
@@ -60,8 +61,9 @@ jobs:
           target: production
           push: true
           tags: |
-            ${{ env.BACKEND_IMAGE }}:latest
             ${{ env.BACKEND_IMAGE }}:${{ steps.sha.outputs.short }}
+          build-args: |
+            GIT_SHA=${{ github.event.workflow_run.head_sha || github.sha }}
           cache-from: type=gha,scope=backend
           cache-to: type=gha,mode=max,scope=backend
 
@@ -73,13 +75,26 @@ jobs:
           target: production
           push: true
           tags: |
-            ${{ env.FRONTEND_IMAGE }}:latest
             ${{ env.FRONTEND_IMAGE }}:${{ steps.sha.outputs.short }}
           build-args: |
+            GIT_SHA=${{ github.event.workflow_run.head_sha || github.sha }}
             VITE_API_BASE_URL=/api/v1
             VITE_APP_NAME=School ERP (Staging)
           cache-from: type=gha,scope=frontend
           cache-to: type=gha,mode=max,scope=frontend
+
+      - name: Build & push nginx
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/nginx/Dockerfile
+          push: true
+          tags: |
+            ${{ env.NGINX_IMAGE }}:${{ steps.sha.outputs.short }}
+          build-args: |
+            GIT_SHA=${{ github.event.workflow_run.head_sha || github.sha }}
+          cache-from: type=gha,scope=nginx
+          cache-to: type=gha,mode=max,scope=nginx
 
   deploy:
     name: Deploy to Staging Server
@@ -97,8 +112,20 @@ jobs:
           script: |
             set -euo pipefail
             cd ${{ secrets.STAGING_APP_PATH }}
+            TAG="${{ needs.build-and-push.outputs.short_sha }}"
+            # Pull the fixed deploy script before running it (server copy may be stale).
+            git fetch origin main
+            git reset --hard origin/main
             chmod +x scripts/staging-*.sh
-            ./scripts/staging-deploy.sh "${{ needs.build-and-push.outputs.short_sha }}"
+            # Keep .env in sync so compose and manual deploys use the CI SHA, not "latest".
+            if [[ -f .env ]]; then
+              if grep -q '^IMAGE_TAG=' .env; then
+                sed -i.bak "s/^IMAGE_TAG=.*/IMAGE_TAG=${TAG}/" .env
+              else
+                echo "IMAGE_TAG=${TAG}" >> .env
+              fi
+            fi
+            ./scripts/staging-deploy.sh "${TAG}"
 
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.2.0

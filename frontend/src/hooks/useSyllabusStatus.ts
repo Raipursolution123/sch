@@ -8,10 +8,10 @@ import type {
 export const SYLLABUS_STATUS_KEYS = {
   all: ['syllabus-status'] as const,
   lists: () => [...SYLLABUS_STATUS_KEYS.all, 'list'] as const,
-  list: (params: Record<string, any>) => [...SYLLABUS_STATUS_KEYS.lists(), params] as const,
+  list: (params: Record<string, unknown>) => [...SYLLABUS_STATUS_KEYS.lists(), params] as const,
 };
 
-export const useSyllabusStatusList = (params?: Record<string, any>) => {
+export const useSyllabusStatusList = (params?: Record<string, unknown>) => {
   return useQuery({
     queryKey: SYLLABUS_STATUS_KEYS.list(params || {}),
     queryFn: () => syllabusStatusService.getSyllabusStatusList(params),

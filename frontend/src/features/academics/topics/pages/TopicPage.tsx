@@ -10,7 +10,7 @@ import { Plus } from 'lucide-react';
 
 export function TopicPage() {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isError } = useTopicList({ page });
+  const { data, isLoading, isError, error, refetch } = useTopicList({ page });
 
   const topics = data?.results || [];
   const count = data?.count || 0;
@@ -58,7 +58,8 @@ export function TopicPage() {
       isLoading={isLoading}
       loadingMessage="Loading topics..."
       isError={isError}
-      errorMessage="Failed to load topics. Please try again later."
+      error={error}
+      onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && topics.length === 0}
       emptyTitle="No topics found"
       emptyDescription="No topics have been created yet."

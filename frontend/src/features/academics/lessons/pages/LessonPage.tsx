@@ -56,7 +56,7 @@ export function LessonPage() {
 
 function LessonTabContent() {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isError } = useLessonList({ page });
+  const { data, isLoading, isError, error, refetch } = useLessonList({ page });
 
   const lessons = data?.results || [];
   const count = data?.count || 0;
@@ -104,7 +104,8 @@ function LessonTabContent() {
       isLoading={isLoading}
       loadingMessage="Loading lessons..."
       isError={isError}
-      errorMessage="Failed to load lessons. Please try again later."
+      error={error}
+      onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && lessons.length === 0}
       emptyTitle="No lessons found"
       emptyDescription="No lessons have been created yet."
@@ -146,7 +147,7 @@ function LessonTabContent() {
 
 function TopicTabContent() {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isError } = useTopicList({ page });
+  const { data, isLoading, isError, error, refetch } = useTopicList({ page });
 
   const topics = data?.results || [];
   const count = data?.count || 0;
@@ -194,7 +195,8 @@ function TopicTabContent() {
       isLoading={isLoading}
       loadingMessage="Loading topics..."
       isError={isError}
-      errorMessage="Failed to load topics. Please try again later."
+      error={error}
+      onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && topics.length === 0}
       emptyTitle="No topics found"
       emptyDescription="No topics have been created yet."
