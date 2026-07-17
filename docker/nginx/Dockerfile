@@ -27,3 +27,9 @@ RUN mkdir -p /var/lib/nginx/tmp/client_body \
     && chown -R nginx:nginx /var/lib/nginx/tmp /var/cache/nginx /var/log/nginx \
     && chmod 755 /var/lib/nginx /var/lib/nginx/tmp /var/cache/nginx \
     && chmod -R 755 /var/lib/nginx/tmp /var/cache/nginx
+
+COPY docker/nginx/entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
