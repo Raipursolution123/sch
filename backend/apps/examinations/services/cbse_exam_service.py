@@ -92,7 +92,11 @@ class CbseExamService:
             "cbse_exam_grade_id": payload.get("cbse_exam_grade_id"),
             "combined_ew": payload.get("combined_ew"),
             "is_publish": int(payload.get("is_publish", 0) or 0),
-            "is_active": int(payload.get("is_active", 1) if payload.get("is_active") is not None else 1),
+            "is_active": int(
+                payload.get("is_active", 1)
+                if payload.get("is_active") is not None
+                else 1
+            ),
             "created_by": payload.get("created_by"),
             "use_exam_roll_no": int(payload.get("use_exam_roll_no", 0) or 0),
             "promote_class": payload.get("promote_class"),

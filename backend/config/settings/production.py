@@ -27,7 +27,9 @@ if SENTRY_DSN:
             dsn=SENTRY_DSN,
             integrations=[DjangoIntegration()],
             environment=env("SENTRY_ENVIRONMENT", default="production"),  # noqa: F405
-            traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.0),  # noqa: F405
+            traces_sample_rate=env.float(
+                "SENTRY_TRACES_SAMPLE_RATE", default=0.0
+            ),  # noqa: F405
             send_default_pii=False,
         )
     except ImportError:

@@ -37,7 +37,9 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
-    "rest_framework_simplejwt.token_blacklist",
+    # token_blacklist omitted: its migrations FK to AUTH_USER_MODEL/`users`,
+    # which is unmanaged legacy schema. Logout/refresh use cache blacklist
+    # (core.auth.jwt_blacklist) instead.
     "corsheaders",
     "django_filters",
     "django_celery_beat",
@@ -210,7 +212,8 @@ SIMPLE_JWT = {
         days=env.int("JWT_REFRESH_TOKEN_LIFETIME_DAYS", default=7)
     ),
     "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
+    # DB blacklist disabled; CustomTokenRefreshView blacklists old refresh in cache.
+    "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,  # Legacy `users` table has no last_login column
     "AUTH_HEADER_TYPES": ("Bearer",),
     "USER_ID_FIELD": "id",
