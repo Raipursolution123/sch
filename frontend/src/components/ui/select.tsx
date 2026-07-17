@@ -6,16 +6,37 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   /** @deprecated Prefer FormField wrapper for labels */
   label?: string;
   error?: string;
-  options: { value: string; label: string }[];
+  options?: { value: string; label: string }[];
   placeholder?: string;
+  onValueChange?: (value: string) => void;
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, label, error, id, options, placeholder, ...props }, ref) => {
+  (
+    {
+      className,
+      label,
+      error,
+      id,
+      options,
+      placeholder,
+      onValueChange,
+      onChange,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      onChange?.(e);
+      onValueChange?.(e.target.value);
+    };
+
     const selectElement = (
       <select
         id={id}
         ref={ref}
+        onChange={handleChange}
         className={cn(
           controlInputClassName,
           controlHeightClassName,
@@ -30,11 +51,13 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             {placeholder}
           </option>
         )}
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
+        {options
+          ? options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))
+          : children}
       </select>
     );
 
@@ -56,5 +79,42 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   },
 );
 Select.displayName = 'Select';
+
+// Polyfill exports for Shadcn UI API compatibility (renders native HTML tags)
+export const SelectTrigger = React.forwardRef<
+  HTMLOptGroupElement,
+  React.HTMLAttributes<HTMLOptGroupElement>
+>(({ children, ...props }, ref) => (
+  <optgroup ref={ref} style={{ display: 'none' }} label="trigger" {...props}>
+    {children}
+  </optgroup>
+));
+SelectTrigger.displayName = 'SelectTrigger';
+
+export const SelectValue = React.forwardRef<
+  HTMLOptionElement,
+  React.OptionHTMLAttributes<HTMLOptionElement> & { placeholder?: React.ReactNode }
+>(({ placeholder, ...props }, ref) => (
+  <option ref={ref} value="" disabled {...props}>
+    {placeholder}
+  </option>
+));
+SelectValue.displayName = 'SelectValue';
+
+export const SelectContent = React.forwardRef<
+  HTMLOptGroupElement,
+  React.HTMLAttributes<HTMLOptGroupElement>
+>(({ children, ...props }, ref) => <React.Fragment>{children}</React.Fragment>);
+SelectContent.displayName = 'SelectContent';
+
+export const SelectItem = React.forwardRef<
+  HTMLOptionElement,
+  React.OptionHTMLAttributes<HTMLOptionElement>
+>(({ value, children, ...props }, ref) => (
+  <option ref={ref} value={value} {...props}>
+    {children}
+  </option>
+));
+SelectItem.displayName = 'SelectItem';
 
 export { Select };
