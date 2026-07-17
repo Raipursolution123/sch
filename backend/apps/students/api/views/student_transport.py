@@ -12,9 +12,7 @@ from apps.students.domain.student_exceptions import (
     StudentNotFoundError,
     StudentValidationError,
 )
-from apps.students.services.student_transport_service import (
-    StudentTransportService,
-)
+from apps.students.services.student_transport_service import StudentTransportService
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
