@@ -36,6 +36,13 @@ class LedgerGroupsDetailView(APIView):
         except CycGroups.DoesNotExist:
             return None
 
+    def get(self, request, pk):
+        group = self.get_object(pk)
+        if not group:
+            return APIResponse.error(message="Ledger Group not found", status_code=status.HTTP_404_NOT_FOUND)
+        serializer = CycGroupsSerializer(group)
+        return APIResponse.success(data=serializer.data, message="Ledger Group fetched successfully")
+
     def put(self, request, pk):
         group = self.get_object(pk)
         if not group:

@@ -3,8 +3,17 @@ export interface LedgerGroup {
   name: string;
   code?: string;
   parent_id?: number | null;
-  base_type?: number;
+  affects_gross: number;
 }
+
+export interface LedgerGroupCreatePayload {
+  name: string;
+  code?: string;
+  parent_id?: number | null;
+  affects_gross: number;
+}
+
+export interface LedgerGroupUpdatePayload extends Partial<LedgerGroupCreatePayload> {}
 
 export interface Ledger {
   id: number;

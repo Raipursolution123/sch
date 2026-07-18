@@ -13,6 +13,12 @@ class LedgersView(APIView):
 
     def get(self, request):
         queryset = CycLedgers.objects.all().order_by('id')
+        
+        # Filter by group_id if provided
+        group_id = request.query_params.get('group_id')
+        if group_id:
+            queryset = queryset.filter(group_id=group_id)
+            
         paginator = StandardResultsSetPagination()
         page = paginator.paginate_queryset(queryset, request)
         serializer = CycLedgersSerializer(page, many=True)
@@ -35,6 +41,9 @@ class LedgersDetailView(APIView):
             return CycLedgers.objects.get(pk=pk)
         except CycLedgers.DoesNotExist:
             return None
+
+    def patch(self, request, pk):
+        return self.put(request, pk)
 
     def put(self, request, pk):
         ledger = self.get_object(pk)

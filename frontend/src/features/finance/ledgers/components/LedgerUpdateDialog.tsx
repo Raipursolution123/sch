@@ -7,6 +7,7 @@ import { Select } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useUpdateLedger } from '@/hooks/useLedgers';
 import { useFeeTypes } from '@/hooks/useFeeTypes';
+import { useLedgerGroups } from '@/hooks/useLedgerGroups';
 import type { Ledger, LedgerUpdatePayload } from '@/types/finance';
 
 interface LedgerUpdateDialogProps {
@@ -18,6 +19,7 @@ interface LedgerUpdateDialogProps {
 export const LedgerUpdateDialog = ({ ledger, open, onOpenChange }: LedgerUpdateDialogProps) => {
   const { mutate: updateLedger, isPending } = useUpdateLedger();
   const { data: feeTypesData } = useFeeTypes();
+  const { data: ledgerGroupsData } = useLedgerGroups();
 
   const [name, setName] = useState<string>('');
   const [code, setCode] = useState<string>('');
@@ -135,13 +137,16 @@ export const LedgerUpdateDialog = ({ ledger, open, onOpenChange }: LedgerUpdateD
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="update_group_id">Group ID *</Label>
-              <Input
+              <Label htmlFor="update_group_id">Group *</Label>
+              <Select
                 id="update_group_id"
-                type="number"
                 value={groupId}
                 onChange={(e) => setGroupId(e.target.value)}
-                placeholder="Enter group ID"
+                options={[
+                  { value: '', label: 'Select Group' },
+                  ...(ledgerGroupsData?.map((g: any) => ({ value: String(g.id), label: g.name })) ||
+                    []),
+                ]}
                 required
               />
             </div>

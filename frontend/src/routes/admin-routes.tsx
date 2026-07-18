@@ -16,6 +16,11 @@ const LedgersPage = lazy(() =>
   })),
 );
 
+const LedgerGroupsPage = lazy(() =>
+  import('@features/finance/ledger-groups/pages/LedgerGroupsPage').then((m) => ({
+    default: m.LedgerGroupsPage,
+  })),
+);
 const SessionsPage = lazy(() =>
   import('@features/academics/sessions/pages/SessionsPage').then((m) => ({
     default: m.SessionsPage,
@@ -473,6 +478,7 @@ export const adminRoutes: RouteObject[] = [
   createPlaceholderModule('/expense', ROUTES.expense.list),
   createModuleRoutes('/finance', ROUTES.finance.chartOfAccounts, [
     { path: 'ledgers', element: <LedgersPage /> },
+    { path: 'groups', element: <LedgerGroupsPage /> },
   ]),
   createPlaceholderModule('/reports', ROUTES.reports.students),
   createPlaceholderModule('/certificates', ROUTES.certificates.templates),
