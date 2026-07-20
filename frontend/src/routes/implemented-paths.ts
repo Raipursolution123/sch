@@ -63,6 +63,13 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.settings.currency,
   ROUTES.lessonPlan.syllabusStatus,
   ROUTES.lessonPlan.lessons,
+  ROUTES.reports.students,
+  ROUTES.reports.attendance,
+  ROUTES.reports.fees,
+  ROUTES.reports.examinations,
+  ROUTES.reports.finance,
+  ROUTES.reports.hr,
+  ROUTES.reports.transport,
 ]);
 
 export function isImplementedPath(path: string): boolean {

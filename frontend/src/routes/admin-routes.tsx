@@ -230,6 +230,42 @@ const AttendanceReportPage = lazy(() =>
   })),
 );
 
+const StudentReportPage = lazy(() =>
+  import('@features/reports/students/pages/StudentReportPage').then((m) => ({
+    default: m.StudentReportPage,
+  })),
+);
+
+const FeesReportPage = lazy(() =>
+  import('@features/reports/fees/pages/FeesReportPage').then((m) => ({
+    default: m.FeesReportPage,
+  })),
+);
+
+const ExamReportPage = lazy(() =>
+  import('@features/reports/examinations/pages/ExamReportPage').then((m) => ({
+    default: m.ExamReportPage,
+  })),
+);
+
+const IncomeExpenseReportPage = lazy(() =>
+  import('@features/reports/finance/pages/IncomeExpenseReportPage').then((m) => ({
+    default: m.IncomeExpenseReportPage,
+  })),
+);
+
+const StaffReportPage = lazy(() =>
+  import('@features/reports/hr/pages/StaffReportPage').then((m) => ({
+    default: m.StaffReportPage,
+  })),
+);
+
+const TransportHostelReportPage = lazy(() =>
+  import('@features/reports/transport/pages/TransportHostelReportPage').then((m) => ({
+    default: m.TransportHostelReportPage,
+  })),
+);
+
 const ApproveLeavePage = lazy(() =>
   import('@features/attendance/approve-leave/pages/ApproveLeavePage').then((m) => ({
     default: m.ApproveLeavePage,
@@ -519,7 +555,15 @@ export const adminRoutes: RouteObject[] = [
     { path: 'ledgers', element: <LedgersPage /> },
     { path: 'groups', element: <LedgerGroupsPage /> },
   ]),
-  createPlaceholderModule('/reports', ROUTES.reports.students),
+  createModuleRoutes('/reports', ROUTES.reports.students, [
+    { path: 'students', element: <StudentReportPage /> },
+    { path: 'attendance', element: <AttendanceReportPage /> },
+    { path: 'fees', element: <FeesReportPage /> },
+    { path: 'examinations', element: <ExamReportPage /> },
+    { path: 'finance', element: <IncomeExpenseReportPage /> },
+    { path: 'hr', element: <StaffReportPage /> },
+    { path: 'transport', element: <TransportHostelReportPage /> },
+  ]),
   createPlaceholderModule('/certificates', ROUTES.certificates.templates),
   createPlaceholderModule('/alumni', ROUTES.alumni.list),
   createPlaceholderModule('/leads', ROUTES.leads.all),

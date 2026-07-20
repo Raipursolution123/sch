@@ -1,8 +1,8 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-20  
-**Current phase:** Phase 7 — Testing, QA & Production Readiness ✅ COMPLETE  
-**Branch:** `main` @ `ac34a54`
+**Current phase:** Phase 8 — Reports Module ✅ COMPLETE  
+**Branch:** `main` @ `d209438`
 
 ---
 
@@ -10,20 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | 100% (roadmap phases 0–7) |
-| **Current Phase** | All roadmap phases complete |
+| **Overall Project Progress** | Phase 8 complete (roadmap phases 0–8) |
+| **Current Phase** | Phase 8 — Reports ✅ |
 | **Current Task** | Production deploy + UAT sign-off (ops) |
-| **Completed Phases** | Phase 0 ✅ … Phase 7 ✅ |
-| **Remaining Phases** | — |
+| **Completed Phases** | Phase 0 ✅ … Phase 8 ✅ |
+| **Remaining Phases** | Feature backlog (library, inventory, homework reports, settings) |
 | **Open Bugs** | 0 |
 | **Backend Completion** | ~74% |
-| **Frontend Completion** | ~58% |
-| **API Integration Status** | Finance endpoints centralized in api-endpoints.ts |
-| **UI Completion Status** | 64 real routes; Coming Soon badges on unimplemented nav |
-| **Testing Status** | Frontend typecheck pass; 187 backend tests pass |
-| **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~85 Coming Soon pages, offline bank payments UI |
+| **Frontend Completion** | ~62% |
+| **API Integration Status** | Reports wired to existing fee, attendance, exam, staff, transport, finance APIs |
+| **UI Completion Status** | 71 real routes; Coming Soon badges on unimplemented nav |
 | **Testing Status** | 13 integration + ~190 unit backend tests; 14 Vitest tests; typecheck pass |
+| **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
+| **Technical Debt Remaining** | ~78 Coming Soon pages, library/inventory/homework report pages |
 
 ---
 
@@ -500,6 +499,47 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 8 — Reports Module ✅ SIGNED OFF
+
+**Signed off:** 2026-07-20  
+**Objective:** Wire the Reports nav module with real report pages using existing APIs and the `ModuleReportPack` pattern.
+
+### Implemented report routes (7)
+
+| Route | Page | Data source |
+|-------|------|-------------|
+| `/reports/students` | Student Report | Students list + class/section filters |
+| `/reports/attendance` | Attendance Report | `/attendance/report/` |
+| `/reports/fees` | Finance & Fees | Due fees + payment search APIs |
+| `/reports/examinations` | Exam Report | Exam results roster (read-only) |
+| `/reports/finance` | Income & Expense | Trial balance API |
+| `/reports/hr` | HR Report | Staff directory |
+| `/reports/transport` | Transport & Hostel | Routes, vehicles, hostel rooms |
+
+### Still Coming Soon (3 report nav items)
+
+- Library Reports — requires library module
+- Inventory Reports — requires inventory module
+- Homework Reports — requires homework module
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 8.1 | Create report pages under `features/reports/` | ✅ |
+| 8.2 | Add `financeReportsService` + `useTrialBalance` hook | ✅ |
+| 8.3 | Wire routes in `admin-routes.tsx` | ✅ |
+| 8.4 | Add paths to `IMPLEMENTED_PATHS` (71 total routes) | ✅ |
+| 8.5 | Frontend typecheck pass | ✅ |
+
+### Verification
+
+- [x] 7 report pages render with filters, summary KPIs, print, and CSV export
+- [x] Coming Soon badges removed from implemented report nav items
+- [x] Frontend typecheck passes
+
+---
+
 ## Roadmap Complete ✅
 
-All 8 phases (0–7) signed off. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (~85 Coming Soon pages).
+All 9 phases (0–8) signed off. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (~78 Coming Soon pages).

@@ -17,11 +17,16 @@ def test_missing_role_denies_privilege():
         is_superadmin=False,
         role=None,
         role_slug=None,
+        id=1,
     )
     with patch(
         "apps.accounts.services.legacy_rbac.is_superadmin_user", return_value=False
     ):
-        assert user_has_privilege(user, "session_setting", "can_view") is False
+        with patch(
+            "apps.accounts.services.legacy_rbac.get_user_legacy_permissions",
+            return_value={},
+        ):
+            assert user_has_privilege(user, "session_setting", "can_view") is False
 
 
 def test_role_permission_grants_view():
@@ -30,32 +35,25 @@ def test_role_permission_grants_view():
         is_superadmin=False,
         role="accountant",
         role_slug="accountant",
+        id=2,
     )
-    role = MagicMock(is_superadmin=0)
-    category = MagicMock(short_code="session_setting")
-    role_perm = MagicMock(can_view=1, can_add=0, can_edit=0, can_delete=0)
 
     with patch(
         "apps.accounts.services.legacy_rbac.is_superadmin_user", return_value=False
     ):
         with patch(
-            "apps.accounts.services.legacy_rbac.Role.objects.filter"
-        ) as role_filter:
-            role_filter.return_value.first.return_value = role
-            with patch(
-                "apps.accounts.services.legacy_rbac.PermissionCategory.objects.filter"
-            ) as cat_filter:
-                cat_filter.return_value.first.return_value = category
-                with patch(
-                    "apps.accounts.services.legacy_rbac.RolePermission.objects.filter"
-                ) as rp_filter:
-                    rp_filter.return_value.first.return_value = role_perm
-                    assert (
-                        user_has_privilege(user, "session_setting", "can_view") is True
-                    )
-                    assert (
-                        user_has_privilege(user, "session_setting", "can_add") is False
-                    )
+            "apps.accounts.services.legacy_rbac.get_user_legacy_permissions",
+            return_value={
+                "session_setting": {
+                    "can_view": True,
+                    "can_add": False,
+                    "can_edit": False,
+                    "can_delete": False,
+                }
+            },
+        ):
+            assert user_has_privilege(user, "session_setting", "can_view") is True
+            assert user_has_privilege(user, "session_setting", "can_add") is False
 
 
 def test_staff_user_resolves_role_via_role_slug():
@@ -79,24 +77,32 @@ def test_staff_user_privilege_uses_role_slug_not_staff_literal():
         is_superadmin=False,
         role="staff",
         role_slug="ADMIN",
+        id=3,
     )
     admin_role = MagicMock(is_superadmin=0)
     category = MagicMock(short_code="class")
-    role_perm = MagicMock(can_view=1, can_add=1, can_edit=1, can_delete=0)
+    role_perm = MagicMock(
+        permission_category=category,
+        can_view=1,
+        can_add=1,
+        can_edit=1,
+        can_delete=0,
+    )
 
     with patch(
         "apps.accounts.services.legacy_rbac.is_superadmin_user", return_value=False
     ):
         with patch(
-            "apps.accounts.services.legacy_rbac.resolve_user_role",
-            return_value=admin_role,
+            "apps.accounts.services.legacy_rbac.cache_get_or_set",
+            side_effect=lambda key, factory, timeout: factory(),
         ):
             with patch(
-                "apps.accounts.services.legacy_rbac.PermissionCategory.objects.filter"
-            ) as cat_filter:
-                cat_filter.return_value.first.return_value = category
+                "apps.accounts.services.legacy_rbac.resolve_user_role",
+                return_value=admin_role,
+            ) as resolve_mock:
                 with patch(
                     "apps.accounts.services.legacy_rbac.RolePermission.objects.filter"
                 ) as rp_filter:
-                    rp_filter.return_value.first.return_value = role_perm
+                    rp_filter.return_value.select_related.return_value = [role_perm]
                     assert user_has_privilege(user, "class", "can_view") is True
+                    resolve_mock.assert_called_once_with(user)

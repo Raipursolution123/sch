@@ -101,8 +101,7 @@ def disable_reason_labels(reason_ids: list[int]) -> dict[int, str]:
     if not reason_ids:
         return {}
     return {
-        row.id: row.reason
-        for row in DisableReason.objects.filter(id__in=reason_ids)
+        row.id: row.reason for row in DisableReason.objects.filter(id__in=reason_ids)
     }
 
 

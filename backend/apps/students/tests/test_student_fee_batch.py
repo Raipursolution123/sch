@@ -70,7 +70,9 @@ def test_batch_fee_totals_for_roster_computes_per_student(roster_context):
             "_fetch_student_fee_master_lines_batch",
             return_value=master_lines,
         ),
-        patch.object(selectors, "_fetch_deposite_payments_batch", return_value=payments),
+        patch.object(
+            selectors, "_fetch_deposite_payments_batch", return_value=payments
+        ),
         patch.object(selectors, "_fetch_class_fee_lines", return_value=class_lines),
     ):
         totals = selectors.batch_fee_totals_for_roster(

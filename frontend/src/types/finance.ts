@@ -51,3 +51,10 @@ export interface LedgerCreatePayload {
 }
 
 export type LedgerUpdatePayload = Partial<LedgerCreatePayload>;
+
+export interface TrialBalanceRow {
+  ledger_id: number;
+  ledger_name: string;
+  total_dr: number | string;
+  total_cr: number | string;
+}

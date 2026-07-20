@@ -76,9 +76,9 @@ class AttendanceService:
                 "entries": [],
             }
 
-        students = Students.objects.filter(id__in=student_ids, is_active="yes").order_by(
-            "roll_no", "firstname", "lastname"
-        )
+        students = Students.objects.filter(
+            id__in=student_ids, is_active="yes"
+        ).order_by("roll_no", "firstname", "lastname")
 
         session_ids = [s.id for s in sessions]
         attendances = StudentAttendences.objects.filter(
