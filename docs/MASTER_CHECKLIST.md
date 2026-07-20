@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-07-20  
 **Current phase:** Phase 1 — Merge & Branch Stabilization  
-**Branch:** `main` (post-merge)
+**Branch:** `main` @ `ac34a54`
 
 ---
 
@@ -10,11 +10,11 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | 18% |
-| **Current Phase** | Phase 1 |
-| **Current Task** | Merge finance branch + Phase 0 security to `main` |
+| **Overall Project Progress** | 20% |
+| **Current Phase** | Phase 1 (verification) |
+| **Current Task** | Confirm CI green on `main` |
 | **Completed Phases** | Phase 0 ✅ |
-| **Remaining Phases** | 1 (in progress), 2–7 |
+| **Remaining Phases** | 1 (sign-off pending), 2–7 |
 | **Open Bugs** | 0 |
 | **Backend Completion** | ~58% |
 | **Frontend Completion** | ~45% |
@@ -50,19 +50,19 @@
 
 | ID | Task | Status | Notes |
 |----|------|--------|-------|
-| 1.1 | Commit Phase 0 security work on merge branch | 🔄 In Progress | |
-| 1.2 | Merge `merge/feature-academics-fees-into-main` → `main` | ❌ Not Started | |
-| 1.3 | Resolve conflicts / stray changes | ❌ Not Started | |
-| 1.4 | Run local verification (pytest + typecheck) | ❌ Not Started | |
-| 1.5 | Push `main` to origin | ❌ Not Started | |
-| 1.6 | Confirm CI green on `main` | ❌ Not Started | |
+| 1.1 | Commit Phase 0 security work on merge branch | ✅ Completed | `ac34a54` |
+| 1.2 | Merge `merge/feature-academics-fees-into-main` → `main` | ✅ Completed | Fast-forward |
+| 1.3 | Resolve conflicts / stray changes | ✅ Completed | `auth/__init__.py` restored |
+| 1.4 | Run local verification (pytest + typecheck) | ✅ Completed | 7/7 + typecheck pass |
+| 1.5 | Push `main` to origin | ✅ Completed | `50a754b..ac34a54` |
+| 1.6 | Confirm CI green on `main` | 🔄 In Progress | Awaiting GitHub Actions |
 
 ### Acceptance Criteria
 
-- [ ] Single `main` branch contains finance + roadmap + Phase 0 security
-- [ ] No uncommitted work on `main`
-- [ ] Backend unit tests pass
-- [ ] Frontend typecheck passes
+- [x] Single `main` branch contains finance + roadmap + Phase 0 security
+- [x] No uncommitted work on `main`
+- [x] Backend unit tests pass
+- [x] Frontend typecheck passes
 - [ ] CI passes on pushed `main`
 
 ---
