@@ -11,7 +11,7 @@ class CycCampaign(models.Model):
     c_by = models.IntegerField()
     c_manager = models.IntegerField()
     c_manager_data = models.TextField(blank=True, null=True)
-    c_status = models.CharField(max_length=44, default='Active')
+    c_status = models.CharField(max_length=44, default="Active")
 
     class Meta:
         managed = False

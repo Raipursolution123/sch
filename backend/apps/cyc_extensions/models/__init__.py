@@ -1,6 +1,8 @@
 from apps.cyc_extensions.models.cy_ptm_time_slot import CyPtmTimeSlot
 from apps.cyc_extensions.models.cy_vehicle_ticket import CyVehicleTicket
-from apps.cyc_extensions.models.cyc_additional_section_teacher import CycAdditionalSectionTeacher
+from apps.cyc_extensions.models.cyc_additional_section_teacher import (
+    CycAdditionalSectionTeacher,
+)
 from apps.cyc_extensions.models.cyc_advance_exam_group import CycAdvanceExamGroup
 from apps.cyc_extensions.models.cyc_biometric_events import CycBiometricEvents
 from apps.cyc_extensions.models.cyc_campaign import CycCampaign
@@ -24,10 +26,18 @@ from apps.cyc_extensions.models.cyc_logs import CycLogs
 from apps.cyc_extensions.models.cyc_ptm import CycPtm
 from apps.cyc_extensions.models.cyc_ptm_attendance import CycPtmAttendance
 from apps.cyc_extensions.models.cyc_ptm_schedule import CycPtmSchedule
-from apps.cyc_extensions.models.cyc_scheme_and_scholarship import CycSchemeAndScholarship
-from apps.cyc_extensions.models.cyc_scheme_and_scholarship_feetype import CycSchemeAndScholarshipFeetype
-from apps.cyc_extensions.models.cyc_scheme_and_scholarship_student import CycSchemeAndScholarshipStudent
-from apps.cyc_extensions.models.cyc_scheme_and_scholarship_value import CycSchemeAndScholarshipValue
+from apps.cyc_extensions.models.cyc_scheme_and_scholarship import (
+    CycSchemeAndScholarship,
+)
+from apps.cyc_extensions.models.cyc_scheme_and_scholarship_feetype import (
+    CycSchemeAndScholarshipFeetype,
+)
+from apps.cyc_extensions.models.cyc_scheme_and_scholarship_student import (
+    CycSchemeAndScholarshipStudent,
+)
+from apps.cyc_extensions.models.cyc_scheme_and_scholarship_value import (
+    CycSchemeAndScholarshipValue,
+)
 from apps.cyc_extensions.models.cyc_student_addon_fee import CycStudentAddonFee
 from apps.cyc_extensions.models.cyc_tags import CycTags
 from apps.cyc_extensions.models.cyc_vehicle_parts_info import CycVehiclePartsInfo
