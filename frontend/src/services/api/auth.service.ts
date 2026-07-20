@@ -1,5 +1,6 @@
 import { apiClient } from '@services/api/client';
 import { API_ENDPOINTS } from '@constants/index';
+import { mapLegacyPermissionsToUser } from '@utils/auth-user';
 import type {
   ApiSuccessResponse,
   AuthResponse,
@@ -14,7 +15,11 @@ export const authService = {
       API_ENDPOINTS.auth.login,
       payload,
     );
-    return data.data;
+    const auth = data.data;
+    return {
+      ...auth,
+      user: mapLegacyPermissionsToUser(auth.user, auth.user.legacy_permissions ?? {}),
+    };
   },
 
   register: async (payload: RegisterPayload) => {
@@ -31,6 +36,7 @@ export const authService = {
 
   getMe: async () => {
     const { data } = await apiClient.get<ApiSuccessResponse<User>>(API_ENDPOINTS.auth.me);
-    return data.data;
+    const user = data.data;
+    return mapLegacyPermissionsToUser(user, user.legacy_permissions ?? {});
   },
 };

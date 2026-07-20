@@ -1,7 +1,7 @@
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
+from apps.cyc_extensions.api.permissions import FINANCE_MODULE, FinanceIsAuthenticated
 from apps.cyc_extensions.api.serializers.fee_head_mapper import (
     CycFeeHeadLedgerSerializer,
 )
@@ -10,7 +10,9 @@ from common.responses.api import APIResponse
 
 
 class FeeHeadMapperView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "accounts"
 
     def get(self, request):
         queryset = CycFeeHeadLedger.objects.all()

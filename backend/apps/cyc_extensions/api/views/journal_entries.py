@@ -1,6 +1,7 @@
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+
+from apps.cyc_extensions.api.permissions import FINANCE_MODULE, FinanceIsAuthenticated
 
 from apps.cyc_extensions.api.serializers.journal_entries import (
     CycEntriesCreateSerializer,
@@ -16,7 +17,9 @@ from common.responses.api import APIResponse
 
 
 class JournalEntriesView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "entries"
 
     def get(self, request):
         queryset = CycEntries.objects.all().order_by("-date", "-id")
@@ -59,7 +62,9 @@ class JournalEntriesView(APIView):
 
 
 class JournalEntriesDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "entries"
 
     def get(self, request, pk):
         try:

@@ -85,6 +85,21 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'exams.submit': ['exam_result'],
   'exams.approve': ['exam_result'],
   'notifications.view': ['notice_board', 'email_sms'],
+  'transport.create': ['routes', 'transport_fees'],
+  'transport.edit': ['routes', 'transport_fees'],
+  'transport.delete': ['routes', 'transport_fees'],
+  'manage_syllabus_status.view': ['manage_syllabus_status'],
+  'manage_syllabus_status.create': ['manage_syllabus_status'],
+  'manage_syllabus_status.edit': ['manage_syllabus_status'],
+  'manage_syllabus_status.delete': ['manage_syllabus_status'],
+  'manage_lesson.view': ['lesson_plan', 'manage_lesson'],
+  'manage_lesson.create': ['lesson_plan', 'manage_lesson'],
+  'manage_lesson.edit': ['lesson_plan', 'manage_lesson'],
+  'manage_lesson.delete': ['lesson_plan', 'manage_lesson'],
+  'manage_topic.view': ['lesson_plan', 'manage_topic'],
+  'manage_topic.create': ['lesson_plan', 'manage_topic'],
+  'manage_topic.edit': ['lesson_plan', 'manage_topic'],
+  'manage_topic.delete': ['lesson_plan', 'manage_topic'],
 };
 
 export interface NavigationPermissionContext {

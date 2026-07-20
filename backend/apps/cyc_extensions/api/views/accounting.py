@@ -1,6 +1,7 @@
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+
+from apps.cyc_extensions.api.permissions import FINANCE_MODULE, FinanceIsAuthenticated
 
 from apps.cyc_extensions.api.serializers.accounting import (
     CycEntriesCreateSerializer,
@@ -23,11 +24,12 @@ from apps.cyc_extensions.services.posting_service import (
 )
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
-from core.permissions.legacy_privilege import HasLegacyPrivilege
 
 
 class LedgerGroupsView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "accounts"
 
     def get(self, request):
         queryset = CycGroups.objects.all().order_by("id")
@@ -56,7 +58,9 @@ class LedgerGroupsView(APIView):
 
 
 class LedgerGroupsDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "accounts"
 
     def get_object(self, pk):
         try:
@@ -93,7 +97,9 @@ class LedgerGroupsDetailView(APIView):
 
 
 class LedgersView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "accounts"
 
     def get(self, request):
         queryset = CycLedgers.objects.all().order_by("id")
@@ -122,7 +128,9 @@ class LedgersView(APIView):
 
 
 class LedgersDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "accounts"
 
     def get_object(self, pk):
         try:
@@ -159,7 +167,9 @@ class LedgersDetailView(APIView):
 
 
 class EntryTypesView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "entries"
 
     def get(self, request):
         queryset = CycEntrytypes.objects.all().order_by("id")
@@ -170,7 +180,9 @@ class EntryTypesView(APIView):
 
 
 class JournalEntriesView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "entries"
 
     def get(self, request):
         queryset = CycEntries.objects.all().order_by("-date", "-id")
@@ -213,7 +225,9 @@ class JournalEntriesView(APIView):
 
 
 class JournalEntriesDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "entries"
 
     def get(self, request, pk):
         try:
@@ -240,7 +254,9 @@ class JournalEntriesDetailView(APIView):
 
 
 class FeeHeadMapperView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "accounts"
 
     def get(self, request):
         queryset = CycFeeHeadLedger.objects.all()
@@ -266,7 +282,9 @@ class FeeHeadMapperView(APIView):
 
 
 class TrialBalanceReportView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "trialbalance"
 
     def get(self, request):
         service = PostingService()

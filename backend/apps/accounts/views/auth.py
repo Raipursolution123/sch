@@ -17,6 +17,19 @@ from core.auth.jwt_blacklist import (
 )
 
 
+def enrich_user_payload(user) -> dict:
+    """Attach legacy RBAC map and viewable category keys for SPA clients."""
+    user_data = UserSerializer(user).data
+    legacy_permissions = get_user_legacy_permissions(user)
+    user_data["legacy_permissions"] = legacy_permissions
+    user_data["permissions"] = [
+        category
+        for category, actions in legacy_permissions.items()
+        if actions.get("can_view")
+    ]
+    return user_data
+
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
 
@@ -193,7 +206,7 @@ class LoginView(APIView):
             refresh = RefreshToken.for_user(user)
             return APIResponse.success(
                 data={
-                    "user": UserSerializer(user).data,
+                    "user": enrich_user_payload(user),
                     "tokens": {
                         "access": str(refresh.access_token),
                         "refresh": str(refresh),
@@ -212,9 +225,7 @@ class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user_data = UserSerializer(request.user).data
-        user_data["legacy_permissions"] = get_user_legacy_permissions(request.user)
-        return APIResponse.success(data=user_data)
+        return APIResponse.success(data=enrich_user_payload(request.user))
 
 
 class LogoutView(APIView):
