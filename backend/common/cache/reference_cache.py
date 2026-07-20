@@ -1,7 +1,7 @@
 """Redis-backed reference-data cache (LocMem in local dev)."""
 
 from collections.abc import Callable
-from typing import Any, TypeVar
+from typing import TypeVar
 
 from django.core.cache import cache
 

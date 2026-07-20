@@ -148,7 +148,7 @@ class AttendanceService:
         except ValueError:
             raise AttendanceValidationError("Invalid date format. Use YYYY-MM-DD.")
 
-        current_session = Sessions.objects.filter(is_active="yes").first()
+        current_session = get_current_session()
         if current_session:
             sessions = StudentSession.objects.filter(
                 class_id=class_id,
@@ -209,7 +209,7 @@ class AttendanceService:
 
         qs = StudentAttendences.objects.filter(date__gte=from_date, date__lte=to_date)
 
-        current_session = Sessions.objects.filter(is_active="yes").first()
+        current_session = get_current_session()
 
         if class_id or section_id or current_session:
             sessions_filter = {}
