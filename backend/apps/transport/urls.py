@@ -20,6 +20,10 @@ from apps.transport.api.views.vehicle_routes import (
     VehicleRoutesDetailView,
     VehicleRoutesListCreateView,
 )
+from apps.transport.api.views.route_pickup_point import (
+    RoutePickupPointListCreateView,
+    RoutePickupPointDetailView,
+)
 
 urlpatterns = [
     path("fees/", TransportFeesListCreateView.as_view(), name="transport-fees-list-create"),
@@ -32,4 +36,6 @@ urlpatterns = [
     path("vehicles/<int:pk>/", VehiclesDetailView.as_view(), name="vehicles-detail"),
     path("assign-vehicles/", VehicleRoutesListCreateView.as_view(), name="assign-vehicles-list-create"),
     path("assign-vehicles/<int:pk>/", VehicleRoutesDetailView.as_view(), name="assign-vehicles-detail"),
+    path("route-pickup-points/", RoutePickupPointListCreateView.as_view(), name="route-pickup-points-list-create"),
+    path("route-pickup-points/<int:pk>/", RoutePickupPointDetailView.as_view(), name="route-pickup-points-detail"),
 ]

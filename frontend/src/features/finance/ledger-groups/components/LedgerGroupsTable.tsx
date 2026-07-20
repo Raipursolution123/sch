@@ -1,9 +1,9 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
-import type { LedgerGroup } from '@/types/finance';
+import type { LedgerGroup } from '@app-types/finance';
 import type { DataTablePaginationConfig } from '@components/data/data-table-types';
-import { useLedgerGroups } from '@/hooks/useLedgerGroups';
+import { useLedgerGroups } from '@hooks/useLedgerGroups';
 
 interface LedgerGroupsTableProps {
   groups: LedgerGroup[];

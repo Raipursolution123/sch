@@ -98,6 +98,7 @@ export const ROUTES = {
     routes: '/transport/routes',
     vehicles: '/transport/vehicles',
     assignVehicle: '/transport/assign-vehicle',
+    routePickupPoints: '/transport/route-pickup-points',
   },
   hostel: {
     root: '/hostel',

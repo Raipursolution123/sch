@@ -1,7 +1,7 @@
 import { Pencil, Trash2 } from 'lucide-react';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
-import type { Lesson } from '@/types/academics/lesson';
+import type { Lesson } from '@app-types/academics/lesson';
 import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { formatDate } from '@utils/format';
 

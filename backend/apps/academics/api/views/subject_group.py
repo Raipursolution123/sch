@@ -54,7 +54,7 @@ class SubjectGroupListCreateView(APIView):
         rows = page if page is not None else qs
         data = [group_list_item_dict(g) for g in rows]
         if page is not None:
-            return paginator.get_paginated_response({"subject_groups": data})
+            return paginator.get_paginated_response(data)
         return APIResponse.success(
             data={"subject_groups": data},
             message="Subject groups retrieved successfully.",

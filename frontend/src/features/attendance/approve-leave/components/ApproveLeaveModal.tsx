@@ -6,7 +6,7 @@ import { Textarea } from '@components/ui/textarea';
 import { Button } from '@components/ui/button';
 import { Label } from '@components/ui/label';
 import { Select } from '@components/ui/select';
-import { useCreateApproveLeave, useUpdateApproveLeave } from '@/hooks/useApproveLeave';
+import { useCreateApproveLeave, useUpdateApproveLeave } from '@hooks/useApproveLeave';
 import { type ApproveLeave } from '@services/api/approve-leave.service';
 
 interface ApproveLeaveModalProps {

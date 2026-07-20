@@ -34,7 +34,7 @@ class ClassListCreateView(APIView):
         sections_map = active_sections_for_classes([c.id for c in rows])
         data = [class_to_dict(c, sections_map.get(c.id, [])) for c in rows]
         if page is not None:
-            return paginator.get_paginated_response({"classes": data})
+            return paginator.get_paginated_response(data)
         return APIResponse.success(
             data={"classes": data}, message="Classes retrieved successfully."
         )

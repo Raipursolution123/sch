@@ -8,6 +8,7 @@ from apps.accounts.models import (
     Role,
     RolePermission,
 )
+from common.cache.reference_cache import CACHE_TTL_PERMISSIONS, cache_get_or_set
 
 PRIVILEGE_ACTIONS = frozenset({"can_view", "can_add", "can_edit", "can_delete"})
 
@@ -51,30 +52,14 @@ def user_has_privilege(user, category_short_code: str, action: str) -> bool:
     if is_superadmin_user(user):
         return True
 
-    role = resolve_user_role(user)
-    if role is None:
+    perms = get_user_legacy_permissions(user)
+    category_perms = perms.get(category_short_code)
+    if category_perms is None:
         return False
-    if role.is_superadmin:
-        return True
-
-    category = PermissionCategory.objects.filter(short_code=category_short_code).first()
-    if category is None:
-        return False
-
-    role_perm = RolePermission.objects.filter(
-        role=role, permission_category=category
-    ).first()
-    if role_perm is None:
-        return False
-
-    return bool(getattr(role_perm, action, 0))
+    return bool(category_perms.get(action, False))
 
 
-def get_user_legacy_permissions(user) -> dict[str, dict[str, bool]]:
-    """Return {short_code: {can_view, can_add, can_edit, can_delete}} for /me."""
-    if not user or not getattr(user, "is_authenticated", False):
-        return {}
-
+def _load_user_legacy_permissions(user) -> dict[str, dict[str, bool]]:
     if is_superadmin_user(user):
         categories = PermissionCategory.objects.all()
         return {
@@ -91,6 +76,18 @@ def get_user_legacy_permissions(user) -> dict[str, dict[str, bool]]:
     role = resolve_user_role(user)
     if role is None:
         return {}
+    if role.is_superadmin:
+        categories = PermissionCategory.objects.all()
+        return {
+            cat.short_code: {
+                "can_view": True,
+                "can_add": True,
+                "can_edit": True,
+                "can_delete": True,
+            }
+            for cat in categories
+            if cat.short_code
+        }
 
     perms: dict[str, dict[str, bool]] = {}
     for rp in RolePermission.objects.filter(role=role).select_related(
@@ -106,3 +103,16 @@ def get_user_legacy_permissions(user) -> dict[str, dict[str, bool]]:
             "can_delete": bool(rp.can_delete),
         }
     return perms
+
+
+def get_user_legacy_permissions(user) -> dict[str, dict[str, bool]]:
+    """Return {short_code: {can_view, can_add, can_edit, can_delete}} for /me."""
+    if not user or not getattr(user, "is_authenticated", False):
+        return {}
+
+    cache_key = f"rbac:legacy_perms:{user.id}"
+    return cache_get_or_set(
+        cache_key,
+        lambda: _load_user_legacy_permissions(user),
+        timeout=CACHE_TTL_PERMISSIONS,
+    )

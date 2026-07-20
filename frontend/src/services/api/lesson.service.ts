@@ -1,6 +1,6 @@
 import { apiClient } from './client';
-import type { ApiSuccessResponse, PaginatedResponse } from '@/types/api';
-import type { Lesson, LessonCreatePayload, LessonUpdatePayload } from '@/types/academics/lesson';
+import type { ApiSuccessResponse, PaginatedResponse } from '@app-types/api';
+import type { Lesson, LessonCreatePayload, LessonUpdatePayload } from '@app-types/academics/lesson';
 
 const BASE_PATH = '/academics/lessons';
 

@@ -5,6 +5,7 @@ import { NAV_SECTION_LABELS, ROUTES } from '@constants/index';
 import type { NavItem, NavSection } from '@app-types/navigation';
 import { useFilteredNav } from '@hooks/useFilteredNav';
 import { useSidebar } from '@components/layout/SidebarContext';
+import { Badge } from '@components/ui/badge';
 import { cn } from '@utils/cn';
 
 function NavLinkItem({
@@ -61,7 +62,16 @@ function NavLinkItem({
       end={item.path === ROUTES.dashboard}
     >
       {Icon && depth === 0 && <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />}
-      {!collapsed && <span className="truncate">{item.label}</span>}
+      {!collapsed && (
+        <>
+          <span className="truncate">{item.label}</span>
+          {item.comingSoon ? (
+            <Badge variant="muted" className="ml-auto shrink-0 text-[10px]">
+              Soon
+            </Badge>
+          ) : null}
+        </>
+      )}
     </NavLink>
   );
 }

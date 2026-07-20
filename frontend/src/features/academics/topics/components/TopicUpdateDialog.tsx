@@ -12,10 +12,10 @@ import { Label } from '@components/ui/label';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
 import { Switch } from '@components/ui/switch';
-import type { Topic, TopicUpdatePayload } from '@/types/academics/topic';
-import { useSubjectGroups, useSubjectGroup } from '@/hooks/useSubjectGroups';
-import { useLessonList } from '@/hooks/useLessons';
-import { useActiveSession } from '@/hooks/useSessions';
+import type { Topic, TopicUpdatePayload } from '@app-types/academics/topic';
+import { useSubjectGroups, useSubjectGroup } from '@hooks/useSubjectGroups';
+import { useLessonList } from '@hooks/useLessons';
+import { useActiveSession } from '@hooks/useSessions';
 
 interface TopicUpdateDialogProps {
   open: boolean;

@@ -2,10 +2,9 @@ from typing import Any
 
 from apps.academics.models import Classes, Sections
 from apps.fees.domain.fee_exceptions import FeeValidationError
-from apps.students.domain.student_exceptions import StudentError
 from apps.students.selectors import promotion_selectors
+from apps.students.selectors import student_fee_selectors as fee_selectors
 from apps.students.selectors import student_selectors as selectors
-from apps.students.services.student_fee_service import StudentFeeService
 
 
 class FeeCollectService:
@@ -30,24 +29,25 @@ class FeeCollectService:
         student_ids = [row.student_id for row in enrollments if row.student_id]
         student_map = promotion_selectors.students_by_ids(student_ids)
 
-        fee_service = StudentFeeService()
-        students: list[dict[str, Any]] = []
+        enrollment_ids = [
+            enrollment.id
+            for enrollment in enrollments
+            if enrollment.student_id and student_map.get(enrollment.student_id)
+        ]
+        fee_totals = fee_selectors.batch_fee_totals_for_roster(
+            enrollment_ids, class_id, active_session.id
+        )
 
+        students: list[dict[str, Any]] = []
         for enrollment in enrollments:
             student = student_map.get(enrollment.student_id)
             if not student or student.is_active != "yes":
                 continue
 
-            total_due = 0.0
-            total_paid = 0.0
-            total_balance = 0.0
-            try:
-                summary = fee_service.get_fee_summary(student.id)
-                total_due = float(summary["total_due"])
-                total_paid = float(summary["total_paid"])
-                total_balance = float(summary["total_balance"])
-            except StudentError:
-                pass
+            summary = fee_totals.get(
+                enrollment.id,
+                {"total_due": 0.0, "total_paid": 0.0, "total_balance": 0.0},
+            )
 
             students.append(
                 {
@@ -57,9 +57,9 @@ class FeeCollectService:
                     "full_name": selectors.format_student_name(
                         student.firstname, student.middlename, student.lastname
                     ),
-                    "total_due": total_due,
-                    "total_paid": total_paid,
-                    "total_balance": total_balance,
+                    "total_due": summary["total_due"],
+                    "total_paid": summary["total_paid"],
+                    "total_balance": summary["total_balance"],
                 }
             )
 

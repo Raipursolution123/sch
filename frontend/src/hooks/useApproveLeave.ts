@@ -7,6 +7,7 @@ import {
   type CreateApproveLeavePayload,
   type ApproveLeaveUpdatePayload,
 } from '@services/api/approve-leave.service';
+import { getApiErrorMessage } from '@utils/session';
 
 export const useApproveLeaves = (page: number = 1) => {
   return useQuery<{
@@ -30,11 +31,7 @@ export const useCreateApproveLeave = () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.attendance.approveLeave.all });
       toast.success('Leave request created successfully');
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
-      const message = error.response?.data?.error?.message || 'Failed to create leave request';
-      toast.error(message);
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create leave request')),
   });
 };
 
@@ -48,11 +45,7 @@ export const useUpdateApproveLeave = () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.attendance.approveLeave.all });
       toast.success('Leave request updated successfully');
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
-      const message = error.response?.data?.error?.message || 'Failed to update leave request';
-      toast.error(message);
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update leave request')),
   });
 };
 
@@ -65,10 +58,6 @@ export const useDeleteApproveLeave = () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.attendance.approveLeave.all });
       toast.success('Leave request deleted successfully');
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
-      const message = error.response?.data?.error?.message || 'Failed to delete leave request';
-      toast.error(message);
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete leave request')),
   });
 };

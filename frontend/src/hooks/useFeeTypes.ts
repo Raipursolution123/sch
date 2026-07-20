@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
+import { REFERENCE_DATA_STALE_TIME } from '@constants/query-stale-times';
 import { feeTypesService } from '@services/api';
 import type { CreateFeeTypePayload, UpdateFeeTypePayload } from '@app-types/fees/fee-type';
 import type {
@@ -15,6 +16,7 @@ export function useFeeCategories() {
   return useQuery({
     queryKey: queryKeys.fees.categories(),
     queryFn: feeTypesService.listCategories,
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 
@@ -61,6 +63,7 @@ export function useFeeTypes() {
   return useQuery({
     queryKey: queryKeys.fees.feeTypes.list(),
     queryFn: feeTypesService.list,
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 

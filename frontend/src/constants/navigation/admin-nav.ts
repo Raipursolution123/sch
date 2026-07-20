@@ -525,6 +525,12 @@ export const ADMIN_NAV: NavItem[] = [
         path: ROUTES.transport.assignVehicle,
         permissionKeys: ['assign_vehicle'],
       },
+      {
+        id: 'transport-route-pickup',
+        label: 'Route Pickup Points',
+        path: ROUTES.transport.routePickupPoints,
+        permissionKeys: ['route_pickup_point'],
+      },
     ],
   },
   {

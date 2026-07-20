@@ -4,7 +4,8 @@ import logging
 from django.db import transaction
 from django.utils import timezone
 
-from apps.academics.models import Classes, Sections, Sessions
+from apps.academics.models import Classes, Sections
+from apps.academics.selectors.session_selectors import get_current_session
 from apps.attendance.domain.attendance_exceptions import (
     AttendanceNotFoundError,
     AttendanceValidationError,
@@ -51,7 +52,7 @@ class AttendanceService:
         except (Classes.DoesNotExist, Sections.DoesNotExist):
             raise AttendanceNotFoundError("Class or section not found.")
 
-        current_session = Sessions.objects.filter(is_active="yes").first()
+        current_session = get_current_session()
         if current_session:
             sessions = StudentSession.objects.filter(
                 class_id=class_id,
@@ -64,8 +65,20 @@ class AttendanceService:
             )
 
         session_map = {s.student_id: s for s in sessions}
+        student_ids = list(session_map.keys())
+        if not student_ids:
+            return {
+                "class_id": int(class_id),
+                "class_name": school_class.class_field,
+                "section_id": int(section_id),
+                "section_name": section.section,
+                "date": date_str,
+                "entries": [],
+            }
 
-        students = Students.objects.filter(id__in=session_map.keys(), is_active="yes")
+        students = Students.objects.filter(id__in=student_ids, is_active="yes").order_by(
+            "roll_no", "firstname", "lastname"
+        )
 
         session_ids = [s.id for s in sessions]
         attendances = StudentAttendences.objects.filter(
@@ -73,7 +86,7 @@ class AttendanceService:
         )
         attendance_map = {a.student_session_id: a for a in attendances}
 
-        types = AttendenceType.objects.all()
+        types = AttendenceType.objects.filter(is_active="yes")
         type_map = {t.id: t for t in types}
 
         entries = []

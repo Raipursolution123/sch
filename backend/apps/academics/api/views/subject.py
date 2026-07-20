@@ -39,7 +39,7 @@ class SubjectListCreateView(APIView):
         rows = page if page is not None else qs
         data = [subject_to_dict(s) for s in rows]
         if page is not None:
-            return paginator.get_paginated_response({"subjects": data})
+            return paginator.get_paginated_response(data)
         return APIResponse.success(
             data={"subjects": data}, message="Subjects retrieved successfully."
         )

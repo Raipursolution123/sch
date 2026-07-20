@@ -1,10 +1,10 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
-import type { Ledger } from '@/types/finance';
+import type { Ledger } from '@app-types/finance';
 import type { FeeType } from '@app-types/fees/fee-type';
 import type { DataTablePaginationConfig } from '@components/data/data-table-types';
-import { useFeeTypes } from '@/hooks/useFeeTypes';
+import { useFeeTypes } from '@hooks/useFeeTypes';
 
 interface LedgersTableProps {
   ledgers: Ledger[];

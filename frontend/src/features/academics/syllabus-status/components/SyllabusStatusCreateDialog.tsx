@@ -11,11 +11,11 @@ import { Button } from '@components/ui/button';
 import { Label } from '@components/ui/label';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
-import type { SyllabusStatusCreatePayload } from '@/types/academics/syllabus-status';
-import { useSubjectGroups, useSubjectGroup } from '@/hooks/useSubjectGroups';
-import { useLessonList } from '@/hooks/useLessons';
-import { useTopicList } from '@/hooks/useTopics';
-import { useActiveSession } from '@/hooks/useSessions';
+import type { SyllabusStatusCreatePayload } from '@app-types/academics/syllabus-status';
+import { useSubjectGroups, useSubjectGroup } from '@hooks/useSubjectGroups';
+import { useLessonList } from '@hooks/useLessons';
+import { useTopicList } from '@hooks/useTopics';
+import { useActiveSession } from '@hooks/useSessions';
 
 interface SyllabusStatusCreateDialogProps {
   open: boolean;

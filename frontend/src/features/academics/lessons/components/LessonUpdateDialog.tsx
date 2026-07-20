@@ -11,9 +11,9 @@ import { Button } from '@components/ui/button';
 import { Label } from '@components/ui/label';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
-import type { Lesson, LessonUpdatePayload } from '@/types/academics/lesson';
-import { useSubjectGroups, useSubjectGroup } from '@/hooks/useSubjectGroups';
-import { useActiveSession } from '@/hooks/useSessions';
+import type { Lesson, LessonUpdatePayload } from '@app-types/academics/lesson';
+import { useSubjectGroups, useSubjectGroup } from '@hooks/useSubjectGroups';
+import { useActiveSession } from '@hooks/useSessions';
 
 interface LessonUpdateDialogProps {
   open: boolean;

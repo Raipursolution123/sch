@@ -1,12 +1,11 @@
-// ds-audit-ignore: DataTable not used because of custom UI requirements
 import { useState } from 'react';
 import { Edit2, Trash2 } from 'lucide-react';
-import { Button } from '@components/ui/button';
+import { PermissionButton } from '@components/rbac/PermissionButton';
+import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { Badge } from '@components/ui/badge';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
-import { Skeleton } from '@components/ui/skeleton';
-import { useApproveLeaves, useDeleteApproveLeave } from '@/hooks/useApproveLeave';
-import { type ApproveLeave } from '@services/api/approve-leave.service';
+import { useApproveLeaves, useDeleteApproveLeave } from '@hooks/useApproveLeave';
+import type { ApproveLeave } from '@services/api/approve-leave.service';
 
 interface ApproveLeaveTableProps {
   onEdit: (leave: ApproveLeave) => void;
@@ -73,55 +72,70 @@ const columns: DataTableColumn<ApproveLeave>[] = [
 
 export function ApproveLeaveTable({ onEdit }: ApproveLeaveTableProps) {
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useApproveLeaves(page);
+  const { data } = useApproveLeaves(page);
   const deleteMutation = useDeleteApproveLeave();
-
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this leave request?')) {
-      deleteMutation.mutate(id);
-    }
-  };
+  const [deleteTarget, setDeleteTarget] = useState<ApproveLeave | null>(null);
 
   const leaves: ApproveLeave[] = data?.results ?? [];
 
-  if (isLoading) {
-    return (
-      <div className="space-y-2">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-      </div>
-    );
-  }
-
   return (
-    <DataTable
-      data={leaves}
-      columns={columns}
-      getRowKey={(leave) => leave.id}
-      showDensityToggle
-      pagination={{
-        page,
-        pageSize: 20,
-        totalCount: data?.count ?? leaves.length,
-        onPageChange: setPage,
-      }}
-      actions={(leave) => (
-        <>
-          <Button variant="ghost" size="sm" onClick={() => onEdit(leave)} aria-label="Edit leave">
-            <Edit2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-destructive hover:text-destructive"
-            onClick={() => handleDelete(leave.id)}
-            aria-label="Delete leave"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </>
-      )}
-    />
+    <>
+      <DataTable
+        data={leaves}
+        columns={columns}
+        getRowKey={(leave) => leave.id}
+        showDensityToggle
+        pagination={{
+          page,
+          pageSize: 20,
+          totalCount: data?.count ?? leaves.length,
+          onPageChange: setPage,
+        }}
+        actions={(leave) => (
+          <>
+            <PermissionButton
+              permission="attendance.report"
+              variant="ghost"
+              size="sm"
+              onClick={() => onEdit(leave)}
+              aria-label="Edit leave"
+            >
+              <Edit2 className="h-4 w-4" />
+            </PermissionButton>
+            <PermissionButton
+              permission="attendance.report"
+              variant="ghost"
+              size="sm"
+              className="text-destructive hover:text-destructive"
+              onClick={() => setDeleteTarget(leave)}
+              aria-label="Delete leave"
+            >
+              <Trash2 className="h-4 w-4" />
+            </PermissionButton>
+          </>
+        )}
+      />
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+        title="Delete leave request"
+        description={
+          deleteTarget
+            ? `Delete leave request for "${deleteTarget.student_name}"? This cannot be undone.`
+            : ''
+        }
+        confirmLabel="Delete"
+        destructive
+        isLoading={deleteMutation.isPending}
+        onConfirm={() => {
+          if (!deleteTarget) return;
+          deleteMutation.mutate(deleteTarget.id, {
+            onSuccess: () => setDeleteTarget(null),
+          });
+        }}
+      />
+    </>
   );
 }

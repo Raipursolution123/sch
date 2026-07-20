@@ -1,7 +1,7 @@
 from django.urls import path
 
 from apps.cyc_extensions.api.views.entry_types import EntryTypesView
-from apps.cyc_extensions.api.views.fee_head_mapper import FeeHeadMapperView
+from apps.cyc_extensions.api.views.fee_head_mapper import FeeHeadMapperView, FeeHeadMapperDetailView
 from apps.cyc_extensions.api.views.journal_entries import (
     JournalEntriesDetailView,
     JournalEntriesView,
@@ -43,6 +43,7 @@ urlpatterns = [
     ),
     # Fee Head & Ledger Mapper
     path("finance/mapper/", FeeHeadMapperView.as_view(), name="finance-mapper-list"),
+    path("finance/mapper/<int:pk>/", FeeHeadMapperDetailView.as_view(), name="finance-mapper-detail"),
     # Reports
     path(
         "finance/reports/trial-balance/",

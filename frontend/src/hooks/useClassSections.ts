@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
+import { REFERENCE_DATA_STALE_TIME } from '@constants/query-stale-times';
 import { classSectionsService } from '@services/api';
 import type {
   CreateClassSectionPayload,
@@ -13,6 +14,7 @@ export function useClassSections(page: number = 1, options?: { enabled?: boolean
     queryKey: [...queryKeys.academics.classSections.list(), page],
     queryFn: () => classSectionsService.list(page),
     enabled: options?.enabled ?? true,
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 

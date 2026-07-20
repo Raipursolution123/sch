@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
+import { REFERENCE_DATA_STALE_TIME } from '@constants/query-stale-times';
 import { sessionsService } from '@services/api';
 import type {
   CreateSessionPayload,
@@ -12,6 +13,7 @@ export function useSessions(page: number = 1) {
   return useQuery({
     queryKey: queryKeys.academics.sessions.list(page),
     queryFn: () => sessionsService.list(page),
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 
@@ -19,6 +21,7 @@ export function useActiveSession() {
   return useQuery({
     queryKey: queryKeys.academics.sessions.active(),
     queryFn: sessionsService.getActive,
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 

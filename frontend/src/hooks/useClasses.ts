@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
+import { REFERENCE_DATA_STALE_TIME } from '@constants/query-stale-times';
 import { classesService } from '@services/api';
 import type { CreateClassPayload, UpdateClassPayload } from '@app-types/academics/class';
 import { getApiErrorMessage } from '@utils/session';
@@ -9,6 +10,7 @@ export function useClasses(page: number = 1) {
   return useQuery({
     queryKey: [...queryKeys.academics.classes.list(), page],
     queryFn: () => classesService.list(page),
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 
@@ -17,6 +19,7 @@ export function useSuggestedClassSortOrder(enabled: boolean) {
     queryKey: queryKeys.academics.classes.suggestSortOrder(),
     queryFn: classesService.suggestSortOrder,
     enabled,
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 

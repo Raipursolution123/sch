@@ -12,9 +12,9 @@ import { Label } from '@components/ui/label';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
 import { Switch } from '@components/ui/switch';
-import type { TopicCreatePayload } from '@/types/academics/topic';
-import { useLessonList } from '@/hooks/useLessons';
-import { useActiveSession } from '@/hooks/useSessions';
+import type { TopicCreatePayload } from '@app-types/academics/topic';
+import { useLessonList } from '@hooks/useLessons';
+import { useActiveSession } from '@hooks/useSessions';
 
 interface TopicCreateDialogProps {
   open: boolean;

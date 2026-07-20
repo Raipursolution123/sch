@@ -14,7 +14,7 @@ import {
 } from '@components/forms/fields';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
-import { Button } from '@components/ui/button';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import { useCreateHostel, useDeleteHostel, useHostels, useUpdateHostel } from '@hooks/useHostels';
 import type { Hostel } from '@app-types/hostel/hostel';
 import { ModuleListPack } from '@workflow-packs';
@@ -120,10 +120,10 @@ export function HostelsPage() {
   };
 
   const addAction = (
-    <Button onClick={openCreate} className="gap-1">
+    <PermissionButton permission="settings.manage" onClick={openCreate} className="gap-1">
       <Plus className="h-4 w-4" aria-hidden="true" />
       Add Hostel
-    </Button>
+    </PermissionButton>
   );
 
   return (
@@ -185,10 +185,17 @@ export function HostelsPage() {
         getRowKey={(row) => row.id}
         actions={(row) => (
           <>
-            <Button variant="ghost" size="sm" onClick={() => openEdit(row)} aria-label="Edit">
+            <PermissionButton
+              permission="settings.manage"
+              variant="ghost"
+              size="sm"
+              onClick={() => openEdit(row)}
+              aria-label="Edit"
+            >
               <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="settings.manage"
               variant="ghost"
               size="sm"
               onClick={() => setDeleteTarget(row)}
@@ -196,7 +203,7 @@ export function HostelsPage() {
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </PermissionButton>
           </>
         )}
       />

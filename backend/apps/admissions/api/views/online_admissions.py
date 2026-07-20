@@ -19,7 +19,7 @@ from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
-MODULE = "front_office"
+MODULE = "online_admission"
 CATEGORY = "online_admission"
 
 

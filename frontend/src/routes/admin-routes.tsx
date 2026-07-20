@@ -2,12 +2,17 @@ import { lazy } from 'react';
 import { Navigate, type RouteObject } from 'react-router-dom';
 import { ROUTES, LEGACY_SETTINGS_SESSIONS } from '@constants/routes';
 import { ModuleLayout } from '@layouts/ModuleLayout';
-import { DashboardPage } from '@features/dashboard/pages/DashboardPage';
 import {
   buildPlaceholderChildren,
   createModuleRoutes,
   createPlaceholderModule,
 } from '@routes/module-routes';
+
+const DashboardPage = lazy(() =>
+  import('@features/dashboard/pages/DashboardPage').then((m) => ({
+    default: m.DashboardPage,
+  })),
+);
 
 // Finance
 const LedgersPage = lazy(() =>
@@ -279,6 +284,30 @@ const EnquiryPage = lazy(() =>
   })),
 );
 
+const VisitorsPage = lazy(() =>
+  import('@features/front-office/visitors/pages/VisitorsPage').then((m) => ({
+    default: m.VisitorsPage,
+  })),
+);
+
+const ComplaintsPage = lazy(() =>
+  import('@features/front-office/complaints/pages/ComplaintsPage').then((m) => ({
+    default: m.ComplaintsPage,
+  })),
+);
+
+const PostalDispatchPage = lazy(() =>
+  import('@features/front-office/postal/pages/PostalRecordsPage').then((m) => ({
+    default: m.PostalDispatchPage,
+  })),
+);
+
+const PostalReceivePage = lazy(() =>
+  import('@features/front-office/postal/pages/PostalRecordsPage').then((m) => ({
+    default: m.PostalReceivePage,
+  })),
+);
+
 const OnlineAdmissionsPage = lazy(() =>
   import('@features/admissions/pages/OnlineAdmissionsPage').then((m) => ({
     default: m.OnlineAdmissionsPage,
@@ -351,6 +380,12 @@ const VehicleRouteAssignPage = lazy(() =>
   })),
 );
 
+const RoutePickupPointsPage = lazy(() =>
+  import('@features/transport/route-pickup-points/pages/RoutePickupPointsPage').then((m) => ({
+    default: m.RoutePickupPointsPage,
+  })),
+);
+
 /** Authenticated admin routes mounted under DashboardLayout. */
 export const adminRoutes: RouteObject[] = [
   { path: 'dashboard', element: <DashboardPage /> },
@@ -415,7 +450,6 @@ export const adminRoutes: RouteObject[] = [
     { path: 'assign', element: <FeeAssignPage /> },
     { path: 'reminders', element: <FeeRemindersPage /> },
     { path: 'payment-gateways', element: <PaymentGatewaysPage /> },
-    { path: 'offline-payments', element: <PaymentGatewaysPage /> },
   ]),
 
   createModuleRoutes('/examinations', ROUTES.examinations.groups, [
@@ -437,6 +471,10 @@ export const adminRoutes: RouteObject[] = [
 
   createModuleRoutes('/front-office', ROUTES.frontOffice.enquiry, [
     { path: 'enquiry', element: <EnquiryPage /> },
+    { path: 'visitors', element: <VisitorsPage /> },
+    { path: 'complaints', element: <ComplaintsPage /> },
+    { path: 'dispatch', element: <PostalDispatchPage /> },
+    { path: 'receive', element: <PostalReceivePage /> },
   ]),
   createPlaceholderModule('/library', ROUTES.library.books),
   createModuleRoutes('/transport', ROUTES.transport.fees, [
@@ -445,6 +483,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'routes', element: <TransportRoutesPage /> },
     { path: 'vehicles', element: <VehiclesPage /> },
     { path: 'assign-vehicle', element: <VehicleRouteAssignPage /> },
+    { path: 'route-pickup-points', element: <RoutePickupPointsPage /> },
   ]),
   createModuleRoutes('/hostel', ROUTES.hostel.rooms, [
     { path: 'buildings', element: <HostelsPage /> },

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
-import { useUpdateLedgerGroup, useLedgerGroups } from '@/hooks/useLedgerGroups';
-import type { LedgerGroup, LedgerGroupUpdatePayload } from '@/types/finance';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui/dialog';
+import { Input } from '@components/ui/input';
+import { Label } from '@components/ui/label';
+import { Button } from '@components/ui/button';
+import { Select } from '@components/ui/select';
+import { useUpdateLedgerGroup, useLedgerGroups } from '@hooks/useLedgerGroups';
+import type { LedgerGroup, LedgerGroupUpdatePayload } from '@app-types/finance';
 
 interface LedgerGroupUpdateDialogProps {
   group: LedgerGroup;

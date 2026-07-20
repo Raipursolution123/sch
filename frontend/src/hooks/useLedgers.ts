@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
-import { ledgersService } from '@/services/api';
-import type { LedgerCreatePayload, LedgerUpdatePayload } from '@/types/finance';
+import { ledgersService } from '@services/api';
+import type { LedgerCreatePayload, LedgerUpdatePayload } from '@app-types/finance';
 import { toast } from 'sonner';
 import { getApiErrorMessage } from '@utils/session';
 

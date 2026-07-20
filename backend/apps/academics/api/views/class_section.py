@@ -51,7 +51,7 @@ class ClassSectionListCreateView(APIView):
             for m in rows
         ]
         if page is not None:
-            return paginator.get_paginated_response({"class_sections": data})
+            return paginator.get_paginated_response(data)
         return APIResponse.success(
             data={"class_sections": data},
             message="Class-Section mappings retrieved successfully.",

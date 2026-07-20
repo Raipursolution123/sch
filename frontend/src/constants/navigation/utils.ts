@@ -1,5 +1,20 @@
 import type { NavItem } from '@app-types/navigation';
 import type { NavigationPermissionChecker } from '@services/navigation/permission-resolver';
+import { isImplementedPath } from '@routes/implemented-paths';
+
+function annotateComingSoon(item: NavItem): NavItem {
+  const children = item.children?.map(annotateComingSoon);
+  return {
+    ...item,
+    comingSoon: item.path ? !isImplementedPath(item.path) : false,
+    children,
+  };
+}
+
+/** Marks nav leaves that route to Coming Soon placeholders. */
+export function annotateNavImplementationStatus(items: NavItem[]): NavItem[] {
+  return items.map(annotateComingSoon);
+}
 
 function filterNavItem(item: NavItem, checker: NavigationPermissionChecker): NavItem | null {
   if (item.disabled) return null;

@@ -35,3 +35,52 @@ class FeeHeadMapperView(APIView):
             details=serializer.errors,
             status_code=status.HTTP_400_BAD_REQUEST,
         )
+
+
+class FeeHeadMapperDetailView(APIView):
+    permission_classes = FinanceIsAuthenticated
+    legacy_module_short_code = FINANCE_MODULE
+    legacy_permission_category = "accounts"
+
+    def get_object(self, pk):
+        try:
+            return CycFeeHeadLedger.objects.get(pk=pk)
+        except CycFeeHeadLedger.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        mapper = self.get_object(pk)
+        if not mapper:
+            return APIResponse.error(
+                message="Mapper entry not found", status_code=status.HTTP_404_NOT_FOUND
+            )
+        serializer = CycFeeHeadLedgerSerializer(mapper)
+        return APIResponse.success(data=serializer.data, message="Mapper fetched successfully")
+
+    def patch(self, request, pk):
+        return self.put(request, pk)
+
+    def put(self, request, pk):
+        mapper = self.get_object(pk)
+        if not mapper:
+            return APIResponse.error(
+                message="Mapper entry not found", status_code=status.HTTP_404_NOT_FOUND
+            )
+        serializer = CycFeeHeadLedgerSerializer(mapper, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return APIResponse.success(data=serializer.data, message="Mapper updated successfully")
+        return APIResponse.error(
+            message="Validation Error",
+            details=serializer.errors,
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+    def delete(self, request, pk):
+        mapper = self.get_object(pk)
+        if not mapper:
+            return APIResponse.error(
+                message="Mapper entry not found", status_code=status.HTTP_404_NOT_FOUND
+            )
+        mapper.delete()
+        return APIResponse.success(message="Mapper entry deleted successfully")

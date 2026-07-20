@@ -229,6 +229,8 @@ export const queryKeys = {
     routes: () => [...queryKeys.transport.all, 'routes'] as const,
     vehicles: () => [...queryKeys.transport.all, 'vehicles'] as const,
     vehicleRoutes: () => [...queryKeys.transport.all, 'vehicle-routes'] as const,
+    routePickupPoints: (routeId?: number) =>
+      [...queryKeys.transport.all, 'route-pickup-points', routeId ?? 'all'] as const,
   },
   attendance: {
     all: ['attendance'] as const,
@@ -316,6 +318,16 @@ export const queryKeys = {
     all: ['front-office'] as const,
     enquiries: {
       list: () => [...queryKeys.frontOffice.all, 'enquiries', 'list'] as const,
+    },
+    visitors: {
+      list: () => [...queryKeys.frontOffice.all, 'visitors', 'list'] as const,
+    },
+    complaints: {
+      list: () => [...queryKeys.frontOffice.all, 'complaints', 'list'] as const,
+    },
+    postal: {
+      list: (type?: string) =>
+        [...queryKeys.frontOffice.all, 'postal', 'list', type ?? 'all'] as const,
     },
   },
   admissions: {

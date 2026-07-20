@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { ModuleListPack } from '@workflow-packs';
 import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@components/ui/button';
 
-import { useLedgersList, useDeleteLedger } from '@/hooks/useLedgers';
+import { useLedgersList, useDeleteLedger } from '@hooks/useLedgers';
 import { LedgersTable } from '../components/LedgersTable';
 import { LedgerCreateDialog } from '../components/LedgerCreateDialog';
 import { LedgerUpdateDialog } from '../components/LedgerUpdateDialog';
-import type { Ledger } from '@/types/finance';
+import type { Ledger } from '@app-types/finance';
 
 export const LedgersPage = () => {
   const [page, setPage] = useState(1);

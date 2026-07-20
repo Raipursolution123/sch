@@ -2,8 +2,6 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from apps.cyc_extensions.api.permissions import FINANCE_MODULE, FinanceIsAuthenticated
-
-from apps.cyc_extensions.api.permissions import FINANCE_MODULE, FinanceIsAuthenticated
 from apps.cyc_extensions.api.serializers.ledgers import CycLedgersSerializer
 from apps.cyc_extensions.models.cyc_ledgers import CycLedgers
 from common.pagination.standard import StandardResultsSetPagination
@@ -57,6 +55,15 @@ class LedgersDetailView(APIView):
             return CycLedgers.objects.get(pk=pk)
         except CycLedgers.DoesNotExist:
             return None
+
+    def get(self, request, pk):
+        ledger = self.get_object(pk)
+        if not ledger:
+            return APIResponse.error(
+                message="Ledger not found", status_code=status.HTTP_404_NOT_FOUND
+            )
+        serializer = CycLedgersSerializer(ledger)
+        return APIResponse.success(data=serializer.data, message="Ledger fetched successfully")
 
     def patch(self, request, pk):
         return self.put(request, pk)

@@ -15,7 +15,7 @@ from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
 MODULE = "transport"
-CATEGORY = "routes"
+CATEGORY = "pickup_point"
 
 
 class PickupPointListCreateView(APIView):

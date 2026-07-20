@@ -27,7 +27,7 @@ class LanguagesListCreateView(APIView):
         languages_data = [language_to_dict(row) for row in rows]
 
         if page is not None:
-            return paginator.get_paginated_response({"languages": languages_data})
+            return paginator.get_paginated_response(languages_data)
 
         return APIResponse.success(
             data={"languages": languages_data},

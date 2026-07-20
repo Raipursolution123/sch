@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useUpdateLedger } from '@/hooks/useLedgers';
-import { useFeeTypes } from '@/hooks/useFeeTypes';
-import { useLedgerGroups } from '@/hooks/useLedgerGroups';
-import type { Ledger, LedgerUpdatePayload } from '@/types/finance';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui/dialog';
+import { Label } from '@components/ui/label';
+import { Input } from '@components/ui/input';
+import { Button } from '@components/ui/button';
+import { Select } from '@components/ui/select';
+import { Checkbox } from '@components/ui/checkbox';
+import { useUpdateLedger } from '@hooks/useLedgers';
+import { useFeeTypes } from '@hooks/useFeeTypes';
+import { useLedgerGroups } from '@hooks/useLedgerGroups';
+import type { Ledger, LedgerUpdatePayload } from '@app-types/finance';
 import type { FeeType } from '@app-types/fees/fee-type';
-import type { LedgerGroup } from '@/types/finance';
+import type { LedgerGroup } from '@app-types/finance';
 
 interface LedgerUpdateDialogProps {
   ledger: Ledger | null;

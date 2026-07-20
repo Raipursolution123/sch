@@ -1,5 +1,9 @@
 import { useMemo } from 'react';
-import { ADMIN_NAV, filterNavigationTree } from '@constants/navigation';
+import {
+  ADMIN_NAV,
+  filterNavigationTree,
+  annotateNavImplementationStatus,
+} from '@constants/navigation';
 import type { NavItem } from '@app-types/navigation';
 import { ROLE_PERMISSIONS } from '@constants/permissions';
 import {
@@ -20,7 +24,9 @@ export function useFilteredNav(): NavItem[] {
 
   return useMemo(() => {
     if (user?.is_superadmin) {
-      return filterNavigationTree(ADMIN_NAV, createPermissiveChecker());
+      return annotateNavImplementationStatus(
+        filterNavigationTree(ADMIN_NAV, createPermissiveChecker()),
+      );
     }
 
     const legacyKeys =
@@ -33,6 +39,6 @@ export function useFilteredNav(): NavItem[] {
       uiKeys: new Set(ROLE_PERMISSIONS[role]),
     });
 
-    return filterNavigationTree(ADMIN_NAV, checker);
+    return annotateNavImplementationStatus(filterNavigationTree(ADMIN_NAV, checker));
   }, [user?.is_superadmin, user?.permissions, legacyPermissions, role]);
 }

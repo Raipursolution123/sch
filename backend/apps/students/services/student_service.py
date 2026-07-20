@@ -321,6 +321,11 @@ class StudentService:
         classes_dict = selectors.class_labels(class_ids)
         sections_dict = selectors.section_labels(section_ids)
 
+        disable_reason_ids = [
+            student.dis_reason for student in students if student.dis_reason
+        ]
+        disable_reasons_dict = selectors.disable_reason_labels(disable_reason_ids)
+
         rows: list[dict[str, Any]] = []
         for student in students:
             enrollment = session_map.get(student.id)
@@ -333,6 +338,11 @@ class StudentService:
                     section_id=section_id,
                     class_name=classes_dict.get(class_id) if class_id else None,
                     section_name=sections_dict.get(section_id) if section_id else None,
+                    disable_reason_label=(
+                        disable_reasons_dict.get(student.dis_reason)
+                        if student.dis_reason
+                        else None
+                    ),
                 )
             )
         return rows

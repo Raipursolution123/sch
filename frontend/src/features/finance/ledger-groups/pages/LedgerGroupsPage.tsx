@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@components/ui/button';
 import { Plus } from 'lucide-react';
-import { PageHeader } from '@/components/layout/PageHeader';
+import { PageHeader } from '@components/layout/PageHeader';
 import { LedgerGroupsTable } from '../components/LedgerGroupsTable';
 import { LedgerGroupCreateDialog } from '../components/LedgerGroupCreateDialog';
 import { LedgerGroupUpdateDialog } from '../components/LedgerGroupUpdateDialog';
-import { useLedgerGroupsList, useDeleteLedgerGroup } from '@/hooks/useLedgerGroups';
-import type { LedgerGroup } from '@/types/finance';
+import { useLedgerGroupsList, useDeleteLedgerGroup } from '@hooks/useLedgerGroups';
+import type { LedgerGroup } from '@app-types/finance';
 
 export const LedgerGroupsPage = () => {
   const [page, setPage] = useState(1);

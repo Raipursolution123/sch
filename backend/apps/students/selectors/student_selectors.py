@@ -3,7 +3,7 @@ from typing import Any
 from django.utils import timezone
 
 from apps.academics.models import Classes, ClassSections, Sections, Sessions
-from apps.academics.selectors.session_selectors import get_current_session_id
+from apps.academics.selectors.session_selectors import get_current_session
 from apps.students.models.disable_reason import DisableReason
 from apps.students.models.student_session import StudentSession
 from apps.students.models.students import Students
@@ -38,12 +38,7 @@ def format_student_name(first, middle, last) -> str:
 
 
 def get_active_session() -> Sessions | None:
-    session_id = get_current_session_id()
-    if session_id:
-        session = Sessions.objects.filter(id=session_id).first()
-        if session:
-            return session
-    return Sessions.objects.filter(is_active="yes").first()
+    return get_current_session()
 
 
 def list_students_qs(*, status: str = "active"):
@@ -102,6 +97,15 @@ def class_section_mapping_active(class_id: int, section_id: int) -> bool:
     return mapping is not None
 
 
+def disable_reason_labels(reason_ids: list[int]) -> dict[int, str]:
+    if not reason_ids:
+        return {}
+    return {
+        row.id: row.reason
+        for row in DisableReason.objects.filter(id__in=reason_ids)
+    }
+
+
 def disable_reason_name(reason_id: int | None) -> str | None:
     if not reason_id:
         return None
@@ -116,7 +120,12 @@ def student_list_item(
     section_id: int | None = None,
     class_name: str | None = None,
     section_name: str | None = None,
+    disable_reason_label: str | None = None,
 ) -> dict[str, Any]:
+    resolved_disable_reason = disable_reason_label
+    if resolved_disable_reason is None and student.dis_reason:
+        resolved_disable_reason = disable_reason_name(student.dis_reason)
+
     return {
         "id": student.id,
         "admission_no": student.admission_no,
@@ -139,7 +148,7 @@ def student_list_item(
         "admission_date": safe_date_str(student.admission_date),
         "created_at": safe_date_str(student.created_at, "%Y-%m-%dT%H:%M:%SZ"),
         "disable_reason_id": student.dis_reason or None,
-        "disable_reason_name": disable_reason_name(student.dis_reason),
+        "disable_reason_name": resolved_disable_reason,
         "disable_note": student.dis_note or None,
         "disabled_at": safe_date_str(student.disable_at),
     }

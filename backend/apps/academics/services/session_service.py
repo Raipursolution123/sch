@@ -13,6 +13,7 @@ from apps.academics.domain.session_validators import (
 )
 from apps.academics.models import Sessions
 from apps.academics.selectors import session_selectors as selectors
+from common.cache.reference_cache import invalidate_session_cache
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +31,7 @@ class SessionService:
         return selectors.session_to_dict(session)
 
     def get_active_session(self) -> dict | None:
-        session = selectors.get_current_session()
-        if session is None:
-            return None
-        return selectors.session_to_dict(session)
+        return selectors.get_active_session_data()
 
     def create_session(self, raw_name: str) -> dict:
         name = validate_session_name(raw_name)
@@ -46,6 +44,7 @@ class SessionService:
             updated_at=None,
         )
         logger.info("Academic session '%s' created (id=%s).", name, session.id)
+        invalidate_session_cache()
         return selectors.session_to_dict(session)
 
     def update_session(self, session_id: int, raw_name: str) -> dict:
@@ -60,6 +59,7 @@ class SessionService:
         session.updated_at = selectors.today_date()
         session.save(update_fields=["session", "updated_at"])
         logger.info("Academic session id=%s renamed to '%s'.", session_id, name)
+        invalidate_session_cache()
         return selectors.session_to_dict(session)
 
     def activate_session(self, session_id: int) -> dict:
@@ -80,6 +80,7 @@ class SessionService:
         logger.info(
             "Academic session '%s' activated (id=%s).", session.session, session.id
         )
+        invalidate_session_cache()
         return selectors.session_to_dict(session)
 
     def delete_session(self, session_id: int) -> None:
@@ -103,4 +104,5 @@ class SessionService:
 
         label = session.session
         session.delete()
+        invalidate_session_cache()
         logger.info("Academic session '%s' deleted (id=%s).", label, session_id)
