@@ -13,7 +13,7 @@ export interface LedgerGroupCreatePayload {
   affects_gross: number;
 }
 
-export interface LedgerGroupUpdatePayload extends Partial<LedgerGroupCreatePayload> {}
+export type LedgerGroupUpdatePayload = Partial<LedgerGroupCreatePayload>;
 
 export interface Ledger {
   id: number;

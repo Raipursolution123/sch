@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tansta
 import { ledgerGroupsService } from '@/services/api';
 import type { LedgerGroupCreatePayload, LedgerGroupUpdatePayload } from '@/types/finance';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@utils/session';
 
 export const LEDGER_GROUPS_KEYS = {
   all: ['ledger_groups'] as const,
@@ -33,9 +34,7 @@ export const useCreateLedgerGroup = () => {
       toast.success(response.message || 'Ledger Group created successfully');
       queryClient.invalidateQueries({ queryKey: LEDGER_GROUPS_KEYS.lists() });
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to create ledger group');
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create ledger group')),
   });
 };
 
@@ -49,9 +48,7 @@ export const useUpdateLedgerGroup = () => {
       toast.success(response.message || 'Ledger Group updated successfully');
       queryClient.invalidateQueries({ queryKey: LEDGER_GROUPS_KEYS.lists() });
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to update ledger group');
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update ledger group')),
   });
 };
 
@@ -64,8 +61,6 @@ export const useDeleteLedgerGroup = () => {
       toast.success(response.message || 'Ledger Group deleted successfully');
       queryClient.invalidateQueries({ queryKey: LEDGER_GROUPS_KEYS.lists() });
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to delete ledger group');
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete ledger group')),
   });
 };

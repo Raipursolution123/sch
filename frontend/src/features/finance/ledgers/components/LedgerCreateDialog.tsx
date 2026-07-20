@@ -9,6 +9,8 @@ import { useCreateLedger } from '@/hooks/useLedgers';
 import { useFeeTypes } from '@/hooks/useFeeTypes';
 import { useLedgerGroups } from '@/hooks/useLedgerGroups';
 import type { LedgerCreatePayload } from '@/types/finance';
+import type { FeeType } from '@app-types/fees/fee-type';
+import type { LedgerGroup } from '@/types/finance';
 
 interface LedgerCreateDialogProps {
   open: boolean;
@@ -61,7 +63,7 @@ export const LedgerCreateDialog = ({ open, onOpenChange }: LedgerCreateDialogPro
       code: code || undefined,
       group_id: parseInt(groupId, 10) || 1,
       op_balance: opBalance || undefined,
-      op_balance_dc: opBalanceDc as any,
+      op_balance_dc: opBalanceDc,
       notes: notes || undefined,
       type: parseInt(type, 10) || 0,
       reconciliation: parseInt(reconciliation, 10) || 0,
@@ -70,7 +72,7 @@ export const LedgerCreateDialog = ({ open, onOpenChange }: LedgerCreateDialogPro
         feeTypes.length > 0
           ? JSON.stringify(
               feeTypes.map((val) => {
-                const ft = feeTypesData?.find((f: any) => String(f.id) === val);
+                const ft = feeTypesData?.find((f: FeeType) => String(f.id) === val);
                 return ft ? ft.name : val;
               }),
             )
@@ -125,8 +127,10 @@ export const LedgerCreateDialog = ({ open, onOpenChange }: LedgerCreateDialogPro
                 onChange={(e) => setGroupId(e.target.value)}
                 options={[
                   { value: '', label: 'Select Group' },
-                  ...(ledgerGroupsData?.map((g: any) => ({ value: String(g.id), label: g.name })) ||
-                    []),
+                  ...(ledgerGroupsData?.map((g: LedgerGroup) => ({
+                    value: String(g.id),
+                    label: g.name,
+                  })) || []),
                 ]}
                 required
               />
@@ -182,7 +186,7 @@ export const LedgerCreateDialog = ({ open, onOpenChange }: LedgerCreateDialogPro
                 </summary>
                 <div className="absolute left-0 top-full z-50 mt-1 max-h-48 w-full overflow-y-auto rounded-md border bg-popover p-2 text-popover-foreground shadow-md">
                   {feeTypesData?.length ? (
-                    feeTypesData.map((ft: any) => (
+                    feeTypesData.map((ft: FeeType) => (
                       <div
                         key={ft.id}
                         className="flex cursor-pointer items-center space-x-2 rounded px-1 py-1.5 hover:bg-accent hover:text-accent-foreground"
@@ -191,7 +195,7 @@ export const LedgerCreateDialog = ({ open, onOpenChange }: LedgerCreateDialogPro
                           id={`create-feetype-${ft.id}`}
                           checked={
                             feeTypes.includes(String(ft.id)) ||
-                            (ft.name && feeTypes.includes(ft.name))
+                            Boolean(ft.name && feeTypes.includes(ft.name))
                           }
                           onChange={(e) => {
                             if (e.target.checked) {

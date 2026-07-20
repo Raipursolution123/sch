@@ -45,7 +45,7 @@ export const LedgerGroupsTable = ({
       header: 'Parent Group',
       cell: (row) => {
         if (!row.parent_id) return '-';
-        const parent = allGroups?.find((g: any) => g.id === row.parent_id);
+        const parent = allGroups?.find((g: LedgerGroup) => g.id === row.parent_id);
         return parent ? parent.code || parent.name : row.parent_id;
       },
     },

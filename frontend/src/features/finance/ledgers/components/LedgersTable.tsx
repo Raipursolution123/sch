@@ -2,6 +2,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import type { Ledger } from '@/types/finance';
+import type { FeeType } from '@app-types/fees/fee-type';
 import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { useFeeTypes } from '@/hooks/useFeeTypes';
 
@@ -54,7 +55,9 @@ export const LedgersTable = ({ ledgers, pagination, onEdit, onDelete }: LedgersT
           try {
             const parsed = JSON.parse(row.fee_types);
             if (Array.isArray(parsed)) ids = parsed.map(String);
-          } catch {}
+          } catch {
+            // fee_types may be a plain string rather than JSON
+          }
         }
         if (ids.length === 0 && row.feetype_id) {
           ids = [String(row.feetype_id)];
@@ -64,7 +67,7 @@ export const LedgersTable = ({ ledgers, pagination, onEdit, onDelete }: LedgersT
 
         const names = ids.map((val) => {
           if (!isNaN(Number(val))) {
-            const ft = feeTypesData.find((f: any) => String(f.id) === val);
+            const ft = feeTypesData.find((f: FeeType) => String(f.id) === val);
             return ft ? ft.name || `Type ${val}` : `Type ${val}`;
           }
           return val;

@@ -58,8 +58,8 @@ export const LedgerGroupUpdateDialog = ({
   const parentOptions = [
     { value: '', label: 'None (Top Level)' },
     ...(ledgerGroupsData
-      ?.filter((g: any) => g.id !== group?.id) // Can't be its own parent
-      ?.map((g: any) => ({ value: String(g.id), label: g.name })) || []),
+      ?.filter((g: LedgerGroup) => g.id !== group?.id)
+      ?.map((g: LedgerGroup) => ({ value: String(g.id), label: g.name })) || []),
   ];
 
   return (
