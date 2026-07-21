@@ -61,6 +61,7 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.finance.groups,
   ROUTES.finance.entries,
   ROUTES.finance.mapper,
+  ROUTES.finance.chartOfAccounts,
   ROUTES.settings.general,
   ROUTES.settings.languages,
   ROUTES.settings.currency,

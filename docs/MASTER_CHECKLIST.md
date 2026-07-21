@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-21  
-**Current phase:** Phase 12 — Offline Bank Payments ✅ COMPLETE  
+**Current phase:** Phase 13 — Chart of Accounts ✅ COMPLETE  
 **Branch:** `main` (local; uncommitted)
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phase 12 complete (roadmap phases 0–12) |
-| **Current Phase** | Phase 12 — Offline Bank Payments ✅ |
-| **Current Task** | Production deploy + UAT sign-off (ops); next: library/inventory or chart of accounts |
-| **Completed Phases** | Phase 0 ✅ … Phase 12 ✅ |
-| **Remaining Phases** | Feature backlog (library, inventory, chart of accounts) |
+| **Overall Project Progress** | Phase 13 complete (roadmap phases 0–13) |
+| **Current Phase** | Phase 13 — Chart of Accounts ✅ |
+| **Current Task** | Production deploy + UAT sign-off (ops); next: library/inventory |
+| **Completed Phases** | Phase 0 ✅ … Phase 13 ✅ |
+| **Remaining Phases** | Feature backlog (library, inventory) |
 | **Open Bugs** | 0 |
 | **Backend Completion** | ~80% |
-| **Frontend Completion** | ~70% |
-| **API Integration Status** | Offline bank payment list/approve/reject wired |
-| **UI Completion Status** | 75 real routes; Coming Soon badges on unimplemented nav |
-| **Testing Status** | Frontend typecheck + offline payment unit tests |
+| **Frontend Completion** | ~71% |
+| **API Integration Status** | Chart of Accounts wired to existing groups/ledgers APIs |
+| **UI Completion Status** | 76 real routes; Coming Soon badges on unimplemented nav |
+| **Testing Status** | Frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~71 Coming Soon pages |
+| **Technical Debt Remaining** | ~70 Coming Soon pages |
 
 ---
 
@@ -652,10 +652,35 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 - Status flags: `0` pending, `1` approved, `2` rejected.
 - Approve posts to `student_fees_deposite` when master + fee type IDs are present (idempotent via `offline_payment_id`).
-- Next: ops/UAT + `v1.0.0` tag, or library/inventory / chart of accounts.
+
+---
+
+## Phase 13 — Chart of Accounts ✅ SIGNED OFF
+
+**Signed off:** 2026-07-21  
+**Objective:** Wire Account Finance → Chart of Accounts as a hierarchical view of existing ledger groups + ledgers.
+
+### Implemented routes
+
+| Route | Page | API |
+|-------|------|-----|
+| `/finance/chart-of-accounts` | Group → ledger hierarchy + search | `/finance/groups/`, `/finance/ledgers/` |
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 13.1 | Chart builder + DataTable view | ✅ |
+| 13.2 | Routes + `IMPLEMENTED_PATHS` | ✅ |
+| 13.3 | Frontend typecheck + ds:audit | ✅ |
+
+### Notes / follow-ups
+
+- CRUD remains on Ledger Groups / Ledgers pages (linked from CoA actions).
+- Next: ops/UAT + `v1.0.0` tag, or library/inventory.
 
 ---
 
 ## Roadmap Complete ✅
 
-All phases 0–12 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (library/inventory, chart of accounts, etc.).
+All phases 0–13 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (library/inventory, etc.).

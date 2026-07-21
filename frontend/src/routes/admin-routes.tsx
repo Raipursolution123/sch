@@ -38,6 +38,12 @@ const FeeMapperPage = lazy(() =>
     default: m.FeeMapperPage,
   })),
 );
+
+const ChartOfAccountsPage = lazy(() =>
+  import('@features/finance/chart-of-accounts/pages/ChartOfAccountsPage').then((m) => ({
+    default: m.ChartOfAccountsPage,
+  })),
+);
 const SessionsPage = lazy(() =>
   import('@features/academics/sessions/pages/SessionsPage').then((m) => ({
     default: m.SessionsPage,
@@ -600,6 +606,7 @@ export const adminRoutes: RouteObject[] = [
   createPlaceholderModule('/income', ROUTES.income.list),
   createPlaceholderModule('/expense', ROUTES.expense.list),
   createModuleRoutes('/finance', ROUTES.finance.chartOfAccounts, [
+    { path: 'chart-of-accounts', element: <ChartOfAccountsPage /> },
     { path: 'ledgers', element: <LedgersPage /> },
     { path: 'groups', element: <LedgerGroupsPage /> },
     { path: 'entries', element: <JournalEntriesPage /> },
