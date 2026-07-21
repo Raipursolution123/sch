@@ -93,6 +93,10 @@ export const API_ENDPOINTS = {
     reminders: '/fees/reminders/',
     reminderDetail: (id: number) => `/fees/reminders/${id}/`,
     paymentGateways: '/fees/payment-gateways/',
+    offlinePayments: '/fees/offline-payments/',
+    offlinePaymentDetail: (id: number) => `/fees/offline-payments/${id}/`,
+    offlinePaymentApprove: (id: number) => `/fees/offline-payments/${id}/approve/`,
+    offlinePaymentReject: (id: number) => `/fees/offline-payments/${id}/reject/`,
   },
   attendance: {
     types: '/attendance/types/',

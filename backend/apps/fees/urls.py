@@ -19,12 +19,38 @@ from apps.fees.api.views.fee_group import FeeGroupDetailView, FeeGroupsListView
 from apps.fees.api.views.fee_reminder import FeeReminderDetailView, FeeRemindersListView
 from apps.fees.api.views.fee_search import FeeDueSearchView, FeePaymentSearchView
 from apps.fees.api.views.fee_type import FeeTypeDetailView, FeeTypesListView
+from apps.fees.api.views.offline_bank_payments import (
+    OfflineBankPaymentApproveView,
+    OfflineBankPaymentDetailView,
+    OfflineBankPaymentRejectView,
+    OfflineBankPaymentsListView,
+)
 from apps.fees.api.views.payment_settings import PaymentGatewaysListView
 
 urlpatterns = [
     path("collect/roster/", FeeCollectRosterView.as_view(), name="fee-collect-roster"),
     path("search/due/", FeeDueSearchView.as_view(), name="fee-due-search"),
     path("search/payments/", FeePaymentSearchView.as_view(), name="fee-payment-search"),
+    path(
+        "offline-payments/",
+        OfflineBankPaymentsListView.as_view(),
+        name="offline-bank-payments-list",
+    ),
+    path(
+        "offline-payments/<int:pk>/",
+        OfflineBankPaymentDetailView.as_view(),
+        name="offline-bank-payments-detail",
+    ),
+    path(
+        "offline-payments/<int:pk>/approve/",
+        OfflineBankPaymentApproveView.as_view(),
+        name="offline-bank-payments-approve",
+    ),
+    path(
+        "offline-payments/<int:pk>/reject/",
+        OfflineBankPaymentRejectView.as_view(),
+        name="offline-bank-payments-reject",
+    ),
     path("categories/", FeeCategoriesListView.as_view(), name="fee-categories-list"),
     path(
         "categories/<int:pk>/",

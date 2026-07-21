@@ -404,6 +404,12 @@ const PaymentGatewaysPage = lazy(() =>
   })),
 );
 
+const OfflineBankPaymentsPage = lazy(() =>
+  import('@features/fees/offline-payments/pages/OfflineBankPaymentsPage').then((m) => ({
+    default: m.OfflineBankPaymentsPage,
+  })),
+);
+
 const NoticesPage = lazy(() =>
   import('@features/communications/notices/pages/NoticesPage').then((m) => ({
     default: m.NoticesPage,
@@ -522,6 +528,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'assign', element: <FeeAssignPage /> },
     { path: 'reminders', element: <FeeRemindersPage /> },
     { path: 'payment-gateways', element: <PaymentGatewaysPage /> },
+    { path: 'offline-payments', element: <OfflineBankPaymentsPage /> },
   ]),
 
   createModuleRoutes('/examinations', ROUTES.examinations.groups, [

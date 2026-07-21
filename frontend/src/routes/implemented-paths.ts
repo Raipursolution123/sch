@@ -35,6 +35,7 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.fees.paymentSearch,
   ROUTES.fees.reminders,
   ROUTES.fees.paymentGateways,
+  ROUTES.fees.offlinePayments,
   ROUTES.attendance.mark,
   ROUTES.attendance.report,
   ROUTES.attendance.approveLeave,

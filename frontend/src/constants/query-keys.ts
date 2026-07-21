@@ -190,6 +190,26 @@ export const queryKeys = {
     paymentGateways: {
       list: () => [...queryKeys.fees.all, 'payment-gateways', 'list'] as const,
     },
+    offlinePayments: {
+      all: ['fees', 'offline-payments'] as const,
+      list: (filters: {
+        status?: string;
+        from_date?: string;
+        to_date?: string;
+        q?: string;
+        page?: number;
+      }) =>
+        [
+          'fees',
+          'offline-payments',
+          'list',
+          filters.status ?? 'pending',
+          filters.from_date ?? '',
+          filters.to_date ?? '',
+          filters.q ?? '',
+          filters.page ?? 1,
+        ] as const,
+    },
     assignments: {
       list: () => [...queryKeys.fees.all, 'assignments', 'list'] as const,
     },

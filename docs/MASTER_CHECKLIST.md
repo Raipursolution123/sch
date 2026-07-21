@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-21  
-**Current phase:** Phase 11 — Finance Journal & Mapper ✅ COMPLETE  
+**Current phase:** Phase 12 — Offline Bank Payments ✅ COMPLETE  
 **Branch:** `main` (local; uncommitted)
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phase 11 complete (roadmap phases 0–11) |
-| **Current Phase** | Phase 11 — Finance Journal & Mapper ✅ |
-| **Current Task** | Production deploy + UAT sign-off (ops); next: offline bank payments or library |
-| **Completed Phases** | Phase 0 ✅ … Phase 11 ✅ |
-| **Remaining Phases** | Feature backlog (offline bank payments, library, inventory) |
+| **Overall Project Progress** | Phase 12 complete (roadmap phases 0–12) |
+| **Current Phase** | Phase 12 — Offline Bank Payments ✅ |
+| **Current Task** | Production deploy + UAT sign-off (ops); next: library/inventory or chart of accounts |
+| **Completed Phases** | Phase 0 ✅ … Phase 12 ✅ |
+| **Remaining Phases** | Feature backlog (library, inventory, chart of accounts) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~78% |
-| **Frontend Completion** | ~68% |
-| **API Integration Status** | Journal entries + fee-head mapper wired |
-| **UI Completion Status** | 74 real routes; Coming Soon badges on unimplemented nav |
-| **Testing Status** | Frontend typecheck |
+| **Backend Completion** | ~80% |
+| **Frontend Completion** | ~70% |
+| **API Integration Status** | Offline bank payment list/approve/reject wired |
+| **UI Completion Status** | 75 real routes; Coming Soon badges on unimplemented nav |
+| **Testing Status** | Frontend typecheck + offline payment unit tests |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~72 Coming Soon pages; chart-of-accounts still placeholder |
+| **Technical Debt Remaining** | ~71 Coming Soon pages |
 
 ---
 
@@ -627,6 +627,35 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 12 — Offline Bank Payments ✅ SIGNED OFF
+
+**Signed off:** 2026-07-21  
+**Objective:** Wire Fees → Offline Bank Payments to legacy `offline_fees_payments` (list / approve / reject).
+
+### Implemented routes
+
+| Route | Page | API |
+|-------|------|-----|
+| `/fees/offline-payments` | Pending/approved/rejected review + approve/reject | `/fees/offline-payments/`, `.../approve/`, `.../reject/` |
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 12.1 | Selector + OfflineBankPaymentService (approve posts deposit) | ✅ |
+| 12.2 | API views + `HasLegacyPrivilege` (`offline_bank_payments`) | ✅ |
+| 12.3 | Frontend types, service, hooks, page | ✅ |
+| 12.4 | Routes + `IMPLEMENTED_PATHS` | ✅ |
+| 12.5 | Unit tests + typecheck | ✅ |
+
+### Notes / follow-ups
+
+- Status flags: `0` pending, `1` approved, `2` rejected.
+- Approve posts to `student_fees_deposite` when master + fee type IDs are present (idempotent via `offline_payment_id`).
+- Next: ops/UAT + `v1.0.0` tag, or library/inventory / chart of accounts.
+
+---
+
 ## Roadmap Complete ✅
 
-All phases 0–11 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (offline bank payments, library/inventory, etc.).
+All phases 0–12 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (library/inventory, chart of accounts, etc.).
