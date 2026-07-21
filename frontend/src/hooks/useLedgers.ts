@@ -17,6 +17,13 @@ export const useLedgersList = (page = 1) => {
   });
 };
 
+export const useLedgers = () => {
+  return useQuery({
+    queryKey: LEDGERS_KEYS.lists(),
+    queryFn: () => ledgersService.getAllLedgers(),
+  });
+};
+
 export const useCreateLedger = () => {
   const queryClient = useQueryClient();
 

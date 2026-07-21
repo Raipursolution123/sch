@@ -51,3 +51,42 @@ export interface LedgerCreatePayload {
 }
 
 export type LedgerUpdatePayload = Partial<LedgerCreatePayload>;
+
+export interface EntryType {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export interface JournalEntryItem {
+  id?: number;
+  entry_id?: number;
+  ledger_id: number;
+  amount: string;
+  dc: 'D' | 'C';
+  reconciliation_date?: string | null;
+  narration?: string;
+}
+
+export interface JournalEntry {
+  id: number;
+  tag_id?: number | null;
+  entrytype_id?: number | null;
+  number?: number | null;
+  date: string;
+  dr_total: string;
+  cr_total: string;
+  notes: string;
+  transaction_id: string;
+  items?: JournalEntryItem[];
+}
+
+export interface JournalEntryCreatePayload {
+  tag_id?: number | null;
+  entrytype_id?: number | null;
+  number?: number | null;
+  date: string;
+  notes?: string;
+  transaction_id?: string;
+  items: Omit<JournalEntryItem, 'id' | 'entry_id'>[];
+}

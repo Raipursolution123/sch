@@ -12,6 +12,13 @@ export const ledgersService = {
     return response.data.data;
   },
 
+  getAllLedgers: async () => {
+    const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<Ledger>>>(BASE_PATH, {
+      params: { page: 1, limit: 1000 },
+    });
+    return response.data.data.results || [];
+  },
+
   createLedger: async (data: LedgerCreatePayload) => {
     const response = await apiClient.post<{ data: Ledger; message: string }>(BASE_PATH, data);
     return response.data;

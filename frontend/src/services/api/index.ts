@@ -55,4 +55,5 @@ export { noticesService } from './notices.service';
 export { ledgerGroupsService } from './ledger-groups.service';
 export { homeworkService } from './homework.service';
 export { examTemplatesService } from './exam-templates.service';
-
+export { journalEntriesService } from './journal-entries.service';
+export { entryTypesService } from './entry-types.service';
