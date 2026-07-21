@@ -10,11 +10,11 @@ from django.db.models import Q
 from django.utils import timezone
 
 from apps.accounts.models import Role, StaffRole, User
-from apps.staff.models import Staff
 from apps.settings.domain.settings_exceptions import (
     SettingsNotFoundError,
     SettingsValidationError,
 )
+from apps.staff.models import Staff
 from common.cache.reference_cache import invalidate_user_permissions_cache
 
 logger = logging.getLogger(__name__)

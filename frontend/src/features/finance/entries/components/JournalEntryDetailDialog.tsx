@@ -6,7 +6,8 @@ import {
   DialogTitle,
 } from '@components/ui/dialog';
 import { Badge } from '@components/ui/badge';
-import type { EntryType, JournalEntry, Ledger } from '@app-types/finance';
+import { DataTable, type DataTableColumn } from '@components/data/DataTable';
+import type { EntryType, JournalEntry, JournalEntryItem, Ledger } from '@app-types/finance';
 import { formatDate } from '@utils/format';
 
 interface JournalEntryDetailDialogProps {
@@ -32,6 +33,31 @@ export function JournalEntryDetailDialog({
   entryTypes,
   ledgers,
 }: JournalEntryDetailDialogProps) {
+  const columns: DataTableColumn<JournalEntryItem>[] = [
+    {
+      id: 'ledger',
+      header: 'Ledger',
+      cell: (row) => ledgerName(ledgers, row.ledger_id),
+    },
+    {
+      id: 'dc',
+      header: 'Dr/Cr',
+      cell: (row) => <span className="uppercase">{row.dc}</span>,
+    },
+    {
+      id: 'amount',
+      header: 'Amount',
+      cellClassName: 'text-right tabular-nums',
+      cell: (row) => row.amount,
+    },
+    {
+      id: 'narration',
+      header: 'Narration',
+      cellClassName: 'text-muted-foreground',
+      cell: (row) => row.narration || '—',
+    },
+  ];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
@@ -53,28 +79,11 @@ export function JournalEntryDetailDialog({
             </div>
             {entry.notes ? <p className="text-sm text-muted-foreground">{entry.notes}</p> : null}
 
-            <div className="overflow-x-auto rounded-md border">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/50 text-left text-xs text-muted-foreground">
-                  <tr>
-                    <th className="px-3 py-2">Ledger</th>
-                    <th className="px-3 py-2">Dr/Cr</th>
-                    <th className="px-3 py-2 text-right">Amount</th>
-                    <th className="px-3 py-2">Narration</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(entry.items ?? []).map((item, idx) => (
-                    <tr key={item.id ?? idx} className="border-t">
-                      <td className="px-3 py-2">{ledgerName(ledgers, item.ledger_id)}</td>
-                      <td className="px-3 py-2 uppercase">{item.dc}</td>
-                      <td className="px-3 py-2 text-right tabular-nums">{item.amount}</td>
-                      <td className="px-3 py-2 text-muted-foreground">{item.narration || '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <DataTable
+              data={entry.items ?? []}
+              columns={columns}
+              getRowKey={(row) => row.id ?? `${row.ledger_id}-${row.dc}-${row.amount}`}
+            />
           </div>
         ) : null}
       </DialogContent>

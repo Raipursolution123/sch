@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { Checkbox } from '@components/ui/checkbox';
 import { useRoleDetail, useUpdateRolePermissions } from '@hooks/useRoles';
 import type {
@@ -67,6 +68,40 @@ export function RolePermissionsDialog({ open, onOpenChange, role }: RolePermissi
 
   const payload = useMemo(() => ({ permissions: Object.values(draft) }), [draft]);
 
+  const columns: DataTableColumn<RolePermissionCategory>[] = useMemo(
+    () => [
+      {
+        id: 'category',
+        header: 'Category',
+        cell: (cat) => (
+          <div>
+            <div className="font-medium">{cat.name}</div>
+            <div className="font-mono text-xs text-muted-foreground">{cat.short_code}</div>
+          </div>
+        ),
+      },
+      ...FLAGS.map((f) => ({
+        id: f.key,
+        header: f.label,
+        cellClassName: 'text-center',
+        cell: (cat: RolePermissionCategory) => {
+          const row = draft[cat.id] ?? categoryToItem(cat);
+          return (
+            <Checkbox
+              aria-label={`${cat.name} ${f.label}`}
+              checked={row[f.key]}
+              onChange={(e) => toggle(cat, f.key, e.target.checked)}
+              disabled={role?.is_superadmin}
+            />
+          );
+        },
+      })),
+    ],
+    // draft + role flags drive checkbox state; toggle is stable enough for render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [draft, role?.is_superadmin],
+  );
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (!roleId) return;
@@ -104,45 +139,7 @@ export function RolePermissionsDialog({ open, onOpenChange, role }: RolePermissi
         {groups.map((group) => (
           <section key={group.id} className="space-y-2">
             <h3 className="text-sm font-semibold tracking-tight">{group.name}</h3>
-            <div className="overflow-x-auto rounded-md border">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/50 text-left text-xs text-muted-foreground">
-                  <tr>
-                    <th className="px-3 py-2 font-medium">Category</th>
-                    {FLAGS.map((f) => (
-                      <th key={f.key} className="px-2 py-2 text-center font-medium">
-                        {f.label}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {group.categories.map((cat) => {
-                    const row = draft[cat.id] ?? categoryToItem(cat);
-                    return (
-                      <tr key={cat.id} className="border-t">
-                        <td className="px-3 py-2">
-                          <div className="font-medium">{cat.name}</div>
-                          <div className="font-mono text-xs text-muted-foreground">
-                            {cat.short_code}
-                          </div>
-                        </td>
-                        {FLAGS.map((f) => (
-                          <td key={f.key} className="px-2 py-2 text-center">
-                            <Checkbox
-                              aria-label={`${cat.name} ${f.label}`}
-                              checked={row[f.key]}
-                              onChange={(e) => toggle(cat, f.key, e.target.checked)}
-                              disabled={role?.is_superadmin}
-                            />
-                          </td>
-                        ))}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            <DataTable data={group.categories} columns={columns} getRowKey={(cat) => cat.id} />
           </section>
         ))}
       </div>
