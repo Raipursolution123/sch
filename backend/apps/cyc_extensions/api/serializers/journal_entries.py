@@ -8,15 +8,20 @@ class CycEntryitemsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CycEntriesSerializer(serializers.ModelSerializer):
-    items = CycEntryitemsSerializer(many=True, read_only=True, source='cycentryitems_set')
+    items = serializers.SerializerMethodField()
 
     class Meta:
         model = CycEntries
         fields = '__all__'
 
+    def get_items(self, obj):
+        from apps.cyc_extensions.models.cyc_entryitems import CycEntryitems
+        items = CycEntryitems.objects.filter(entry_id=obj.id)
+        return CycEntryitemsSerializer(items, many=True).data
+
 class CycEntriesCreateSerializer(serializers.Serializer):
     tag_id = serializers.IntegerField(required=False, allow_null=True)
-    entrytype_id = serializers.IntegerField(required=True)
+    entrytype_id = serializers.IntegerField(required=False, allow_null=True)
     number = serializers.IntegerField(required=False, allow_null=True)
     date = serializers.DateField(required=True)
     notes = serializers.CharField(max_length=500, required=False, allow_blank=True)

@@ -6,6 +6,7 @@ from apps.cyc_extensions.models.cyc_entries import CycEntries
 from apps.cyc_extensions.models.cyc_entryitems import CycEntryitems
 from apps.cyc_extensions.models.cyc_fee_head_ledger import CycFeeHeadLedger
 from apps.cyc_extensions.models.cyc_ledgers import CycLedgers
+from apps.cyc_extensions.models.cyc_entrytypes import CycEntrytypes
 
 logger = logging.getLogger(__name__)
 
@@ -29,19 +30,34 @@ class PostingService:
         for item in items:
             amt = Decimal(str(item.get('amount', 0)))
             dc = item.get('dc', '').lower()
-            if dc == 'dr':
+            if dc in ['dr', 'd']:
                 dr_total += amt
-            elif dc == 'cr':
+            elif dc in ['cr', 'c']:
                 cr_total += amt
             else:
-                raise AccountPostingError("Entry item must specify 'dc' as 'dr' or 'cr'.")
+                raise AccountPostingError("Entry item must specify 'dc' as 'D' or 'C'.")
 
         if dr_total != cr_total:
             raise AccountPostingError(f"Debits and Credits must balance. Dr: {dr_total}, Cr: {cr_total}")
 
+        default_type = CycEntrytypes.objects.first()
+        if not default_type:
+            default_type = CycEntrytypes.objects.create(
+                label='General',
+                name='General Journal',
+                description='Default system-generated entry type',
+                base_type=0,
+                numbering=1,
+                prefix='',
+                suffix='',
+                zero_padding=0,
+                restriction_bankcash=1
+            )
+        fallback_id = default_type.id
+
         entry = CycEntries.objects.create(
             tag_id=data.get('tag_id'),
-            entrytype_id=data.get('entrytype_id'),
+            entrytype_id=data.get('entrytype_id') or fallback_id,
             number=data.get('number'),
             date=data.get('date', timezone.now().date()),
             dr_total=dr_total,
@@ -49,6 +65,69 @@ class PostingService:
             notes=data.get('notes', ''),
             transaction_id=data.get('transaction_id', '')
         )
+
+        for item in items:
+            CycEntryitems.objects.create(
+                entry_id=entry.id,
+                ledger_id=item['ledger_id'],
+                amount=Decimal(str(item['amount'])),
+                dc=item['dc'].lower(),
+                narration=item.get('narration', '')
+            )
+
+        return entry
+
+    @transaction.atomic
+    def update_journal_entry(self, pk: int, data: dict) -> CycEntries:
+        """
+        Updates an existing CycEntries record and recreates its associated CycEntryitems.
+        Ensures that Debits == Credits.
+        """
+        try:
+            entry = CycEntries.objects.get(pk=pk)
+        except CycEntries.DoesNotExist:
+            raise AccountPostingError("Journal entry not found.")
+
+        items = data.get('items', [])
+        if not items:
+            raise AccountPostingError("A journal entry must contain at least two items.")
+
+        dr_total = Decimal('0.00')
+        cr_total = Decimal('0.00')
+
+        for item in items:
+            amt = Decimal(str(item.get('amount', 0)))
+            dc = item.get('dc', '').lower()
+            if dc in ['dr', 'd']:
+                dr_total += amt
+            elif dc in ['cr', 'c']:
+                cr_total += amt
+            else:
+                raise AccountPostingError("Entry item must specify 'dc' as 'D' or 'C'.")
+
+        if dr_total != cr_total:
+            raise AccountPostingError(f"Debits and Credits must balance. Dr: {dr_total}, Cr: {cr_total}")
+
+        # Update core entry
+        if 'tag_id' in data:
+            entry.tag_id = data['tag_id']
+        if 'entrytype_id' in data and data['entrytype_id'] is not None:
+            entry.entrytype_id = data['entrytype_id']
+        if 'number' in data:
+            entry.number = data['number']
+        if 'date' in data:
+            entry.date = data['date']
+        if 'notes' in data:
+            entry.notes = data['notes']
+        if 'transaction_id' in data:
+            entry.transaction_id = data['transaction_id']
+
+        entry.dr_total = dr_total
+        entry.cr_total = cr_total
+        entry.save()
+
+        # Delete existing items and recreate
+        CycEntryitems.objects.filter(entry_id=entry.id).delete()
 
         for item in items:
             CycEntryitems.objects.create(

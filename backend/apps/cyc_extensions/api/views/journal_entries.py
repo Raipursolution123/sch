@@ -33,6 +33,13 @@ class JournalEntriesView(APIView):
         except AccountPostingError as e:
             return APIResponse.error(message=str(e), status_code=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            import traceback
+            import os
+            try:
+                with open("/app/logs/traceback_dump.txt", "w", encoding="utf-8") as f:
+                    f.write(traceback.format_exc())
+            except:
+                pass
             return APIResponse.error(message="An error occurred during posting.", details=str(e), status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -55,3 +62,25 @@ class JournalEntriesDetailView(APIView):
             return APIResponse.success(message="Entry deleted successfully")
         except CycEntries.DoesNotExist:
             return APIResponse.error(message="Entry not found", status_code=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk):
+        serializer = CycEntriesCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return APIResponse.error(message="Validation Error", details=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
+
+        service = PostingService()
+        try:
+            entry = service.update_journal_entry(pk, serializer.validated_data)
+            out_serializer = CycEntriesSerializer(entry)
+            return APIResponse.success(data=out_serializer.data, message="Journal entry updated successfully", status_code=status.HTTP_200_OK)
+        except AccountPostingError as e:
+            return APIResponse.error(message=str(e), status_code=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            import traceback
+            import os
+            try:
+                with open("/app/logs/traceback_dump.txt", "w", encoding="utf-8") as f:
+                    f.write(traceback.format_exc())
+            except:
+                pass
+            return APIResponse.error(message="An error occurred during updating.", details=str(e), status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
