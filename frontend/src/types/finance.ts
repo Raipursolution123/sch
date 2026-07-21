@@ -58,3 +58,69 @@ export interface TrialBalanceRow {
   total_dr: number | string;
   total_cr: number | string;
 }
+
+export interface EntryType {
+  id: number;
+  label: string;
+  name: string;
+  description?: string;
+  base_type?: number;
+  numbering?: number;
+  prefix?: string;
+  suffix?: string;
+  zero_padding?: number;
+  restriction_bankcash?: number;
+}
+
+export type JournalDc = 'dr' | 'cr';
+
+export interface JournalEntryItem {
+  id?: number;
+  entry_id?: number;
+  ledger_id: number;
+  amount: string | number;
+  dc: JournalDc | string;
+  reconciliation_date?: string | null;
+  narration?: string;
+}
+
+export interface JournalEntry {
+  id: number;
+  tag_id?: number | null;
+  entrytype_id: number;
+  number?: number | null;
+  date: string;
+  dr_total: string | number;
+  cr_total: string | number;
+  notes?: string;
+  transaction_id?: string;
+  items: JournalEntryItem[];
+}
+
+export interface JournalEntryCreatePayload {
+  entrytype_id: number;
+  date: string;
+  notes?: string;
+  tag_id?: number | null;
+  number?: number | null;
+  transaction_id?: string;
+  items: Array<{
+    ledger_id: number;
+    amount: number;
+    dc: JournalDc;
+    narration?: string;
+  }>;
+}
+
+export interface FeeHeadMapper {
+  fhl_id: number;
+  ledger_id: number;
+  head_id: number;
+}
+
+export interface FeeHeadMapperPayload {
+  ledger_id: number;
+  head_id: number;
+}
+
+export type FeeHeadMapperUpdatePayload = Partial<FeeHeadMapperPayload>;

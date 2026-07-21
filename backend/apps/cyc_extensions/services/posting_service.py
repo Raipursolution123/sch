@@ -6,7 +6,6 @@ from django.utils import timezone
 
 from apps.cyc_extensions.models.cyc_entries import CycEntries
 from apps.cyc_extensions.models.cyc_entryitems import CycEntryitems
-from apps.cyc_extensions.models.cyc_fee_head_ledger import CycFeeHeadLedger
 from apps.cyc_extensions.models.cyc_ledgers import CycLedgers
 
 logger = logging.getLogger(__name__)
@@ -24,7 +23,7 @@ class PostingService:
         Ensures that Debits == Credits.
         """
         items = data.get("items", [])
-        if not items:
+        if not items or len(items) < 2:
             raise AccountPostingError(
                 "A journal entry must contain at least two items."
             )
@@ -70,6 +69,14 @@ class PostingService:
             )
 
         return entry
+
+    @transaction.atomic
+    def delete_journal_entry(self, entry_id: int) -> None:
+        entry = CycEntries.objects.filter(pk=entry_id).first()
+        if entry is None:
+            raise AccountPostingError("Entry not found.")
+        CycEntryitems.objects.filter(entry_id=entry.id).delete()
+        entry.delete()
 
     @transaction.atomic
     def post_fee_payment_entry(self, fee_payment_id: int):

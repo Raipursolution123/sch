@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-21  
-**Current phase:** Phase 10 — Roles & Users ✅ COMPLETE  
+**Current phase:** Phase 11 — Finance Journal & Mapper ✅ COMPLETE  
 **Branch:** `main` (local; uncommitted)
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phase 10 complete (roadmap phases 0–10) |
-| **Current Phase** | Phase 10 — Roles & Users ✅ |
-| **Current Task** | Production deploy + UAT sign-off (ops); next: finance journal/mapper UI |
-| **Completed Phases** | Phase 0 ✅ … Phase 10 ✅ |
-| **Remaining Phases** | Feature backlog (finance entries/mapper, library, inventory) |
+| **Overall Project Progress** | Phase 11 complete (roadmap phases 0–11) |
+| **Current Phase** | Phase 11 — Finance Journal & Mapper ✅ |
+| **Current Task** | Production deploy + UAT sign-off (ops); next: offline bank payments or library |
+| **Completed Phases** | Phase 0 ✅ … Phase 11 ✅ |
+| **Remaining Phases** | Feature backlog (offline bank payments, library, inventory) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~76% |
-| **Frontend Completion** | ~66% |
-| **API Integration Status** | Roles/users settings APIs wired |
-| **UI Completion Status** | 72 real routes; Coming Soon badges on unimplemented nav |
-| **Testing Status** | Frontend typecheck + roles/users unit tests |
+| **Backend Completion** | ~78% |
+| **Frontend Completion** | ~68% |
+| **API Integration Status** | Journal entries + fee-head mapper wired |
+| **UI Completion Status** | 74 real routes; Coming Soon badges on unimplemented nav |
+| **Testing Status** | Frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~74 Coming Soon pages; `roles` category may be missing in older DBs (superadmin bypass works) |
+| **Technical Debt Remaining** | ~72 Coming Soon pages; chart-of-accounts still placeholder |
 
 ---
 
@@ -595,10 +595,38 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 - Superadmin role permissions are read-only (cannot be edited).
 - `permission_category.short_code = roles` may be absent in older DBs; superadmin still accesses via RBAC bypass. Non-superadmin needs a matching category + `roles_permissions` row.
-- Next recommended product work: finance journal entries / ledger mapper UI.
+
+---
+
+## Phase 11 — Finance Journal & Mapper ✅ SIGNED OFF
+
+**Signed off:** 2026-07-21  
+**Objective:** Wire Account Finance → Journal Entries and Account Mapper to existing `cyc_extensions` APIs.
+
+### Implemented routes
+
+| Route | Page | API |
+|-------|------|-----|
+| `/finance/entries` | Journal list / create / view / delete | `/finance/entries/`, `/finance/entry-types/` |
+| `/finance/mapper` | Fee-head ↔ ledger CRUD | `/finance/mapper/` |
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 11.1 | Fix entry `items` serialization + cascade delete | ✅ |
+| 11.2 | Types, services, hooks for entries + mapper | ✅ |
+| 11.3 | Journal Entries + Fee Mapper pages | ✅ |
+| 11.4 | Routes + `IMPLEMENTED_PATHS` + RBAC keys | ✅ |
+| 11.5 | Frontend typecheck | ✅ |
+
+### Notes / follow-ups
+
+- Chart of Accounts and Finance Reports under `/finance/*` remain Coming Soon (trial balance lives under Reports).
+- Next recommended product work: offline bank payments, or ops/UAT + `v1.0.0` tag.
 
 ---
 
 ## Roadmap Complete ✅
 
-All phases 0–10 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (finance entries, library/inventory, etc.).
+All phases 0–11 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (offline bank payments, library/inventory, etc.).

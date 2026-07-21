@@ -372,4 +372,17 @@ export const queryKeys = {
       [...queryKeys.workflows.all, entityType, entityId] as const,
     exams: () => [...queryKeys.workflows.all, 'exam'] as const,
   },
+  finance: {
+    all: ['finance'] as const,
+    entryTypes: () => [...queryKeys.finance.all, 'entry-types'] as const,
+    entries: {
+      all: ['finance', 'entries'] as const,
+      list: (page: number) => [...queryKeys.finance.entries.all, 'list', page] as const,
+      detail: (id: number) => [...queryKeys.finance.entries.all, 'detail', id] as const,
+    },
+    mapper: {
+      all: ['finance', 'mapper'] as const,
+      list: () => [...queryKeys.finance.mapper.all, 'list'] as const,
+    },
+  },
 } as const;

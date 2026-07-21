@@ -10,10 +10,10 @@ export const LEDGERS_KEYS = {
   list: (page: number) => [...LEDGERS_KEYS.lists(), { page }] as const,
 };
 
-export const useLedgersList = (page = 1) => {
+export const useLedgersList = (page = 1, pageSize = 20) => {
   return useQuery({
-    queryKey: LEDGERS_KEYS.list(page),
-    queryFn: () => ledgersService.getLedgers(page),
+    queryKey: [...LEDGERS_KEYS.list(page), pageSize] as const,
+    queryFn: () => ledgersService.getLedgers(page, pageSize),
     placeholderData: keepPreviousData,
   });
 };

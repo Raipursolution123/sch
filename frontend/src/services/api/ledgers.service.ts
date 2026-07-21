@@ -4,10 +4,10 @@ import type { Ledger, LedgerCreatePayload, LedgerUpdatePayload } from '@app-type
 import type { ApiSuccessResponse, PaginatedResponse } from '@app-types/api';
 
 export const ledgersService = {
-  getLedgers: async (page = 1) => {
+  getLedgers: async (page = 1, pageSize = 20) => {
     const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<Ledger>>>(
       API_ENDPOINTS.finance.ledgers,
-      { params: { page } },
+      { params: { page, page_size: pageSize } },
     );
     return response.data.data;
   },

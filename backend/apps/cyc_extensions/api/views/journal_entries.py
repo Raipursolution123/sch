@@ -81,10 +81,15 @@ class JournalEntriesDetailView(APIView):
     def delete(self, request, pk):
         try:
             entry = CycEntries.objects.get(pk=pk)
-            # Reversal logic could be implemented here or a flag updated, but per hard-delete requirement fallback:
-            entry.delete()
-            return APIResponse.success(message="Entry deleted successfully")
         except CycEntries.DoesNotExist:
             return APIResponse.error(
                 message="Entry not found", status_code=status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            PostingService().delete_journal_entry(entry.id)
+            return APIResponse.success(message="Entry deleted successfully")
+        except AccountPostingError as e:
+            return APIResponse.error(
+                message=str(e), status_code=status.HTTP_400_BAD_REQUEST
             )

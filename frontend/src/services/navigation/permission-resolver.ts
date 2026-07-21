@@ -129,6 +129,10 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'daily_assignment.create': ['daily_assignment'],
   'daily_assignment.edit': ['daily_assignment'],
   'daily_assignment.delete': ['daily_assignment'],
+  'finance.entries.view': ['entries'],
+  'finance.entries.create': ['entries'],
+  'finance.entries.delete': ['entries'],
+  'finance.accounts.manage': ['accounts'],
 };
 
 export interface NavigationPermissionContext {

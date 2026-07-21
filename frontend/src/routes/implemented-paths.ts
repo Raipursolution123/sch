@@ -58,6 +58,8 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.communicate.notices,
   ROUTES.finance.ledgers,
   ROUTES.finance.groups,
+  ROUTES.finance.entries,
+  ROUTES.finance.mapper,
   ROUTES.settings.general,
   ROUTES.settings.languages,
   ROUTES.settings.currency,

@@ -77,4 +77,8 @@ export type Permission =
   | 'daily_assignment.view'
   | 'daily_assignment.create'
   | 'daily_assignment.edit'
-  | 'daily_assignment.delete';
+  | 'daily_assignment.delete'
+  | 'finance.entries.view'
+  | 'finance.entries.create'
+  | 'finance.entries.delete'
+  | 'finance.accounts.manage';
