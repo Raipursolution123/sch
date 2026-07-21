@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Trash2 } from 'lucide-react';
+import { Trash2, UserCheck } from 'lucide-react';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { StudentOverviewTab } from '@features/students/components/StudentOverviewTab';
 import { StudentAcademicTab } from '@features/students/components/StudentAcademicTab';
@@ -11,8 +11,9 @@ import { StudentAdmissionDialog } from '@features/students/components/StudentAdm
 import type { StudentAdmissionFormValues } from '@features/students/schemas/student-admission.schema';
 import { DisableStudentDialog } from '@features/students/components/DisableStudentDialog';
 import type { DisableStudentFormValues } from '@features/students/schemas/disable-student.schema';
+import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { toStudentPayload } from '@features/students/utils/student-payload';
-import { useStudent, useUpdateStudent, useDisableStudent } from '@hooks/useStudents';
+import { useStudent, useUpdateStudent, useDisableStudent, useEnableStudent } from '@hooks/useStudents';
 import { useClasses } from '@hooks/useClasses';
 import { ROUTES } from '@constants/index';
 import { ModuleProfilePack } from '@workflow-packs';
@@ -37,12 +38,14 @@ export function StudentProfilePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [editOpen, setEditOpen] = useState(false);
   const [disableOpen, setDisableOpen] = useState(false);
+  const [enableConfirmOpen, setEnableConfirmOpen] = useState(false);
   const id = Number(studentId);
   const { data: student, isLoading, isError, error, refetch } = useStudent(id);
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
   const updateMutation = useUpdateStudent(id);
   const disableMutation = useDisableStudent();
+  const enableMutation = useEnableStudent();
 
   const activeTab = searchParams.get('tab');
   const currentTab = isProfileTab(activeTab) ? activeTab : 'overview';
@@ -71,6 +74,15 @@ export function StudentProfilePage() {
     );
   };
 
+  const handleEnableConfirm = () => {
+    enableMutation.mutate(id, {
+      onSuccess: () => {
+        setEnableConfirmOpen(false);
+        navigate(ROUTES.students.root);
+      },
+    });
+  };
+
   return (
     <ModuleProfilePack
       backTo={ROUTES.students.root}
@@ -83,16 +95,29 @@ export function StudentProfilePage() {
       onRetry={() => void refetch()}
       headerActions={
         student ? (
-          <PermissionButton
-            permission="students.delete"
-            variant="destructive"
-            size="sm"
-            onClick={() => setDisableOpen(true)}
-            className="gap-2"
-          >
-            <Trash2 className="h-4 w-4" />
-            Disable Student
-          </PermissionButton>
+          student.is_active === 'yes' ? (
+            <PermissionButton
+              permission="students.delete"
+              variant="destructive"
+              size="sm"
+              onClick={() => setDisableOpen(true)}
+              className="gap-2"
+            >
+              <Trash2 className="h-4 w-4" />
+              Disable Student
+            </PermissionButton>
+          ) : (
+            <PermissionButton
+              permission="students.delete"
+              variant="default"
+              size="sm"
+              onClick={() => setEnableConfirmOpen(true)}
+              className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              <UserCheck className="h-4 w-4" />
+              Enable Student
+            </PermissionButton>
+          )
         ) : undefined
       }
       tabs={
@@ -138,6 +163,16 @@ export function StudentProfilePage() {
               studentName={student.full_name}
               onSubmit={handleDisableSubmit}
               isLoading={disableMutation.isPending}
+            />
+
+            <ConfirmDialog
+              open={enableConfirmOpen}
+              onOpenChange={setEnableConfirmOpen}
+              title="Re-enable student"
+              description={`Restore ${student.full_name} to the active student list and reactivate portal access?`}
+              confirmLabel="Re-enable"
+              isLoading={enableMutation.isPending}
+              onConfirm={handleEnableConfirm}
             />
           </>
         ) : undefined

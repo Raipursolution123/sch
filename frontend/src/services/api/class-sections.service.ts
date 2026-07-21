@@ -101,7 +101,7 @@ function assertUniquePair(classId: number, sectionId: number, excludeId?: number
 }
 
 export const classSectionsService = {
-  list: async (page = 1): Promise<{ results: ClassSection[]; count: number }> => {
+  list: async (page = 1, noPaginate = false): Promise<{ results: ClassSection[]; count: number }> => {
     if (USE_MOCK) {
       const allData = await enrich(mockList());
       const sorted = allData.sort(
@@ -111,9 +111,10 @@ export const classSectionsService = {
       return delay({ results: sorted, count: sorted.length });
     }
     // TODO: Wire when backend exposes GET /api/v1/academics/class-sections/
-    const { data } = await apiClient.get<BackendPayload>(
-      `${API_ENDPOINTS.academics.classSections}?page=${page}`,
-    );
+    const url = noPaginate
+      ? `${API_ENDPOINTS.academics.classSections}?no_paginate=true`
+      : `${API_ENDPOINTS.academics.classSections}?page=${page}`;
+    const { data } = await apiClient.get<BackendPayload>(url);
     const results = extractList<ClassSection>(data, 'class_sections');
     const count = extractCount(data, results.length);
     return { results, count };

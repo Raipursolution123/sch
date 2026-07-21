@@ -40,11 +40,13 @@ class FeeCollectService:
 
             total_due = 0.0
             total_paid = 0.0
+            total_discount = 0.0
             total_balance = 0.0
             try:
                 summary = fee_service.get_fee_summary(student.id)
                 total_due = float(summary["total_due"])
                 total_paid = float(summary["total_paid"])
+                total_discount = float(summary.get("total_discount", 0.0))
                 total_balance = float(summary["total_balance"])
             except StudentError:
                 pass
@@ -59,6 +61,7 @@ class FeeCollectService:
                     ),
                     "total_due": total_due,
                     "total_paid": total_paid,
+                    "total_discount": total_discount,
                     "total_balance": total_balance,
                 }
             )

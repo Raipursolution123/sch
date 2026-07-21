@@ -27,12 +27,28 @@ class ClassSectionListCreateView(APIView):
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
+    def initial(self, request, *args, **kwargs):
+        if request.method == "GET":
+            user = request.user
+            from apps.accounts.services.legacy_rbac import user_has_privilege
+            for cat in ["class", "student", "collect_fees", "promote_student", "online_admission"]:
+                if user_has_privilege(user, cat, "can_view"):
+                    self.legacy_permission_category = cat
+                    break
+        super().initial(request, *args, **kwargs)
+
     def get(self, request):
         active_only = request.query_params.get("active_only", "false").lower() == "true"
+        no_paginate = request.query_params.get("no_paginate", "false").lower() == "true"
         qs = ClassSectionService().list_mappings(active_only=active_only)
-        paginator = StandardResultsSetPagination()
-        page = paginator.paginate_queryset(qs, request, view=self)
-        rows = list(page if page is not None else qs)
+        
+        if no_paginate:
+            page = None
+            rows = list(qs)
+        else:
+            paginator = StandardResultsSetPagination()
+            page = paginator.paginate_queryset(qs, request, view=self)
+            rows = list(page)
 
         class_ids = [m.class_id for m in rows if m.class_id]
         section_ids = [m.section_id for m in rows if m.section_id]

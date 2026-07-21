@@ -132,6 +132,7 @@ export function MarkAttendancePage() {
             <Input
               id="attendance_date"
               type="date"
+              max={todayIsoDate()}
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />

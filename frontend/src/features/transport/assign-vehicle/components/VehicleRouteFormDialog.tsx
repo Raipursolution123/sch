@@ -65,6 +65,7 @@ export function VehicleRouteFormDialog({
         control={control}
         name="route_id"
         label="Route"
+        placeholder="Select route"
         options={routes.map((route) => ({
           value: String(route.id),
           label: route.route_title || `Route ${route.id}`,
@@ -75,6 +76,7 @@ export function VehicleRouteFormDialog({
         control={control}
         name="vehicle_id"
         label="Vehicle"
+        placeholder="Select vehicle"
         options={vehicles.map((vehicle) => ({
           value: String(vehicle.id),
           label: vehicle.vehicle_no || vehicle.registration_number,

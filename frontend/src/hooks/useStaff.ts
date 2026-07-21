@@ -22,6 +22,46 @@ export function useStaffMember(id: number) {
   });
 }
 
+export function useStaffAttendance(date?: string) {
+  return useQuery({
+    queryKey: ['staff', 'attendance', date],
+    queryFn: () => staffService.getAttendance(date),
+  });
+}
+
+export function useMarkStaffAttendance() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ date, attendanceData }: { date: string; attendanceData: any[] }) =>
+      staffService.markAttendance(date, attendanceData),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['staff', 'attendance'] });
+      toast.success('Staff attendance saved successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to save staff attendance')),
+  });
+}
+
+export function useStaffPayroll(month?: string, year?: string) {
+  return useQuery({
+    queryKey: ['staff', 'payroll', month, year],
+    queryFn: () => staffService.getPayroll(month, year),
+  });
+}
+
+export function useGeneratePayslip() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: { staff_id: number; month: string; year: string; basic_salary?: number; payment_mode?: string }) =>
+      staffService.generatePayslip(payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['staff', 'payroll'] });
+      toast.success('Payslip generated successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to generate payslip')),
+  });
+}
+
 export function useStaffDepartments() {
   return useQuery({
     queryKey: queryKeys.staff.departments(),
@@ -29,10 +69,82 @@ export function useStaffDepartments() {
   });
 }
 
+export function useCreateDepartment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (name: string) => staffService.createDepartment(name),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.departments() });
+      toast.success('Department created successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create department')),
+  });
+}
+
+export function useUpdateDepartment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, name }: { id: number; name: string }) => staffService.updateDepartment(id, name),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.departments() });
+      toast.success('Department updated successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update department')),
+  });
+}
+
+export function useDeleteDepartment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => staffService.deleteDepartment(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.departments() });
+      toast.success('Department deleted successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete department')),
+  });
+}
+
 export function useStaffDesignations() {
   return useQuery({
     queryKey: queryKeys.staff.designations(),
     queryFn: staffService.listDesignations,
+  });
+}
+
+export function useCreateDesignation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (name: string) => staffService.createDesignation(name),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.designations() });
+      toast.success('Designation created successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create designation')),
+  });
+}
+
+export function useUpdateDesignation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, name }: { id: number; name: string }) => staffService.updateDesignation(id, name),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.designations() });
+      toast.success('Designation updated successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update designation')),
+  });
+}
+
+export function useDeleteDesignation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => staffService.deleteDesignation(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.designations() });
+      toast.success('Designation deleted successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete designation')),
   });
 }
 

@@ -5,6 +5,7 @@ export interface FeeCollectRosterStudent {
   full_name: string;
   total_due: number;
   total_paid: number;
+  total_discount?: number;
   total_balance: number;
 }
 

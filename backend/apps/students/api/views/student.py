@@ -40,7 +40,7 @@ class StudentListCreateView(APIView):
 
     def initial(self, request, *args, **kwargs):
         status_filter = request.query_params.get("status", "active")
-        if status_filter == "disabled":
+        if status_filter == "disabled" and request.method != "GET":
             self.legacy_permission_category = DISABLE_CATEGORY
         else:
             self.legacy_permission_category = CATEGORY

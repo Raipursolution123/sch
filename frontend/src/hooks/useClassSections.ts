@@ -8,10 +8,10 @@ import type {
 } from '@app-types/academics/class-section';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useClassSections(page: number = 1, options?: { enabled?: boolean }) {
+export function useClassSections(page: number = 1, options?: { enabled?: boolean; noPaginate?: boolean }) {
   return useQuery({
-    queryKey: [...queryKeys.academics.classSections.list(), page],
-    queryFn: () => classSectionsService.list(page),
+    queryKey: [...queryKeys.academics.classSections.list(), page, options?.noPaginate],
+    queryFn: () => classSectionsService.list(page, options?.noPaginate),
     enabled: options?.enabled ?? true,
   });
 }

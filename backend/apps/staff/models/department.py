@@ -5,8 +5,8 @@ class Department(models.Model):
     """Maps to `department` in db_current."""
 
     id = models.AutoField(primary_key=True)
-    department_name = models.CharField(max_length=200)
-    is_active = models.CharField(max_length=100)
+    department_name = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.CharField(max_length=100, blank=True, null=True, default="yes")
 
     class Meta:
         managed = False

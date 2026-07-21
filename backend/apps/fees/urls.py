@@ -21,8 +21,14 @@ from apps.fees.api.views.fee_search import FeeDueSearchView, FeePaymentSearchVie
 from apps.fees.api.views.fee_type import FeeTypeDetailView, FeeTypesListView
 from apps.fees.api.views.payment_settings import PaymentGatewaysListView
 
+from apps.fees.api.views.fee_master import FeeMasterDetailView, FeeMasterListView
+
 urlpatterns = [
     path("collect/roster/", FeeCollectRosterView.as_view(), name="fee-collect-roster"),
+    path("fee-masters/", FeeMasterListView.as_view(), name="fee-masters-list"),
+    path("fee-masters/<int:pk>/", FeeMasterDetailView.as_view(), name="fee-master-detail"),
+    path("fee-master/", FeeMasterListView.as_view(), name="fee-master-list"),
+    path("fee-master/<int:pk>/", FeeMasterDetailView.as_view(), name="fee-master-detail-alias"),
     path("search/due/", FeeDueSearchView.as_view(), name="fee-due-search"),
     path("search/payments/", FeePaymentSearchView.as_view(), name="fee-payment-search"),
     path("categories/", FeeCategoriesListView.as_view(), name="fee-categories-list"),

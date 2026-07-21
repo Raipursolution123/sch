@@ -339,4 +339,17 @@ export const queryKeys = {
       [...queryKeys.workflows.all, entityType, entityId] as const,
     exams: () => [...queryKeys.workflows.all, 'exam'] as const,
   },
+  homework: {
+    all: ['homework'] as const,
+    homeworkList: {
+      list: (params?: Record<string, unknown>) => [...queryKeys.homework.all, 'homeworkList', params] as const,
+    },
+    evaluations: {
+      list: (params?: Record<string, unknown>) => [...queryKeys.homework.all, 'evaluations', params] as const,
+    },
+    dailyAssignments: {
+      list: (params?: Record<string, unknown>) => [...queryKeys.homework.all, 'dailyAssignments', params] as const,
+    },
+  },
 } as const;
+

@@ -9,26 +9,29 @@ from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
-CATEGORY = "fees_master"
+CATEGORY = "fees"
 
 
 class FeeAssignmentsListView(APIView):
-    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    permission_classes = [IsAuthenticated]
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
     def get(self, request):
-        service = FeeAssignmentService()
-        qs = service.list_assignments()
-        paginator = StandardResultsSetPagination()
-        page = paginator.paginate_queryset(qs, request, view=self)
-        rows = list(page if page is not None else qs)
-        data = service.enrich_list(rows)
-        if page is not None:
-            return paginator.get_paginated_response(data)
-        return APIResponse.success(
-            data=data, message="Fee assignments retrieved successfully."
-        )
+        try:
+            service = FeeAssignmentService()
+            qs = service.list_assignments()
+            paginator = StandardResultsSetPagination()
+            page = paginator.paginate_queryset(qs, request, view=self)
+            rows = list(page if page is not None else qs)
+            data = service.enrich_list(rows)
+            if page is not None:
+                return paginator.get_paginated_response(data)
+            return APIResponse.success(
+                data=data, message="Fee assignments retrieved successfully."
+            )
+        except Exception as exc:
+            return fee_error_response(exc)
 
     def post(self, request):
         try:

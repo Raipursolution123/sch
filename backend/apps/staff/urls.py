@@ -13,8 +13,17 @@ from apps.staff.api.views.leave_type import (
     LeaveTypeDetailView,
     LeaveTypesListCreateView,
 )
-from apps.staff.api.views.lookup import DepartmentListView, DesignationListView
+from apps.staff.api.views.lookup import (
+    DepartmentDetailView,
+    DepartmentListView,
+    DesignationDetailView,
+    DesignationListView,
+)
 from apps.staff.api.views.staff import StaffDetailView, StaffListCreateView
+from apps.staff.api.views.staff_payroll_attendance import (
+    StaffAttendanceView,
+    StaffPayrollView,
+)
 from apps.staff.api.views.staff_document import (
     StaffDocumentDeleteView,
     StaffDocumentUploadView,
@@ -22,8 +31,12 @@ from apps.staff.api.views.staff_document import (
 
 urlpatterns = [
     path("", StaffListCreateView.as_view(), name="staff_list_create"),
+    path("attendance/", StaffAttendanceView.as_view(), name="staff_attendance"),
+    path("payroll/", StaffPayrollView.as_view(), name="staff_payroll"),
     path("departments/", DepartmentListView.as_view(), name="department_list"),
+    path("departments/<int:pk>/", DepartmentDetailView.as_view(), name="department_detail"),
     path("designations/", DesignationListView.as_view(), name="designation_list"),
+    path("designations/<int:pk>/", DesignationDetailView.as_view(), name="designation_detail"),
     path("leave-types/", LeaveTypesListCreateView.as_view(), name="leave_types_list"),
     path(
         "leave-types/<int:pk>/",

@@ -104,7 +104,7 @@ SelectValue.displayName = 'SelectValue';
 export const SelectContent = React.forwardRef<
   HTMLOptGroupElement,
   React.HTMLAttributes<HTMLOptGroupElement>
->(({ children }) => <React.Fragment>{children}</React.Fragment>);
+>(({ children }, _ref) => <React.Fragment>{children}</React.Fragment>);
 SelectContent.displayName = 'SelectContent';
 
 export const SelectItem = React.forwardRef<

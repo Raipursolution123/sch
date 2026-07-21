@@ -47,6 +47,12 @@ export function CollectFeesTable({ students, onCollect }: CollectFeesTableProps)
       cell: (row) => formatAmount(row.total_paid),
     },
     {
+      id: 'total_discount',
+      header: 'Discount',
+      cellClassName: 'tabular-nums text-muted-foreground',
+      cell: (row) => formatAmount(row.total_discount || 0),
+    },
+    {
       id: 'total_balance',
       header: 'Balance',
       cellClassName: 'tabular-nums font-medium',

@@ -55,3 +55,15 @@ export type {
 export type { CbseExam, CreateCbseExamPayload } from './examinations/cbse-exam';
 export type { PaymentGateway } from './fees/payment-gateway';
 export type { Notice, CreateNoticePayload, UpdateNoticePayload } from './communications/notice';
+export type {
+  Homework,
+  CreateHomeworkPayload,
+  UpdateHomeworkPayload,
+  HomeworkEvaluation,
+  CreateHomeworkEvaluationPayload,
+  UpdateHomeworkEvaluationPayload,
+  DailyAssignment,
+  CreateDailyAssignmentPayload,
+  UpdateDailyAssignmentPayload,
+} from './academics/homework';
+

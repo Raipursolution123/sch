@@ -89,6 +89,7 @@ def fee_type_to_dict(
     return {
         "id": ft.id,
         "code": ft.code or "",
+        "type": ft.type or "",
         "name": ft.type or "",
         "feecategory_id": ft.feecategory_id,
         "category_name": category_name,
@@ -127,14 +128,18 @@ def assignment_to_dict(fsg: FeeSessionGroups) -> dict[str, Any]:
         )
         total_amount += amt
 
+    class_name = getattr(school_class, "class_field", None) or getattr(school_class, "name", "—") if school_class else "—"
+    session_name = getattr(session, "session", None) or getattr(session, "name", "—") if session else "—"
+    fee_group_name = getattr(fee_group, "name", "—") if fee_group else "—"
+
     return {
         "id": fsg.id,
         "class_id": fsg.class_id,
-        "class_name": school_class.class_field if school_class else "—",
+        "class_name": class_name,
         "fee_group_id": fsg.fee_groups_id,
-        "fee_group_name": fee_group.name if fee_group else "—",
+        "fee_group_name": fee_group_name,
         "session_id": fsg.session_id,
-        "session_name": session.session if session else "—",
+        "session_name": session_name,
         "lines": lines,
         "total_amount": total_amount,
         "is_active": fsg.is_active,

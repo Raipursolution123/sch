@@ -85,6 +85,7 @@ export function StudentAdmissionDialog({
   const isEdit = student != null;
   const { data: classSectionsData, isLoading: mappingsLoading } = useClassSections(1, {
     enabled: open,
+    noPaginate: true,
   });
 
   const activeMappings = useMemo(
@@ -184,7 +185,7 @@ export function StudentAdmissionDialog({
     if (!open || !selectedClassId || sectionOptions.length === 0) return;
 
     const validSectionIds = new Set(sectionOptions.map((o) => Number(o.value)));
-    if (!validSectionIds.has(selectedSectionId)) {
+    if (!validSectionIds.has(Number(selectedSectionId))) {
       setValue('section_id', Number(sectionOptions[0].value));
     }
   }, [open, selectedClassId, selectedSectionId, sectionOptions, setValue]);

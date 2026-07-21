@@ -47,3 +47,35 @@ export function useAttendanceReport(filters: AttendanceReportFilters, enabled: b
     enabled: enabled && Boolean(filters.from_date) && Boolean(filters.to_date),
   });
 }
+
+export function useSubjectAttendanceRoster(
+  classId: number,
+  sectionId: number,
+  subjectId: number,
+  date: string,
+  enabled: boolean,
+) {
+  return useQuery({
+    queryKey: ['attendance', 'subjectRoster', classId, sectionId, subjectId, date],
+    queryFn: () => attendanceService.getSubjectRoster(classId, sectionId, subjectId, date),
+    enabled: enabled && classId > 0 && sectionId > 0 && subjectId > 0 && Boolean(date),
+  });
+}
+
+export function useSaveSubjectAttendance() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: {
+      class_id: number;
+      section_id: number;
+      subject_id: number;
+      date: string;
+      entries: { student_id: number; attendence_type_id: number; remark?: string }[];
+    }) => attendanceService.saveSubjectMark(payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.attendance.all });
+      toast.success('Subject attendance saved');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to save subject attendance')),
+  });
+}

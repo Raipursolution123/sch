@@ -1,11 +1,9 @@
 import { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
-import { FormTextField } from '@components/forms/fields';
-import { FormField } from '@components/forms/FormField';
-import { Select } from '@components/ui/select';
+import { FormTextField, FormSelectField } from '@components/forms/fields';
 import {
   disableStudentSchema,
   type DisableStudentFormValues,
@@ -45,7 +43,7 @@ export function DisableStudentDialog({
       disable_reason_id: reasons[0]?.id ?? 0,
       dis_note: '',
     });
-  }, [open, reasons, reset]);
+  }, [open, reasonsLoading, reset]);
 
   const reasonOptions = reasons.map((reason) => ({
     value: String(reason.id),
@@ -73,25 +71,13 @@ export function DisableStudentDialog({
         </p>
       ) : (
         <>
-          <Controller
+          <FormSelectField
             control={control}
             name="disable_reason_id"
-            render={({ field, fieldState }) => (
-              <FormField
-                label="Reason"
-                htmlFor="disable_reason_id"
-                error={fieldState.error?.message}
-                required
-              >
-                <Select
-                  id="disable_reason_id"
-                  placeholder="Select reason"
-                  options={reasonOptions}
-                  value={field.value ? String(field.value) : ''}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
-              </FormField>
-            )}
+            label="Reason"
+            placeholder="Select reason"
+            options={reasonOptions}
+            required
           />
           <FormTextField
             control={control}

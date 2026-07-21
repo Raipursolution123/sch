@@ -24,8 +24,12 @@ from apps.examinations.api.views.mark_divisions import (
     MarkDivisionsDetailView,
     MarkDivisionsListCreateView,
 )
-from apps.examinations.api.views.cbse_exam import CbseExamsListCreateView
-
+from apps.examinations.api.views.templates import (
+    AdmitCardTemplateDetailView,
+    AdmitCardTemplatesView,
+    MarksheetTemplateDetailView,
+    MarksheetTemplatesView,
+)
 
 app_name = "examinations"
 
@@ -82,4 +86,8 @@ urlpatterns = [
         CbseExamsListCreateView.as_view(),
         name="cbse_exams_list_create",
     ),
+    path("templates/marksheets/", MarksheetTemplatesView.as_view(), name="marksheet_templates"),
+    path("templates/marksheets/<int:pk>/", MarksheetTemplateDetailView.as_view(), name="marksheet_template_detail"),
+    path("templates/admit-cards/", AdmitCardTemplatesView.as_view(), name="admitcard_templates"),
+    path("templates/admit-cards/<int:pk>/", AdmitCardTemplateDetailView.as_view(), name="admitcard_template_detail"),
 ]

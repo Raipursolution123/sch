@@ -29,6 +29,7 @@ export interface StudentFeeSummary {
   section_name: string | null;
   total_due: number;
   total_paid: number;
+  total_discount?: number;
   total_balance: number;
   lines: StudentFeeLine[];
   payments: StudentFeePayment[];

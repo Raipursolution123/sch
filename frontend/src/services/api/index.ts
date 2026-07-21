@@ -18,6 +18,7 @@ export { staffLeaveRequestsService } from './staff-leave-requests.service';
 export { staffLeaveAllotmentsService } from './staff-leave-allotments.service';
 export { feeTypesService } from './fee-types.service';
 export { feeGroupsService } from './fee-groups.service';
+export { feeMastersService } from './fee-masters.service';
 export { feeDiscountsService } from './fee-discounts.service';
 export { feeDiscountAssignmentsService } from './fee-discount-assignments.service';
 export { feeRemindersService } from './fee-reminders.service';
@@ -52,3 +53,6 @@ export { cbseExamsService } from './cbse-exams.service';
 export { paymentGatewaysService } from './payment-gateways.service';
 export { noticesService } from './notices.service';
 export { ledgerGroupsService } from './ledger-groups.service';
+export { homeworkService } from './homework.service';
+export { examTemplatesService } from './exam-templates.service';
+

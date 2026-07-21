@@ -16,9 +16,9 @@ class FeeGroupsFeetype(models.Model):
     due_date = models.DateField(blank=True, null=True)
     fine_percentage = models.FloatField(default=0.00)
     fine_amount = models.FloatField(default=0.00)
-    collection_type = models.IntegerField()
-    is_active = models.CharField(max_length=10, default="no")
-    created_at = models.DateTimeField()
+    collection_type = models.IntegerField(blank=True, null=True, default=1)
+    is_active = models.CharField(max_length=10, blank=True, null=True, default="yes")
+    created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False

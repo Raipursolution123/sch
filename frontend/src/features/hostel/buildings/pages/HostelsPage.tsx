@@ -105,7 +105,7 @@ export function HostelsPage() {
       type: values.type || null,
       address: values.address || null,
       intake: values.intake ?? null,
-      hostel_incharge: values.hostel_incharge || null,
+      hostel_incharge: values.hostel_incharge || '',
       description: values.description || null,
       is_active: values.is_active ? 'yes' : 'no',
     };

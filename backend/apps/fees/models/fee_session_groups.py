@@ -7,8 +7,8 @@ class FeeSessionGroups(models.Model):
     id = models.AutoField(primary_key=True)
     fee_groups_id = models.IntegerField(blank=True, null=True, db_index=True)
     session_id = models.IntegerField(blank=True, null=True, db_index=True)
-    is_active = models.CharField(max_length=10, default="no")
-    created_at = models.DateTimeField()
+    is_active = models.CharField(max_length=10, blank=True, null=True, default="yes")
+    created_at = models.DateTimeField(blank=True, null=True)
     class_id = models.IntegerField(blank=True, null=True)
 
     class Meta:

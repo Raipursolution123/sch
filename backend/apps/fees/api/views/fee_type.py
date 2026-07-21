@@ -9,7 +9,7 @@ from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
-CATEGORY = "fees_type"
+CATEGORY = "fees"
 
 
 class FeeTypesListView(APIView):

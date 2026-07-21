@@ -16,7 +16,7 @@ import { ModuleMarkGridPack } from '@workflow-packs';
 export function CollectFeesPage() {
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  const { data: classSectionsData } = useClassSections();
+  const { data: classSectionsData } = useClassSections(1, { noPaginate: true });
   const classSections = classSectionsData?.results || [];
 
   const [classId, setClassId] = useState(0);
@@ -45,17 +45,14 @@ export function CollectFeesPage() {
 
   useEffect(() => {
     if (activeClasses.length > 0 && classId === 0) {
-      setClassId(activeClasses[0].id);
+      const initialClassId = activeClasses[0].id;
+      setClassId(initialClassId);
+      const initialSectionId = firstSectionIdForClass(classSections, initialClassId);
+      if (initialSectionId) {
+        setSectionId(initialSectionId);
+      }
     }
-  }, [activeClasses, classId]);
-
-  useEffect(() => {
-    if (classId <= 0) return;
-    const nextSectionId = firstSectionIdForClass(classSections, classId);
-    if (nextSectionId && sectionId !== nextSectionId) {
-      setSectionId(nextSectionId);
-    }
-  }, [classId, classSections, sectionId]);
+  }, [activeClasses, classSections, classId]);
 
   const canCollect =
     activeClasses.length > 0 && classSections.some((row) => row.is_active === 'yes');

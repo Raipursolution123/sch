@@ -115,6 +115,7 @@ export function HostelRoomsPage() {
       room_type_id: values.room_type_id ?? null,
       no_of_bed: values.no_of_bed ?? null,
       cost_per_bed: values.cost_per_bed ?? 0,
+      cost_term: '',
       title: values.title || null,
       description: values.description || null,
     };

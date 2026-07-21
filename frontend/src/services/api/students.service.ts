@@ -31,7 +31,7 @@ export const studentsService = {
   },
 
   list: async (status: StudentListStatus = 'active'): Promise<StudentListItem[]> => {
-    const { results } = await studentsService.listPaginated(1, 20, status);
+    const { results } = await studentsService.listPaginated(1, 100, status);
     return results;
   },
 

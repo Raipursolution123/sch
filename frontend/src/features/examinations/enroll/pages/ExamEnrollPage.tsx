@@ -26,7 +26,7 @@ export function ExamEnrollPage() {
   const exams = examsData?.results || [];
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  const { data: classSectionsData } = useClassSections();
+  const { data: classSectionsData } = useClassSections(1, { noPaginate: true });
   const classSections = classSectionsData?.results || [];
 
   const activeExams = useMemo(() => exams.filter((e) => e.is_active === 'yes'), [exams]);
@@ -73,17 +73,14 @@ export function ExamEnrollPage() {
 
   useEffect(() => {
     if (activeClasses.length > 0 && classId === 0) {
-      setClassId(activeClasses[0].id);
+      const initialClassId = activeClasses[0].id;
+      setClassId(initialClassId);
+      const initialSectionId = firstSectionIdForClass(classSections, initialClassId);
+      if (initialSectionId) {
+        setSectionId(initialSectionId);
+      }
     }
-  }, [activeClasses, classId]);
-
-  useEffect(() => {
-    if (classId <= 0) return;
-    const nextSectionId = firstSectionIdForClass(classSections, classId);
-    if (nextSectionId && sectionId !== nextSectionId) {
-      setSectionId(nextSectionId);
-    }
-  }, [classId, classSections, sectionId]);
+  }, [activeClasses, classSections, classId]);
 
   useEffect(() => {
     setSelectedIds([]);

@@ -45,6 +45,10 @@ class AttendanceService:
         except ValueError:
             raise AttendanceValidationError("Invalid date format. Use YYYY-MM-DD.")
 
+        today = timezone.now().date()
+        if target_date > today:
+            raise AttendanceValidationError("Attendance cannot be marked or viewed for future dates.")
+
         try:
             school_class = Classes.objects.get(pk=class_id)
             section = Sections.objects.get(pk=section_id)
@@ -75,6 +79,7 @@ class AttendanceService:
 
         types = AttendenceType.objects.all()
         type_map = {t.id: t for t in types}
+        absent_type = next((t for t in types if (t.key_value and t.key_value.lower() == 'absent') or t.type.lower() == 'absent'), None)
 
         entries = []
         for student in students:
@@ -83,11 +88,19 @@ class AttendanceService:
                 continue
 
             record = attendance_map.get(sess.id)
-            type_id = record.attendence_type_id if record else 1
+            if record:
+                type_id = record.attendence_type_id
+            else:
+                # Check if student was admitted after target_date
+                if student.admission_date and student.admission_date > target_date:
+                    type_id = absent_type.id if absent_type else 2
+                else:
+                    type_id = 1
+
             att_type = type_map.get(type_id)
 
-            status_label = att_type.type if att_type else "Present"
-            status_key = ATTENDANCE_TYPE_KEY_MAP.get(status_label, "present")
+            status_label = att_type.type if att_type else ("Absent" if (student.admission_date and student.admission_date > target_date) else "Present")
+            status_key = ATTENDANCE_TYPE_KEY_MAP.get(status_label, att_type.key_value.lower() if att_type and att_type.key_value else status_label.lower())
 
             entries.append(
                 {
@@ -98,7 +111,7 @@ class AttendanceService:
                     "attendence_type_id": type_id,
                     "status_key": status_key,
                     "status_label": status_label,
-                    "remark": record.remark if record else "",
+                    "remark": record.remark if record else ("Not admitted on this date" if (not record and student.admission_date and student.admission_date > target_date) else ""),
                 }
             )
 
@@ -134,6 +147,10 @@ class AttendanceService:
             target_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
         except ValueError:
             raise AttendanceValidationError("Invalid date format. Use YYYY-MM-DD.")
+
+        today = timezone.now().date()
+        if target_date > today:
+            raise AttendanceValidationError("Attendance cannot be marked for future dates.")
 
         current_session = Sessions.objects.filter(is_active="yes").first()
         if current_session:

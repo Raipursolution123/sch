@@ -5,8 +5,8 @@ class StaffDesignation(models.Model):
     """Maps to `staff_designation` in db_current."""
 
     id = models.AutoField(primary_key=True)
-    designation = models.CharField(max_length=200)
-    is_active = models.CharField(max_length=100)
+    designation = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.CharField(max_length=100, blank=True, null=True, default="yes")
 
     class Meta:
         managed = False

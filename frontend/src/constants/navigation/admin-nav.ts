@@ -147,7 +147,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'students-disabled',
         label: 'Disabled Students',
         path: ROUTES.students.disabled,
-        permissionKeys: ['disable_student'],
+        permissionKeys: ['student'],
       },
       {
         id: 'students-import',

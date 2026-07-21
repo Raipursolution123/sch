@@ -202,8 +202,9 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
         </Link>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
         <SummaryCard label="Total due" value={formatAmount(fees.total_due)} />
+        <SummaryCard label="Discount" value={formatAmount(fees.total_discount || 0)} />
         <SummaryCard label="Total paid" value={formatAmount(fees.total_paid)} />
         <SummaryCard label="Balance" value={formatAmount(fees.total_balance)} />
       </div>

@@ -2,6 +2,8 @@ import { lazy } from 'react';
 import { Navigate, type RouteObject } from 'react-router-dom';
 import { ROUTES, LEGACY_SETTINGS_SESSIONS } from '@constants/routes';
 import { ModuleLayout } from '@layouts/ModuleLayout';
+import { HostelLayout } from '@layouts/HostelLayout';
+import { HomeworkLayout } from '@layouts/HomeworkLayout';
 import { DashboardPage } from '@features/dashboard/pages/DashboardPage';
 import {
   buildPlaceholderChildren,
@@ -129,6 +131,24 @@ const DisabledStudentsPage = lazy(() =>
   })),
 );
 
+const StudentCategoriesPage = lazy(() =>
+  import('@features/students/categories/pages/StudentCategoriesPage').then((m) => ({
+    default: m.StudentCategoriesPage,
+  })),
+);
+
+const StudentHousesPage = lazy(() =>
+  import('@features/students/houses/pages/StudentHousesPage').then((m) => ({
+    default: m.StudentHousesPage,
+  })),
+);
+
+const ImportStudentsPage = lazy(() =>
+  import('@features/students/import/pages/ImportStudentsPage').then((m) => ({
+    default: m.ImportStudentsPage,
+  })),
+);
+
 const StaffPage = lazy(() =>
   import('@features/staff/pages/StaffPage').then((m) => ({
     default: m.StaffPage,
@@ -138,6 +158,30 @@ const StaffPage = lazy(() =>
 const LeaveTypesPage = lazy(() =>
   import('@features/staff/leave-types/pages/LeaveTypesPage').then((m) => ({
     default: m.LeaveTypesPage,
+  })),
+);
+
+const DepartmentsPage = lazy(() =>
+  import('@features/staff/departments/pages/DepartmentsPage').then((m) => ({
+    default: m.DepartmentsPage,
+  })),
+);
+
+const DesignationsPage = lazy(() =>
+  import('@features/staff/designations/pages/DesignationsPage').then((m) => ({
+    default: m.DesignationsPage,
+  })),
+);
+
+const StaffAttendancePage = lazy(() =>
+  import('@features/staff/attendance/pages/StaffAttendancePage').then((m) => ({
+    default: m.StaffAttendancePage,
+  })),
+);
+
+const StaffPayrollPage = lazy(() =>
+  import('@features/staff/payroll/pages/StaffPayrollPage').then((m) => ({
+    default: m.StaffPayrollPage,
   })),
 );
 
@@ -174,6 +218,12 @@ const FeeGroupsPage = lazy(() =>
 const FeeDiscountsPage = lazy(() =>
   import('@features/fees/discounts/pages/FeeDiscountsPage').then((m) => ({
     default: m.FeeDiscountsPage,
+  })),
+);
+
+const FeeMastersPage = lazy(() =>
+  import('@features/fees/fee-masters/pages/FeeMastersPage').then((m) => ({
+    default: m.FeeMastersPage,
   })),
 );
 
@@ -216,6 +266,12 @@ const FeeRemindersPage = lazy(() =>
 const MarkAttendancePage = lazy(() =>
   import('@features/attendance/mark/pages/MarkAttendancePage').then((m) => ({
     default: m.MarkAttendancePage,
+  })),
+);
+
+const SubjectAttendancePage = lazy(() =>
+  import('@features/attendance/subject/pages/SubjectAttendancePage').then((m) => ({
+    default: m.SubjectAttendancePage,
   })),
 );
 
@@ -291,6 +347,18 @@ const CbseExamsPage = lazy(() =>
   })),
 );
 
+const MarksheetPage = lazy(() =>
+  import('@features/examinations/marksheet/pages/MarksheetPage').then((m) => ({
+    default: m.MarksheetPage,
+  })),
+);
+
+const AdmitCardPage = lazy(() =>
+  import('@features/examinations/admit-card/pages/AdmitCardPage').then((m) => ({
+    default: m.AdmitCardPage,
+  })),
+);
+
 const HostelsPage = lazy(() =>
   import('@features/hostel/buildings/pages/HostelsPage').then((m) => ({
     default: m.HostelsPage,
@@ -318,6 +386,18 @@ const PaymentGatewaysPage = lazy(() =>
 const NoticesPage = lazy(() =>
   import('@features/communications/notices/pages/NoticesPage').then((m) => ({
     default: m.NoticesPage,
+  })),
+);
+
+const HomeworkPage = lazy(() =>
+  import('@features/homework/pages/HomeworkPage').then((m) => ({
+    default: m.HomeworkPage,
+  })),
+);
+
+const DailyAssignmentPage = lazy(() =>
+  import('@features/homework/pages/DailyAssignmentPage').then((m) => ({
+    default: m.DailyAssignmentPage,
   })),
 );
 
@@ -378,6 +458,9 @@ export const adminRoutes: RouteObject[] = [
     element: <ModuleLayout />,
     children: [
       { index: true, element: <StudentsPage /> },
+      { path: 'categories', element: <StudentCategoriesPage /> },
+      { path: 'houses', element: <StudentHousesPage /> },
+      { path: 'import', element: <ImportStudentsPage /> },
       { path: 'disabled', element: <DisabledStudentsPage /> },
       { path: 'online-admission', element: <OnlineAdmissionsPage /> },
       { path: ':studentId', element: <StudentProfilePage /> },
@@ -390,6 +473,10 @@ export const adminRoutes: RouteObject[] = [
     element: <ModuleLayout />,
     children: [
       { index: true, element: <StaffPage /> },
+      { path: 'departments', element: <DepartmentsPage /> },
+      { path: 'designations', element: <DesignationsPage /> },
+      { path: 'attendance', element: <StaffAttendancePage /> },
+      { path: 'payroll', element: <StaffPayrollPage /> },
       { path: 'leave-types', element: <LeaveTypesPage /> },
       { path: 'leave', element: <StaffLeaveRequestsPage /> },
       { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
@@ -402,6 +489,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'mark', element: <MarkAttendancePage /> },
     { path: 'report', element: <AttendanceReportPage /> },
     { path: 'approve-leave', element: <ApproveLeavePage /> },
+    { path: 'subject', element: <SubjectAttendancePage /> },
   ]),
 
   createModuleRoutes('/fees', ROUTES.fees.feeTypes, [
@@ -410,6 +498,8 @@ export const adminRoutes: RouteObject[] = [
     { path: 'payment-search', element: <PaymentSearchPage /> },
     { path: 'fee-types', element: <FeeTypesPage /> },
     { path: 'fee-groups', element: <FeeGroupsPage /> },
+    { path: 'fee-masters', element: <FeeMastersPage /> },
+    { path: 'master', element: <FeeMastersPage /> },
     { path: 'discounts', element: <FeeDiscountsPage /> },
     { path: 'discounts/assign', element: <AssignDiscountsPage /> },
     { path: 'assign', element: <FeeAssignPage /> },
@@ -427,6 +517,8 @@ export const adminRoutes: RouteObject[] = [
     { path: 'grades', element: <GradesPage /> },
     { path: 'divisions', element: <MarkDivisionsPage /> },
     { path: 'cbse-exams', element: <CbseExamsPage /> },
+    { path: 'marksheet', element: <MarksheetPage /> },
+    { path: 'admit-card', element: <AdmitCardPage /> },
   ]),
 
   createModuleRoutes('/settings', ROUTES.settings.general, [
@@ -446,13 +538,28 @@ export const adminRoutes: RouteObject[] = [
     { path: 'vehicles', element: <VehiclesPage /> },
     { path: 'assign-vehicle', element: <VehicleRouteAssignPage /> },
   ]),
-  createModuleRoutes('/hostel', ROUTES.hostel.rooms, [
-    { path: 'buildings', element: <HostelsPage /> },
-    { path: 'rooms', element: <HostelRoomsPage /> },
-    { path: 'room-types', element: <RoomTypesPage /> },
-  ]),
+  {
+    path: 'hostel',
+    element: <HostelLayout />,
+    children: [
+      { index: true, element: <Navigate to={ROUTES.hostel.rooms} replace /> },
+      { path: 'buildings', element: <HostelsPage /> },
+      { path: 'rooms', element: <HostelRoomsPage /> },
+      { path: 'room-types', element: <RoomTypesPage /> },
+      ...buildPlaceholderChildren('/hostel'),
+    ],
+  },
   createPlaceholderModule('/inventory', ROUTES.inventory.issue),
-  createPlaceholderModule('/homework', ROUTES.homework.assignments),
+  {
+    path: 'homework',
+    element: <HomeworkLayout />,
+    children: [
+      { index: true, element: <Navigate to={ROUTES.homework.assignments} replace /> },
+      { path: 'assignments', element: <HomeworkPage /> },
+      { path: 'daily', element: <DailyAssignmentPage /> },
+      ...buildPlaceholderChildren('/homework'),
+    ],
+  },
   createModuleRoutes('/communicate', ROUTES.communicate.notices, [
     { path: 'notices', element: <NoticesPage /> },
   ]),

@@ -130,6 +130,7 @@ export function AttendanceReportPage() {
             <Input
               id="from_date"
               type="date"
+              max={todayIsoDate()}
               value={fromDate}
               onChange={(e) => {
                 setFromDate(e.target.value);
@@ -141,6 +142,7 @@ export function AttendanceReportPage() {
             <Input
               id="to_date"
               type="date"
+              max={todayIsoDate()}
               value={toDate}
               onChange={(e) => {
                 setToDate(e.target.value);

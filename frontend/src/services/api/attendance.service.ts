@@ -238,4 +238,27 @@ export const attendanceService = {
     );
     return data.data;
   },
+
+  getSubjectRoster: async (
+    classId: number,
+    sectionId: number,
+    subjectId: number,
+    date: string,
+  ): Promise<AttendanceRoster> => {
+    const { data } = await apiClient.get<ApiSuccessResponse<AttendanceRoster>>(
+      API_ENDPOINTS.attendance.subjectRoster,
+      { params: { class_id: classId, section_id: sectionId, subject_id: subjectId, date } },
+    );
+    return data.data;
+  },
+
+  saveSubjectMark: async (payload: {
+    class_id: number;
+    section_id: number;
+    subject_id: number;
+    date: string;
+    entries: { student_id: number; attendence_type_id: number; remark?: string }[];
+  }): Promise<void> => {
+    await apiClient.post(API_ENDPOINTS.attendance.subjectMark, payload);
+  },
 };

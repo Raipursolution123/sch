@@ -24,7 +24,7 @@ export function AssignDiscountsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  const { data: classSectionsData } = useClassSections();
+  const { data: classSectionsData } = useClassSections(1, { noPaginate: true });
   const classSections = classSectionsData?.results || [];
   const { data: discounts = [] } = useFeeDiscounts();
 
@@ -76,17 +76,14 @@ export function AssignDiscountsPage() {
 
   useEffect(() => {
     if (activeClasses.length > 0 && classId === 0) {
-      setClassId(activeClasses[0].id);
+      const initialClassId = activeClasses[0].id;
+      setClassId(initialClassId);
+      const initialSectionId = firstSectionIdForClass(classSections, initialClassId);
+      if (initialSectionId) {
+        setSectionId(initialSectionId);
+      }
     }
-  }, [activeClasses, classId]);
-
-  useEffect(() => {
-    if (classId <= 0) return;
-    const nextSectionId = firstSectionIdForClass(classSections, classId);
-    if (nextSectionId && sectionId !== nextSectionId) {
-      setSectionId(nextSectionId);
-    }
-  }, [classId, classSections, sectionId]);
+  }, [activeClasses, classSections, classId]);
 
   useEffect(() => {
     setSelectedIds([]);

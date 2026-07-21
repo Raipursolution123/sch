@@ -22,7 +22,7 @@ export function PromoteWizard() {
   const { data: classesData } = useClasses();
   const classes = (classesData?.results ?? []).filter((c) => c.is_active === 'yes');
 
-  const { data: classSectionsData } = useClassSections();
+  const { data: classSectionsData } = useClassSections(1, { noPaginate: true });
   const classSections = (classSectionsData?.results ?? []).filter((m) => m.is_active === 'yes');
 
   const [step, setStep] = useState<Step>('Source');

@@ -256,22 +256,67 @@ function recordFromPayload(payload: CreateStaffPayload, id: number): StaffRecord
 }
 
 export const staffService = {
+  getAttendance: async (date?: string): Promise<{ results: any[]; count: number }> => {
+    const query = date ? `?date=${date}` : '';
+    const { data } = await apiClient.get<BackendPayload>(`${API_ENDPOINTS.staff.attendance}${query}`);
+    const results = extractList<any>(data);
+    return { results, count: extractCount(data, results.length) };
+  },
+
+  markAttendance: async (date: string, attendanceData: any[]): Promise<void> => {
+    await apiClient.post(API_ENDPOINTS.staff.attendance, { date, attendance_data: attendanceData });
+  },
+
+  getPayroll: async (month?: string, year?: string): Promise<{ results: any[]; count: number }> => {
+    const params = new URLSearchParams();
+    if (month) params.append('month', month);
+    if (year) params.append('year', year);
+    const query = params.toString() ? `?${params.toString()}` : '';
+    const { data } = await apiClient.get<BackendPayload>(`${API_ENDPOINTS.staff.payroll}${query}`);
+    const results = extractList<any>(data);
+    return { results, count: extractCount(data, results.length) };
+  },
+
+  generatePayslip: async (payload: { staff_id: number; month: string; year: string; basic_salary?: number; payment_mode?: string }): Promise<void> => {
+    await apiClient.post(API_ENDPOINTS.staff.payroll, payload);
+  },
+
   listDepartments: async (): Promise<StaffDepartment[]> => {
-    if (USE_MOCK) return delay([...MOCK_DEPARTMENTS]);
-    // TODO: Wire when backend exposes GET /api/v1/staff/departments/
-    const { data } = await apiClient.get<ApiSuccessResponse<StaffDepartment[]>>(
-      API_ENDPOINTS.staff.departments,
-    );
-    return data.data;
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.staff.departments);
+    return extractList<StaffDepartment>(data);
+  },
+
+  createDepartment: async (name: string): Promise<StaffDepartment> => {
+    const { data } = await apiClient.post<BackendPayload>(API_ENDPOINTS.staff.departments, { department_name: name });
+    return extractEntity<StaffDepartment>(data);
+  },
+
+  updateDepartment: async (id: number, name: string): Promise<StaffDepartment> => {
+    const { data } = await apiClient.put<BackendPayload>(API_ENDPOINTS.staff.departmentDetail(id), { department_name: name });
+    return extractEntity<StaffDepartment>(data);
+  },
+
+  deleteDepartment: async (id: number): Promise<void> => {
+    await apiClient.delete(API_ENDPOINTS.staff.departmentDetail(id));
   },
 
   listDesignations: async (): Promise<StaffDesignation[]> => {
-    if (USE_MOCK) return delay([...MOCK_DESIGNATIONS]);
-    // TODO: Wire when backend exposes GET /api/v1/staff/designations/
-    const { data } = await apiClient.get<ApiSuccessResponse<StaffDesignation[]>>(
-      API_ENDPOINTS.staff.designations,
-    );
-    return data.data;
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.staff.designations);
+    return extractList<StaffDesignation>(data);
+  },
+
+  createDesignation: async (name: string): Promise<StaffDesignation> => {
+    const { data } = await apiClient.post<BackendPayload>(API_ENDPOINTS.staff.designations, { designation: name });
+    return extractEntity<StaffDesignation>(data);
+  },
+
+  updateDesignation: async (id: number, name: string): Promise<StaffDesignation> => {
+    const { data } = await apiClient.put<BackendPayload>(API_ENDPOINTS.staff.designationDetail(id), { designation: name });
+    return extractEntity<StaffDesignation>(data);
+  },
+
+  deleteDesignation: async (id: number): Promise<void> => {
+    await apiClient.delete(API_ENDPOINTS.staff.designationDetail(id));
   },
 
   list: async (page = 1): Promise<{ results: StaffListItem[]; count: number }> => {

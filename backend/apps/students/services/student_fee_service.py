@@ -48,6 +48,21 @@ class StudentFeeService:
         total_due = sum(line["amount"] for line in lines)
         total_paid = sum(line["amount_paid"] for line in lines)
 
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT fd.amount
+                FROM student_fees_discounts sfd
+                JOIN fees_discounts fd ON sfd.fees_discount_id = fd.id
+                WHERE sfd.student_session_id = %s
+                  AND sfd.status = 'assigned'
+                  AND sfd.is_active = 'yes'
+                """,
+                [student_session.id]
+            )
+            discounts = cursor.fetchall()
+        total_discount = sum(float(row[0] or 0) for row in discounts)
+
         return {
             "student_id": student.id,
             "session_name": active_session.session,
@@ -55,7 +70,8 @@ class StudentFeeService:
             "section_name": section_name,
             "total_due": total_due,
             "total_paid": total_paid,
-            "total_balance": max(0, total_due - total_paid),
+            "total_discount": total_discount,
+            "total_balance": max(0, total_due - total_paid - total_discount),
             "lines": lines,
             "payments": [
                 {

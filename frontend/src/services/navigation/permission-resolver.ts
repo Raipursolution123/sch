@@ -85,6 +85,9 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'exams.submit': ['exam_result'],
   'exams.approve': ['exam_result'],
   'notifications.view': ['notice_board', 'email_sms'],
+  'transport.create': ['routes', 'vehicle', 'pickup_point', 'assign_vehicle', 'transport_fees'],
+  'transport.edit': ['routes', 'vehicle', 'pickup_point', 'assign_vehicle', 'transport_fees'],
+  'transport.delete': ['routes', 'vehicle', 'pickup_point', 'assign_vehicle', 'transport_fees'],
 };
 
 export interface NavigationPermissionContext {
