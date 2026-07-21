@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-21  
-**Current phase:** Phase 15 — Inventory ✅ COMPLETE  
+**Current phase:** Phase 16 — Income & Expense ✅ COMPLETE  
 **Branch:** `main` (local; uncommitted)
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phase 15 complete (roadmap phases 0–15) |
-| **Current Phase** | Phase 15 — Inventory ✅ |
+| **Overall Project Progress** | Phase 16 complete (roadmap phases 0–16) |
+| **Current Phase** | Phase 16 — Income & Expense ✅ |
 | **Current Task** | Production deploy + UAT sign-off (ops); tag `v1.0.0` |
-| **Completed Phases** | Phase 0 ✅ … Phase 15 ✅ |
-| **Remaining Phases** | Ops / feature backlog (reports, certificates, etc.) |
+| **Completed Phases** | Phase 0 ✅ … Phase 16 ✅ |
+| **Remaining Phases** | Ops / feature backlog (certificates, CMS, etc.) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~85% |
-| **Frontend Completion** | ~76% |
-| **API Integration Status** | Inventory masters + stock + issue wired |
-| **UI Completion Status** | 84 real routes; Coming Soon badges on unimplemented nav |
-| **Testing Status** | Backend inventory unit tests + frontend typecheck |
+| **Backend Completion** | ~87% |
+| **Frontend Completion** | ~78% |
+| **API Integration Status** | Income/Expense heads + lists wired |
+| **UI Completion Status** | 88 real routes; Coming Soon badges on unimplemented nav |
+| **Testing Status** | Backend income/expense unit tests + frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~62 Coming Soon pages |
+| **Technical Debt Remaining** | ~58 Coming Soon pages |
 
 ---
 
@@ -737,10 +737,40 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 - Stock-in updates `item.quantity`; issue/return adjust quantity.
 - Inventory Reports remain Coming Soon.
-- Next: ops/UAT + `v1.0.0` tag.
+
+---
+
+## Phase 16 — Income & Expense ✅ SIGNED OFF
+
+**Signed off:** 2026-07-21  
+**Objective:** Wire Income/Expense heads + cashbook lists against legacy `income*` / `expense*` tables.
+
+### Implemented routes
+
+| Route | Page | API |
+|-------|------|-----|
+| `/income/heads` | Income head CRUD | `/income/heads/` |
+| `/income/list` | Income list CRUD | `/income/` |
+| `/expense/heads` | Expense head CRUD | `/expense/heads/` |
+| `/expense/list` | Expense list CRUD | `/expense/` |
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 16.1 | Heads + income/expense services/APIs | ✅ |
+| 16.2 | Four UI pages + permissions | ✅ |
+| 16.3 | Routes + checklist | ✅ |
+| 16.4 | Unit tests + typecheck + ds:audit | ✅ |
+
+### Notes / follow-ups
+
+- Soft-delete via `is_deleted='yes'`.
+- Search screens / document upload / ledger posting deferred.
+- Next: ops/UAT + `v1.0.0` tag, or certificates.
 
 ---
 
 ## Roadmap Complete ✅
 
-All phases 0–15 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (reports, certificates, etc.).
+All phases 0–16 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (certificates, CMS, etc.).

@@ -98,6 +98,18 @@ const ALL_PERMISSIONS: Permission[] = [
   'inventory.stock.delete',
   'inventory.issue.create',
   'inventory.issue.edit',
+  'income.create',
+  'income.edit',
+  'income.delete',
+  'income.head.create',
+  'income.head.edit',
+  'income.head.delete',
+  'expense.create',
+  'expense.edit',
+  'expense.delete',
+  'expense.head.create',
+  'expense.head.edit',
+  'expense.head.delete',
 ];
 
 export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {

@@ -102,4 +102,16 @@ export type Permission =
   | 'inventory.stock.create'
   | 'inventory.stock.delete'
   | 'inventory.issue.create'
-  | 'inventory.issue.edit';
+  | 'inventory.issue.edit'
+  | 'income.create'
+  | 'income.edit'
+  | 'income.delete'
+  | 'income.head.create'
+  | 'income.head.edit'
+  | 'income.head.delete'
+  | 'expense.create'
+  | 'expense.edit'
+  | 'expense.delete'
+  | 'expense.head.create'
+  | 'expense.head.edit'
+  | 'expense.head.delete';

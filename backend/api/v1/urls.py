@@ -32,6 +32,9 @@ urlpatterns = [
     path("examinations/", include("apps.examinations.urls")),
     # fees
     path("fees/", include("apps.fees.urls")),
+    # income / expense (cashbook; models under fees)
+    path("income/", include("apps.fees.urls_income")),
+    path("expense/", include("apps.fees.urls_expense")),
     # transport
     path("transport/", include("apps.transport.urls")),
     # front office

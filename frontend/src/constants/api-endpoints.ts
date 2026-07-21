@@ -186,6 +186,18 @@ export const API_ENDPOINTS = {
     issues: '/inventory/issues/',
     issueReturn: (id: number) => `/inventory/issues/${id}/return/`,
   },
+  income: {
+    list: '/income/',
+    detail: (id: number) => `/income/${id}/`,
+    heads: '/income/heads/',
+    headDetail: (id: number) => `/income/heads/${id}/`,
+  },
+  expense: {
+    list: '/expense/',
+    detail: (id: number) => `/expense/${id}/`,
+    heads: '/expense/heads/',
+    headDetail: (id: number) => `/expense/heads/${id}/`,
+  },
   finance: {
     groups: '/finance/groups/',
     groupDetail: (id: number) => `/finance/groups/${id}/`,

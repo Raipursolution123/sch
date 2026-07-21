@@ -58,6 +58,7 @@ export { paymentGatewaysService } from './payment-gateways.service';
 export { offlineBankPaymentsService } from './offline-bank-payments.service';
 export { libraryService } from './library.service';
 export { inventoryService } from './inventory.service';
+export { incomeExpenseService } from './income-expense.service';
 export { noticesService } from './notices.service';
 export { ledgersService } from './ledgers.service';
 export { ledgerGroupsService } from './ledger-groups.service';

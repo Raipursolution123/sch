@@ -464,6 +464,30 @@ const ItemIssuePage = lazy(() =>
   })),
 );
 
+const IncomeListPage = lazy(() =>
+  import('@features/income/list/pages/IncomeListPage').then((m) => ({
+    default: m.IncomeListPage,
+  })),
+);
+
+const IncomeHeadsPage = lazy(() =>
+  import('@features/income/heads/pages/IncomeHeadsPage').then((m) => ({
+    default: m.IncomeHeadsPage,
+  })),
+);
+
+const ExpenseListPage = lazy(() =>
+  import('@features/expense/list/pages/ExpenseListPage').then((m) => ({
+    default: m.ExpenseListPage,
+  })),
+);
+
+const ExpenseHeadsPage = lazy(() =>
+  import('@features/expense/heads/pages/ExpenseHeadsPage').then((m) => ({
+    default: m.ExpenseHeadsPage,
+  })),
+);
+
 const NoticesPage = lazy(() =>
   import('@features/communications/notices/pages/NoticesPage').then((m) => ({
     default: m.NoticesPage,
@@ -661,8 +685,14 @@ export const adminRoutes: RouteObject[] = [
     },
   ]),
   createPlaceholderModule('/online-examinations', ROUTES.onlineExams.exams),
-  createPlaceholderModule('/income', ROUTES.income.list),
-  createPlaceholderModule('/expense', ROUTES.expense.list),
+  createModuleRoutes('/income', ROUTES.income.list, [
+    { path: 'list', element: <IncomeListPage /> },
+    { path: 'heads', element: <IncomeHeadsPage /> },
+  ]),
+  createModuleRoutes('/expense', ROUTES.expense.list, [
+    { path: 'list', element: <ExpenseListPage /> },
+    { path: 'heads', element: <ExpenseHeadsPage /> },
+  ]),
   createModuleRoutes('/finance', ROUTES.finance.chartOfAccounts, [
     { path: 'chart-of-accounts', element: <ChartOfAccountsPage /> },
     { path: 'ledgers', element: <LedgersPage /> },

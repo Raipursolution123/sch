@@ -154,6 +154,18 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'inventory.stock.delete': ['item_stock'],
   'inventory.issue.create': ['issue_item'],
   'inventory.issue.edit': ['issue_item'],
+  'income.create': ['income'],
+  'income.edit': ['income'],
+  'income.delete': ['income'],
+  'income.head.create': ['income_head'],
+  'income.head.edit': ['income_head'],
+  'income.head.delete': ['income_head'],
+  'expense.create': ['expense'],
+  'expense.edit': ['expense'],
+  'expense.delete': ['expense'],
+  'expense.head.create': ['expense_head'],
+  'expense.head.edit': ['expense_head'],
+  'expense.head.delete': ['expense_head'],
 };
 
 export interface NavigationPermissionContext {

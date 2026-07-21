@@ -440,4 +440,19 @@ export const queryKeys = {
         [...queryKeys.inventory.all, 'issues', 'list', status, query] as const,
     },
   },
+  incomeExpense: {
+    all: ['income-expense'] as const,
+    incomeHeads: {
+      list: () => [...queryKeys.incomeExpense.all, 'income-heads', 'list'] as const,
+    },
+    income: {
+      list: (query = '') => [...queryKeys.incomeExpense.all, 'income', 'list', query] as const,
+    },
+    expenseHeads: {
+      list: () => [...queryKeys.incomeExpense.all, 'expense-heads', 'list'] as const,
+    },
+    expense: {
+      list: (query = '') => [...queryKeys.incomeExpense.all, 'expense', 'list', query] as const,
+    },
+  },
 } as const;
