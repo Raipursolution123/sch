@@ -428,6 +428,42 @@ const LibraryIssueReturnPage = lazy(() =>
   })),
 );
 
+const ItemCategoriesPage = lazy(() =>
+  import('@features/inventory/categories/pages/ItemCategoriesPage').then((m) => ({
+    default: m.ItemCategoriesPage,
+  })),
+);
+
+const ItemStoresPage = lazy(() =>
+  import('@features/inventory/stores/pages/ItemStoresPage').then((m) => ({
+    default: m.ItemStoresPage,
+  })),
+);
+
+const ItemSuppliersPage = lazy(() =>
+  import('@features/inventory/suppliers/pages/ItemSuppliersPage').then((m) => ({
+    default: m.ItemSuppliersPage,
+  })),
+);
+
+const InventoryItemsPage = lazy(() =>
+  import('@features/inventory/items/pages/InventoryItemsPage').then((m) => ({
+    default: m.InventoryItemsPage,
+  })),
+);
+
+const ItemStockPage = lazy(() =>
+  import('@features/inventory/stock/pages/ItemStockPage').then((m) => ({
+    default: m.ItemStockPage,
+  })),
+);
+
+const ItemIssuePage = lazy(() =>
+  import('@features/inventory/issue/pages/ItemIssuePage').then((m) => ({
+    default: m.ItemIssuePage,
+  })),
+);
+
 const NoticesPage = lazy(() =>
   import('@features/communications/notices/pages/NoticesPage').then((m) => ({
     default: m.NoticesPage,
@@ -592,7 +628,14 @@ export const adminRoutes: RouteObject[] = [
     { path: 'rooms', element: <HostelRoomsPage /> },
     { path: 'room-types', element: <RoomTypesPage /> },
   ]),
-  createPlaceholderModule('/inventory', ROUTES.inventory.issue),
+  createModuleRoutes('/inventory', ROUTES.inventory.items, [
+    { path: 'categories', element: <ItemCategoriesPage /> },
+    { path: 'stores', element: <ItemStoresPage /> },
+    { path: 'suppliers', element: <ItemSuppliersPage /> },
+    { path: 'items', element: <InventoryItemsPage /> },
+    { path: 'stock', element: <ItemStockPage /> },
+    { path: 'issue', element: <ItemIssuePage /> },
+  ]),
   createModuleRoutes('/homework', ROUTES.homework.assignments, [
     { path: 'assignments', element: <HomeworkPage /> },
     { path: 'daily', element: <DailyAssignmentsPage /> },

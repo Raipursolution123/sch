@@ -418,4 +418,26 @@ export const queryKeys = {
       list: () => [...queryKeys.library.all, 'members', 'list'] as const,
     },
   },
+  inventory: {
+    all: ['inventory'] as const,
+    categories: {
+      list: (query = '') => [...queryKeys.inventory.all, 'categories', 'list', query] as const,
+    },
+    stores: {
+      list: (query = '') => [...queryKeys.inventory.all, 'stores', 'list', query] as const,
+    },
+    suppliers: {
+      list: (query = '') => [...queryKeys.inventory.all, 'suppliers', 'list', query] as const,
+    },
+    items: {
+      list: (query = '') => [...queryKeys.inventory.all, 'items', 'list', query] as const,
+    },
+    stock: {
+      list: (query = '') => [...queryKeys.inventory.all, 'stock', 'list', query] as const,
+    },
+    issues: {
+      list: (status = 'open', query = '') =>
+        [...queryKeys.inventory.all, 'issues', 'list', status, query] as const,
+    },
+  },
 } as const;

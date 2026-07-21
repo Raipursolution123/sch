@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-21  
-**Current phase:** Phase 14 — Library ✅ COMPLETE  
+**Current phase:** Phase 15 — Inventory ✅ COMPLETE  
 **Branch:** `main` (local; uncommitted)
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phase 14 complete (roadmap phases 0–14) |
-| **Current Phase** | Phase 14 — Library ✅ |
-| **Current Task** | Production deploy + UAT sign-off (ops); next: inventory |
-| **Completed Phases** | Phase 0 ✅ … Phase 14 ✅ |
-| **Remaining Phases** | Feature backlog (inventory) |
+| **Overall Project Progress** | Phase 15 complete (roadmap phases 0–15) |
+| **Current Phase** | Phase 15 — Inventory ✅ |
+| **Current Task** | Production deploy + UAT sign-off (ops); tag `v1.0.0` |
+| **Completed Phases** | Phase 0 ✅ … Phase 15 ✅ |
+| **Remaining Phases** | Ops / feature backlog (reports, certificates, etc.) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~82% |
-| **Frontend Completion** | ~73% |
-| **API Integration Status** | Library books + issue/return APIs wired |
-| **UI Completion Status** | 78 real routes; Coming Soon badges on unimplemented nav |
-| **Testing Status** | Backend library unit tests + frontend typecheck |
+| **Backend Completion** | ~85% |
+| **Frontend Completion** | ~76% |
+| **API Integration Status** | Inventory masters + stock + issue wired |
+| **UI Completion Status** | 84 real routes; Coming Soon badges on unimplemented nav |
+| **Testing Status** | Backend inventory unit tests + frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~68 Coming Soon pages |
+| **Technical Debt Remaining** | ~62 Coming Soon pages |
 
 ---
 
@@ -705,10 +705,42 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 - `issue_return` seed is view-only; issue/return POST maps to `can_view` (legacy-compatible).
 - Library Reports remain Coming Soon.
-- Next: inventory, or ops/UAT + `v1.0.0` tag.
+
+---
+
+## Phase 15 — Inventory ✅ SIGNED OFF
+
+**Signed off:** 2026-07-21  
+**Objective:** Wire Inventory masters + stock + issue against legacy inventory tables.
+
+### Implemented routes
+
+| Route | Page | API |
+|-------|------|-----|
+| `/inventory/categories` | Category CRUD | `/inventory/categories/` |
+| `/inventory/stores` | Store CRUD | `/inventory/stores/` |
+| `/inventory/suppliers` | Supplier CRUD | `/inventory/suppliers/` |
+| `/inventory/items` | Item catalog | `/inventory/items/` |
+| `/inventory/stock` | Stock-in | `/inventory/stock/` |
+| `/inventory/issue` | Issue / return | `/inventory/issues/` |
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 15.1 | Masters + items + stock/issue services/APIs | ✅ |
+| 15.2 | Six inventory UI pages | ✅ |
+| 15.3 | Nav RBAC keys (`store`/`supplier`) + routes | ✅ |
+| 15.4 | Unit tests + typecheck + ds:audit | ✅ |
+
+### Notes / follow-ups
+
+- Stock-in updates `item.quantity`; issue/return adjust quantity.
+- Inventory Reports remain Coming Soon.
+- Next: ops/UAT + `v1.0.0` tag.
 
 ---
 
 ## Roadmap Complete ✅
 
-All phases 0–14 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (inventory, etc.).
+All phases 0–15 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (reports, certificates, etc.).

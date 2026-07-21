@@ -40,6 +40,8 @@ urlpatterns = [
     path("admissions/", include("apps.admissions.urls")),
     # library
     path("library/", include("apps.library.urls")),
+    # inventory
+    path("inventory/", include("apps.inventory.urls")),
     # hostel
     path("hostel/", include("apps.hostel.urls")),
     # communications

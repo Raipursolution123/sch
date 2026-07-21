@@ -138,6 +138,22 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'library.books.edit': ['books'],
   'library.books.delete': ['books'],
   'library.issue.view': ['issue_return'],
+  'inventory.category.create': ['item_category'],
+  'inventory.category.edit': ['item_category'],
+  'inventory.category.delete': ['item_category'],
+  'inventory.store.create': ['store'],
+  'inventory.store.edit': ['store'],
+  'inventory.store.delete': ['store'],
+  'inventory.supplier.create': ['supplier'],
+  'inventory.supplier.edit': ['supplier'],
+  'inventory.supplier.delete': ['supplier'],
+  'inventory.item.create': ['item'],
+  'inventory.item.edit': ['item'],
+  'inventory.item.delete': ['item'],
+  'inventory.stock.create': ['item_stock'],
+  'inventory.stock.delete': ['item_stock'],
+  'inventory.issue.create': ['issue_item'],
+  'inventory.issue.edit': ['issue_item'],
 };
 
 export interface NavigationPermissionContext {

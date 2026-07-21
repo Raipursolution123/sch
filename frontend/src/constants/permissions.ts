@@ -82,6 +82,22 @@ const ALL_PERMISSIONS: Permission[] = [
   'library.books.edit',
   'library.books.delete',
   'library.issue.view',
+  'inventory.category.create',
+  'inventory.category.edit',
+  'inventory.category.delete',
+  'inventory.store.create',
+  'inventory.store.edit',
+  'inventory.store.delete',
+  'inventory.supplier.create',
+  'inventory.supplier.edit',
+  'inventory.supplier.delete',
+  'inventory.item.create',
+  'inventory.item.edit',
+  'inventory.item.delete',
+  'inventory.stock.create',
+  'inventory.stock.delete',
+  'inventory.issue.create',
+  'inventory.issue.edit',
 ];
 
 export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {
