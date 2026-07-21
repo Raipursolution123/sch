@@ -50,6 +50,18 @@ const CurrencyPage = lazy(() =>
   })),
 );
 
+const RolesPage = lazy(() =>
+  import('@features/settings/roles/pages/RolesPage').then((m) => ({
+    default: m.RolesPage,
+  })),
+);
+
+const UsersPage = lazy(() =>
+  import('@features/settings/users/pages/UsersPage').then((m) => ({
+    default: m.UsersPage,
+  })),
+);
+
 const ClassesPage = lazy(() =>
   import('@features/academics/classes/pages/ClassesPage').then((m) => ({
     default: m.ClassesPage,
@@ -386,6 +398,18 @@ const NoticesPage = lazy(() =>
   })),
 );
 
+const HomeworkPage = lazy(() =>
+  import('@features/homework/assignments/pages/HomeworkPage').then((m) => ({
+    default: m.HomeworkPage,
+  })),
+);
+
+const DailyAssignmentsPage = lazy(() =>
+  import('@features/homework/daily/pages/DailyAssignmentsPage').then((m) => ({
+    default: m.DailyAssignmentsPage,
+  })),
+);
+
 const TransportFeesPage = lazy(() =>
   import('@features/transport/fees/pages/TransportFeesPage').then((m) => ({
     default: m.TransportFeesPage,
@@ -503,6 +527,8 @@ export const adminRoutes: RouteObject[] = [
     { path: 'general', element: <GeneralSettingsPage /> },
     { path: 'languages', element: <LanguagesPage /> },
     { path: 'currency', element: <CurrencyPage /> },
+    { path: 'roles', element: <RolesPage /> },
+    { path: 'users', element: <UsersPage /> },
   ]),
 
   createModuleRoutes('/front-office', ROUTES.frontOffice.enquiry, [
@@ -527,7 +553,10 @@ export const adminRoutes: RouteObject[] = [
     { path: 'room-types', element: <RoomTypesPage /> },
   ]),
   createPlaceholderModule('/inventory', ROUTES.inventory.issue),
-  createPlaceholderModule('/homework', ROUTES.homework.assignments),
+  createModuleRoutes('/homework', ROUTES.homework.assignments, [
+    { path: 'assignments', element: <HomeworkPage /> },
+    { path: 'daily', element: <DailyAssignmentsPage /> },
+  ]),
   createModuleRoutes('/communicate', ROUTES.communicate.notices, [
     { path: 'notices', element: <NoticesPage /> },
   ]),

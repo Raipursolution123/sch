@@ -17,6 +17,12 @@ export const API_ENDPOINTS = {
     currencies: '/settings/currencies/',
     currencyDetail: (id: number) => `/settings/currencies/${id}/`,
     currencyActivate: (id: number) => `/settings/currencies/${id}/activate/`,
+    roles: '/settings/roles/',
+    roleDetail: (id: number) => `/settings/roles/${id}/`,
+    rolePermissions: (id: number) => `/settings/roles/${id}/permissions/`,
+    users: '/settings/users/',
+    userDetail: (id: number) => `/settings/users/${id}/`,
+    userRoleOptions: '/settings/users/role-options/',
   },
   academics: {
     classes: '/academics/classes/',
@@ -39,6 +45,10 @@ export const API_ENDPOINTS = {
     classTeacherDetail: (id: number) => `/academics/class-teachers/${id}/`,
     promotePreview: '/academics/promote/preview/',
     promote: '/academics/promote/',
+    homework: '/academics/homework/',
+    homeworkDetail: (id: number) => `/academics/homework/${id}/`,
+    dailyAssignments: '/academics/daily-assignments/',
+    dailyAssignmentDetail: (id: number) => `/academics/daily-assignments/${id}/`,
   },
   students: {
     list: '/students/',

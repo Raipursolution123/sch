@@ -121,6 +121,14 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'manage_topic.create': ['lesson_plan', 'manage_topic'],
   'manage_topic.edit': ['lesson_plan', 'manage_topic'],
   'manage_topic.delete': ['lesson_plan', 'manage_topic'],
+  'homework.view': ['homework'],
+  'homework.create': ['homework'],
+  'homework.edit': ['homework'],
+  'homework.delete': ['homework'],
+  'daily_assignment.view': ['daily_assignment'],
+  'daily_assignment.create': ['daily_assignment'],
+  'daily_assignment.edit': ['daily_assignment'],
+  'daily_assignment.delete': ['daily_assignment'],
 };
 
 export interface NavigationPermissionContext {

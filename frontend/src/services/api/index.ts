@@ -59,3 +59,5 @@ export { noticesService } from './notices.service';
 export { ledgersService } from './ledgers.service';
 export { ledgerGroupsService } from './ledger-groups.service';
 export { financeReportsService } from './finance-reports.service';
+export { homeworkService, dailyAssignmentsService } from './homework.service';
+export { rolesService, usersService } from './roles.service';

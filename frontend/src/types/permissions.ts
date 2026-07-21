@@ -69,4 +69,12 @@ export type Permission =
   | 'manage_topic.view'
   | 'manage_topic.create'
   | 'manage_topic.edit'
-  | 'manage_topic.delete';
+  | 'manage_topic.delete'
+  | 'homework.view'
+  | 'homework.create'
+  | 'homework.edit'
+  | 'homework.delete'
+  | 'daily_assignment.view'
+  | 'daily_assignment.create'
+  | 'daily_assignment.edit'
+  | 'daily_assignment.delete';

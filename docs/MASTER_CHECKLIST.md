@@ -1,8 +1,8 @@
 # School ERP — Master Implementation Checklist
 
-**Last updated:** 2026-07-20  
-**Current phase:** Phase 8 — Reports Module ✅ COMPLETE  
-**Branch:** `main` @ `d209438`
+**Last updated:** 2026-07-21  
+**Current phase:** Phase 10 — Roles & Users ✅ COMPLETE  
+**Branch:** `main` (local; uncommitted)
 
 ---
 
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phase 8 complete (roadmap phases 0–8) |
-| **Current Phase** | Phase 8 — Reports ✅ |
-| **Current Task** | Production deploy + UAT sign-off (ops) |
-| **Completed Phases** | Phase 0 ✅ … Phase 8 ✅ |
-| **Remaining Phases** | Feature backlog (library, inventory, homework reports, settings) |
+| **Overall Project Progress** | Phase 10 complete (roadmap phases 0–10) |
+| **Current Phase** | Phase 10 — Roles & Users ✅ |
+| **Current Task** | Production deploy + UAT sign-off (ops); next: finance journal/mapper UI |
+| **Completed Phases** | Phase 0 ✅ … Phase 10 ✅ |
+| **Remaining Phases** | Feature backlog (finance entries/mapper, library, inventory) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~74% |
-| **Frontend Completion** | ~62% |
-| **API Integration Status** | Reports wired to existing fee, attendance, exam, staff, transport, finance APIs |
-| **UI Completion Status** | 71 real routes; Coming Soon badges on unimplemented nav |
-| **Testing Status** | 13 integration + ~190 unit backend tests; 14 Vitest tests; typecheck pass |
+| **Backend Completion** | ~76% |
+| **Frontend Completion** | ~66% |
+| **API Integration Status** | Roles/users settings APIs wired |
+| **UI Completion Status** | 72 real routes; Coming Soon badges on unimplemented nav |
+| **Testing Status** | Frontend typecheck + roles/users unit tests |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~78 Coming Soon pages, library/inventory/homework report pages |
+| **Technical Debt Remaining** | ~74 Coming Soon pages; `roles` category may be missing in older DBs (superadmin bypass works) |
 
 ---
 
@@ -540,6 +540,65 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 9 — Homework UI ✅ SIGNED OFF
+
+**Signed off:** 2026-07-21  
+**Objective:** Wire the Homework nav module to existing academics homework APIs (backend-ready, frontend was Coming Soon).
+
+### Implemented routes
+
+| Route | Page | API |
+|-------|------|-----|
+| `/homework/assignments` | Homework CRUD + class/section filters | `/academics/homework/` |
+| `/homework/daily` | Daily assignment CRUD | `/academics/daily-assignments/` |
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 9.1 | Types + `api-endpoints` + `homework.service` | ✅ |
+| 9.2 | Hooks with `getApiErrorMessage` | ✅ |
+| 9.3 | Homework + Daily Assignment pages (ConfirmDialog) | ✅ |
+| 9.4 | Routes + `IMPLEMENTED_PATHS` + RBAC permission keys | ✅ |
+| 9.5 | Frontend typecheck | ✅ |
+
+### Notes / follow-ups
+
+- Daily assignment form still uses raw `student_session_id` / `subject_group_subject_id` (no student picker yet).
+- Homework evaluations / submit-assignments APIs remain unwired (optional Phase 9b).
+
+---
+
+## Phase 10 — Roles & Users ✅ SIGNED OFF
+
+**Signed off:** 2026-07-21  
+**Objective:** Wire Settings → Roles & Permissions and User Accounts to legacy `roles` / `roles_permissions` / `staff_roles` / `users`.
+
+### Implemented routes
+
+| Route | Page | API |
+|-------|------|-----|
+| `/settings/roles` | Role list + permission matrix editor | `/settings/roles/`, `/settings/roles/<id>/`, `/settings/roles/<id>/permissions/` |
+| `/settings/users` | Staff login accounts + role / active toggle | `/settings/users/`, `/settings/users/<id>/`, `/settings/users/role-options/` |
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 10.1 | Backend RoleService + UserAccountService | ✅ |
+| 10.2 | Settings API views + `HasLegacyPrivilege` (`roles`, `user_status`) | ✅ |
+| 10.3 | Frontend types, endpoints, services, hooks | ✅ |
+| 10.4 | Roles & Users pages + route wiring | ✅ |
+| 10.5 | Unit tests + frontend typecheck | ✅ |
+
+### Notes / follow-ups
+
+- Superadmin role permissions are read-only (cannot be edited).
+- `permission_category.short_code = roles` may be absent in older DBs; superadmin still accesses via RBAC bypass. Non-superadmin needs a matching category + `roles_permissions` row.
+- Next recommended product work: finance journal entries / ledger mapper UI.
+
+---
+
 ## Roadmap Complete ✅
 
-All 9 phases (0–8) signed off. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (~78 Coming Soon pages).
+All phases 0–10 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (finance entries, library/inventory, etc.).

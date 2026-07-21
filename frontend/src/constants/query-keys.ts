@@ -23,6 +23,18 @@ export const queryKeys = {
       list: (page: number) => [...queryKeys.settings.currencies.all, 'list', page] as const,
       detail: (id: number) => [...queryKeys.settings.currencies.all, 'detail', id] as const,
     },
+    roles: {
+      all: ['settings', 'roles'] as const,
+      list: (page: number) => [...queryKeys.settings.roles.all, 'list', page] as const,
+      detail: (id: number) => [...queryKeys.settings.roles.all, 'detail', id] as const,
+    },
+    users: {
+      all: ['settings', 'users'] as const,
+      list: (page: number, q: string) =>
+        [...queryKeys.settings.users.all, 'list', page, q] as const,
+      detail: (id: number) => [...queryKeys.settings.users.all, 'detail', id] as const,
+      roleOptions: () => [...queryKeys.settings.users.all, 'role-options'] as const,
+    },
   },
   academics: {
     classes: {
@@ -334,6 +346,15 @@ export const queryKeys = {
     all: ['admissions'] as const,
     online: {
       list: () => [...queryKeys.admissions.all, 'online', 'list'] as const,
+    },
+  },
+  homework: {
+    all: ['homework'] as const,
+    list: (filters: Record<string, unknown>) =>
+      [...queryKeys.homework.all, 'list', filters] as const,
+    daily: {
+      list: (filters: Record<string, unknown>) =>
+        [...queryKeys.homework.all, 'daily', 'list', filters] as const,
     },
   },
   dashboard: {
