@@ -165,6 +165,13 @@ export const API_ENDPOINTS = {
     onlineDetail: (id: number) => `/admissions/online/${id}/`,
     convert: (id: number) => `/admissions/online/${id}/convert/`,
   },
+  library: {
+    books: '/library/books/',
+    bookDetail: (id: number) => `/library/books/${id}/`,
+    issues: '/library/issues/',
+    issueReturn: (id: number) => `/library/issues/${id}/return/`,
+    members: '/library/members/',
+  },
   finance: {
     groups: '/finance/groups/',
     groupDetail: (id: number) => `/finance/groups/${id}/`,

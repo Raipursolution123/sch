@@ -56,6 +56,8 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.hostel.rooms,
   ROUTES.hostel.roomTypes,
   ROUTES.hostel.hostels,
+  ROUTES.library.books,
+  ROUTES.library.issueReturn,
   ROUTES.communicate.notices,
   ROUTES.finance.ledgers,
   ROUTES.finance.groups,

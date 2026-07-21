@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-21  
-**Current phase:** Phase 13 — Chart of Accounts ✅ COMPLETE  
+**Current phase:** Phase 14 — Library ✅ COMPLETE  
 **Branch:** `main` (local; uncommitted)
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phase 13 complete (roadmap phases 0–13) |
-| **Current Phase** | Phase 13 — Chart of Accounts ✅ |
-| **Current Task** | Production deploy + UAT sign-off (ops); next: library/inventory |
-| **Completed Phases** | Phase 0 ✅ … Phase 13 ✅ |
-| **Remaining Phases** | Feature backlog (library, inventory) |
+| **Overall Project Progress** | Phase 14 complete (roadmap phases 0–14) |
+| **Current Phase** | Phase 14 — Library ✅ |
+| **Current Task** | Production deploy + UAT sign-off (ops); next: inventory |
+| **Completed Phases** | Phase 0 ✅ … Phase 14 ✅ |
+| **Remaining Phases** | Feature backlog (inventory) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~80% |
-| **Frontend Completion** | ~71% |
-| **API Integration Status** | Chart of Accounts wired to existing groups/ledgers APIs |
-| **UI Completion Status** | 76 real routes; Coming Soon badges on unimplemented nav |
-| **Testing Status** | Frontend typecheck |
+| **Backend Completion** | ~82% |
+| **Frontend Completion** | ~73% |
+| **API Integration Status** | Library books + issue/return APIs wired |
+| **UI Completion Status** | 78 real routes; Coming Soon badges on unimplemented nav |
+| **Testing Status** | Backend library unit tests + frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~70 Coming Soon pages |
+| **Technical Debt Remaining** | ~68 Coming Soon pages |
 
 ---
 
@@ -677,10 +677,38 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 ### Notes / follow-ups
 
 - CRUD remains on Ledger Groups / Ledgers pages (linked from CoA actions).
-- Next: ops/UAT + `v1.0.0` tag, or library/inventory.
+
+---
+
+## Phase 14 — Library ✅ SIGNED OFF
+
+**Signed off:** 2026-07-21  
+**Objective:** Wire Library → Book List + Issue & Return against legacy `books` / `book_issues` / `libarary_members`.
+
+### Implemented routes
+
+| Route | Page | API |
+|-------|------|-----|
+| `/library/books` | Book catalog CRUD | `/library/books/` |
+| `/library/issue-return` | Issue / return + members | `/library/issues/`, `/library/members/` |
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 14.1 | Books + issues + members services/APIs | ✅ |
+| 14.2 | Book List + Issue & Return UI | ✅ |
+| 14.3 | Routes + permissions + checklist | ✅ |
+| 14.4 | Unit tests + typecheck + ds:audit | ✅ |
+
+### Notes / follow-ups
+
+- `issue_return` seed is view-only; issue/return POST maps to `can_view` (legacy-compatible).
+- Library Reports remain Coming Soon.
+- Next: inventory, or ops/UAT + `v1.0.0` tag.
 
 ---
 
 ## Roadmap Complete ✅
 
-All phases 0–13 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (library/inventory, etc.).
+All phases 0–14 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (inventory, etc.).

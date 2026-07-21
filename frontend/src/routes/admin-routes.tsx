@@ -416,6 +416,18 @@ const OfflineBankPaymentsPage = lazy(() =>
   })),
 );
 
+const LibraryBooksPage = lazy(() =>
+  import('@features/library/books/pages/BooksPage').then((m) => ({
+    default: m.BooksPage,
+  })),
+);
+
+const LibraryIssueReturnPage = lazy(() =>
+  import('@features/library/issue-return/pages/IssueReturnPage').then((m) => ({
+    default: m.IssueReturnPage,
+  })),
+);
+
 const NoticesPage = lazy(() =>
   import('@features/communications/notices/pages/NoticesPage').then((m) => ({
     default: m.NoticesPage,
@@ -563,7 +575,10 @@ export const adminRoutes: RouteObject[] = [
     { path: 'dispatch', element: <PostalDispatchPage /> },
     { path: 'receive', element: <PostalReceivePage /> },
   ]),
-  createPlaceholderModule('/library', ROUTES.library.books),
+  createModuleRoutes('/library', ROUTES.library.books, [
+    { path: 'books', element: <LibraryBooksPage /> },
+    { path: 'issue-return', element: <LibraryIssueReturnPage /> },
+  ]),
   createModuleRoutes('/transport', ROUTES.transport.fees, [
     { path: 'fees', element: <TransportFeesPage /> },
     { path: 'pickup-points', element: <PickupPointsPage /> },

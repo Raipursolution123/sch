@@ -65,6 +65,23 @@ const ALL_PERMISSIONS: Permission[] = [
   'manage_topic.create',
   'manage_topic.edit',
   'manage_topic.delete',
+  'homework.view',
+  'homework.create',
+  'homework.edit',
+  'homework.delete',
+  'daily_assignment.view',
+  'daily_assignment.create',
+  'daily_assignment.edit',
+  'daily_assignment.delete',
+  'finance.entries.view',
+  'finance.entries.create',
+  'finance.entries.delete',
+  'finance.accounts.manage',
+  'library.books.view',
+  'library.books.create',
+  'library.books.edit',
+  'library.books.delete',
+  'library.issue.view',
 ];
 
 export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {

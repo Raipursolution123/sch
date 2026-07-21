@@ -81,4 +81,9 @@ export type Permission =
   | 'finance.entries.view'
   | 'finance.entries.create'
   | 'finance.entries.delete'
-  | 'finance.accounts.manage';
+  | 'finance.accounts.manage'
+  | 'library.books.view'
+  | 'library.books.create'
+  | 'library.books.edit'
+  | 'library.books.delete'
+  | 'library.issue.view';

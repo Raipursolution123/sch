@@ -38,6 +38,8 @@ urlpatterns = [
     path("front-office/", include("apps.front_office.urls")),
     # admissions
     path("admissions/", include("apps.admissions.urls")),
+    # library
+    path("library/", include("apps.library.urls")),
     # hostel
     path("hostel/", include("apps.hostel.urls")),
     # communications

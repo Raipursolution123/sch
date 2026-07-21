@@ -405,4 +405,17 @@ export const queryKeys = {
       list: () => [...queryKeys.finance.mapper.all, 'list'] as const,
     },
   },
+  library: {
+    all: ['library'] as const,
+    books: {
+      list: (query = '') => [...queryKeys.library.all, 'books', 'list', query] as const,
+    },
+    issues: {
+      list: (status = 'open', query = '') =>
+        [...queryKeys.library.all, 'issues', 'list', status, query] as const,
+    },
+    members: {
+      list: () => [...queryKeys.library.all, 'members', 'list'] as const,
+    },
+  },
 } as const;

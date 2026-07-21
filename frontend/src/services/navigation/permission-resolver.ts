@@ -133,6 +133,11 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'finance.entries.create': ['entries'],
   'finance.entries.delete': ['entries'],
   'finance.accounts.manage': ['accounts'],
+  'library.books.view': ['books'],
+  'library.books.create': ['books'],
+  'library.books.edit': ['books'],
+  'library.books.delete': ['books'],
+  'library.issue.view': ['issue_return'],
 };
 
 export interface NavigationPermissionContext {
