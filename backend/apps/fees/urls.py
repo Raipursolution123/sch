@@ -22,6 +22,7 @@ from apps.fees.api.views.fee_type import FeeTypeDetailView, FeeTypesListView
 from apps.fees.api.views.payment_settings import PaymentGatewaysListView, PaymentGatewayDetailView
 
 from apps.fees.api.views.fee_master import FeeMasterDetailView, FeeMasterListView
+from apps.fees.api.views.financial_report import FinancialReportView
 
 urlpatterns = [
     path("collect/roster/", FeeCollectRosterView.as_view(), name="fee-collect-roster"),
@@ -83,5 +84,10 @@ urlpatterns = [
         "payment-gateways/<int:pk>/",
         PaymentGatewayDetailView.as_view(),
         name="payment-gateways-detail",
+    ),
+    path(
+        "financial-report/",
+        FinancialReportView.as_view(),
+        name="financial-report",
     ),
 ]

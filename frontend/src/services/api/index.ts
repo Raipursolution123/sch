@@ -63,3 +63,4 @@ export { notificationSettingsService } from './notification-settings.service';
 export { printHeaderFooterService } from './print-header-footer.service';
 export { paymentMethodsService } from './payment-methods.service';
 export { rolesService } from './roles.service';
+export { financialReportService } from './financial-report.service';

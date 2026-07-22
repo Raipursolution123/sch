@@ -15,6 +15,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+]
+
 # debug_toolbar disabled to avoid NoReverseMatch 'djdt' errors
 # INSTALLED_APPS += [
 #     "debug_toolbar",

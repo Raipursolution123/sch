@@ -10,7 +10,7 @@ class CustomFields(models.Model):
     type = models.CharField(max_length=100, blank=True, null=True, db_index=True)
     bs_column = models.IntegerField(blank=True, null=True)
     validation = models.IntegerField(blank=True, null=True, default=0)
-    field_values = models.TextField(blank=True, null=True, db_index=True)
+    field_values = models.TextField(blank=True, null=True)
     show_table = models.CharField(max_length=100, blank=True, null=True)
     visible_on_table = models.IntegerField(db_index=True)
     weight = models.IntegerField(blank=True, null=True, db_index=True)

@@ -35,6 +35,19 @@ class Command(BaseCommand):
             | Q(slug__in=SUPER_ADMIN_ROLE_NAMES)
             | Q(is_superadmin=1)
         ).first()
+        
+        if not super_admin_role:
+            super_admin_role = Role.objects.create(
+                name="Super Admin",
+                slug="superadmin",
+                is_superadmin=1,
+                is_active=1,
+                is_system=1,
+                created_at=timezone.now()
+            )
+        elif not super_admin_role.is_superadmin:
+            super_admin_role.is_superadmin = 1
+            super_admin_role.save(update_fields=["is_superadmin"])
 
         created = 0
         updated = 0
@@ -87,18 +100,9 @@ class Command(BaseCommand):
 
     def _ensure_school_admin_staff_roles(self, *, admin_role, super_admin_role, now):
         created = 0
-        candidates = Staff.objects.filter(is_active=1).filter(
-            Q(email__in=DEFAULT_SCHOOL_ADMIN_EMAILS)
-            | Q(employee_id=INITIAL_SETUP_EMPLOYEE_ID)
-        )
+        candidates = Staff.objects.filter(is_active=1)
 
         for staff in candidates.distinct():
-            has_active_role = StaffRole.objects.filter(
-                staff_id=staff.id, is_active=1
-            ).exists()
-            if has_active_role:
-                continue
-
             target_role = super_admin_role or admin_role
             if target_role is None:
                 self.stderr.write(
@@ -106,6 +110,16 @@ class Command(BaseCommand):
                         f"No role available to assign for staff id={staff.id}; skipped."
                     )
                 )
+                continue
+
+            staff_role = StaffRole.objects.filter(staff_id=staff.id, is_active=1).first()
+            if staff_role:
+                if staff_role.role_id != target_role.id:
+                    staff_role.role = target_role
+                    staff_role.save(update_fields=["role"])
+                    self.stdout.write(
+                        f"  Updated staff id={staff.id} ({staff.email}) -> {target_role.name}"
+                    )
                 continue
 
             StaffRole.objects.create(

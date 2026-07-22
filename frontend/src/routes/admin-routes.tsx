@@ -30,6 +30,12 @@ const JournalEntriesPage = lazy(() =>
   })),
 );
 
+const FinancialReportPage = lazy(() =>
+  import('@features/finance/financial-report/pages/FinancialReportPage').then((m) => ({
+    default: m.FinancialReportPage,
+  })),
+);
+
 const SessionsPage = lazy(() =>
   import('@features/academics/sessions/pages/SessionsPage').then((m) => ({
     default: m.SessionsPage,
@@ -636,6 +642,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'ledgers', element: <LedgersPage /> },
     { path: 'groups', element: <LedgerGroupsPage /> },
     { path: 'entries', element: <JournalEntriesPage /> },
+    { path: 'reports', element: <FinancialReportPage /> },
   ]),
   createPlaceholderModule('/reports', ROUTES.reports.students),
   createPlaceholderModule('/certificates', ROUTES.certificates.templates),

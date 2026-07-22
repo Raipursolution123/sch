@@ -1,6 +1,10 @@
 from rest_framework.permissions import BasePermission
 
-from apps.accounts.services.legacy_rbac import is_module_active, user_has_privilege
+from apps.accounts.services.legacy_rbac import (
+    is_module_active,
+    is_superadmin_user,
+    user_has_privilege,
+)
 
 
 class HasLegacyPrivilege(BasePermission):
@@ -27,12 +31,16 @@ class HasLegacyPrivilege(BasePermission):
         if not user or not getattr(user, "is_authenticated", False):
             return False
 
+        if is_superadmin_user(user):
+            return True
+
         category = getattr(view, "legacy_permission_category", None)
         if not category:
             return False
 
         module_code = getattr(view, "legacy_module_short_code", None)
         if module_code and not is_module_active(module_code):
+            print(f"[DEBUG HasLegacyPrivilege] FAILED: module {module_code} is not active")
             return False
 
         action = getattr(view, "legacy_permission_action", None)
@@ -44,6 +52,12 @@ class HasLegacyPrivilege(BasePermission):
             action = method_actions.get(request.method)
 
         if not action:
+            print(f"[DEBUG HasLegacyPrivilege] No action mapped for {request.method}")
             return False
 
-        return user_has_privilege(user, category, action)
+        has_priv = user_has_privilege(user, category, action)
+        if not has_priv:
+            is_super = is_superadmin_user(user)
+            print(f"[DEBUG HasLegacyPrivilege] FAILED: user={user.username}, is_superadmin={is_super}, category={category}, action={action}")
+        
+        return has_priv

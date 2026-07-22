@@ -207,6 +207,7 @@ export const ROUTES = {
     groups: '/finance/groups',
     ledgers: '/finance/ledgers',
     reports: '/finance/reports',
+    financialReport: '/finance/financial-report',
   },
   settings: {
     root: '/settings',
