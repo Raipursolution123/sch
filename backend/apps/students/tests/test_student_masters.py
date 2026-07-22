@@ -18,9 +18,7 @@ def test_category_requires_name():
 
 
 def test_category_conflict_on_duplicate_name():
-    with patch(
-        "apps.students.services.student_category_service.connection"
-    ) as conn:
+    with patch("apps.students.services.student_category_service.connection") as conn:
         cursor = MagicMock()
         conn.cursor.return_value.__enter__.return_value = cursor
         cursor.fetchone.return_value = (1,)

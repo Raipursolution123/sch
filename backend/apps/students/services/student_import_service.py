@@ -64,7 +64,10 @@ class StudentImportService:
                 for field in ("class_id", "section_id"):
                     if field in payload and payload[field] is not None:
                         payload[field] = int(payload[field])
-                if "school_house_id" in payload and payload["school_house_id"] is not None:
+                if (
+                    "school_house_id" in payload
+                    and payload["school_house_id"] is not None
+                ):
                     payload["school_house_id"] = int(payload["school_house_id"])
                 if "roll_no" in payload and payload["roll_no"] not in (None, ""):
                     payload["roll_no"] = int(payload["roll_no"])

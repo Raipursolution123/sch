@@ -107,9 +107,7 @@ class StudentHouseListCreateView(APIView):
         paginator = StandardResultsSetPagination()
         page = paginator.paginate_queryset(qs, request, view=self)
         rows = list(page if page is not None else qs)
-        data = StudentHouseSerializer(
-            [house_to_dict(r) for r in rows], many=True
-        ).data
+        data = StudentHouseSerializer([house_to_dict(r) for r in rows], many=True).data
         if page is not None:
             return paginator.get_paginated_response(data)
         return APIResponse.success(data=data, message="Student houses retrieved.")
