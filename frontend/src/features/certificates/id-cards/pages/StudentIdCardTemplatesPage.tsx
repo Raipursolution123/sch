@@ -15,6 +15,7 @@ import {
   useStudentIdCardTemplates,
   useUpdateStudentIdCard,
 } from '@hooks/useIdCards';
+import { DEFAULT_ID_CARD_HEADER_COLOR } from '@constants/id-cards';
 import type { StudentIdCardTemplate } from '@app-types/id-cards';
 import { ModuleListPack } from '@workflow-packs';
 
@@ -41,7 +42,7 @@ const defaults: FormValues = {
   title: '',
   school_name: '',
   school_address: '',
-  header_color: '#0d6efd',
+  header_color: DEFAULT_ID_CARD_HEADER_COLOR,
   enable_vertical_card: false,
   enable_admission_no: true,
   enable_student_name: true,
@@ -73,7 +74,7 @@ function toPayload(values: FormValues) {
     background: '',
     logo: '',
     sign_image: '',
-    header_color: values.header_color || '#0d6efd',
+    header_color: values.header_color || DEFAULT_ID_CARD_HEADER_COLOR,
     enable_vertical_card: values.enable_vertical_card ? 1 : 0,
     enable_admission_no: values.enable_admission_no ? 1 : 0,
     enable_student_name: values.enable_student_name ? 1 : 0,
@@ -110,7 +111,7 @@ export function StudentIdCardTemplatesPage() {
             title: selected.title,
             school_name: selected.school_name || '',
             school_address: selected.school_address || '',
-            header_color: selected.header_color || '#0d6efd',
+            header_color: selected.header_color || DEFAULT_ID_CARD_HEADER_COLOR,
             enable_vertical_card: selected.enable_vertical_card === 1,
             enable_admission_no: selected.enable_admission_no === 1,
             enable_student_name: selected.enable_student_name === 1,

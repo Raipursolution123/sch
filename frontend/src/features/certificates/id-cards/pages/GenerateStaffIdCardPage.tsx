@@ -6,6 +6,7 @@ import { Button } from '@components/ui/button';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { useGenerateStaffIdCard, useStaffIdCardTemplates } from '@hooks/useIdCards';
 import { useStaff } from '@hooks/useStaff';
+import { DEFAULT_ID_CARD_HEADER_COLOR } from '@constants/id-cards';
 import type { IdCardPreview } from '@app-types/id-cards';
 import { printReport } from '@utils/print-report';
 import { ModuleListPack } from '@workflow-packs';
@@ -16,7 +17,7 @@ function IdCardPreviewCard({ preview }: { preview: IdCardPreview }) {
       className="mx-auto overflow-hidden rounded-lg border bg-card shadow-sm print:border-0 print:shadow-none"
       style={{
         maxWidth: preview.enable_vertical_card === 1 ? 280 : 420,
-        borderTop: `6px solid ${preview.header_color || '#0d6efd'}`,
+        borderTop: `6px solid ${preview.header_color || DEFAULT_ID_CARD_HEADER_COLOR}`,
       }}
     >
       <div className="space-y-1 p-4 text-center">

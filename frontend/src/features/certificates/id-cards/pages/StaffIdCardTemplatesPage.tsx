@@ -15,6 +15,7 @@ import {
   useStaffIdCardTemplates,
   useUpdateStaffIdCard,
 } from '@hooks/useIdCards';
+import { DEFAULT_ID_CARD_HEADER_COLOR } from '@constants/id-cards';
 import type { StaffIdCardTemplate } from '@app-types/id-cards';
 import { ModuleListPack } from '@workflow-packs';
 
@@ -43,7 +44,7 @@ const defaults: FormValues = {
   title: '',
   school_name: '',
   school_address: '',
-  header_color: '#0d6efd',
+  header_color: DEFAULT_ID_CARD_HEADER_COLOR,
   enable_vertical_card: false,
   enable_staff_role: true,
   enable_staff_id: true,
@@ -77,7 +78,7 @@ function toPayload(values: FormValues) {
     background: '',
     logo: '',
     sign_image: '',
-    header_color: values.header_color || '#0d6efd',
+    header_color: values.header_color || DEFAULT_ID_CARD_HEADER_COLOR,
     enable_vertical_card: values.enable_vertical_card ? 1 : 0,
     enable_staff_role: values.enable_staff_role ? 1 : 0,
     enable_staff_id: values.enable_staff_id ? 1 : 0,
@@ -116,7 +117,7 @@ export function StaffIdCardTemplatesPage() {
             title: selected.title,
             school_name: selected.school_name || '',
             school_address: selected.school_address || '',
-            header_color: selected.header_color || '#0d6efd',
+            header_color: selected.header_color || DEFAULT_ID_CARD_HEADER_COLOR,
             enable_vertical_card: selected.enable_vertical_card === 1,
             enable_staff_role: selected.enable_staff_role === 1,
             enable_staff_id: selected.enable_staff_id === 1,
