@@ -2,10 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from apps.staff.domain.staff_exceptions import (
-    StaffNotFoundError,
-    StaffValidationError,
-)
+from apps.staff.domain.staff_exceptions import StaffNotFoundError, StaffValidationError
 from apps.staff.services.department_designation_service import (
     DepartmentService,
     DesignationService,

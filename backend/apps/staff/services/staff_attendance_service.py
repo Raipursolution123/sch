@@ -7,10 +7,7 @@ from typing import Any
 from django.db import transaction
 from django.utils import timezone
 
-from apps.staff.domain.staff_exceptions import (
-    StaffNotFoundError,
-    StaffValidationError,
-)
+from apps.staff.domain.staff_exceptions import StaffNotFoundError, StaffValidationError
 from apps.staff.models.staff import Staff
 from apps.staff.models.staff_attendance import StaffAttendance
 from apps.staff.models.staff_attendance_type import StaffAttendanceType
