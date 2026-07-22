@@ -356,6 +356,12 @@ const TransportHostelReportPage = lazy(() =>
   })),
 );
 
+const LibraryReportPage = lazy(() =>
+  import('@features/reports/library/pages/LibraryReportPage').then((m) => ({
+    default: m.LibraryReportPage,
+  })),
+);
+
 const ApproveLeavePage = lazy(() =>
   import('@features/attendance/approve-leave/pages/ApproveLeavePage').then((m) => ({
     default: m.ApproveLeavePage,
@@ -404,6 +410,18 @@ const ExamEnrollPage = lazy(() =>
   })),
 );
 
+const AdmitCardTemplatesPage = lazy(() =>
+  import('@features/examinations/admit-card/pages/AdmitCardTemplatesPage').then((m) => ({
+    default: m.AdmitCardTemplatesPage,
+  })),
+);
+
+const MarksheetTemplatesPage = lazy(() =>
+  import('@features/examinations/marksheet/pages/MarksheetTemplatesPage').then((m) => ({
+    default: m.MarksheetTemplatesPage,
+  })),
+);
+
 const EnquiryPage = lazy(() =>
   import('@features/front-office/enquiry/pages/EnquiryPage').then((m) => ({
     default: m.EnquiryPage,
@@ -413,6 +431,18 @@ const EnquiryPage = lazy(() =>
 const VisitorsPage = lazy(() =>
   import('@features/front-office/visitors/pages/VisitorsPage').then((m) => ({
     default: m.VisitorsPage,
+  })),
+);
+
+const PhoneCallLogPage = lazy(() =>
+  import('@features/front-office/phone-calls/pages/PhoneCallLogPage').then((m) => ({
+    default: m.PhoneCallLogPage,
+  })),
+);
+
+const VisitorPurposePage = lazy(() =>
+  import('@features/front-office/visitor-purpose/pages/VisitorPurposePage').then((m) => ({
+    default: m.VisitorPurposePage,
   })),
 );
 
@@ -733,6 +763,8 @@ export const adminRoutes: RouteObject[] = [
     { path: 'enroll', element: <ExamEnrollPage /> },
     { path: 'schedule', element: <ExamSchedulePage /> },
     { path: 'results', element: <ExamResultsPage /> },
+    { path: 'admit-card', element: <AdmitCardTemplatesPage /> },
+    { path: 'marksheet', element: <MarksheetTemplatesPage /> },
     { path: 'grades', element: <GradesPage /> },
     { path: 'divisions', element: <MarkDivisionsPage /> },
     { path: 'cbse-exams', element: <CbseExamsPage /> },
@@ -749,9 +781,11 @@ export const adminRoutes: RouteObject[] = [
   createModuleRoutes('/front-office', ROUTES.frontOffice.enquiry, [
     { path: 'enquiry', element: <EnquiryPage /> },
     { path: 'visitors', element: <VisitorsPage /> },
+    { path: 'phone-calls', element: <PhoneCallLogPage /> },
     { path: 'complaints', element: <ComplaintsPage /> },
     { path: 'dispatch', element: <PostalDispatchPage /> },
     { path: 'receive', element: <PostalReceivePage /> },
+    { path: 'visitor-purpose', element: <VisitorPurposePage /> },
   ]),
   createModuleRoutes('/library', ROUTES.library.books, [
     { path: 'books', element: <LibraryBooksPage /> },
@@ -829,6 +863,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'finance', element: <IncomeExpenseReportPage /> },
     { path: 'hr', element: <StaffReportPage /> },
     { path: 'transport', element: <TransportHostelReportPage /> },
+    { path: 'library', element: <LibraryReportPage /> },
   ]),
   createModuleRoutes('/certificates', ROUTES.certificates.templates, [
     { path: 'templates', element: <CertificateTemplatesPage /> },

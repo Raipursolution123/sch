@@ -19,6 +19,12 @@ from apps.examinations.api.views.exam_schedules import (
     ExamSchedulesDetailView,
     ExamSchedulesListCreateView,
 )
+from apps.examinations.api.views.exam_templates import (
+    AdmitCardTemplateDetailView,
+    AdmitCardTemplateListCreateView,
+    MarksheetTemplateDetailView,
+    MarksheetTemplateListCreateView,
+)
 from apps.examinations.api.views.grades import GradesDetailView, GradesListCreateView
 from apps.examinations.api.views.mark_divisions import (
     MarkDivisionsDetailView,
@@ -53,6 +59,26 @@ urlpatterns = [
         "divisions/<int:pk>/",
         MarkDivisionsDetailView.as_view(),
         name="mark_divisions_detail",
+    ),
+    path(
+        "admit-cards/",
+        AdmitCardTemplateListCreateView.as_view(),
+        name="admit_card_templates",
+    ),
+    path(
+        "admit-cards/<int:pk>/",
+        AdmitCardTemplateDetailView.as_view(),
+        name="admit_card_template_detail",
+    ),
+    path(
+        "marksheets/",
+        MarksheetTemplateListCreateView.as_view(),
+        name="marksheet_templates",
+    ),
+    path(
+        "marksheets/<int:pk>/",
+        MarksheetTemplateDetailView.as_view(),
+        name="marksheet_template_detail",
     ),
     path(
         "results/roster/",

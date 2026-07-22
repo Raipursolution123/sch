@@ -385,13 +385,13 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'exams-admit-card',
         label: 'Admit Card',
         path: ROUTES.examinations.admitCard,
-        permissionKeys: ['admit_card'],
+        permissionKeys: ['design_admit_card'],
       },
       {
         id: 'exams-marksheet',
         label: 'Marksheet',
         path: ROUTES.examinations.marksheet,
-        permissionKeys: ['marksheet'],
+        permissionKeys: ['design_marksheet'],
       },
       {
         id: 'exams-grades',
@@ -461,7 +461,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'fo-visitor-purpose',
         label: 'Visitor Purpose',
         path: ROUTES.frontOffice.visitorPurpose,
-        permissionKeys: ['setup_front_office'],
+        permissionKeys: ['setup_font_office'],
       },
     ],
   },
@@ -861,7 +861,12 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'reports-library',
         label: 'Library Reports',
         path: ROUTES.reports.library,
-        permissionKeys: ['library_report'],
+        permissionKeys: [
+          'book_issue_report',
+          'book_due_report',
+          'book_issue_return_report',
+          'book_inventory_report',
+        ],
       },
       {
         id: 'reports-inventory',

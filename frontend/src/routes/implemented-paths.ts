@@ -21,9 +21,11 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.students.onlineAdmission,
   ROUTES.frontOffice.enquiry,
   ROUTES.frontOffice.visitors,
+  ROUTES.frontOffice.phoneCalls,
   ROUTES.frontOffice.complaints,
   ROUTES.frontOffice.dispatch,
   ROUTES.frontOffice.receive,
+  ROUTES.frontOffice.visitorPurpose,
   ROUTES.staff.root,
   ROUTES.staff.attendance,
   ROUTES.staff.payroll,
@@ -54,6 +56,8 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.examinations.enroll,
   ROUTES.examinations.schedule,
   ROUTES.examinations.results,
+  ROUTES.examinations.admitCard,
+  ROUTES.examinations.marksheet,
   ROUTES.examinations.grades,
   ROUTES.examinations.divisions,
   ROUTES.examinations.cbseExams,
@@ -108,6 +112,7 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.reports.finance,
   ROUTES.reports.hr,
   ROUTES.reports.transport,
+  ROUTES.reports.library,
 ]);
 
 export function isImplementedPath(path: string): boolean {

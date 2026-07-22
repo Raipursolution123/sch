@@ -368,6 +368,12 @@ export const queryKeys = {
     cbseExams: {
       list: () => [...queryKeys.examinations.all, 'cbse-exams', 'list'] as const,
     },
+    admitCards: {
+      list: () => [...queryKeys.examinations.all, 'admit-cards', 'list'] as const,
+    },
+    marksheets: {
+      list: () => [...queryKeys.examinations.all, 'marksheets', 'list'] as const,
+    },
   },
   hostel: {
     all: ['hostel'] as const,
@@ -395,6 +401,12 @@ export const queryKeys = {
     },
     visitors: {
       list: () => [...queryKeys.frontOffice.all, 'visitors', 'list'] as const,
+    },
+    visitorPurposes: {
+      list: () => [...queryKeys.frontOffice.all, 'visitor-purposes', 'list'] as const,
+    },
+    phoneCalls: {
+      list: () => [...queryKeys.frontOffice.all, 'phone-calls', 'list'] as const,
     },
     complaints: {
       list: () => [...queryKeys.frontOffice.all, 'complaints', 'list'] as const,

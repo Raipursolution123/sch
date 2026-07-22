@@ -1,14 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
-import { FormTextField, FormTextareaField, FormNumberField } from '@components/forms/fields';
+import {
+  FormNumberField,
+  FormSelectField,
+  FormTextField,
+  FormTextareaField,
+} from '@components/forms/fields';
 import type { VisitorsBookEntry } from '@app-types/front-office/visitors-book';
 import {
   visitorFormSchema,
   type VisitorFormValues,
 } from '@features/front-office/visitors/schemas/visitor.schema';
+import { useVisitorPurposes } from '@hooks/usePhoneCallPurpose';
 
 interface VisitorFormDialogProps {
   open: boolean;
@@ -43,6 +49,7 @@ export function VisitorFormDialog({
   isLoading,
 }: VisitorFormDialogProps) {
   const isEdit = Boolean(visitor);
+  const { data: purposes = [] } = useVisitorPurposes();
   const {
     control,
     handleSubmit,
@@ -52,6 +59,18 @@ export function VisitorFormDialog({
     resolver: zodResolver(visitorFormSchema),
     defaultValues,
   });
+
+  const purposeOptions = useMemo(() => {
+    const options = purposes.map((p) => {
+      const label = p.visitors_purpose || p.name;
+      return { value: label, label };
+    });
+    const current = visitor?.purpose?.trim();
+    if (current && !options.some((o) => o.value === current)) {
+      options.unshift({ value: current, label: current });
+    }
+    return options;
+  }, [purposes, visitor?.purpose]);
 
   useEffect(() => {
     if (!open) return;
@@ -91,7 +110,19 @@ export function VisitorFormDialog({
       <div className="grid gap-4 sm:grid-cols-2">
         <FormTextField control={control} name="name" label="Name" />
         <FormTextField control={control} name="contact" label="Contact" />
-        <FormTextField control={control} name="purpose" label="Purpose" />
+        <FormSelectField
+          control={control}
+          name="purpose"
+          label="Purpose"
+          required
+          placeholder="Select purpose"
+          options={purposeOptions}
+          hint={
+            purposeOptions.length === 0
+              ? 'Add purposes under Front Office → Visitor Purpose first.'
+              : undefined
+          }
+        />
         <FormTextField control={control} name="email" label="Email" optional />
         <FormTextField control={control} name="source" label="Source" optional />
         <FormTextField control={control} name="id_proof" label="ID proof" optional />

@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-22  
-**Current phase:** Phase 22 — Attendance subject + Fees master/assign/carry-forward ✅ COMPLETE  
+**Current phase:** Phase 23 — Examinations templates + Front Office phone/purpose + Library report ✅ COMPLETE  
 **Branch:** `main`
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phases 0–22 complete |
-| **Current Phase** | Phase 22 — Attendance subject + Fees gaps ✅ |
+| **Overall Project Progress** | Phases 0–23 complete |
+| **Current Phase** | Phase 23 — Exams / Front Office / Library gaps ✅ |
 | **Current Task** | Ops: prod deploy + UAT |
-| **Completed Phases** | Phase 0 ✅ … Phase 22 ✅ |
+| **Completed Phases** | Phase 0 ✅ … Phase 23 ✅ |
 | **Remaining Phases** | Ops / UAT; feature backlog (videos, CMS, etc.) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~94% |
-| **Frontend Completion** | ~88% |
-| **API Integration Status** | Subject attendance + fees assign/carry-forward wired |
-| **UI Completion Status** | Attendance + Fees Coming Soon cleared |
+| **Backend Completion** | ~95% |
+| **Frontend Completion** | ~90% |
+| **API Integration Status** | Admit/marksheet templates + phone calls + visitor purpose wired |
+| **UI Completion Status** | Exams / Front Office / Library Coming Soon cleared |
 | **Testing Status** | Gap unit tests + frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT |
-| **Technical Debt Remaining** | ~38 Coming Soon pages |
+| **Technical Debt Remaining** | ~34 Coming Soon pages |
 
 ---
 
@@ -504,7 +504,7 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 **Signed off:** 2026-07-20  
 **Objective:** Wire the Reports nav module with real report pages using existing APIs and the `ModuleReportPack` pattern.
 
-### Implemented report routes (7)
+### Implemented report routes (8)
 
 | Route | Page | Data source |
 |-------|------|-------------|
@@ -515,10 +515,10 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 | `/reports/finance` | Income & Expense | Trial balance API |
 | `/reports/hr` | HR Report | Staff directory |
 | `/reports/transport` | Transport & Hostel | Routes, vehicles, hostel rooms |
+| `/reports/library` | Library Report | Books catalog + issues |
 
-### Still Coming Soon (3 report nav items)
+### Still Coming Soon (2 report nav items)
 
-- Library Reports — requires library module
 - Inventory Reports — requires inventory module
 - Homework Reports — requires homework module
 
@@ -534,7 +534,7 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ### Verification
 
-- [x] 7 report pages render with filters, summary KPIs, print, and CSV export
+- [x] 8 report pages render with filters, summary KPIs, print, and CSV export
 - [x] Coming Soon badges removed from implemented report nav items
 - [x] Frontend typecheck passes
 
@@ -896,6 +896,28 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 23 — Examinations Templates, Front Office Phone/Purpose, Library Report ✅ SIGNED OFF
+
+**Signed off:** 2026-07-22
+
+| ID | Task | Status |
+|----|------|--------|
+| 23.1 | Admit card template CRUD (`template_admitcards`) | ✅ |
+| 23.2 | Marksheet template CRUD (`template_marksheets`) | ✅ |
+| 23.3 | Phone call log CRUD (`general_calls`) | ✅ |
+| 23.4 | Visitor purpose CRUD (`visitors_purpose`) + visitor form select | ✅ |
+| 23.5 | Library report (catalog + issues) | ✅ |
+| 23.6 | Routes, IMPLEMENTED_PATHS, RBAC permissions | ✅ |
+| 23.7 | Unit tests (`test_exam_fo_templates`) + frontend typecheck | ✅ |
+
+### Notes
+
+- Admit card model lives under `apps.documents`; marksheet under `apps.examinations`.
+- Library Books + Issue/Return were already complete; report clears the remaining Library Coming Soon nav item.
+- Legacy privilege categories aligned to seeds: `design_admit_card`, `design_marksheet`, `setup_font_office` (legacy typo), `phone_call_log`.
+
+---
+
 ## Roadmap Complete ✅
 
-Phases 0–22 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (videos, CMS, alumni, etc.).
+Phases 0–23 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (videos, CMS, alumni, etc.).
