@@ -23,7 +23,11 @@ interface ModuleListPackProps {
   footer?: ReactNode;
 }
 
-/** Standard list module shell: header + async states + DataTable slot. */
+/**
+ * Standard list module shell: header + async states + DataTable slot.
+ * Note: when `isEmpty` is true, `children` are not rendered — keep dialogs/
+ * overlays in `footer` (or outside this pack) so create flows still work.
+ */
 export function ModuleListPack({
   title,
   description,

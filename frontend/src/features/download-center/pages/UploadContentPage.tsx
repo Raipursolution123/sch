@@ -105,36 +105,38 @@ export function UploadContentPage() {
   );
 
   return (
-    <ModuleListPack
-      title="Upload Content"
-      description="Register downloadable files by path or URL (binary upload can follow later)."
-      actions={addAction}
-      isLoading={isLoading}
-      loadingMessage="Loading content..."
-      isError={isError}
-      error={error}
-      onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && data.length === 0}
-      emptyTitle="No uploaded content"
-      emptyDescription="Add a file path or link under a content type."
-      emptyAction={addAction}
-    >
-      <DataTable
-        data={data}
-        columns={columns}
-        getRowKey={(r) => r.id}
-        actions={(row) => (
-          <PermissionButton
-            permission="downloadcenter.content.delete"
-            variant="ghost"
-            size="sm"
-            className="text-destructive hover:text-destructive"
-            onClick={() => setDeleteTarget(row)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </PermissionButton>
-        )}
-      />
+    <>
+      <ModuleListPack
+        title="Upload Content"
+        description="Register downloadable files by path or URL (binary upload can follow later)."
+        actions={addAction}
+        isLoading={isLoading}
+        loadingMessage="Loading content..."
+        isError={isError}
+        error={error}
+        onRetry={() => void refetch()}
+        isEmpty={!isLoading && !isError && data.length === 0}
+        emptyTitle="No uploaded content"
+        emptyDescription="Add a file path or link under a content type."
+        emptyAction={addAction}
+      >
+        <DataTable
+          data={data}
+          columns={columns}
+          getRowKey={(r) => r.id}
+          actions={(row) => (
+            <PermissionButton
+              permission="downloadcenter.content.delete"
+              variant="ghost"
+              size="sm"
+              className="text-destructive hover:text-destructive"
+              onClick={() => setDeleteTarget(row)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </PermissionButton>
+          )}
+        />
+      </ModuleListPack>
       <EntityFormDialog
         open={open}
         onOpenChange={setOpen}
@@ -179,6 +181,6 @@ export function UploadContentPage() {
         }}
         isLoading={deleteMutation.isPending}
       />
-    </ModuleListPack>
+    </>
   );
 }

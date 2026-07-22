@@ -143,49 +143,52 @@ export function StudentIdCardTemplatesPage() {
   );
 
   return (
-    <ModuleListPack
-      title="Student ID Cards"
-      description="Design templates for student identity cards."
-      actions={addAction}
-      isLoading={isLoading}
-      loadingMessage="Loading templates..."
-      isError={isError}
-      error={error}
-      onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && data.length === 0}
-      emptyTitle="No student ID templates"
-      emptyDescription="Create a template to start generating student ID cards."
-      emptyAction={addAction}
-    >
-      <DataTable
-        data={data}
-        columns={columns}
-        getRowKey={(r) => r.id}
-        actions={(row) => (
-          <>
-            <PermissionButton
-              permission="idcards.student.edit"
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSelected(row);
-                setOpen(true);
-              }}
-            >
-              <Pencil className="h-4 w-4" />
-            </PermissionButton>
-            <PermissionButton
-              permission="idcards.student.delete"
-              variant="ghost"
-              size="sm"
-              className="text-destructive hover:text-destructive"
-              onClick={() => setDeleteTarget(row)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </PermissionButton>
-          </>
-        )}
-      />
+    <>
+      <ModuleListPack
+        title="Student ID Cards"
+        description="Design templates for student identity cards."
+        actions={addAction}
+        isLoading={isLoading}
+        loadingMessage="Loading templates..."
+        isError={isError}
+        error={error}
+        onRetry={() => void refetch()}
+        isEmpty={!isLoading && !isError && data.length === 0}
+        emptyTitle="No student ID templates"
+        emptyDescription="Create a template to start generating student ID cards."
+        emptyAction={addAction}
+      >
+        <DataTable
+          data={data}
+          columns={columns}
+          getRowKey={(r) => r.id}
+          actions={(row) => (
+            <>
+              <PermissionButton
+                permission="idcards.student.edit"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setSelected(row);
+                  setOpen(true);
+                }}
+              >
+                <Pencil className="h-4 w-4" />
+              </PermissionButton>
+              <PermissionButton
+                permission="idcards.student.delete"
+                variant="ghost"
+                size="sm"
+                className="text-destructive hover:text-destructive"
+                onClick={() => setDeleteTarget(row)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </PermissionButton>
+            </>
+          )}
+        />
+      </ModuleListPack>
+      {/* Dialogs must stay mounted when the list is empty (ModuleListPack skips children). */}
       <EntityFormDialog
         open={open}
         onOpenChange={setOpen}
@@ -236,6 +239,6 @@ export function StudentIdCardTemplatesPage() {
         }}
         isLoading={deleteMutation.isPending}
       />
-    </ModuleListPack>
+    </>
   );
 }

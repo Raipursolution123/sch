@@ -80,49 +80,51 @@ export function ContentTypesPage() {
   );
 
   return (
-    <ModuleListPack
-      title="Content Types"
-      description="Categories for downloadable study materials."
-      actions={addAction}
-      isLoading={isLoading}
-      loadingMessage="Loading content types..."
-      isError={isError}
-      error={error}
-      onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && data.length === 0}
-      emptyTitle="No content types"
-      emptyDescription="Create a type such as Notes, Assignments, or Syllabus."
-      emptyAction={addAction}
-    >
-      <DataTable
-        data={data}
-        columns={columns}
-        getRowKey={(r) => r.id}
-        actions={(row) => (
-          <>
-            <PermissionButton
-              permission="downloadcenter.type.edit"
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSelected(row);
-                setOpen(true);
-              }}
-            >
-              <Pencil className="h-4 w-4" />
-            </PermissionButton>
-            <PermissionButton
-              permission="downloadcenter.type.delete"
-              variant="ghost"
-              size="sm"
-              className="text-destructive hover:text-destructive"
-              onClick={() => setDeleteTarget(row)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </PermissionButton>
-          </>
-        )}
-      />
+    <>
+      <ModuleListPack
+        title="Content Types"
+        description="Categories for downloadable study materials."
+        actions={addAction}
+        isLoading={isLoading}
+        loadingMessage="Loading content types..."
+        isError={isError}
+        error={error}
+        onRetry={() => void refetch()}
+        isEmpty={!isLoading && !isError && data.length === 0}
+        emptyTitle="No content types"
+        emptyDescription="Create a type such as Notes, Assignments, or Syllabus."
+        emptyAction={addAction}
+      >
+        <DataTable
+          data={data}
+          columns={columns}
+          getRowKey={(r) => r.id}
+          actions={(row) => (
+            <>
+              <PermissionButton
+                permission="downloadcenter.type.edit"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setSelected(row);
+                  setOpen(true);
+                }}
+              >
+                <Pencil className="h-4 w-4" />
+              </PermissionButton>
+              <PermissionButton
+                permission="downloadcenter.type.delete"
+                variant="ghost"
+                size="sm"
+                className="text-destructive hover:text-destructive"
+                onClick={() => setDeleteTarget(row)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </PermissionButton>
+            </>
+          )}
+        />
+      </ModuleListPack>
       <EntityFormDialog
         open={open}
         onOpenChange={setOpen}
@@ -162,6 +164,6 @@ export function ContentTypesPage() {
         }}
         isLoading={deleteMutation.isPending}
       />
-    </ModuleListPack>
+    </>
   );
 }

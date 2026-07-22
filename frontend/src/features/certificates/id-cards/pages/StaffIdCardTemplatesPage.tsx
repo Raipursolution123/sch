@@ -151,49 +151,51 @@ export function StaffIdCardTemplatesPage() {
   );
 
   return (
-    <ModuleListPack
-      title="Staff ID Cards"
-      description="Design templates for staff identity cards."
-      actions={addAction}
-      isLoading={isLoading}
-      loadingMessage="Loading templates..."
-      isError={isError}
-      error={error}
-      onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && data.length === 0}
-      emptyTitle="No staff ID templates"
-      emptyDescription="Create a template to start generating staff ID cards."
-      emptyAction={addAction}
-    >
-      <DataTable
-        data={data}
-        columns={columns}
-        getRowKey={(r) => r.id}
-        actions={(row) => (
-          <>
-            <PermissionButton
-              permission="idcards.staff.edit"
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSelected(row);
-                setOpen(true);
-              }}
-            >
-              <Pencil className="h-4 w-4" />
-            </PermissionButton>
-            <PermissionButton
-              permission="idcards.staff.delete"
-              variant="ghost"
-              size="sm"
-              className="text-destructive hover:text-destructive"
-              onClick={() => setDeleteTarget(row)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </PermissionButton>
-          </>
-        )}
-      />
+    <>
+      <ModuleListPack
+        title="Staff ID Cards"
+        description="Design templates for staff identity cards."
+        actions={addAction}
+        isLoading={isLoading}
+        loadingMessage="Loading templates..."
+        isError={isError}
+        error={error}
+        onRetry={() => void refetch()}
+        isEmpty={!isLoading && !isError && data.length === 0}
+        emptyTitle="No staff ID templates"
+        emptyDescription="Create a template to start generating staff ID cards."
+        emptyAction={addAction}
+      >
+        <DataTable
+          data={data}
+          columns={columns}
+          getRowKey={(r) => r.id}
+          actions={(row) => (
+            <>
+              <PermissionButton
+                permission="idcards.staff.edit"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setSelected(row);
+                  setOpen(true);
+                }}
+              >
+                <Pencil className="h-4 w-4" />
+              </PermissionButton>
+              <PermissionButton
+                permission="idcards.staff.delete"
+                variant="ghost"
+                size="sm"
+                className="text-destructive hover:text-destructive"
+                onClick={() => setDeleteTarget(row)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </PermissionButton>
+            </>
+          )}
+        />
+      </ModuleListPack>
       <EntityFormDialog
         open={open}
         onOpenChange={setOpen}
@@ -254,6 +256,6 @@ export function StaffIdCardTemplatesPage() {
         }}
         isLoading={deleteMutation.isPending}
       />
-    </ModuleListPack>
+    </>
   );
 }
