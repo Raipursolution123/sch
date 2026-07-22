@@ -141,6 +141,15 @@ export const queryKeys = {
     transport: (id: number) => [...queryKeys.students.all, 'transport', id] as const,
     suggestAdmissionNo: () => [...queryKeys.students.all, 'suggest-admission-no'] as const,
     disableReasons: () => [...queryKeys.students.all, 'disable-reasons'] as const,
+    categories: {
+      all: ['students', 'categories'] as const,
+      list: (query = '') => [...queryKeys.students.categories.all, 'list', query] as const,
+    },
+    houses: {
+      all: ['students', 'houses'] as const,
+      list: (query = '') => [...queryKeys.students.houses.all, 'list', query] as const,
+    },
+    importTemplate: () => [...queryKeys.students.all, 'import-template'] as const,
   },
   staff: {
     all: ['staff'] as const,

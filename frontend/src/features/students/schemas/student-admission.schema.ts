@@ -39,6 +39,7 @@ export const studentAdmissionSchema = z.object({
   blood_group: z.string().trim().optional().or(z.literal('')),
   religion: z.string().trim().max(100).optional().or(z.literal('')),
   category_id: z.string().trim().optional().or(z.literal('')),
+  school_house_id: z.string().trim().optional().or(z.literal('')),
   rte: z.string().trim().min(1, 'Select RTE status'),
   is_active: z.boolean(),
 });

@@ -57,6 +57,12 @@ export const API_ENDPOINTS = {
     transport: (id: number) => `/students/${id}/transport/`,
     disableReasons: '/students/disable-reasons/',
     enable: (id: number) => `/students/${id}/enable/`,
+    categories: '/students/categories/',
+    categoryDetail: (id: number) => `/students/categories/${id}/`,
+    houses: '/students/houses/',
+    houseDetail: (id: number) => `/students/houses/${id}/`,
+    import: '/students/import/',
+    importTemplate: '/students/import/template/',
   },
   staff: {
     list: '/staff/',

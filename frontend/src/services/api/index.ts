@@ -12,6 +12,7 @@ export { subjectGroupsService } from './subject-groups.service';
 export { timetableService } from './timetable.service';
 export { classTeachersService } from './class-teachers.service';
 export { studentsService } from './students.service';
+export { studentMastersService } from './student-masters.service';
 export { staffService } from './staff.service';
 export { leaveTypesService } from './leave-types.service';
 export { staffLeaveRequestsService } from './staff-leave-requests.service';

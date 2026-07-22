@@ -38,6 +38,7 @@ class StudentCreateSerializer(serializers.Serializer):
     category_id = serializers.CharField(
         required=False, allow_blank=True, allow_null=True
     )
+    school_house_id = serializers.IntegerField(required=False, allow_null=True)
     rte = serializers.CharField(required=False, allow_blank=True)
     is_active = serializers.CharField(required=False, allow_blank=True)
 

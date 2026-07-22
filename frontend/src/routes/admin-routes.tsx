@@ -164,6 +164,24 @@ const DisabledStudentsPage = lazy(() =>
   })),
 );
 
+const StudentCategoriesPage = lazy(() =>
+  import('@features/students/pages/StudentCategoriesPage').then((m) => ({
+    default: m.StudentCategoriesPage,
+  })),
+);
+
+const StudentHousesPage = lazy(() =>
+  import('@features/students/pages/StudentHousesPage').then((m) => ({
+    default: m.StudentHousesPage,
+  })),
+);
+
+const ImportStudentsPage = lazy(() =>
+  import('@features/students/pages/ImportStudentsPage').then((m) => ({
+    default: m.ImportStudentsPage,
+  })),
+);
+
 const StaffPage = lazy(() =>
   import('@features/staff/pages/StaffPage').then((m) => ({
     default: m.StaffPage,
@@ -617,7 +635,10 @@ export const adminRoutes: RouteObject[] = [
     element: <ModuleLayout />,
     children: [
       { index: true, element: <StudentsPage /> },
+      { path: 'categories', element: <StudentCategoriesPage /> },
+      { path: 'houses', element: <StudentHousesPage /> },
       { path: 'disabled', element: <DisabledStudentsPage /> },
+      { path: 'import', element: <ImportStudentsPage /> },
       { path: 'online-admission', element: <OnlineAdmissionsPage /> },
       { path: ':studentId', element: <StudentProfilePage /> },
       ...buildPlaceholderChildren('/students'),

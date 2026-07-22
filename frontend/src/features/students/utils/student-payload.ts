@@ -29,7 +29,8 @@ export function studentToFormValues(student: StudentDetail): StudentAdmissionFor
     current_address: student.current_address ?? '',
     blood_group: student.blood_group ?? '',
     religion: student.religion ?? '',
-    category_id: student.category_id ?? 'General',
+    category_id: student.category_id ?? '',
+    school_house_id: student.school_house_id != null ? String(student.school_house_id) : '',
     rte: student.rte ?? 'No',
     is_active: student.is_active === 'yes',
   };
@@ -37,6 +38,7 @@ export function studentToFormValues(student: StudentDetail): StudentAdmissionFor
 
 export function toStudentPayload(values: StudentAdmissionFormValues): CreateStudentPayload {
   const rollNo = values.roll_no?.trim();
+  const houseId = values.school_house_id?.trim();
   return {
     admission_no: values.admission_no.trim(),
     admission_date: values.admission_date,
@@ -58,6 +60,7 @@ export function toStudentPayload(values: StudentAdmissionFormValues): CreateStud
     blood_group: emptyToNull(values.blood_group),
     religion: emptyToNull(values.religion),
     category_id: emptyToNull(values.category_id),
+    school_house_id: houseId && !Number.isNaN(Number(houseId)) ? Number(houseId) : null,
     rte: values.rte,
     is_active: (values.is_active ? 'yes' : 'no') as ActiveFlag,
   };

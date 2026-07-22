@@ -1,8 +1,8 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-22  
-**Current phase:** Phase 19 — Download Center ✅ COMPLETE  
-**Branch:** `main` (local; tag `v1.0.0` pending push)
+**Current phase:** Phase 20 — Students masters + import ✅ COMPLETE  
+**Branch:** `main`
 
 ---
 
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phases 0–19 complete |
-| **Current Phase** | Phase 19 — Download Center ✅ |
-| **Current Task** | Ops: push `main` + tag `v1.0.0` |
-| **Completed Phases** | Phase 0 ✅ … Phase 19 ✅ |
+| **Overall Project Progress** | Phases 0–20 complete |
+| **Current Phase** | Phase 20 — Students Categories/Houses/Import ✅ |
+| **Current Task** | Ops: prod deploy + UAT |
+| **Completed Phases** | Phase 0 ✅ … Phase 20 ✅ |
 | **Remaining Phases** | Ops / UAT; feature backlog (videos, CMS, etc.) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~90% |
-| **Frontend Completion** | ~82% |
-| **API Integration Status** | Certificates, ID cards, download center wired |
-| **UI Completion Status** | 98 real routes; Coming Soon on remaining nav |
-| **Testing Status** | Document service unit tests + Docker pytest + frontend typecheck |
-| **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~48 Coming Soon pages |
+| **Backend Completion** | ~91% |
+| **Frontend Completion** | ~84% |
+| **API Integration Status** | Students categories, houses, import wired |
+| **UI Completion Status** | Students Coming Soon cleared |
+| **Testing Status** | Student masters unit tests + frontend typecheck |
+| **Production Readiness** | Code-ready — pending prod deploy, UAT |
+| **Technical Debt Remaining** | ~45 Coming Soon pages |
 
 ---
 
@@ -836,6 +836,26 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 20 — Students Categories, Houses & Import ✅ SIGNED OFF
+
+**Signed off:** 2026-07-22
+
+| ID | Task | Status |
+|----|------|--------|
+| 20.1 | Categories API (`student_categories`) on shared `categories` table | ✅ |
+| 20.2 | Houses API (`student_houses`) on `school_houses` | ✅ |
+| 20.3 | Import API (`import_student`) CSV rows → `admit_student` | ✅ |
+| 20.4 | Categories / Houses / Import UI + IMPLEMENTED_PATHS | ✅ |
+| 20.5 | Admission dialog live category + house selects | ✅ |
+| 20.6 | Unit tests (`test_student_masters`) | ✅ |
+
+### Notes
+
+- Fee Types keep `/fees/categories/` on the same table.
+- Import uses active session enrollment; CSV class_id/section_id required.
+
+---
+
 ## Roadmap Complete ✅
 
-Phases 0–19 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag `v1.0.0`) and **feature backlog** (videos, CMS, alumni, etc.).
+Phases 0–20 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (videos, CMS, alumni, etc.).

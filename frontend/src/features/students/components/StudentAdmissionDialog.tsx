@@ -17,7 +17,6 @@ import type { SchoolClass } from '@app-types/academics/class';
 import type { StudentDetail } from '@app-types/students/student';
 import {
   BLOOD_GROUP_OPTIONS,
-  CATEGORY_OPTIONS,
   GENDER_OPTIONS,
   RTE_OPTIONS,
 } from '@features/students/constants/options';
@@ -31,6 +30,7 @@ import {
 } from '@features/students/utils/class-section-options';
 import { studentToFormValues } from '@features/students/utils/student-payload';
 import { useClassSections } from '@hooks/useClassSections';
+import { useStudentCategories, useStudentHouses } from '@hooks/useStudentMasters';
 import { todayIsoDate } from '@utils/student';
 
 interface StudentAdmissionDialogProps {
@@ -63,11 +63,6 @@ const bloodGroupOptions = [
   ...BLOOD_GROUP_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
 ];
 
-const categoryOptions = CATEGORY_OPTIONS.map((option) => ({
-  value: option.value,
-  label: option.label,
-}));
-
 const rteOptions = RTE_OPTIONS.map((option) => ({
   value: option.value,
   label: option.label,
@@ -86,6 +81,33 @@ export function StudentAdmissionDialog({
   const { data: classSectionsData, isLoading: mappingsLoading } = useClassSections(1, {
     enabled: open,
   });
+  const { data: categories = [] } = useStudentCategories();
+  const { data: houses = [] } = useStudentHouses();
+
+  const categoryOptions = useMemo(() => {
+    const active = categories.filter((c) => c.is_active === 'yes');
+    const options = active.map((c) => ({ value: c.name, label: c.name }));
+    if (isEdit && student?.category_id && !options.some((o) => o.value === student.category_id)) {
+      options.unshift({ value: student.category_id, label: student.category_id });
+    }
+    return [{ value: '', label: 'Not specified' }, ...options];
+  }, [categories, isEdit, student]);
+
+  const houseOptions = useMemo(() => {
+    const active = houses.filter((h) => h.is_active === 'yes');
+    const options = active.map((h) => ({ value: String(h.id), label: h.house_name }));
+    if (
+      isEdit &&
+      student?.school_house_id != null &&
+      !options.some((o) => o.value === String(student.school_house_id))
+    ) {
+      options.unshift({
+        value: String(student.school_house_id),
+        label: `House #${student.school_house_id}`,
+      });
+    }
+    return [{ value: '', label: 'Not specified' }, ...options];
+  }, [houses, isEdit, student]);
 
   const activeMappings = useMemo(
     () => (classSectionsData?.results ?? []).filter((m) => m.is_active === 'yes'),
@@ -160,7 +182,8 @@ export function StudentAdmissionDialog({
       current_address: '',
       blood_group: '',
       religion: '',
-      category_id: 'General',
+      category_id: '',
+      school_house_id: '',
       rte: 'No',
       is_active: true,
     },
@@ -222,7 +245,8 @@ export function StudentAdmissionDialog({
       current_address: '',
       blood_group: '',
       religion: '',
-      category_id: 'General',
+      category_id: '',
+      school_house_id: '',
       rte: 'No',
       is_active: true,
     });
@@ -367,6 +391,13 @@ export function StudentAdmissionDialog({
             name="category_id"
             label="Category"
             options={categoryOptions}
+            optional
+          />
+          <FormSelectField
+            control={control}
+            name="school_house_id"
+            label="House"
+            options={houseOptions}
             optional
           />
           <FormSelectField control={control} name="rte" label="RTE" options={rteOptions} required />

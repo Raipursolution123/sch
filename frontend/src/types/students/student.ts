@@ -35,6 +35,7 @@ export interface StudentDetail extends StudentListItem {
   blood_group: string | null;
   religion: string | null;
   category_id: string | null;
+  school_house_id?: number | null;
   rte: string | null;
   updated_at: string | null;
 }
@@ -60,6 +61,7 @@ export interface CreateStudentPayload {
   blood_group: string | null;
   religion: string | null;
   category_id: string | null;
+  school_house_id?: number | null;
   rte: string;
   is_active: ActiveFlag;
 }
