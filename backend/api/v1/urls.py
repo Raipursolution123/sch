@@ -8,6 +8,11 @@ from apps.accounts.views import (
     MeView,
     RegisterView,
 )
+from apps.accounts.views.roles import (
+    RolesListCreateView,
+    RoleDetailView,
+    RolePermissionsView,
+)
 
 app_name = "accounts"
 
@@ -18,6 +23,10 @@ urlpatterns = [
     path("auth/me/", MeView.as_view(), name="me"),
     path("auth/token/", CustomTokenObtainPairView.as_view(), name="token_obtain"),
     path("auth/token/refresh/", CustomTokenRefreshView.as_view(), name="token_refresh"),
+    # roles
+    path("roles/", RolesListCreateView.as_view(), name="roles_list"),
+    path("roles/<int:pk>/", RoleDetailView.as_view(), name="role_detail"),
+    path("roles/<int:role_id>/permissions/", RolePermissionsView.as_view(), name="role_permissions"),
     # settings
     path("settings/", include("apps.settings.urls")),
     # attendance

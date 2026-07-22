@@ -55,10 +55,14 @@ class JournalEntriesDetailView(APIView):
             return APIResponse.error(message="Entry not found", status_code=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, pk):
+        from django.db import transaction
+        from apps.cyc_extensions.models.cyc_entryitems import CycEntryitems
         try:
-            entry = CycEntries.objects.get(pk=pk)
-            # Reversal logic could be implemented here or a flag updated, but per hard-delete requirement fallback:
-            entry.delete()
+            with transaction.atomic():
+                entry = CycEntries.objects.get(pk=pk)
+                # Delete related entry items first due to database foreign key constraints
+                CycEntryitems.objects.filter(entry_id=entry.id).delete()
+                entry.delete()
             return APIResponse.success(message="Entry deleted successfully")
         except CycEntries.DoesNotExist:
             return APIResponse.error(message="Entry not found", status_code=status.HTTP_404_NOT_FOUND)

@@ -54,6 +54,42 @@ const CurrencyPage = lazy(() =>
   })),
 );
 
+const SmsSettingsPage = lazy(() =>
+  import('@features/settings/sms/pages/SmsSettingsPage').then((m) => ({
+    default: m.SmsSettingsPage,
+  })),
+);
+
+const EmailSettingsPage = lazy(() =>
+  import('@features/settings/email/pages/EmailSettingsPage').then((m) => ({
+    default: m.EmailSettingsPage,
+  })),
+);
+
+const NotificationSettingsPage = lazy(() =>
+  import('@features/settings/notifications/pages/NotificationSettingsPage').then((m) => ({
+    default: m.NotificationSettingsPage,
+  })),
+);
+
+const PrintHeaderFooterPage = lazy(() =>
+  import('@features/settings/print-header-footer/pages/PrintHeaderFooterPage').then((m) => ({
+    default: m.PrintHeaderFooterPage,
+  })),
+);
+
+const PaymentMethodsPage = lazy(() =>
+  import('@features/settings/payment-methods/pages/PaymentMethodsPage').then((m) => ({
+    default: m.PaymentMethodsPage,
+  })),
+);
+
+const RolesPage = lazy(() =>
+  import('@features/settings/roles/pages/RolesPage').then((m) => ({
+    default: m.RolesPage,
+  })),
+);
+
 const ClassesPage = lazy(() =>
   import('@features/academics/classes/pages/ClassesPage').then((m) => ({
     default: m.ClassesPage,
@@ -532,6 +568,12 @@ export const adminRoutes: RouteObject[] = [
     { path: 'general', element: <GeneralSettingsPage /> },
     { path: 'languages', element: <LanguagesPage /> },
     { path: 'currency', element: <CurrencyPage /> },
+    { path: 'sms', element: <SmsSettingsPage /> },
+    { path: 'email', element: <EmailSettingsPage /> },
+    { path: 'notifications', element: <NotificationSettingsPage /> },
+    { path: 'print-header-footer', element: <PrintHeaderFooterPage /> },
+    { path: 'payment-methods', element: <PaymentMethodsPage /> },
+    { path: 'roles', element: <RolesPage /> },
   ]),
 
   createModuleRoutes('/front-office', ROUTES.frontOffice.enquiry, [

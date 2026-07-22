@@ -3,5 +3,17 @@ from apps.accounts.serializers.auth import (
     RegisterSerializer,
     UserSerializer,
 )
+from apps.accounts.serializers.role import (
+    RoleSerializer,
+    PermissionCategorySerializer,
+    RolePermissionSerializer,
+)
 
-__all__ = ["UserSerializer", "LoginSerializer", "RegisterSerializer"]
+__all__ = [
+    "UserSerializer",
+    "LoginSerializer",
+    "RegisterSerializer",
+    "RoleSerializer",
+    "PermissionCategorySerializer",
+    "RolePermissionSerializer",
+]
