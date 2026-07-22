@@ -67,6 +67,8 @@ const ALL_PERMISSIONS: Permission[] = [
   'exams.submit',
   'exams.approve',
   'fees.manage',
+  'fees.student_assign',
+  'fees.carry_forward',
   'attendance.mark',
   'attendance.report',
   'notifications.view',

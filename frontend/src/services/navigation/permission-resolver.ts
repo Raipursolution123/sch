@@ -93,6 +93,8 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
     'search_fees_payment',
     'offline_bank_payments',
   ],
+  'fees.student_assign': ['fees_group_assign'],
+  'fees.carry_forward': ['fees_forward'],
   'attendance.mark': ['student_attendance', 'subject_attendance'],
   'attendance.report': ['student_attendance', 'attendance_report'],
   'exams.view': ['exam_group', 'exam_schedule', 'exam_result'],

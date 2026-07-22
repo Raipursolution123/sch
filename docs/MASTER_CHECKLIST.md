@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-22  
-**Current phase:** Phase 21 — Staff masters + attendance + payroll ✅ COMPLETE  
+**Current phase:** Phase 22 — Attendance subject + Fees master/assign/carry-forward ✅ COMPLETE  
 **Branch:** `main`
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phases 0–21 complete |
-| **Current Phase** | Phase 21 — Staff Departments/Designations/Attendance/Payroll ✅ |
+| **Overall Project Progress** | Phases 0–22 complete |
+| **Current Phase** | Phase 22 — Attendance subject + Fees gaps ✅ |
 | **Current Task** | Ops: prod deploy + UAT |
-| **Completed Phases** | Phase 0 ✅ … Phase 21 ✅ |
+| **Completed Phases** | Phase 0 ✅ … Phase 22 ✅ |
 | **Remaining Phases** | Ops / UAT; feature backlog (videos, CMS, etc.) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~93% |
-| **Frontend Completion** | ~86% |
-| **API Integration Status** | Staff masters, attendance, payroll wired |
-| **UI Completion Status** | Staff Coming Soon cleared |
-| **Testing Status** | Staff masters unit tests + frontend typecheck |
+| **Backend Completion** | ~94% |
+| **Frontend Completion** | ~88% |
+| **API Integration Status** | Subject attendance + fees assign/carry-forward wired |
+| **UI Completion Status** | Attendance + Fees Coming Soon cleared |
+| **Testing Status** | Gap unit tests + frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT |
-| **Technical Debt Remaining** | ~41 Coming Soon pages |
+| **Technical Debt Remaining** | ~38 Coming Soon pages |
 
 ---
 
@@ -876,6 +876,26 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 22 — Subject Attendance + Fees Master / Assign / Carry Forward ✅ SIGNED OFF
+
+**Signed off:** 2026-07-22
+
+| ID | Task | Status |
+|----|------|--------|
+| 22.1 | Subject attendance periods / roster / mark APIs | ✅ |
+| 22.2 | Fees Master UI on fee_session_groups (`/fees/master`) | ✅ |
+| 22.3 | Assign Fees to students (`student_fees_master`) | ✅ |
+| 22.4 | Carry Forward prior balances into target session | ✅ |
+| 22.5 | Routes + IMPLEMENTED_PATHS + RBAC | ✅ |
+| 22.6 | Unit tests for validation paths | ✅ |
+
+### Notes
+
+- Subject attendance uses timetable periods for the selected weekday.
+- Carry forward writes `student_fees_master` with `is_system=1` against a target Fees Master structure.
+
+---
+
 ## Roadmap Complete ✅
 
-Phases 0–21 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (videos, CMS, alumni, etc.).
+Phases 0–22 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (videos, CMS, alumni, etc.).

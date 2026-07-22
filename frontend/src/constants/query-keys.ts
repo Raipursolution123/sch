@@ -231,6 +231,26 @@ export const queryKeys = {
     assignments: {
       list: () => [...queryKeys.fees.all, 'assignments', 'list'] as const,
     },
+    studentAssignments: {
+      roster: (feeSessionGroupId: number, sectionId?: number) =>
+        [
+          ...queryKeys.fees.all,
+          'student-assignments',
+          feeSessionGroupId,
+          sectionId ?? 'all',
+        ] as const,
+    },
+    carryForward: {
+      preview: (fromSessionId: number, toSessionId: number, classId: number, sectionId: number) =>
+        [
+          ...queryKeys.fees.all,
+          'carry-forward',
+          fromSessionId,
+          toSessionId,
+          classId,
+          sectionId,
+        ] as const,
+    },
     collect: {
       roster: (classId: number, sectionId: number) =>
         [...queryKeys.fees.all, 'collect', 'roster', classId, sectionId] as const,
@@ -287,6 +307,10 @@ export const queryKeys = {
     types: () => [...queryKeys.attendance.all, 'types'] as const,
     roster: (classId: number, sectionId: number, date: string) =>
       [...queryKeys.attendance.all, 'roster', classId, sectionId, date] as const,
+    subjectPeriods: (classId: number, sectionId: number, date: string) =>
+      [...queryKeys.attendance.all, 'subject-periods', classId, sectionId, date] as const,
+    subjectRoster: (periodId: number, date: string) =>
+      [...queryKeys.attendance.all, 'subject-roster', periodId, date] as const,
     report: (filters: {
       from_date: string;
       to_date: string;

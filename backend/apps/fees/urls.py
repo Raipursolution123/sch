@@ -18,6 +18,12 @@ from apps.fees.api.views.fee_discount_assign import (
 from apps.fees.api.views.fee_group import FeeGroupDetailView, FeeGroupsListView
 from apps.fees.api.views.fee_reminder import FeeReminderDetailView, FeeRemindersListView
 from apps.fees.api.views.fee_search import FeeDueSearchView, FeePaymentSearchView
+from apps.fees.api.views.fee_student_assign import (
+    FeeCarryForwardApplyView,
+    FeeCarryForwardPreviewView,
+    FeeStudentAssignRosterView,
+    FeeStudentAssignSaveView,
+)
 from apps.fees.api.views.fee_type import FeeTypeDetailView, FeeTypesListView
 from apps.fees.api.views.offline_bank_payments import (
     OfflineBankPaymentApproveView,
@@ -31,6 +37,26 @@ urlpatterns = [
     path("collect/roster/", FeeCollectRosterView.as_view(), name="fee-collect-roster"),
     path("search/due/", FeeDueSearchView.as_view(), name="fee-due-search"),
     path("search/payments/", FeePaymentSearchView.as_view(), name="fee-payment-search"),
+    path(
+        "student-assignments/roster/",
+        FeeStudentAssignRosterView.as_view(),
+        name="fee-student-assign-roster",
+    ),
+    path(
+        "student-assignments/",
+        FeeStudentAssignSaveView.as_view(),
+        name="fee-student-assign-save",
+    ),
+    path(
+        "carry-forward/preview/",
+        FeeCarryForwardPreviewView.as_view(),
+        name="fee-carry-forward-preview",
+    ),
+    path(
+        "carry-forward/",
+        FeeCarryForwardApplyView.as_view(),
+        name="fee-carry-forward-apply",
+    ),
     path(
         "offline-payments/",
         OfflineBankPaymentsListView.as_view(),

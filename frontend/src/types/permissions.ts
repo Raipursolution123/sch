@@ -69,6 +69,8 @@ export type Permission =
   | 'exams.submit'
   | 'exams.approve'
   | 'fees.manage'
+  | 'fees.student_assign'
+  | 'fees.carry_forward'
   | 'transport.create'
   | 'transport.edit'
   | 'transport.delete'

@@ -85,18 +85,20 @@ export function FeeAssignPage() {
       title={canAssign ? undefined : 'Configure classes, fee types, groups, and sessions first'}
     >
       <Plus className="h-4 w-4" aria-hidden="true" />
-      Assign Fees
+      Add fee structure
     </PermissionButton>
   );
 
   return (
     <ModuleListPack
-      title="Assign Fees"
+      title="Fees Master"
+      description="Define session fee structures by class and fee group. Assign them to students from Assign Fees."
       actions={assignAction}
       prerequisiteHint={
         !canAssign && !isLoading ? (
           <p className="text-sm text-muted-foreground">
-            Set up fee types, fee groups, classes, and academic sessions before assigning fees.
+            Set up fee types, fee groups, classes, and academic sessions before creating fee
+            structures.
           </p>
         ) : undefined
       }
@@ -106,8 +108,8 @@ export function FeeAssignPage() {
       error={error}
       onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && assignments?.length === 0}
-      emptyTitle="No fee assignments"
-      emptyDescription="Assign a fee group to a class to define what students owe."
+      emptyTitle="No fee structures"
+      emptyDescription="Create a fee structure for a class and fee group to define what students owe."
       emptyAction={canAssign ? assignAction : undefined}
       footer={
         <>

@@ -30,6 +30,8 @@ export { studentFeesService } from './student-fees.service';
 export { collectFeesService } from './collect-fees.service';
 export { feeSearchService } from './fee-search.service';
 export { attendanceService } from './attendance.service';
+export { subjectAttendanceService } from './subject-attendance.service';
+export { feeStudentAssignService, feeCarryForwardService } from './fee-student-assign.service';
 export { examGroupsService } from './exam-groups.service';
 export { examsService } from './exams.service';
 export { examSchedulesService } from './exam-schedules.service';

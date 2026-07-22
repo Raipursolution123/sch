@@ -266,6 +266,18 @@ const FeeAssignPage = lazy(() =>
   })),
 );
 
+const AssignFeesToStudentsPage = lazy(() =>
+  import('@features/fees/assign/pages/AssignFeesToStudentsPage').then((m) => ({
+    default: m.AssignFeesToStudentsPage,
+  })),
+);
+
+const FeeCarryForwardPage = lazy(() =>
+  import('@features/fees/carry-forward/pages/FeeCarryForwardPage').then((m) => ({
+    default: m.FeeCarryForwardPage,
+  })),
+);
+
 const CollectFeesPage = lazy(() =>
   import('@features/fees/collect/pages/CollectFeesPage').then((m) => ({
     default: m.CollectFeesPage,
@@ -293,6 +305,12 @@ const FeeRemindersPage = lazy(() =>
 const MarkAttendancePage = lazy(() =>
   import('@features/attendance/mark/pages/MarkAttendancePage').then((m) => ({
     default: m.MarkAttendancePage,
+  })),
+);
+
+const SubjectAttendancePage = lazy(() =>
+  import('@features/attendance/subject/pages/SubjectAttendancePage').then((m) => ({
+    default: m.SubjectAttendancePage,
   })),
 );
 
@@ -690,17 +708,20 @@ export const adminRoutes: RouteObject[] = [
     { path: 'mark', element: <MarkAttendancePage /> },
     { path: 'report', element: <AttendanceReportPage /> },
     { path: 'approve-leave', element: <ApproveLeavePage /> },
+    { path: 'subject', element: <SubjectAttendancePage /> },
   ]),
 
   createModuleRoutes('/fees', ROUTES.fees.feeTypes, [
     { path: 'collect', element: <CollectFeesPage /> },
     { path: 'due-search', element: <DueFeesSearchPage /> },
     { path: 'payment-search', element: <PaymentSearchPage /> },
+    { path: 'master', element: <FeeAssignPage /> },
     { path: 'fee-types', element: <FeeTypesPage /> },
     { path: 'fee-groups', element: <FeeGroupsPage /> },
     { path: 'discounts', element: <FeeDiscountsPage /> },
     { path: 'discounts/assign', element: <AssignDiscountsPage /> },
-    { path: 'assign', element: <FeeAssignPage /> },
+    { path: 'assign', element: <AssignFeesToStudentsPage /> },
+    { path: 'carry-forward', element: <FeeCarryForwardPage /> },
     { path: 'reminders', element: <FeeRemindersPage /> },
     { path: 'payment-gateways', element: <PaymentGatewaysPage /> },
     { path: 'offline-payments', element: <OfflineBankPaymentsPage /> },
