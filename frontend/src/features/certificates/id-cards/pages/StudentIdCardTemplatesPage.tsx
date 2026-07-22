@@ -194,6 +194,7 @@ export function StudentIdCardTemplatesPage() {
         onOpenChange={setOpen}
         title={selected ? 'Edit Student ID Template' : 'Add Student ID Template'}
         size="lg"
+        scrollable
         onSubmit={handleSubmit((values) => {
           const payload = toPayload(values);
           if (selected) {

@@ -181,6 +181,7 @@ export function CertificateTemplatesPage() {
         onOpenChange={setOpen}
         title={selected ? 'Edit Template' : 'Add Template'}
         size="lg"
+        scrollable
         onSubmit={handleSubmit((values) => {
           const payload = {
             ...values,

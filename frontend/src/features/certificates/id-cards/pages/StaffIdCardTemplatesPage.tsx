@@ -201,6 +201,7 @@ export function StaffIdCardTemplatesPage() {
         onOpenChange={setOpen}
         title={selected ? 'Edit Staff ID Template' : 'Add Staff ID Template'}
         size="lg"
+        scrollable
         onSubmit={handleSubmit((values) => {
           const payload = toPayload(values);
           if (selected) {
