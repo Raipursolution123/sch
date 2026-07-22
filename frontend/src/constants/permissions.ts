@@ -110,6 +110,23 @@ const ALL_PERMISSIONS: Permission[] = [
   'expense.head.create',
   'expense.head.edit',
   'expense.head.delete',
+  'certificates.template.create',
+  'certificates.template.edit',
+  'certificates.template.delete',
+  'certificates.generate.view',
+  'idcards.student.create',
+  'idcards.student.edit',
+  'idcards.student.delete',
+  'idcards.student.generate',
+  'idcards.staff.create',
+  'idcards.staff.edit',
+  'idcards.staff.delete',
+  'idcards.staff.generate',
+  'downloadcenter.type.create',
+  'downloadcenter.type.edit',
+  'downloadcenter.type.delete',
+  'downloadcenter.content.create',
+  'downloadcenter.content.delete',
 ];
 
 export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {

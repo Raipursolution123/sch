@@ -166,6 +166,23 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'expense.head.create': ['expense_head'],
   'expense.head.edit': ['expense_head'],
   'expense.head.delete': ['expense_head'],
+  'certificates.template.create': ['student_certificate'],
+  'certificates.template.edit': ['student_certificate'],
+  'certificates.template.delete': ['student_certificate'],
+  'certificates.generate.view': ['generate_certificate'],
+  'idcards.student.create': ['student_id_card'],
+  'idcards.student.edit': ['student_id_card'],
+  'idcards.student.delete': ['student_id_card'],
+  'idcards.student.generate': ['generate_id_card'],
+  'idcards.staff.create': ['staff_id_card'],
+  'idcards.staff.edit': ['staff_id_card'],
+  'idcards.staff.delete': ['staff_id_card'],
+  'idcards.staff.generate': ['generate_staff_id_card'],
+  'downloadcenter.type.create': ['content_type'],
+  'downloadcenter.type.edit': ['content_type'],
+  'downloadcenter.type.delete': ['content_type'],
+  'downloadcenter.content.create': ['upload_content'],
+  'downloadcenter.content.delete': ['upload_content'],
 };
 
 export interface NavigationPermissionContext {

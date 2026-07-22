@@ -1,8 +1,8 @@
 # School ERP — Master Implementation Checklist
 
-**Last updated:** 2026-07-21  
-**Current phase:** Phase 16 — Income & Expense ✅ COMPLETE  
-**Branch:** `main` (local; uncommitted)
+**Last updated:** 2026-07-22  
+**Current phase:** Phase 19 — Download Center ✅ COMPLETE  
+**Branch:** `main` (local; tag `v1.0.0` pending push)
 
 ---
 
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phase 16 complete (roadmap phases 0–16) |
-| **Current Phase** | Phase 16 — Income & Expense ✅ |
-| **Current Task** | Production deploy + UAT sign-off (ops); tag `v1.0.0` |
-| **Completed Phases** | Phase 0 ✅ … Phase 16 ✅ |
-| **Remaining Phases** | Ops / feature backlog (certificates, CMS, etc.) |
+| **Overall Project Progress** | Phases 0–19 complete |
+| **Current Phase** | Phase 19 — Download Center ✅ |
+| **Current Task** | Ops: push `main` + tag `v1.0.0` |
+| **Completed Phases** | Phase 0 ✅ … Phase 19 ✅ |
+| **Remaining Phases** | Ops / UAT; feature backlog (videos, CMS, etc.) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~87% |
-| **Frontend Completion** | ~78% |
-| **API Integration Status** | Income/Expense heads + lists wired |
-| **UI Completion Status** | 88 real routes; Coming Soon badges on unimplemented nav |
-| **Testing Status** | Backend income/expense unit tests + frontend typecheck |
+| **Backend Completion** | ~90% |
+| **Frontend Completion** | ~82% |
+| **API Integration Status** | Certificates, ID cards, download center wired |
+| **UI Completion Status** | 98 real routes; Coming Soon on remaining nav |
+| **Testing Status** | Document service unit tests + Docker pytest + frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT, v1.0.0 tag |
-| **Technical Debt Remaining** | ~58 Coming Soon pages |
+| **Technical Debt Remaining** | ~48 Coming Soon pages |
 
 ---
 
@@ -767,10 +767,75 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 - Soft-delete via `is_deleted='yes'`.
 - Search screens / document upload / ledger posting deferred.
-- Next: ops/UAT + `v1.0.0` tag, or certificates.
+
+---
+
+## Phase 17 — Certificates ✅ SIGNED OFF
+
+**Signed off:** 2026-07-22  
+**Objective:** Wire Certificate Templates + Generate Certificate (student HTML merge + print).
+
+### Implemented routes
+
+| Route | Page | API |
+|-------|------|-----|
+| `/certificates/templates` | Template CRUD | `/documents/certificates/` |
+| `/certificates/generate` | Merge + print preview | `/documents/certificates/generate/` |
+
+### Tasks
+
+| ID | Task | Status |
+|----|------|--------|
+| 17.1 | Template CRUD + generate merge service | ✅ |
+| 17.2 | Templates + Generate UI | ✅ |
+| 17.3 | Nav RBAC keys (`student_certificate`) | ✅ |
+| 17.4 | Unit tests + typecheck + ds:audit | ✅ |
+
+### Notes / follow-ups
+
+- Tokens: `[name]`, `[admission_no]`, `[class]`, `[section]`, etc. (also `{{…}}`).
+- Student/Staff ID Card screens remain Coming Soon (Phase 18+).
+- Next: ID cards, Download Center, or ops/UAT + `v1.0.0` tag.
+
+---
+
+## Phase 18 — ID Cards ✅ SIGNED OFF
+
+**Signed off:** 2026-07-22
+
+| ID | Task | Status |
+|----|------|--------|
+| 18.1 | Student/Staff ID template CRUD + generate APIs | ✅ |
+| 18.2 | Templates + Generate UI (4 screens) | ✅ |
+| 18.3 | Nav / `IMPLEMENTED_PATHS` + RBAC keys | ✅ |
+| 18.4 | Unit tests (`test_id_card_service`) | ✅ |
+
+### Notes
+
+- Preview returns enabled fields + barcode; print via browser print helper.
+- Binary background/logo upload deferred (path strings only).
+
+---
+
+## Phase 19 — Download Center ✅ SIGNED OFF
+
+**Signed off:** 2026-07-22
+
+| ID | Task | Status |
+|----|------|--------|
+| 19.1 | Content types CRUD API (`content_type`) | ✅ |
+| 19.2 | Upload content list/create/delete API (`upload_content`) | ✅ |
+| 19.3 | Content Types + Upload Content UI | ✅ |
+| 19.4 | Nav RBAC (`content_type` vs `upload_content`) | ✅ |
+| 19.5 | Unit tests (`test_download_center_service`) | ✅ |
+
+### Notes
+
+- Video tutorials remain Coming Soon.
+- File registration is path/URL metadata (binary upload later).
 
 ---
 
 ## Roadmap Complete ✅
 
-All phases 0–16 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag) and **feature backlog** (certificates, CMS, etc.).
+Phases 0–19 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT, tag `v1.0.0`) and **feature backlog** (videos, CMS, alumni, etc.).

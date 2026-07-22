@@ -1,0 +1,89 @@
+from django.urls import path
+
+from apps.documents.api.views.certificates import (
+    CertificateDetailView,
+    CertificateGenerateView,
+    CertificateListCreateView,
+)
+from apps.documents.api.views.download_center import (
+    ContentTypeDetailView,
+    ContentTypeListCreateView,
+    UploadContentDetailView,
+    UploadContentListCreateView,
+)
+from apps.documents.api.views.id_cards import (
+    StaffIdCardDetailView,
+    StaffIdCardGenerateView,
+    StaffIdCardListCreateView,
+    StudentIdCardDetailView,
+    StudentIdCardGenerateView,
+    StudentIdCardListCreateView,
+)
+
+urlpatterns = [
+    path(
+        "certificates/generate/",
+        CertificateGenerateView.as_view(),
+        name="certificate-generate",
+    ),
+    path(
+        "certificates/",
+        CertificateListCreateView.as_view(),
+        name="certificate-templates-list-create",
+    ),
+    path(
+        "certificates/<int:pk>/",
+        CertificateDetailView.as_view(),
+        name="certificate-templates-detail",
+    ),
+    path(
+        "id-cards/student/generate/",
+        StudentIdCardGenerateView.as_view(),
+        name="student-id-card-generate",
+    ),
+    path(
+        "id-cards/student/",
+        StudentIdCardListCreateView.as_view(),
+        name="student-id-card-list-create",
+    ),
+    path(
+        "id-cards/student/<int:pk>/",
+        StudentIdCardDetailView.as_view(),
+        name="student-id-card-detail",
+    ),
+    path(
+        "id-cards/staff/generate/",
+        StaffIdCardGenerateView.as_view(),
+        name="staff-id-card-generate",
+    ),
+    path(
+        "id-cards/staff/",
+        StaffIdCardListCreateView.as_view(),
+        name="staff-id-card-list-create",
+    ),
+    path(
+        "id-cards/staff/<int:pk>/",
+        StaffIdCardDetailView.as_view(),
+        name="staff-id-card-detail",
+    ),
+    path(
+        "download-center/content-types/",
+        ContentTypeListCreateView.as_view(),
+        name="content-types-list-create",
+    ),
+    path(
+        "download-center/content-types/<int:pk>/",
+        ContentTypeDetailView.as_view(),
+        name="content-types-detail",
+    ),
+    path(
+        "download-center/content/",
+        UploadContentListCreateView.as_view(),
+        name="upload-content-list-create",
+    ),
+    path(
+        "download-center/content/<int:pk>/",
+        UploadContentDetailView.as_view(),
+        name="upload-content-detail",
+    ),
+]

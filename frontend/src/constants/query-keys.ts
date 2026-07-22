@@ -455,4 +455,29 @@ export const queryKeys = {
       list: (query = '') => [...queryKeys.incomeExpense.all, 'expense', 'list', query] as const,
     },
   },
+  certificates: {
+    all: ['certificates'] as const,
+    templates: {
+      list: (query = '') => [...queryKeys.certificates.all, 'templates', 'list', query] as const,
+    },
+  },
+  idCards: {
+    all: ['id-cards'] as const,
+    student: {
+      list: (query = '') => [...queryKeys.idCards.all, 'student', 'list', query] as const,
+    },
+    staff: {
+      list: (query = '') => [...queryKeys.idCards.all, 'staff', 'list', query] as const,
+    },
+  },
+  downloadCenter: {
+    all: ['download-center'] as const,
+    contentTypes: {
+      list: (query = '') =>
+        [...queryKeys.downloadCenter.all, 'content-types', 'list', query] as const,
+    },
+    content: {
+      list: (query = '') => [...queryKeys.downloadCenter.all, 'content', 'list', query] as const,
+    },
+  },
 } as const;

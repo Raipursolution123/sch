@@ -663,13 +663,13 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.downloadCenter.root,
     icon: Download,
     section: 'operations',
-    permissionKeys: ['upload_content', 'video_tutorial'],
+    permissionKeys: ['upload_content', 'video_tutorial', 'content_type'],
     children: [
       {
         id: 'download-types',
         label: 'Content Types',
         path: ROUTES.downloadCenter.contentTypes,
-        permissionKeys: ['upload_content'],
+        permissionKeys: ['content_type'],
       },
       {
         id: 'download-content',
@@ -895,13 +895,20 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.certificates.root,
     icon: CreditCard,
     section: 'insights',
-    permissionKeys: ['certificate', 'student_id_card'],
+    permissionKeys: [
+      'student_certificate',
+      'generate_certificate',
+      'student_id_card',
+      'generate_id_card',
+      'staff_id_card',
+      'generate_staff_id_card',
+    ],
     children: [
       {
         id: 'cert-templates',
         label: 'Certificate Templates',
         path: ROUTES.certificates.templates,
-        permissionKeys: ['certificate'],
+        permissionKeys: ['student_certificate'],
       },
       {
         id: 'cert-generate',

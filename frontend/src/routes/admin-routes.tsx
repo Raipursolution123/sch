@@ -488,6 +488,54 @@ const ExpenseHeadsPage = lazy(() =>
   })),
 );
 
+const CertificateTemplatesPage = lazy(() =>
+  import('@features/certificates/templates/pages/CertificateTemplatesPage').then((m) => ({
+    default: m.CertificateTemplatesPage,
+  })),
+);
+
+const GenerateCertificatePage = lazy(() =>
+  import('@features/certificates/generate/pages/GenerateCertificatePage').then((m) => ({
+    default: m.GenerateCertificatePage,
+  })),
+);
+
+const StudentIdCardTemplatesPage = lazy(() =>
+  import('@features/certificates/id-cards/pages/StudentIdCardTemplatesPage').then((m) => ({
+    default: m.StudentIdCardTemplatesPage,
+  })),
+);
+
+const GenerateStudentIdCardPage = lazy(() =>
+  import('@features/certificates/id-cards/pages/GenerateStudentIdCardPage').then((m) => ({
+    default: m.GenerateStudentIdCardPage,
+  })),
+);
+
+const StaffIdCardTemplatesPage = lazy(() =>
+  import('@features/certificates/id-cards/pages/StaffIdCardTemplatesPage').then((m) => ({
+    default: m.StaffIdCardTemplatesPage,
+  })),
+);
+
+const GenerateStaffIdCardPage = lazy(() =>
+  import('@features/certificates/id-cards/pages/GenerateStaffIdCardPage').then((m) => ({
+    default: m.GenerateStaffIdCardPage,
+  })),
+);
+
+const ContentTypesPage = lazy(() =>
+  import('@features/download-center/pages/ContentTypesPage').then((m) => ({
+    default: m.ContentTypesPage,
+  })),
+);
+
+const UploadContentPage = lazy(() =>
+  import('@features/download-center/pages/UploadContentPage').then((m) => ({
+    default: m.UploadContentPage,
+  })),
+);
+
 const NoticesPage = lazy(() =>
   import('@features/communications/notices/pages/NoticesPage').then((m) => ({
     default: m.NoticesPage,
@@ -667,7 +715,10 @@ export const adminRoutes: RouteObject[] = [
   createModuleRoutes('/communicate', ROUTES.communicate.notices, [
     { path: 'notices', element: <NoticesPage /> },
   ]),
-  createPlaceholderModule('/download-center', ROUTES.downloadCenter.contentTypes),
+  createModuleRoutes('/download-center', ROUTES.downloadCenter.contentTypes, [
+    { path: 'content-types', element: <ContentTypesPage /> },
+    { path: 'content', element: <UploadContentPage /> },
+  ]),
   createModuleRoutes('/lesson-plan', ROUTES.lessonPlan.syllabusStatus, [
     {
       path: 'syllabus-status',
@@ -709,7 +760,14 @@ export const adminRoutes: RouteObject[] = [
     { path: 'hr', element: <StaffReportPage /> },
     { path: 'transport', element: <TransportHostelReportPage /> },
   ]),
-  createPlaceholderModule('/certificates', ROUTES.certificates.templates),
+  createModuleRoutes('/certificates', ROUTES.certificates.templates, [
+    { path: 'templates', element: <CertificateTemplatesPage /> },
+    { path: 'generate', element: <GenerateCertificatePage /> },
+    { path: 'student-id-card', element: <StudentIdCardTemplatesPage /> },
+    { path: 'generate-id-card', element: <GenerateStudentIdCardPage /> },
+    { path: 'staff-id-card', element: <StaffIdCardTemplatesPage /> },
+    { path: 'generate-staff-id-card', element: <GenerateStaffIdCardPage /> },
+  ]),
   createPlaceholderModule('/alumni', ROUTES.alumni.list),
   createPlaceholderModule('/leads', ROUTES.leads.all),
   createPlaceholderModule('/cms', ROUTES.cms.events),
