@@ -158,6 +158,15 @@ export const queryKeys = {
     departments: () => [...queryKeys.staff.all, 'departments'] as const,
     designations: () => [...queryKeys.staff.all, 'designations'] as const,
     suggestEmployeeId: () => [...queryKeys.staff.all, 'suggest-employee-id'] as const,
+    attendance: {
+      types: () => [...queryKeys.staff.all, 'attendance', 'types'] as const,
+      roster: (date: string) => [...queryKeys.staff.all, 'attendance', 'roster', date] as const,
+    },
+    payroll: {
+      scales: () => [...queryKeys.staff.all, 'payroll', 'scales'] as const,
+      payslips: (staffId?: number) =>
+        [...queryKeys.staff.all, 'payroll', 'payslips', staffId ?? 'all'] as const,
+    },
     leaveTypes: {
       list: () => [...queryKeys.staff.all, 'leave-types', 'list'] as const,
     },

@@ -13,17 +13,82 @@ from apps.staff.api.views.leave_type import (
     LeaveTypeDetailView,
     LeaveTypesListCreateView,
 )
-from apps.staff.api.views.lookup import DepartmentListView, DesignationListView
 from apps.staff.api.views.staff import StaffDetailView, StaffListCreateView
 from apps.staff.api.views.staff_document import (
     StaffDocumentDeleteView,
     StaffDocumentUploadView,
 )
+from apps.staff.api.views.staff_masters import (
+    DepartmentDetailView,
+    DepartmentListCreateView,
+    DesignationDetailView,
+    DesignationListCreateView,
+    StaffAttendanceMarkView,
+    StaffAttendanceRosterView,
+    StaffAttendanceTypesView,
+    StaffPayrollScaleDetailView,
+    StaffPayrollScaleListCreateView,
+    StaffPayslipDetailView,
+    StaffPayslipListCreateView,
+)
 
 urlpatterns = [
     path("", StaffListCreateView.as_view(), name="staff_list_create"),
-    path("departments/", DepartmentListView.as_view(), name="department_list"),
-    path("designations/", DesignationListView.as_view(), name="designation_list"),
+    path(
+        "departments/",
+        DepartmentListCreateView.as_view(),
+        name="department_list_create",
+    ),
+    path(
+        "departments/<int:pk>/",
+        DepartmentDetailView.as_view(),
+        name="department_detail",
+    ),
+    path(
+        "designations/",
+        DesignationListCreateView.as_view(),
+        name="designation_list_create",
+    ),
+    path(
+        "designations/<int:pk>/",
+        DesignationDetailView.as_view(),
+        name="designation_detail",
+    ),
+    path(
+        "attendance/types/",
+        StaffAttendanceTypesView.as_view(),
+        name="staff_attendance_types",
+    ),
+    path(
+        "attendance/roster/",
+        StaffAttendanceRosterView.as_view(),
+        name="staff_attendance_roster",
+    ),
+    path(
+        "attendance/mark/",
+        StaffAttendanceMarkView.as_view(),
+        name="staff_attendance_mark",
+    ),
+    path(
+        "payroll/scales/",
+        StaffPayrollScaleListCreateView.as_view(),
+        name="staff_payroll_scales",
+    ),
+    path(
+        "payroll/scales/<int:pk>/",
+        StaffPayrollScaleDetailView.as_view(),
+        name="staff_payroll_scale_detail",
+    ),
+    path(
+        "payroll/payslips/",
+        StaffPayslipListCreateView.as_view(),
+        name="staff_payslips",
+    ),
+    path(
+        "payroll/payslips/<int:pk>/",
+        StaffPayslipDetailView.as_view(),
+        name="staff_payslip_detail",
+    ),
     path("leave-types/", LeaveTypesListCreateView.as_view(), name="leave_types_list"),
     path(
         "leave-types/<int:pk>/",

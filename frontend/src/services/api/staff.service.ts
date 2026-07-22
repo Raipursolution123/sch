@@ -1,6 +1,5 @@
 import { apiClient } from '@services/api/client';
 import { API_ENDPOINTS } from '@constants/index';
-import type { ApiSuccessResponse } from '@app-types/api';
 import type {
   CreateStaffPayload,
   StaffDepartment,
@@ -258,20 +257,18 @@ function recordFromPayload(payload: CreateStaffPayload, id: number): StaffRecord
 export const staffService = {
   listDepartments: async (): Promise<StaffDepartment[]> => {
     if (USE_MOCK) return delay([...MOCK_DEPARTMENTS]);
-    // TODO: Wire when backend exposes GET /api/v1/staff/departments/
-    const { data } = await apiClient.get<ApiSuccessResponse<StaffDepartment[]>>(
-      API_ENDPOINTS.staff.departments,
-    );
-    return data.data;
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.staff.departments, {
+      params: { page_size: 100 },
+    });
+    return extractList<StaffDepartment>(data);
   },
 
   listDesignations: async (): Promise<StaffDesignation[]> => {
     if (USE_MOCK) return delay([...MOCK_DESIGNATIONS]);
-    // TODO: Wire when backend exposes GET /api/v1/staff/designations/
-    const { data } = await apiClient.get<ApiSuccessResponse<StaffDesignation[]>>(
-      API_ENDPOINTS.staff.designations,
-    );
-    return data.data;
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.staff.designations, {
+      params: { page_size: 100 },
+    });
+    return extractList<StaffDesignation>(data);
   },
 
   list: async (page = 1): Promise<{ results: StaffListItem[]; count: number }> => {

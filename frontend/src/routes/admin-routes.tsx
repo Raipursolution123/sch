@@ -212,6 +212,30 @@ const StaffProfilePage = lazy(() =>
   })),
 );
 
+const StaffAttendancePage = lazy(() =>
+  import('@features/staff/pages/StaffAttendancePage').then((m) => ({
+    default: m.StaffAttendancePage,
+  })),
+);
+
+const StaffPayrollPage = lazy(() =>
+  import('@features/staff/pages/StaffPayrollPage').then((m) => ({
+    default: m.StaffPayrollPage,
+  })),
+);
+
+const StaffDepartmentsPage = lazy(() =>
+  import('@features/staff/pages/StaffDepartmentsPage').then((m) => ({
+    default: m.StaffDepartmentsPage,
+  })),
+);
+
+const StaffDesignationsPage = lazy(() =>
+  import('@features/staff/pages/StaffDesignationsPage').then((m) => ({
+    default: m.StaffDesignationsPage,
+  })),
+);
+
 const FeeTypesPage = lazy(() =>
   import('@features/fees/fee-types/pages/FeeTypesPage').then((m) => ({
     default: m.FeeTypesPage,
@@ -650,9 +674,13 @@ export const adminRoutes: RouteObject[] = [
     element: <ModuleLayout />,
     children: [
       { index: true, element: <StaffPage /> },
+      { path: 'attendance', element: <StaffAttendancePage /> },
+      { path: 'payroll', element: <StaffPayrollPage /> },
       { path: 'leave-types', element: <LeaveTypesPage /> },
       { path: 'leave', element: <StaffLeaveRequestsPage /> },
       { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
+      { path: 'departments', element: <StaffDepartmentsPage /> },
+      { path: 'designations', element: <StaffDesignationsPage /> },
       { path: ':staffId', element: <StaffProfilePage /> },
       ...buildPlaceholderChildren('/staff'),
     ],

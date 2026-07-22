@@ -3,12 +3,30 @@ import type { ActiveFlag } from '@app-types/settings/session';
 export interface StaffDepartment {
   id: number;
   name: string;
+  department_name?: string;
+  is_active?: ActiveFlag;
 }
 
 export interface StaffDesignation {
   id: number;
   name: string;
+  designation?: string;
+  is_active?: ActiveFlag;
 }
+
+export interface CreateStaffDepartmentPayload {
+  department_name: string;
+  is_active: ActiveFlag;
+}
+
+export type UpdateStaffDepartmentPayload = CreateStaffDepartmentPayload;
+
+export interface CreateStaffDesignationPayload {
+  designation: string;
+  is_active: ActiveFlag;
+}
+
+export type UpdateStaffDesignationPayload = CreateStaffDesignationPayload;
 
 export interface StaffListItem {
   id: number;
