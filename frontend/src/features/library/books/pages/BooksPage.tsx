@@ -163,64 +163,66 @@ export function BooksPage() {
   );
 
   return (
-    <ModuleListPack
-      title="Book List"
-      description="Manage the school library catalog."
-      actions={
-        <div className="flex flex-wrap items-end gap-3">
-          <FormField label="Search" htmlFor="books-search">
-            <Input
-              id="books-search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Title, number, ISBN, author…"
-              className="w-64"
-            />
-          </FormField>
-          {addAction}
-        </div>
-      }
-      isLoading={isLoading}
-      loadingMessage="Loading books..."
-      isError={isError}
-      error={error}
-      onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && books.length === 0}
-      emptyTitle="No books yet"
-      emptyDescription="Add the first book to start the catalog."
-      emptyAction={addAction}
-    >
-      <DataTable
-        data={books}
-        columns={columns}
-        getRowKey={(row) => row.id}
-        actions={(row) => (
-          <>
-            <PermissionButton
-              permission="library.books.edit"
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSelected(row);
-                setDialogOpen(true);
-              }}
-              aria-label={`Edit ${row.book_title}`}
-            >
-              <Pencil className="h-4 w-4" />
-            </PermissionButton>
-            <PermissionButton
-              permission="library.books.delete"
-              variant="ghost"
-              size="sm"
-              onClick={() => setDeleteTarget(row)}
-              aria-label={`Delete ${row.book_title}`}
-              className="text-destructive hover:text-destructive"
-            >
-              <Trash2 className="h-4 w-4" />
-            </PermissionButton>
-          </>
-        )}
-      />
+    <>
+      <ModuleListPack
+        title="Book List"
+        description="Manage the school library catalog."
+        actions={
+          <div className="flex flex-wrap items-end gap-3">
+            <FormField label="Search" htmlFor="books-search">
+              <Input
+                id="books-search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Title, number, ISBN, author…"
+                className="w-64"
+              />
+            </FormField>
+            {addAction}
+          </div>
+        }
+        isLoading={isLoading}
+        loadingMessage="Loading books..."
+        isError={isError}
+        error={error}
+        onRetry={() => void refetch()}
+        isEmpty={!isLoading && !isError && books.length === 0}
+        emptyTitle="No books yet"
+        emptyDescription="Add the first book to start the catalog."
+        emptyAction={addAction}
+      >
+        <DataTable
+          data={books}
+          columns={columns}
+          getRowKey={(row) => row.id}
+          actions={(row) => (
+            <>
+              <PermissionButton
+                permission="library.books.edit"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setSelected(row);
+                  setDialogOpen(true);
+                }}
+                aria-label={`Edit ${row.book_title}`}
+              >
+                <Pencil className="h-4 w-4" />
+              </PermissionButton>
+              <PermissionButton
+                permission="library.books.delete"
+                variant="ghost"
+                size="sm"
+                onClick={() => setDeleteTarget(row)}
+                aria-label={`Delete ${row.book_title}`}
+                className="text-destructive hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </PermissionButton>
+            </>
+          )}
+        />
+      </ModuleListPack>
 
       <EntityFormDialog
         open={dialogOpen}
@@ -257,6 +259,6 @@ export function BooksPage() {
         }}
         isLoading={deleteMutation.isPending}
       />
-    </ModuleListPack>
+    </>
   );
 }

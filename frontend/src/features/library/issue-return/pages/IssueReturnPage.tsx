@@ -164,73 +164,75 @@ export function IssueReturnPage() {
   );
 
   return (
-    <ModuleListPack
-      title="Issue & Return"
-      description="Circulate books to library members and record returns."
-      actions={
-        <div className="flex flex-wrap items-end gap-3">
-          <FormField label="Status" htmlFor="issue-status">
-            <Select
-              id="issue-status"
-              className="w-40"
-              value={status}
-              onValueChange={setStatus}
-              options={[
-                { value: 'open', label: 'Open' },
-                { value: 'returned', label: 'Returned' },
-                { value: 'all', label: 'All' },
-              ]}
-            />
-          </FormField>
-          <FormField label="Search" htmlFor="issue-search">
-            <Input
-              id="issue-search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Book or card…"
-              className="w-56"
-            />
-          </FormField>
-          <PermissionButton
-            permission="library.issue.view"
-            variant="outline"
-            onClick={() => setMemberOpen(true)}
-          >
-            Add member
-          </PermissionButton>
-          {issueAction}
-        </div>
-      }
-      isLoading={isLoading}
-      loadingMessage="Loading issues..."
-      isError={isError}
-      error={error}
-      onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && issues.length === 0}
-      emptyTitle="No issues found"
-      emptyDescription="Issue a book to a library member to start circulation."
-      emptyAction={issueAction}
-    >
-      <DataTable
-        data={issues}
-        columns={columns}
-        getRowKey={(row) => row.id}
-        actions={(row) =>
-          row.is_returned ? null : (
+    <>
+      <ModuleListPack
+        title="Issue & Return"
+        description="Circulate books to library members and record returns."
+        actions={
+          <div className="flex flex-wrap items-end gap-3">
+            <FormField label="Status" htmlFor="issue-status">
+              <Select
+                id="issue-status"
+                className="w-40"
+                value={status}
+                onValueChange={setStatus}
+                options={[
+                  { value: 'open', label: 'Open' },
+                  { value: 'returned', label: 'Returned' },
+                  { value: 'all', label: 'All' },
+                ]}
+              />
+            </FormField>
+            <FormField label="Search" htmlFor="issue-search">
+              <Input
+                id="issue-search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Book or card…"
+                className="w-56"
+              />
+            </FormField>
             <PermissionButton
               permission="library.issue.view"
-              variant="ghost"
-              size="sm"
-              onClick={() => setReturnTarget(row)}
-              aria-label={`Return ${row.book_title || 'book'}`}
-              className="gap-1"
+              variant="outline"
+              onClick={() => setMemberOpen(true)}
             >
-              <Undo2 className="h-4 w-4" />
-              Return
+              Add member
             </PermissionButton>
-          )
+            {issueAction}
+          </div>
         }
-      />
+        isLoading={isLoading}
+        loadingMessage="Loading issues..."
+        isError={isError}
+        error={error}
+        onRetry={() => void refetch()}
+        isEmpty={!isLoading && !isError && issues.length === 0}
+        emptyTitle="No issues found"
+        emptyDescription="Issue a book to a library member to start circulation."
+        emptyAction={issueAction}
+      >
+        <DataTable
+          data={issues}
+          columns={columns}
+          getRowKey={(row) => row.id}
+          actions={(row) =>
+            row.is_returned ? null : (
+              <PermissionButton
+                permission="library.issue.view"
+                variant="ghost"
+                size="sm"
+                onClick={() => setReturnTarget(row)}
+                aria-label={`Return ${row.book_title || 'book'}`}
+                className="gap-1"
+              >
+                <Undo2 className="h-4 w-4" />
+                Return
+              </PermissionButton>
+            )
+          }
+        />
+      </ModuleListPack>
 
       <EntityFormDialog
         open={issueOpen}
@@ -325,6 +327,6 @@ export function IssueReturnPage() {
         }}
         isLoading={returnMutation.isPending}
       />
-    </ModuleListPack>
+    </>
   );
 }

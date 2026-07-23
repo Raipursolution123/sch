@@ -25,8 +25,10 @@ interface ModuleListPackProps {
 
 /**
  * Standard list module shell: header + async states + DataTable slot.
- * Note: when `isEmpty` is true, `children` are not rendered — keep dialogs/
- * overlays in `footer` (or outside this pack) so create flows still work.
+ *
+ * When `isEmpty` is true the empty state is shown instead of the table.
+ * Children are still mounted (hidden) so create/edit dialogs kept inside
+ * `children` continue to work — prefer `footer` or siblings for overlays.
  */
 export function ModuleListPack({
   title,
@@ -58,7 +60,15 @@ export function ModuleListPack({
       )}
 
       {!isLoading && !isError && isEmpty && (
-        <EmptyState title={emptyTitle} description={emptyDescription} action={emptyAction} />
+        <>
+          <EmptyState title={emptyTitle} description={emptyDescription} action={emptyAction} />
+          {/* Keep dialogs/overlays in the tree while the list is empty. */}
+          {children ? (
+            <div className="hidden" aria-hidden="true">
+              {children}
+            </div>
+          ) : null}
+        </>
       )}
 
       {!isLoading && !isError && !isEmpty && children}
