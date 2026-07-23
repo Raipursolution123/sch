@@ -1175,7 +1175,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'settings-print',
         label: 'Print Header & Footer',
         path: ROUTES.settings.printHeaderFooter,
-        permissionKeys: ['print_headerfooter'],
+        permissionKeys: ['print_header_footer'],
       },
       {
         id: 'settings-roles',

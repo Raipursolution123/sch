@@ -23,6 +23,27 @@ export const queryKeys = {
       list: (page: number) => [...queryKeys.settings.currencies.all, 'list', page] as const,
       detail: (id: number) => [...queryKeys.settings.currencies.all, 'detail', id] as const,
     },
+    notificationSettings: {
+      all: ['settings', 'notification-settings'] as const,
+      list: (page: number, search: string) =>
+        [...queryKeys.settings.notificationSettings.all, 'list', page, search] as const,
+    },
+    smsConfig: {
+      all: ['settings', 'sms-config'] as const,
+      list: (page: number) => [...queryKeys.settings.smsConfig.all, 'list', page] as const,
+    },
+    emailConfig: {
+      all: ['settings', 'email-config'] as const,
+      list: (page: number) => [...queryKeys.settings.emailConfig.all, 'list', page] as const,
+    },
+    paymentMethods: {
+      all: ['settings', 'payment-methods'] as const,
+      list: (page: number) => [...queryKeys.settings.paymentMethods.all, 'list', page] as const,
+    },
+    printHeaderFooter: {
+      all: ['settings', 'print-header-footer'] as const,
+      list: (page: number) => [...queryKeys.settings.printHeaderFooter.all, 'list', page] as const,
+    },
     roles: {
       all: ['settings', 'roles'] as const,
       list: (page: number) => [...queryKeys.settings.roles.all, 'list', page] as const,

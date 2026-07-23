@@ -83,3 +83,10 @@ export { journalEntriesService } from './journal-entries.service';
 export { feeMapperService } from './fee-mapper.service';
 export { homeworkService, dailyAssignmentsService } from './homework.service';
 export { rolesService, usersService } from './roles.service';
+export {
+  emailConfigService,
+  notificationSettingsService,
+  paymentMethodsService,
+  printHeaderFooterService,
+  smsConfigService,
+} from './system-config.service';

@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-23  
-**Current phase:** Phase 27 — Reports gaps + Lead Management + Front CMS ✅ COMPLETE  
+**Current phase:** Phase 28 — Settings system config (Notifications / SMS / Email / Payment / Print) ✅ COMPLETE  
 **Branch:** `main`
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phases 0–27 complete |
-| **Current Phase** | Phase 27 — Reports / Leads / CMS ✅ |
+| **Overall Project Progress** | Phases 0–28 complete |
+| **Current Phase** | Phase 28 — Settings system config ✅ |
 | **Current Task** | Ops: prod deploy + UAT |
-| **Completed Phases** | Phase 0 ✅ … Phase 27 ✅ |
-| **Remaining Phases** | Ops / UAT; residual backlog |
+| **Completed Phases** | Phase 0 ✅ … Phase 28 ✅ |
+| **Remaining Phases** | Ops / UAT; residual Settings (modules, custom fields, captcha, backup, etc.) |
 | **Open Bugs** | 0 |
 | **Backend Completion** | ~99% |
-| **Frontend Completion** | ~98% |
-| **API Integration Status** | Leads + Front CMS APIs; Inventory/Homework reports |
-| **UI Completion Status** | Reports / Leads / Front CMS Coming Soon cleared |
-| **Testing Status** | CMS/leads validation tests + frontend typecheck |
+| **Frontend Completion** | ~99% |
+| **API Integration Status** | Settings notification/SMS/email/payment/print APIs |
+| **UI Completion Status** | Settings Soon badges cleared for Notifications, SMS, Email, Payment Methods, Print Header & Footer |
+| **Testing Status** | system_config service tests + frontend typecheck + Docker verification |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT |
-| **Technical Debt Remaining** | ~5 Coming Soon pages (residual settings/misc) |
+| **Technical Debt Remaining** | Residual Settings: modules, custom fields, captcha, system fields, online admission settings, sidebar menu editor, backup/restore, file types |
 
 ---
 
@@ -1011,6 +1011,46 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 28 — Settings system config ✅ SIGNED OFF
+
+**Signed off:** 2026-07-23  
+**Objective:** Complete unfinished Settings submenus for notification templates, SMS/email gateways, payment methods, and print header/footer — preserving legacy privilege categories under `system_settings`.
+
+| ID | Task | Status |
+|----|------|--------|
+| 28.1 | Notification Settings API + UI (list/filter/CRUD, channel toggles) | ✅ |
+| 28.2 | SMS Config API + UI (CRUD + activate; secrets masked) | ✅ |
+| 28.3 | Email Config API + UI (CRUD + activate; secrets masked) | ✅ |
+| 28.4 | Payment Methods API + UI (CRUD + activate under `payment_methods`) | ✅ |
+| 28.5 | Print Header & Footer API + UI (`print_header_footer`) | ✅ |
+| 28.6 | Nav privilege fix (`print_header_footer`), routes, implemented-paths | ✅ |
+| 28.7 | Unit tests + frontend typecheck + Docker verification | ✅ |
+
+### Implementation details
+
+| Submenu | Privilege | Table | Endpoints |
+|---------|-----------|-------|-----------|
+| Notifications | `notification_setting` | `notification_setting` | `/settings/notification-settings/` |
+| SMS Config | `sms_setting` | `sms_config` | `/settings/sms-config/` (+ activate) |
+| Email Config | `email_setting` | `email_config` | `/settings/email-config/` (+ activate) |
+| Payment Methods | `payment_methods` | `payment_settings` | `/settings/payment-methods/` (+ activate) |
+| Print Header & Footer | `print_header_footer` | `print_headerfooter` | `/settings/print-header-footer/` |
+
+### Testing status
+
+- Backend: `apps/settings/tests/test_system_config_services.py` — validation, not-found, active-delete guards, secret masking helpers
+- Frontend: `npm run typecheck` pass (host + Docker with `NODE_OPTIONS=--max-old-space-size=768`)
+- Docker: `docker compose -f docker-compose.dev.yml` — mysql/redis/backend healthy; backend pytest 16 passed; frontend serves HTTP 200 on `:5173`; health endpoint OK
+
+### Notes
+
+- Secrets (`authkey`, `password`, SMTP password, API keys, gateway salts) are masked on read; blank/masked values on update keep the stored secret.
+- SMS uses legacy `enabled`/`disabled`; email & payment use `yes`/`no`.
+- Fees → Payment Gateways remains a read-only fees-module list (`offline_bank_payments`); Settings → Payment Methods is the writable config under `system_settings`.
+- Residual Settings Soon items (modules, custom fields, captcha, backup, etc.) are intentionally deferred.
+
+---
+
 ## Roadmap Complete ✅
 
-Phases 0–27 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and residual backlog (student online exam attempt, binary uploads, etc.).
+Phases 0–28 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and residual backlog (remaining Settings screens, student online exam attempt, binary uploads, etc.).
