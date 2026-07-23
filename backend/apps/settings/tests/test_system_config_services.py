@@ -7,7 +7,9 @@ from apps.settings.domain.settings_exceptions import (
     SettingsValidationError,
 )
 from apps.settings.services.email_config_service import EmailConfigService
-from apps.settings.services.notification_setting_service import NotificationSettingService
+from apps.settings.services.notification_setting_service import (
+    NotificationSettingService,
+)
 from apps.settings.services.payment_methods_service import PaymentMethodsService
 from apps.settings.services.print_headerfooter_service import PrintHeaderFooterService
 from apps.settings.services.secret_utils import (
@@ -34,7 +36,8 @@ def test_notification_create_requires_fields():
 
 def test_notification_get_not_found():
     with patch(
-        "apps.settings.services.notification_setting_service.NotificationSetting.objects.filter"
+        "apps.settings.services.notification_setting_service."
+        "NotificationSetting.objects.filter"
     ) as filter_mock:
         filter_mock.return_value.first.return_value = None
         with pytest.raises(SettingsNotFoundError):

@@ -11,11 +11,7 @@ from apps.settings.domain.settings_exceptions import (
     SettingsValidationError,
 )
 from apps.settings.selectors.settings_selectors import now_datetime
-from apps.settings.services.secret_utils import (
-    as_yes_no,
-    mask_secret,
-    resolve_secret,
-)
+from apps.settings.services.secret_utils import as_yes_no, mask_secret, resolve_secret
 
 logger = logging.getLogger(__name__)
 

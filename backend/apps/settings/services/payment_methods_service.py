@@ -11,11 +11,7 @@ from apps.settings.domain.settings_exceptions import (
     SettingsValidationError,
 )
 from apps.settings.selectors.settings_selectors import now_datetime, today_date
-from apps.settings.services.secret_utils import (
-    as_yes_no,
-    mask_secret,
-    resolve_secret,
-)
+from apps.settings.services.secret_utils import as_yes_no, mask_secret, resolve_secret
 
 logger = logging.getLogger(__name__)
 
@@ -150,7 +146,8 @@ class PaymentMethodsService:
             raise SettingsNotFoundError("Payment method not found.")
         if (row.is_active or "").lower() == "yes":
             raise SettingsValidationError(
-                "Cannot delete the active payment method. Activate another method first."
+                "Cannot delete the active payment method. "
+                "Activate another method first."
             )
         row.delete()
         logger.info("Deleted payment method id=%s", method_id)

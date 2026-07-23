@@ -86,7 +86,9 @@ class NotificationSettingService:
         logger.info("Created notification setting id=%s type=%s", row.id, row.type)
         return _to_dict(row)
 
-    def update_setting(self, setting_id: int, payload: dict[str, Any]) -> dict[str, Any]:
+    def update_setting(
+        self, setting_id: int, payload: dict[str, Any]
+    ) -> dict[str, Any]:
         row = NotificationSetting.objects.filter(id=setting_id).first()
         if row is None:
             raise SettingsNotFoundError("Notification setting not found.")

@@ -121,7 +121,8 @@ class SmsConfigService:
             raise SettingsNotFoundError("SMS config not found.")
         if (row.is_active or "").lower() == "enabled":
             raise SettingsValidationError(
-                "Cannot delete the active SMS provider. Activate another provider first."
+                "Cannot delete the active SMS provider. "
+                "Activate another provider first."
             )
         row.delete()
         logger.info("Deleted SMS config id=%s", config_id)

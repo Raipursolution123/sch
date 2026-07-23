@@ -17,7 +17,9 @@ def looks_masked(value: str) -> bool:
     return "*" in value
 
 
-def resolve_secret(incoming: Any, current: str | None, *, allow_clear: bool = False) -> str:
+def resolve_secret(
+    incoming: Any, current: str | None, *, allow_clear: bool = False
+) -> str:
     """Keep current secret when payload omits/blank/masks the field."""
     if incoming is None:
         return current or ""

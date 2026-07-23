@@ -24,7 +24,9 @@ def _paginated_list(request, view, qs, rows_builder):
     data = rows_builder(rows)
     if page is not None:
         return paginator.get_paginated_response(data)
-    return APIResponse.success(data={"results": data}, message="Retrieved successfully.")
+    return APIResponse.success(
+        data={"results": data}, message="Retrieved successfully."
+    )
 
 
 class NotificationSettingsListCreateView(APIView):
@@ -36,7 +38,10 @@ class NotificationSettingsListCreateView(APIView):
         search = request.query_params.get("search", "")
         qs = NotificationSettingService().list_settings(search=search)
         return _paginated_list(
-            request, self, qs, lambda rows: [notification_setting_to_dict(row) for row in rows]
+            request,
+            self,
+            qs,
+            lambda rows: [notification_setting_to_dict(row) for row in rows],
         )
 
     def post(self, request):
@@ -140,7 +145,9 @@ class SmsConfigDetailView(APIView):
     def delete(self, request, pk):
         try:
             SmsConfigService().delete_config(pk)
-            return APIResponse.success(data=None, message="SMS config deleted successfully.")
+            return APIResponse.success(
+                data=None, message="SMS config deleted successfully."
+            )
         except SettingsError as exc:
             return settings_error_response(exc)
 

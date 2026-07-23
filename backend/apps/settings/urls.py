@@ -73,7 +73,9 @@ urlpatterns = [
         NotificationSettingsDetailView.as_view(),
         name="notification_settings_detail",
     ),
-    path("sms-config/", SmsConfigListCreateView.as_view(), name="sms_config_list_create"),
+    path(
+        "sms-config/", SmsConfigListCreateView.as_view(), name="sms_config_list_create"
+    ),
     path(
         "sms-config/<int:pk>/",
         SmsConfigDetailView.as_view(),
