@@ -5,7 +5,9 @@ import { downloadCenterService } from '@services/api/download-center.service';
 import type {
   CreateContentTypePayload,
   CreateUploadContentPayload,
+  CreateVideoTutorialPayload,
   UpdateContentTypePayload,
+  UpdateVideoTutorialPayload,
 } from '@app-types/download-center';
 import { getApiErrorMessage } from '@utils/session';
 
@@ -83,5 +85,49 @@ export function useDeleteUploadContent() {
       toast.success('Content deleted');
     },
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete content')),
+  });
+}
+
+export function useVideoTutorials(query = '') {
+  return useQuery({
+    queryKey: queryKeys.downloadCenter.videos.list(query),
+    queryFn: () => downloadCenterService.listVideos(query || undefined),
+  });
+}
+
+export function useCreateVideoTutorial() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateVideoTutorialPayload) => downloadCenterService.createVideo(payload),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.downloadCenter.all });
+      toast.success('Video tutorial created');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create video tutorial')),
+  });
+}
+
+export function useUpdateVideoTutorial() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: number; payload: UpdateVideoTutorialPayload }) =>
+      downloadCenterService.updateVideo(id, payload),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.downloadCenter.all });
+      toast.success('Video tutorial updated');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update video tutorial')),
+  });
+}
+
+export function useDeleteVideoTutorial() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => downloadCenterService.deleteVideo(id),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.downloadCenter.all });
+      toast.success('Video tutorial deleted');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete video tutorial')),
   });
 }

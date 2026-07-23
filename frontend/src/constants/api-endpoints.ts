@@ -149,6 +149,17 @@ export const API_ENDPOINTS = {
     admitCardDetail: (id: number) => `/examinations/admit-cards/${id}/`,
     marksheets: '/examinations/marksheets/',
     marksheetDetail: (id: number) => `/examinations/marksheets/${id}/`,
+    questions: '/examinations/questions/',
+    questionDetail: (id: number) => `/examinations/questions/${id}/`,
+    onlineExams: '/examinations/online-exams/',
+    onlineExamDetail: (id: number) => `/examinations/online-exams/${id}/`,
+    onlineExamQuestions: (id: number) => `/examinations/online-exams/${id}/questions/`,
+    onlineExamQuestionDetail: (id: number, linkId: number) =>
+      `/examinations/online-exams/${id}/questions/${linkId}/`,
+    onlineExamStudentsRoster: (id: number) => `/examinations/online-exams/${id}/students/roster/`,
+    onlineExamStudents: (id: number) => `/examinations/online-exams/${id}/students/`,
+    onlineExamStudentDetail: (id: number, assignmentId: number) =>
+      `/examinations/online-exams/${id}/students/${assignmentId}/`,
   },
   hostel: {
     hostels: '/hostel/hostels/',
@@ -161,6 +172,10 @@ export const API_ENDPOINTS = {
   communications: {
     notices: '/communications/notices/',
     noticeDetail: (id: number) => `/communications/notices/${id}/`,
+    messages: '/communications/messages/',
+    composeEmail: '/communications/messages/email/',
+    composeSms: '/communications/messages/sms/',
+    bulkEmail: '/communications/bulk-email/',
   },
   transport: {
     fees: '/transport/fees/',
@@ -242,6 +257,8 @@ export const API_ENDPOINTS = {
     contentTypeDetail: (id: number) => `/documents/download-center/content-types/${id}/`,
     uploadContent: '/documents/download-center/content/',
     uploadContentDetail: (id: number) => `/documents/download-center/content/${id}/`,
+    videos: '/documents/download-center/videos/',
+    videoDetail: (id: number) => `/documents/download-center/videos/${id}/`,
   },
   finance: {
     groups: '/finance/groups/',

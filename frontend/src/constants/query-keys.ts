@@ -393,6 +393,11 @@ export const queryKeys = {
     notices: {
       list: () => [...queryKeys.communications.all, 'notices', 'list'] as const,
     },
+    messages: {
+      all: ['communications', 'messages'] as const,
+      list: (channel?: string) =>
+        [...queryKeys.communications.all, 'messages', 'list', channel ?? 'all'] as const,
+    },
   },
   frontOffice: {
     all: ['front-office'] as const,
@@ -532,6 +537,22 @@ export const queryKeys = {
     },
     content: {
       list: (query = '') => [...queryKeys.downloadCenter.all, 'content', 'list', query] as const,
+    },
+    videos: {
+      list: (query = '') => [...queryKeys.downloadCenter.all, 'videos', 'list', query] as const,
+    },
+  },
+  onlineExams: {
+    all: ['online-exams'] as const,
+    questions: {
+      list: (query = '') => [...queryKeys.onlineExams.all, 'questions', 'list', query] as const,
+    },
+    exams: {
+      list: (query = '') => [...queryKeys.onlineExams.all, 'exams', 'list', query] as const,
+      questions: (examId: number) =>
+        [...queryKeys.onlineExams.all, 'exams', examId, 'questions'] as const,
+      roster: (examId: number, classId: number, sectionId: number) =>
+        [...queryKeys.onlineExams.all, 'exams', examId, 'roster', classId, sectionId] as const,
     },
   },
 } as const;

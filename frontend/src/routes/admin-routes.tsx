@@ -626,9 +626,39 @@ const UploadContentPage = lazy(() =>
   })),
 );
 
+const VideoTutorialsPage = lazy(() =>
+  import('@features/download-center/pages/VideoTutorialsPage').then((m) => ({
+    default: m.VideoTutorialsPage,
+  })),
+);
+
+const OnlineExamsPage = lazy(() =>
+  import('@features/online-examinations/exams/pages/OnlineExamsPage').then((m) => ({
+    default: m.OnlineExamsPage,
+  })),
+);
+
+const QuestionBankPage = lazy(() =>
+  import('@features/online-examinations/question-bank/pages/QuestionBankPage').then((m) => ({
+    default: m.QuestionBankPage,
+  })),
+);
+
 const NoticesPage = lazy(() =>
   import('@features/communications/notices/pages/NoticesPage').then((m) => ({
     default: m.NoticesPage,
+  })),
+);
+
+const EmailSmsPage = lazy(() =>
+  import('@features/communications/email-sms/pages/EmailSmsPage').then((m) => ({
+    default: m.EmailSmsPage,
+  })),
+);
+
+const BulkEmailPage = lazy(() =>
+  import('@features/communications/bulk-email/pages/BulkEmailPage').then((m) => ({
+    default: m.BulkEmailPage,
   })),
 );
 
@@ -818,10 +848,13 @@ export const adminRoutes: RouteObject[] = [
   ]),
   createModuleRoutes('/communicate', ROUTES.communicate.notices, [
     { path: 'notices', element: <NoticesPage /> },
+    { path: 'email-sms', element: <EmailSmsPage /> },
+    { path: 'bulk-email', element: <BulkEmailPage /> },
   ]),
   createModuleRoutes('/download-center', ROUTES.downloadCenter.contentTypes, [
     { path: 'content-types', element: <ContentTypesPage /> },
     { path: 'content', element: <UploadContentPage /> },
+    { path: 'videos', element: <VideoTutorialsPage /> },
   ]),
   createModuleRoutes('/lesson-plan', ROUTES.lessonPlan.syllabusStatus, [
     {
@@ -839,7 +872,10 @@ export const adminRoutes: RouteObject[] = [
       },
     },
   ]),
-  createPlaceholderModule('/online-examinations', ROUTES.onlineExams.exams),
+  createModuleRoutes('/online-examinations', ROUTES.onlineExams.exams, [
+    { path: 'exams', element: <OnlineExamsPage /> },
+    { path: 'question-bank', element: <QuestionBankPage /> },
+  ]),
   createModuleRoutes('/income', ROUTES.income.list, [
     { path: 'list', element: <IncomeListPage /> },
     { path: 'heads', element: <IncomeHeadsPage /> },

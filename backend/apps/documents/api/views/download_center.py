@@ -8,12 +8,15 @@ from apps.documents.api.serializers.download_center import (
     ContentTypeUpdateSerializer,
     UploadContentCreateSerializer,
     UploadContentSerializer,
+    VideoTutorialCreateSerializer,
+    VideoTutorialUpdateSerializer,
 )
 from apps.documents.api.views.certificates import certificate_error_response
 from apps.documents.domain.certificate_exceptions import CertificateError
 from apps.documents.services.download_center_service import (
     ContentTypeService,
     UploadContentService,
+    VideoTutorialService,
 )
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
@@ -148,5 +151,80 @@ class UploadContentDetailView(APIView):
         try:
             UploadContentService().delete(pk)
             return APIResponse.success(message="Upload content deleted.")
+        except CertificateError as exc:
+            return certificate_error_response(exc)
+
+
+class VideoTutorialListCreateView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "video_tutorial"
+
+    def get(self, request):
+        service = VideoTutorialService()
+        qs = service.list(query=request.query_params.get("q"))
+        paginator = StandardResultsSetPagination()
+        page = paginator.paginate_queryset(qs, request, view=self)
+        rows = list(page if page is not None else qs)
+        data = [service.to_dict(row) for row in rows]
+        if page is not None:
+            return paginator.get_paginated_response(data)
+        return APIResponse.success(data=data, message="Video tutorials retrieved.")
+
+    def post(self, request):
+        serializer = VideoTutorialCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return APIResponse.error(
+                message="Validation failed",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        created_by = getattr(request.user, "user_id", None)
+        try:
+            data = VideoTutorialService().create(
+                serializer.validated_data, created_by=int(created_by or 0)
+            )
+            return APIResponse.success(
+                data=data,
+                message="Video tutorial created.",
+                status_code=status.HTTP_201_CREATED,
+            )
+        except CertificateError as exc:
+            return certificate_error_response(exc)
+
+
+class VideoTutorialDetailView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "video_tutorial"
+
+    def get(self, request, pk):
+        try:
+            service = VideoTutorialService()
+            return APIResponse.success(data=service.to_dict(service.get(pk)))
+        except CertificateError as exc:
+            return certificate_error_response(exc)
+
+    def patch(self, request, pk):
+        return self.put(request, pk)
+
+    def put(self, request, pk):
+        serializer = VideoTutorialUpdateSerializer(data=request.data, partial=True)
+        if not serializer.is_valid():
+            return APIResponse.error(
+                message="Validation failed",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            data = VideoTutorialService().update(pk, serializer.validated_data)
+            return APIResponse.success(data=data, message="Video tutorial updated.")
+        except CertificateError as exc:
+            return certificate_error_response(exc)
+
+    def delete(self, request, pk):
+        try:
+            VideoTutorialService().delete(pk)
+            return APIResponse.success(message="Video tutorial deleted.")
         except CertificateError as exc:
             return certificate_error_response(exc)

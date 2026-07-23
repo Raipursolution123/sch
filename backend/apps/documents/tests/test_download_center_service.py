@@ -6,6 +6,7 @@ from apps.documents.domain.certificate_exceptions import CertificateValidationEr
 from apps.documents.services.download_center_service import (
     ContentTypeService,
     UploadContentService,
+    VideoTutorialService,
 )
 
 
@@ -33,3 +34,27 @@ def test_upload_content_requires_upload_by():
             UploadContentService().create(
                 {"content_type_id": 1, "real_name": "notes.pdf"}, upload_by=0
             )
+
+
+def test_video_tutorial_requires_title():
+    with pytest.raises(CertificateValidationError, match="title"):
+        VideoTutorialService().create(
+            {"title": " ", "description": "d", "video_link": "http://x"},
+            created_by=1,
+        )
+
+
+def test_video_tutorial_requires_link():
+    with pytest.raises(CertificateValidationError, match="video_link"):
+        VideoTutorialService().create(
+            {"title": "Intro", "description": "d", "video_link": " "},
+            created_by=1,
+        )
+
+
+def test_video_tutorial_requires_created_by():
+    with pytest.raises(CertificateValidationError, match="created_by"):
+        VideoTutorialService().create(
+            {"title": "Intro", "description": "d", "video_link": "http://x"},
+            created_by=0,
+        )

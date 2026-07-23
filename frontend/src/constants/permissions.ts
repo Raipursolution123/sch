@@ -84,6 +84,10 @@ const ALL_PERMISSIONS: Permission[] = [
   'attendance.mark',
   'attendance.report',
   'notifications.view',
+  'communicate.email.send',
+  'communicate.sms.send',
+  'communicate.bulk_email.send',
+  'communicate.messages.view',
   'manage_syllabus_status.view',
   'manage_syllabus_status.create',
   'manage_syllabus_status.edit',
@@ -158,6 +162,17 @@ const ALL_PERMISSIONS: Permission[] = [
   'downloadcenter.type.delete',
   'downloadcenter.content.create',
   'downloadcenter.content.delete',
+  'downloadcenter.video.create',
+  'downloadcenter.video.edit',
+  'downloadcenter.video.delete',
+  'onlineexams.exam.create',
+  'onlineexams.exam.edit',
+  'onlineexams.exam.delete',
+  'onlineexams.question.create',
+  'onlineexams.question.edit',
+  'onlineexams.question.delete',
+  'onlineexams.exam.questions',
+  'onlineexams.exam.assign',
 ];
 
 export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {

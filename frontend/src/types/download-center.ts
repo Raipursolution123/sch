@@ -46,3 +46,32 @@ export type CreateUploadContentPayload = {
   vid_url?: string;
   vid_title?: string;
 };
+
+export interface VideoTutorial {
+  id: number;
+  title: string;
+  vid_title: string | null;
+  description: string;
+  thumb_path: string | null;
+  dir_path: string | null;
+  img_name: string;
+  thumb_name: string;
+  video_link: string;
+  created_by: number;
+  created_at: string | null;
+  class_section_ids?: number[];
+}
+
+export type CreateVideoTutorialPayload = {
+  title: string;
+  description: string;
+  video_link: string;
+  vid_title?: string;
+  thumb_path?: string;
+  dir_path?: string;
+  img_name?: string;
+  thumb_name?: string;
+  class_section_ids?: number[];
+};
+
+export type UpdateVideoTutorialPayload = Partial<CreateVideoTutorialPayload>;

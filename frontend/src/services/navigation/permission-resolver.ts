@@ -115,7 +115,11 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'front_office.visitor_purpose.create': ['setup_font_office'],
   'front_office.visitor_purpose.edit': ['setup_font_office'],
   'front_office.visitor_purpose.delete': ['setup_font_office'],
-  'notifications.view': ['notice_board', 'email_sms'],
+  'notifications.view': ['notice_board', 'email', 'sms', 'login_credentials_send'],
+  'communicate.email.send': ['email'],
+  'communicate.sms.send': ['sms'],
+  'communicate.bulk_email.send': ['login_credentials_send'],
+  'communicate.messages.view': ['email_sms_log', 'email', 'sms'],
   'transport.create': [
     'routes',
     'transport_fees_master',
@@ -214,6 +218,17 @@ export const PERMISSION_TO_LEGACY: Partial<Record<Permission, NavPermissionKey[]
   'downloadcenter.type.delete': ['content_type'],
   'downloadcenter.content.create': ['upload_content'],
   'downloadcenter.content.delete': ['upload_content'],
+  'downloadcenter.video.create': ['video_tutorial'],
+  'downloadcenter.video.edit': ['video_tutorial'],
+  'downloadcenter.video.delete': ['video_tutorial'],
+  'onlineexams.exam.create': ['online_examination'],
+  'onlineexams.exam.edit': ['online_examination'],
+  'onlineexams.exam.delete': ['online_examination'],
+  'onlineexams.question.create': ['question_bank'],
+  'onlineexams.question.edit': ['question_bank'],
+  'onlineexams.question.delete': ['question_bank'],
+  'onlineexams.exam.questions': ['add_questions_in_exam'],
+  'onlineexams.exam.assign': ['online_assign_view_student'],
 };
 
 export interface NavigationPermissionContext {

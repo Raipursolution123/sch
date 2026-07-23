@@ -10,6 +10,8 @@ from apps.documents.api.views.download_center import (
     ContentTypeListCreateView,
     UploadContentDetailView,
     UploadContentListCreateView,
+    VideoTutorialDetailView,
+    VideoTutorialListCreateView,
 )
 from apps.documents.api.views.id_cards import (
     StaffIdCardDetailView,
@@ -85,5 +87,15 @@ urlpatterns = [
         "download-center/content/<int:pk>/",
         UploadContentDetailView.as_view(),
         name="upload-content-detail",
+    ),
+    path(
+        "download-center/videos/",
+        VideoTutorialListCreateView.as_view(),
+        name="video-tutorials-list-create",
+    ),
+    path(
+        "download-center/videos/<int:pk>/",
+        VideoTutorialDetailView.as_view(),
+        name="video-tutorials-detail",
     ),
 ]

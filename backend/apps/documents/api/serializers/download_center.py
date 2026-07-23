@@ -60,7 +60,56 @@ class UploadContentCreateSerializer(serializers.Serializer):
     img_name = serializers.CharField(required=False, allow_blank=True, default="")
     thumb_name = serializers.CharField(required=False, allow_blank=True, default="")
     file_type = serializers.CharField(required=False, default="file")
-    mime_type = serializers.CharField(required=False, default="application/octet-stream")
+    mime_type = serializers.CharField(
+        required=False, default="application/octet-stream"
+    )
     file_size = serializers.CharField(required=False, default="0")
     vid_url = serializers.CharField(required=False, allow_blank=True, default="")
     vid_title = serializers.CharField(required=False, allow_blank=True, default="")
+
+
+class VideoTutorialSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField()
+    vid_title = serializers.CharField(allow_blank=True, allow_null=True)
+    description = serializers.CharField()
+    thumb_path = serializers.CharField(allow_blank=True, allow_null=True)
+    dir_path = serializers.CharField(allow_blank=True, allow_null=True)
+    img_name = serializers.CharField()
+    thumb_name = serializers.CharField()
+    video_link = serializers.CharField()
+    created_by = serializers.IntegerField()
+    created_at = serializers.DateTimeField(allow_null=True)
+    class_section_ids = serializers.ListField(
+        child=serializers.IntegerField(), required=False
+    )
+
+
+class VideoTutorialCreateSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=100)
+    description = serializers.CharField()
+    video_link = serializers.CharField(max_length=100)
+    vid_title = serializers.CharField(required=False, allow_blank=True, default="")
+    thumb_path = serializers.CharField(required=False, allow_blank=True, default="")
+    dir_path = serializers.CharField(required=False, allow_blank=True, default="")
+    img_name = serializers.CharField(required=False, allow_blank=True, default="")
+    thumb_name = serializers.CharField(required=False, allow_blank=True, default="")
+    class_section_ids = serializers.ListField(
+        child=serializers.IntegerField(), required=False, default=list
+    )
+
+
+class VideoTutorialUpdateSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=100, required=False)
+    description = serializers.CharField(required=False)
+    video_link = serializers.CharField(max_length=100, required=False)
+    vid_title = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    thumb_path = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True
+    )
+    dir_path = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    img_name = serializers.CharField(required=False, allow_blank=True)
+    thumb_name = serializers.CharField(required=False, allow_blank=True)
+    class_section_ids = serializers.ListField(
+        child=serializers.IntegerField(), required=False
+    )

@@ -635,7 +635,7 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.communicate.root,
     icon: Mail,
     section: 'operations',
-    permissionKeys: ['notice_board', 'email_sms'],
+    permissionKeys: ['notice_board', 'email', 'sms', 'login_credentials_send'],
     children: [
       {
         id: 'communicate-notices',
@@ -647,13 +647,13 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'communicate-email-sms',
         label: 'Send Email / SMS',
         path: ROUTES.communicate.emailSms,
-        permissionKeys: ['email_sms'],
+        permissionKeys: ['email', 'sms'],
       },
       {
         id: 'communicate-bulk',
         label: 'Bulk Email to Students',
         path: ROUTES.communicate.bulkEmail,
-        permissionKeys: ['email_sms'],
+        permissionKeys: ['login_credentials_send'],
       },
     ],
   },

@@ -5,8 +5,11 @@ import type {
   ContentType,
   CreateContentTypePayload,
   CreateUploadContentPayload,
+  CreateVideoTutorialPayload,
   UpdateContentTypePayload,
+  UpdateVideoTutorialPayload,
   UploadContent,
+  VideoTutorial,
 } from '@app-types/download-center';
 import { type BackendPayload, extractList } from '@utils/api-response';
 
@@ -58,5 +61,32 @@ export const downloadCenterService = {
 
   deleteContent: async (id: number): Promise<void> => {
     await apiClient.delete(API_ENDPOINTS.documents.uploadContentDetail(id));
+  },
+
+  listVideos: async (query?: string): Promise<VideoTutorial[]> => {
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.documents.videos, {
+      params: { page_size: 100, ...(query ? { q: query } : {}) },
+    });
+    return extractList<VideoTutorial>(data);
+  },
+
+  createVideo: async (payload: CreateVideoTutorialPayload): Promise<VideoTutorial> => {
+    const { data } = await apiClient.post<ApiSuccessResponse<VideoTutorial>>(
+      API_ENDPOINTS.documents.videos,
+      payload,
+    );
+    return data.data;
+  },
+
+  updateVideo: async (id: number, payload: UpdateVideoTutorialPayload): Promise<VideoTutorial> => {
+    const { data } = await apiClient.patch<ApiSuccessResponse<VideoTutorial>>(
+      API_ENDPOINTS.documents.videoDetail(id),
+      payload,
+    );
+    return data.data;
+  },
+
+  deleteVideo: async (id: number): Promise<void> => {
+    await apiClient.delete(API_ENDPOINTS.documents.videoDetail(id));
   },
 };

@@ -30,6 +30,17 @@ from apps.examinations.api.views.mark_divisions import (
     MarkDivisionsDetailView,
     MarkDivisionsListCreateView,
 )
+from apps.examinations.api.views.online_exam import (
+    OnlineExamDetailView,
+    OnlineExamListCreateView,
+    OnlineExamQuestionDetailView,
+    OnlineExamQuestionsView,
+    OnlineExamStudentsAssignView,
+    OnlineExamStudentsRosterView,
+    OnlineExamStudentUnassignView,
+    QuestionBankDetailView,
+    QuestionBankListCreateView,
+)
 
 app_name = "examinations"
 
@@ -105,5 +116,50 @@ urlpatterns = [
         "cbse-exams/",
         CbseExamsListCreateView.as_view(),
         name="cbse_exams_list_create",
+    ),
+    path(
+        "questions/",
+        QuestionBankListCreateView.as_view(),
+        name="question_bank_list_create",
+    ),
+    path(
+        "questions/<int:pk>/",
+        QuestionBankDetailView.as_view(),
+        name="question_bank_detail",
+    ),
+    path(
+        "online-exams/",
+        OnlineExamListCreateView.as_view(),
+        name="online_exams_list_create",
+    ),
+    path(
+        "online-exams/<int:pk>/",
+        OnlineExamDetailView.as_view(),
+        name="online_exams_detail",
+    ),
+    path(
+        "online-exams/<int:pk>/questions/",
+        OnlineExamQuestionsView.as_view(),
+        name="online_exams_questions",
+    ),
+    path(
+        "online-exams/<int:pk>/questions/<int:link_id>/",
+        OnlineExamQuestionDetailView.as_view(),
+        name="online_exams_question_detail",
+    ),
+    path(
+        "online-exams/<int:pk>/students/roster/",
+        OnlineExamStudentsRosterView.as_view(),
+        name="online_exams_students_roster",
+    ),
+    path(
+        "online-exams/<int:pk>/students/",
+        OnlineExamStudentsAssignView.as_view(),
+        name="online_exams_students_assign",
+    ),
+    path(
+        "online-exams/<int:pk>/students/<int:assignment_id>/",
+        OnlineExamStudentUnassignView.as_view(),
+        name="online_exams_students_unassign",
     ),
 ]

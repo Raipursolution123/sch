@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
-**Last updated:** 2026-07-22  
-**Current phase:** Phase 23 — Examinations templates + Front Office phone/purpose + Library report ✅ COMPLETE  
+**Last updated:** 2026-07-23  
+**Current phase:** Phase 25 — Download Center Videos + Online Examinations ✅ COMPLETE  
 **Branch:** `main`
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phases 0–23 complete |
-| **Current Phase** | Phase 23 — Exams / Front Office / Library gaps ✅ |
+| **Overall Project Progress** | Phases 0–25 complete |
+| **Current Phase** | Phase 25 — Download Center / Online Exams ✅ |
 | **Current Task** | Ops: prod deploy + UAT |
-| **Completed Phases** | Phase 0 ✅ … Phase 23 ✅ |
-| **Remaining Phases** | Ops / UAT; feature backlog (videos, CMS, etc.) |
+| **Completed Phases** | Phase 0 ✅ … Phase 25 ✅ |
+| **Remaining Phases** | Ops / UAT; feature backlog (CMS, alumni, student take-exam, etc.) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~95% |
-| **Frontend Completion** | ~90% |
-| **API Integration Status** | Admit/marksheet templates + phone calls + visitor purpose wired |
-| **UI Completion Status** | Exams / Front Office / Library Coming Soon cleared |
-| **Testing Status** | Gap unit tests + frontend typecheck |
+| **Backend Completion** | ~97% |
+| **Frontend Completion** | ~93% |
+| **API Integration Status** | Video tutorials + online exam/question bank wired |
+| **UI Completion Status** | Download Center + Online Examinations Coming Soon cleared |
+| **Testing Status** | Download center + online exam unit tests + frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT |
-| **Technical Debt Remaining** | ~34 Coming Soon pages |
+| **Technical Debt Remaining** | ~28 Coming Soon pages |
 
 ---
 
@@ -831,7 +831,7 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ### Notes
 
-- Video tutorials remain Coming Soon.
+- Video tutorials completed in Phase 25.
 - File registration is path/URL metadata (binary upload later).
 
 ---
@@ -918,6 +918,50 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 24 — Communicate Email / SMS + Bulk Email ✅ SIGNED OFF
+
+**Signed off:** 2026-07-23
+
+| ID | Task | Status |
+|----|------|--------|
+| 24.1 | Message compose service writing legacy `messages` | ✅ |
+| 24.2 | Email / SMS / Bulk Email APIs + RBAC (`email`, `sms`, `login_credentials_send`) | ✅ |
+| 24.3 | Send Email / SMS UI + recent log | ✅ |
+| 24.4 | Bulk Email to Students UI | ✅ |
+| 24.5 | Nav privilege keys fixed (drop fictional `email_sms`) | ✅ |
+| 24.6 | Unit tests + routes / IMPLEMENTED_PATHS | ✅ |
+
+### Notes
+
+- MVP queues messages with `sent=0` (audit trail). Live SMTP/SMS delivery waits on Settings email/SMS config.
+- Notice Board was already complete; compose does **not** use `send_notification`.
+
+---
+
+## Phase 25 — Download Center Videos + Online Examinations ✅ SIGNED OFF
+
+**Signed off:** 2026-07-23
+
+| ID | Task | Status |
+|----|------|--------|
+| 25.1 | Video Tutorials CRUD API (`video_tutorial` + class sections) | ✅ |
+| 25.2 | Video Tutorials UI + IMPLEMENTED_PATHS | ✅ |
+| 25.3 | Question Bank CRUD API (`questions` / `question_bank`) | ✅ |
+| 25.4 | Online Exam CRUD API (`onlineexam` / `online_examination`) | ✅ |
+| 25.5 | Add/remove exam questions (`add_questions_in_exam`) | ✅ |
+| 25.6 | Assign/view/unassign students (`online_assign_view_student`) | ✅ |
+| 25.7 | Online Exam + Question Bank UI (manage questions + assign dialogs) | ✅ |
+| 25.8 | Unit tests + frontend typecheck | ✅ |
+
+### Notes
+
+- Download Center: Content Types + Upload Content were Phase 19; Phase 25 clears Video Tutorials.
+- Online Examinations admin MVP only — student take-exam, evaluation, rank generation, and online exam reports remain backlog.
+- Binary video/file upload remains deferred (path/URL metadata).
+- RBAC module short code for online APIs: `online_examination` (not traditional `examination`).
+
+---
+
 ## Roadmap Complete ✅
 
-Phases 0–23 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (videos, CMS, alumni, etc.).
+Phases 0–25 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (CMS, alumni, student online exam attempt, etc.).
