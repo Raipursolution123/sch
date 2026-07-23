@@ -22,9 +22,9 @@ export function useApproveOfflineBankPayment() {
   return useMutation({
     mutationFn: ({ id, payload }: { id: number; payload?: OfflineBankPaymentActionPayload }) =>
       offlineBankPaymentsService.approve(id, payload),
-    onSuccess: (response) => {
+    onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.fees.offlinePayments.all });
-      toast.success(response.message || 'Payment approved');
+      toast.success('Payment approved');
     },
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to approve offline payment')),
   });
@@ -35,9 +35,9 @@ export function useRejectOfflineBankPayment() {
   return useMutation({
     mutationFn: ({ id, payload }: { id: number; payload?: OfflineBankPaymentActionPayload }) =>
       offlineBankPaymentsService.reject(id, payload),
-    onSuccess: (response) => {
+    onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.fees.offlinePayments.all });
-      toast.success(response.message || 'Payment rejected');
+      toast.success('Payment rejected');
     },
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to reject offline payment')),
   });
