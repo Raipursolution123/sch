@@ -492,6 +492,53 @@ export const queryKeys = {
       list: (query = '') => [...queryKeys.alumni.all, 'report', 'list', query] as const,
     },
   },
+  leads: {
+    all: ['leads'] as const,
+    list: (query = '', campaignId = '') =>
+      [...queryKeys.leads.all, 'list', query, campaignId] as const,
+    campaigns: {
+      list: (query = '') => [...queryKeys.leads.all, 'campaigns', 'list', query] as const,
+    },
+    followupStatuses: {
+      list: (query = '') => [...queryKeys.leads.all, 'followup-statuses', 'list', query] as const,
+    },
+    followups: {
+      list: (query = '', leadId = '') =>
+        [...queryKeys.leads.all, 'followups', 'list', query, leadId] as const,
+    },
+    sources: {
+      list: () => [...queryKeys.leads.all, 'sources', 'list'] as const,
+    },
+    promoters: {
+      list: () => [...queryKeys.leads.all, 'promoters', 'list'] as const,
+    },
+    report: () => [...queryKeys.leads.all, 'report'] as const,
+  },
+  cms: {
+    all: ['cms'] as const,
+    events: {
+      list: (query = '') => [...queryKeys.cms.all, 'events', 'list', query] as const,
+    },
+    gallery: {
+      list: (query = '') => [...queryKeys.cms.all, 'gallery', 'list', query] as const,
+    },
+    media: {
+      list: (query = '') => [...queryKeys.cms.all, 'media', 'list', query] as const,
+    },
+    notices: {
+      list: (query = '') => [...queryKeys.cms.all, 'notices', 'list', query] as const,
+    },
+    pages: {
+      list: (query = '') => [...queryKeys.cms.all, 'pages', 'list', query] as const,
+    },
+    menus: {
+      list: (query = '') => [...queryKeys.cms.all, 'menus', 'list', query] as const,
+    },
+    banners: {
+      list: (query = '') => [...queryKeys.cms.all, 'banners', 'list', query] as const,
+    },
+    settings: () => [...queryKeys.cms.all, 'settings'] as const,
+  },
   library: {
     all: ['library'] as const,
     books: {

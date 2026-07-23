@@ -2,11 +2,7 @@ import { lazy } from 'react';
 import { Navigate, type RouteObject } from 'react-router-dom';
 import { ROUTES, LEGACY_SETTINGS_SESSIONS } from '@constants/routes';
 import { ModuleLayout } from '@layouts/ModuleLayout';
-import {
-  buildPlaceholderChildren,
-  createModuleRoutes,
-  createPlaceholderModule,
-} from '@routes/module-routes';
+import { buildPlaceholderChildren, createModuleRoutes } from '@routes/module-routes';
 
 const DashboardPage = lazy(() =>
   import('@features/dashboard/pages/DashboardPage').then((m) => ({
@@ -95,6 +91,67 @@ const AlumniReportPage = lazy(() =>
   import('@features/reports/alumni/pages/AlumniReportPage').then((m) => ({
     default: m.AlumniReportPage,
   })),
+);
+const InventoryReportPage = lazy(() =>
+  import('@features/reports/inventory/pages/InventoryReportPage').then((m) => ({
+    default: m.InventoryReportPage,
+  })),
+);
+const HomeworkReportPage = lazy(() =>
+  import('@features/reports/homework/pages/HomeworkReportPage').then((m) => ({
+    default: m.HomeworkReportPage,
+  })),
+);
+
+const LeadsPage = lazy(() =>
+  import('@features/leads/pages/LeadsPage').then((m) => ({ default: m.LeadsPage })),
+);
+const CampaignsPage = lazy(() =>
+  import('@features/leads/pages/CampaignsPage').then((m) => ({ default: m.CampaignsPage })),
+);
+const CampaignTypesPage = lazy(() =>
+  import('@features/leads/pages/CampaignTypesPage').then((m) => ({
+    default: m.CampaignTypesPage,
+  })),
+);
+const PromotersPage = lazy(() =>
+  import('@features/leads/pages/PromotersPage').then((m) => ({ default: m.PromotersPage })),
+);
+const FollowupStatusPage = lazy(() =>
+  import('@features/leads/pages/FollowupStatusPage').then((m) => ({
+    default: m.FollowupStatusPage,
+  })),
+);
+const FollowupsPage = lazy(() =>
+  import('@features/leads/pages/FollowupsPage').then((m) => ({ default: m.FollowupsPage })),
+);
+const LeadReportsPage = lazy(() =>
+  import('@features/leads/pages/LeadReportsPage').then((m) => ({ default: m.LeadReportsPage })),
+);
+
+const CmsEventsPage = lazy(() =>
+  import('@features/cms/pages/EventsPage').then((m) => ({ default: m.EventsPage })),
+);
+const CmsGalleryPage = lazy(() =>
+  import('@features/cms/pages/GalleryPage').then((m) => ({ default: m.GalleryPage })),
+);
+const CmsMediaPage = lazy(() =>
+  import('@features/cms/pages/MediaPage').then((m) => ({ default: m.MediaPage })),
+);
+const CmsNoticesPage = lazy(() =>
+  import('@features/cms/pages/NoticesPage').then((m) => ({ default: m.NoticesPage })),
+);
+const CmsPagesPage = lazy(() =>
+  import('@features/cms/pages/PagesPage').then((m) => ({ default: m.PagesPage })),
+);
+const CmsMenusPage = lazy(() =>
+  import('@features/cms/pages/MenusPage').then((m) => ({ default: m.MenusPage })),
+);
+const CmsBannersPage = lazy(() =>
+  import('@features/cms/pages/BannersPage').then((m) => ({ default: m.BannersPage })),
+);
+const CmsSettingsPage = lazy(() =>
+  import('@features/cms/pages/SettingsPage').then((m) => ({ default: m.SettingsPage })),
 );
 const SessionsPage = lazy(() =>
   import('@features/academics/sessions/pages/SessionsPage').then((m) => ({
@@ -959,6 +1016,8 @@ export const adminRoutes: RouteObject[] = [
     { path: 'hr', element: <StaffReportPage /> },
     { path: 'transport', element: <TransportHostelReportPage /> },
     { path: 'library', element: <LibraryReportPage /> },
+    { path: 'inventory', element: <InventoryReportPage /> },
+    { path: 'homework', element: <HomeworkReportPage /> },
     { path: 'alumni', element: <AlumniReportPage /> },
   ]),
   createModuleRoutes('/certificates', ROUTES.certificates.templates, [
@@ -973,6 +1032,23 @@ export const adminRoutes: RouteObject[] = [
     { path: 'list', element: <AlumniListPage /> },
     { path: 'events', element: <AlumniEventsPage /> },
   ]),
-  createPlaceholderModule('/leads', ROUTES.leads.all),
-  createPlaceholderModule('/cms', ROUTES.cms.events),
+  createModuleRoutes('/leads', ROUTES.leads.all, [
+    { path: 'all', element: <LeadsPage /> },
+    { path: 'campaigns', element: <CampaignsPage /> },
+    { path: 'campaign-types', element: <CampaignTypesPage /> },
+    { path: 'promoters', element: <PromotersPage /> },
+    { path: 'follow-up-status', element: <FollowupStatusPage /> },
+    { path: 'follow-ups', element: <FollowupsPage /> },
+    { path: 'reports', element: <LeadReportsPage /> },
+  ]),
+  createModuleRoutes('/cms', ROUTES.cms.events, [
+    { path: 'events', element: <CmsEventsPage /> },
+    { path: 'gallery', element: <CmsGalleryPage /> },
+    { path: 'notices', element: <CmsNoticesPage /> },
+    { path: 'media', element: <CmsMediaPage /> },
+    { path: 'pages', element: <CmsPagesPage /> },
+    { path: 'menus', element: <CmsMenusPage /> },
+    { path: 'banners', element: <CmsBannersPage /> },
+    { path: 'settings', element: <CmsSettingsPage /> },
+  ]),
 ];

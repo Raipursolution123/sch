@@ -53,6 +53,10 @@ urlpatterns = [
     path("communications/", include("apps.communications.urls")),
     # alumni
     path("alumni/", include("apps.alumni.urls")),
+    # leads / CRM
+    path("leads/", include("apps.cyc_extensions.urls_leads")),
+    # front cms
+    path("cms/", include("apps.cms.urls")),
     # cyc_extensions (Finance / accounting)
     path("", include("apps.cyc_extensions.urls")),
 ]

@@ -8,6 +8,7 @@ import {
   ClipboardList,
   CreditCard,
   Download,
+  FileBarChart,
   FileText,
   GraduationCap,
   Home,
@@ -779,7 +780,7 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.finance.root,
     icon: Landmark,
     section: 'finance',
-    permissionKeys: ['accounts', 'entries', 'trialbalance', 'balancesheet', 'profitloss', 'index'],
+    permissionKeys: ['accounts', 'entries'],
     children: [
       {
         id: 'finance-coa',
@@ -811,9 +812,19 @@ export const ADMIN_NAV: NavItem[] = [
         path: ROUTES.finance.ledgers,
         permissionKeys: ['accounts'],
       },
+    ],
+  },
+  {
+    id: 'finance-reports',
+    label: 'Financial Reports',
+    path: ROUTES.finance.reports,
+    icon: FileBarChart,
+    section: 'finance',
+    permissionKeys: ['trialbalance', 'balancesheet', 'profitloss', 'index'],
+    children: [
       {
-        id: 'finance-reports-hub',
-        label: 'Reports Hub',
+        id: 'finance-reports-dashboard',
+        label: 'Dashboard',
         path: ROUTES.finance.reports,
         permissionKeys: ['index', 'trialbalance', 'balancesheet', 'profitloss'],
       },
@@ -908,7 +919,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'reports-inventory',
         label: 'Inventory Reports',
         path: ROUTES.reports.inventory,
-        permissionKeys: ['inventory_report'],
+        permissionKeys: ['stock_report', 'add_item_report', 'issue_item_report'],
       },
       {
         id: 'reports-hr',
@@ -926,7 +937,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'reports-homework',
         label: 'Homework Reports',
         path: ROUTES.reports.homework,
-        permissionKeys: ['homework_report'],
+        permissionKeys: ['homework', 'daily_assignment'],
       },
       {
         id: 'reports-alumni',
@@ -1017,13 +1028,13 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.leads.root,
     icon: UserPlus,
     section: 'insights',
-    permissionKeys: ['lead_manager'],
+    permissionKeys: ['lead_manager', 'all_leads', 'leads_follow_up'],
     children: [
       {
         id: 'leads-all',
         label: 'All Leads',
         path: ROUTES.leads.all,
-        permissionKeys: ['lead_manager'],
+        permissionKeys: ['all_leads'],
       },
       {
         id: 'leads-campaigns',
@@ -1047,13 +1058,13 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'leads-followup-status',
         label: 'Follow-up Status',
         path: ROUTES.leads.followUpStatus,
-        permissionKeys: ['lead_manager'],
+        permissionKeys: ['leads_follow_up'],
       },
       {
         id: 'leads-followups',
         label: 'Follow-ups',
         path: ROUTES.leads.followUps,
-        permissionKeys: ['lead_manager'],
+        permissionKeys: ['leads_follow_up'],
       },
       {
         id: 'leads-reports',
@@ -1069,7 +1080,16 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.cms.root,
     icon: FileText,
     section: 'insights',
-    permissionKeys: ['event', 'gallery', 'pages', 'menus'],
+    permissionKeys: [
+      'event',
+      'gallery',
+      'notice',
+      'media_manager',
+      'pages',
+      'menus',
+      'banner_images',
+      'front_cms_setting',
+    ],
     children: [
       { id: 'cms-events', label: 'Events', path: ROUTES.cms.events, permissionKeys: ['event'] },
       {

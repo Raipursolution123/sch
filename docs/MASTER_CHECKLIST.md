@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-23  
-**Current phase:** Phase 26 — Financial Reports + Alumni ✅ COMPLETE  
+**Current phase:** Phase 27 — Reports gaps + Lead Management + Front CMS ✅ COMPLETE  
 **Branch:** `main`
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phases 0–26 complete |
-| **Current Phase** | Phase 26 — Financial Reports + Alumni ✅ |
+| **Overall Project Progress** | Phases 0–27 complete |
+| **Current Phase** | Phase 27 — Reports / Leads / CMS ✅ |
 | **Current Task** | Ops: prod deploy + UAT |
-| **Completed Phases** | Phase 0 ✅ … Phase 26 ✅ |
-| **Remaining Phases** | Ops / UAT; feature backlog (CMS, leads, student take-exam, etc.) |
+| **Completed Phases** | Phase 0 ✅ … Phase 27 ✅ |
+| **Remaining Phases** | Ops / UAT; residual backlog |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~98% |
-| **Frontend Completion** | ~95% |
-| **API Integration Status** | Finance reports (TB/BS/P&L/statement/recon) + Alumni CRUD wired |
-| **UI Completion Status** | Account Finance reports + Alumni Coming Soon cleared |
-| **Testing Status** | Finance report + alumni unit tests + frontend typecheck |
+| **Backend Completion** | ~99% |
+| **Frontend Completion** | ~98% |
+| **API Integration Status** | Leads + Front CMS APIs; Inventory/Homework reports |
+| **UI Completion Status** | Reports / Leads / Front CMS Coming Soon cleared |
+| **Testing Status** | CMS/leads validation tests + frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT |
-| **Technical Debt Remaining** | ~20 Coming Soon pages |
+| **Technical Debt Remaining** | ~5 Coming Soon pages (residual settings/misc) |
 
 ---
 
@@ -986,6 +986,31 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 27 — Reports gaps + Lead Management + Front CMS ✅ SIGNED OFF
+
+**Signed off:** 2026-07-23
+
+| ID | Task | Status |
+|----|------|--------|
+| 27.1 | Inventory Reports page (stock / items / issues) | ✅ |
+| 27.2 | Homework Reports page (homework + daily assignments) | ✅ |
+| 27.3 | Lead Management APIs (leads, campaigns, follow-ups, statuses, promoters, report) | ✅ |
+| 27.4 | Lead Management UI (all 7 nav items) | ✅ |
+| 27.5 | Front CMS APIs (events, gallery, media, notices, pages, menus, banners, settings) | ✅ |
+| 27.6 | Front CMS UI (all 8 nav items) | ✅ |
+| 27.7 | Nav privilege alignment + unit tests + typecheck | ✅ |
+
+### Notes
+
+- Reports Inventory/Homework compose existing inventory & academics APIs (no new report endpoints).
+- Campaign Types uses distinct `l_source` values (no `cyc_campaign_type` table in schema).
+- Promoters map to `cyc_leads_counsellor` (campaign staff assignments).
+- CMS Banners use `front_cms_programs` with `type=banner`; Notices use `front_cms_pages` with `type=notice`.
+- CMS Settings privilege lives under `system_settings` / `front_cms_setting`.
+- Financial Reports restored as a **separate top-level sidebar module** (legacy menu `finance_reports`), sibling to Account Finance — not flattened under Account Finance / not renamed to Reports Hub.
+
+---
+
 ## Roadmap Complete ✅
 
-Phases 0–26 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (CMS, leads, student online exam attempt, etc.).
+Phases 0–27 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and residual backlog (student online exam attempt, binary uploads, etc.).

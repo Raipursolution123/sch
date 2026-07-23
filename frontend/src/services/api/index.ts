@@ -77,6 +77,8 @@ export { ledgersService } from './ledgers.service';
 export { ledgerGroupsService } from './ledger-groups.service';
 export { financeReportsService } from './finance-reports.service';
 export { alumniService } from './alumni.service';
+export { leadsService } from './leads.service';
+export { cmsService } from './cms.service';
 export { journalEntriesService } from './journal-entries.service';
 export { feeMapperService } from './fee-mapper.service';
 export { homeworkService, dailyAssignmentsService } from './homework.service';
