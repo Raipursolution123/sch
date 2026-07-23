@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-23  
-**Current phase:** Phase 25 — Download Center Videos + Online Examinations ✅ COMPLETE  
+**Current phase:** Phase 26 — Financial Reports + Alumni ✅ COMPLETE  
 **Branch:** `main`
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phases 0–25 complete |
-| **Current Phase** | Phase 25 — Download Center / Online Exams ✅ |
+| **Overall Project Progress** | Phases 0–26 complete |
+| **Current Phase** | Phase 26 — Financial Reports + Alumni ✅ |
 | **Current Task** | Ops: prod deploy + UAT |
-| **Completed Phases** | Phase 0 ✅ … Phase 25 ✅ |
-| **Remaining Phases** | Ops / UAT; feature backlog (CMS, alumni, student take-exam, etc.) |
+| **Completed Phases** | Phase 0 ✅ … Phase 26 ✅ |
+| **Remaining Phases** | Ops / UAT; feature backlog (CMS, leads, student take-exam, etc.) |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~97% |
-| **Frontend Completion** | ~93% |
-| **API Integration Status** | Video tutorials + online exam/question bank wired |
-| **UI Completion Status** | Download Center + Online Examinations Coming Soon cleared |
-| **Testing Status** | Download center + online exam unit tests + frontend typecheck |
+| **Backend Completion** | ~98% |
+| **Frontend Completion** | ~95% |
+| **API Integration Status** | Finance reports (TB/BS/P&L/statement/recon) + Alumni CRUD wired |
+| **UI Completion Status** | Account Finance reports + Alumni Coming Soon cleared |
+| **Testing Status** | Finance report + alumni unit tests + frontend typecheck |
 | **Production Readiness** | Code-ready — pending prod deploy, UAT |
-| **Technical Debt Remaining** | ~28 Coming Soon pages |
+| **Technical Debt Remaining** | ~20 Coming Soon pages |
 
 ---
 
@@ -962,6 +962,30 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 
 ---
 
+## Phase 26 — Financial Reports + Alumni ✅ SIGNED OFF
+
+**Signed off:** 2026-07-23
+
+| ID | Task | Status |
+|----|------|--------|
+| 26.1 | Trial Balance API hardened (date range, totals, closing) | ✅ |
+| 26.2 | Balance Sheet + Profit & Loss APIs (`balancesheet`, `profitloss`) | ✅ |
+| 26.3 | Ledger Statement + Ledger Entries + Reconciliation (`index`) | ✅ |
+| 26.4 | Account Finance report pages + Reports Hub | ✅ |
+| 26.5 | Manage Alumni CRUD (`manage_alumni` / `alumni_students`) | ✅ |
+| 26.6 | Alumni Events CRUD (`events` / `alumni_events`) | ✅ |
+| 26.7 | Alumni Report under Reports (`alumni_report`) | ✅ |
+| 26.8 | Nav RBAC fix (`alumni_event` → `events`) + unit tests + typecheck | ✅ |
+
+### Notes
+
+- BS/P&L classify ledgers by walking `cyc_groups` to root name (Assets/Liabilities/Income/Expenses).
+- Sidebar keys `ledgerstatement` / `ledgerentries` / `reconciliation` are not seeded as categories; APIs gate with `index`.
+- Alumni Events privilege short_code is `events` (seed), not `alumni_event`.
+- Reports → Income & Expense still shows trial balance for operational reports nav (unchanged path).
+
+---
+
 ## Roadmap Complete ✅
 
-Phases 0–25 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (CMS, alumni, student online exam attempt, etc.).
+Phases 0–26 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and **feature backlog** (CMS, leads, student online exam attempt, etc.).

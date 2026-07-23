@@ -13,13 +13,20 @@ function parseAmount(value: number | string): number {
 }
 
 export function IncomeExpenseReportPage() {
-  const { data: rows = [], isLoading, isError, error, refetch } = useTrialBalance(true);
+  const { data: report, isLoading, isError, error, refetch } = useTrialBalance({}, true);
+  const rows = report?.rows ?? [];
 
   const totals = useMemo(() => {
+    if (report?.totals) {
+      return {
+        totalDr: parseAmount(report.totals.total_dr),
+        totalCr: parseAmount(report.totals.total_cr),
+      };
+    }
     const totalDr = rows.reduce((sum, row) => sum + parseAmount(row.total_dr), 0);
     const totalCr = rows.reduce((sum, row) => sum + parseAmount(row.total_cr), 0);
     return { totalDr, totalCr };
-  }, [rows]);
+  }, [report, rows]);
 
   const handleExportCsv = () => {
     exportToCsv(

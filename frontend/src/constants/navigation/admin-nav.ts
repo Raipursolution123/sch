@@ -779,7 +779,7 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.finance.root,
     icon: Landmark,
     section: 'finance',
-    permissionKeys: ['accounts', 'entries', 'trialbalance'],
+    permissionKeys: ['accounts', 'entries', 'trialbalance', 'balancesheet', 'profitloss', 'index'],
     children: [
       {
         id: 'finance-coa',
@@ -812,10 +812,46 @@ export const ADMIN_NAV: NavItem[] = [
         permissionKeys: ['accounts'],
       },
       {
-        id: 'finance-reports',
-        label: 'Financial Reports',
+        id: 'finance-reports-hub',
+        label: 'Reports Hub',
         path: ROUTES.finance.reports,
+        permissionKeys: ['index', 'trialbalance', 'balancesheet', 'profitloss'],
+      },
+      {
+        id: 'finance-trial-balance',
+        label: 'Trial Balance',
+        path: ROUTES.finance.trialBalance,
         permissionKeys: ['trialbalance'],
+      },
+      {
+        id: 'finance-balance-sheet',
+        label: 'Balance Sheet',
+        path: ROUTES.finance.balanceSheet,
+        permissionKeys: ['balancesheet'],
+      },
+      {
+        id: 'finance-profit-loss',
+        label: 'Profit & Loss',
+        path: ROUTES.finance.profitLoss,
+        permissionKeys: ['profitloss'],
+      },
+      {
+        id: 'finance-ledger-statement',
+        label: 'Ledger Statement',
+        path: ROUTES.finance.ledgerStatement,
+        permissionKeys: ['index'],
+      },
+      {
+        id: 'finance-ledger-entries',
+        label: 'Ledger Entries',
+        path: ROUTES.finance.ledgerEntries,
+        permissionKeys: ['index'],
+      },
+      {
+        id: 'finance-reconciliation',
+        label: 'Reconciliation',
+        path: ROUTES.finance.reconciliation,
+        permissionKeys: ['index'],
       },
     ],
   },
@@ -825,7 +861,7 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.reports.root,
     icon: BarChart3,
     section: 'insights',
-    permissionKeys: ['student_report', 'attendance_report', 'finance_report'],
+    permissionKeys: ['student_report', 'attendance_report', 'finance_report', 'alumni_report'],
     children: [
       {
         id: 'reports-students',
@@ -892,6 +928,12 @@ export const ADMIN_NAV: NavItem[] = [
         path: ROUTES.reports.homework,
         permissionKeys: ['homework_report'],
       },
+      {
+        id: 'reports-alumni',
+        label: 'Alumni Report',
+        path: ROUTES.reports.alumni,
+        permissionKeys: ['alumni_report'],
+      },
     ],
   },
   {
@@ -953,7 +995,7 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.alumni.root,
     icon: Megaphone,
     section: 'insights',
-    permissionKeys: ['manage_alumni', 'alumni_event'],
+    permissionKeys: ['manage_alumni', 'events'],
     children: [
       {
         id: 'alumni-list',
@@ -965,7 +1007,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'alumni-events',
         label: 'Alumni Events',
         path: ROUTES.alumni.events,
-        permissionKeys: ['alumni_event'],
+        permissionKeys: ['events'],
       },
     ],
   },

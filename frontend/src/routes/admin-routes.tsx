@@ -44,6 +44,58 @@ const ChartOfAccountsPage = lazy(() =>
     default: m.ChartOfAccountsPage,
   })),
 );
+
+const FinanceReportsHubPage = lazy(() =>
+  import('@features/finance/reports/pages/FinanceReportsHubPage').then((m) => ({
+    default: m.FinanceReportsHubPage,
+  })),
+);
+const TrialBalancePage = lazy(() =>
+  import('@features/finance/reports/pages/TrialBalancePage').then((m) => ({
+    default: m.TrialBalancePage,
+  })),
+);
+const BalanceSheetPage = lazy(() =>
+  import('@features/finance/reports/pages/BalanceSheetPage').then((m) => ({
+    default: m.BalanceSheetPage,
+  })),
+);
+const ProfitLossPage = lazy(() =>
+  import('@features/finance/reports/pages/ProfitLossPage').then((m) => ({
+    default: m.ProfitLossPage,
+  })),
+);
+const LedgerStatementPage = lazy(() =>
+  import('@features/finance/reports/pages/LedgerStatementPage').then((m) => ({
+    default: m.LedgerStatementPage,
+  })),
+);
+const LedgerEntriesPage = lazy(() =>
+  import('@features/finance/reports/pages/LedgerEntriesPage').then((m) => ({
+    default: m.LedgerEntriesPage,
+  })),
+);
+const ReconciliationPage = lazy(() =>
+  import('@features/finance/reports/pages/ReconciliationPage').then((m) => ({
+    default: m.ReconciliationPage,
+  })),
+);
+
+const AlumniListPage = lazy(() =>
+  import('@features/alumni/pages/AlumniListPage').then((m) => ({
+    default: m.AlumniListPage,
+  })),
+);
+const AlumniEventsPage = lazy(() =>
+  import('@features/alumni/pages/AlumniEventsPage').then((m) => ({
+    default: m.AlumniEventsPage,
+  })),
+);
+const AlumniReportPage = lazy(() =>
+  import('@features/reports/alumni/pages/AlumniReportPage').then((m) => ({
+    default: m.AlumniReportPage,
+  })),
+);
 const SessionsPage = lazy(() =>
   import('@features/academics/sessions/pages/SessionsPage').then((m) => ({
     default: m.SessionsPage,
@@ -890,6 +942,13 @@ export const adminRoutes: RouteObject[] = [
     { path: 'groups', element: <LedgerGroupsPage /> },
     { path: 'entries', element: <JournalEntriesPage /> },
     { path: 'mapper', element: <FeeMapperPage /> },
+    { path: 'reports', element: <FinanceReportsHubPage /> },
+    { path: 'reports/trial-balance', element: <TrialBalancePage /> },
+    { path: 'reports/balance-sheet', element: <BalanceSheetPage /> },
+    { path: 'reports/profit-loss', element: <ProfitLossPage /> },
+    { path: 'reports/ledger-statement', element: <LedgerStatementPage /> },
+    { path: 'reports/ledger-entries', element: <LedgerEntriesPage /> },
+    { path: 'reports/reconciliation', element: <ReconciliationPage /> },
   ]),
   createModuleRoutes('/reports', ROUTES.reports.students, [
     { path: 'students', element: <StudentReportPage /> },
@@ -900,6 +959,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'hr', element: <StaffReportPage /> },
     { path: 'transport', element: <TransportHostelReportPage /> },
     { path: 'library', element: <LibraryReportPage /> },
+    { path: 'alumni', element: <AlumniReportPage /> },
   ]),
   createModuleRoutes('/certificates', ROUTES.certificates.templates, [
     { path: 'templates', element: <CertificateTemplatesPage /> },
@@ -909,7 +969,10 @@ export const adminRoutes: RouteObject[] = [
     { path: 'staff-id-card', element: <StaffIdCardTemplatesPage /> },
     { path: 'generate-staff-id-card', element: <GenerateStaffIdCardPage /> },
   ]),
-  createPlaceholderModule('/alumni', ROUTES.alumni.list),
+  createModuleRoutes('/alumni', ROUTES.alumni.list, [
+    { path: 'list', element: <AlumniListPage /> },
+    { path: 'events', element: <AlumniEventsPage /> },
+  ]),
   createPlaceholderModule('/leads', ROUTES.leads.all),
   createPlaceholderModule('/cms', ROUTES.cms.events),
 ];

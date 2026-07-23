@@ -101,6 +101,15 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.finance.entries,
   ROUTES.finance.mapper,
   ROUTES.finance.chartOfAccounts,
+  ROUTES.finance.reports,
+  ROUTES.finance.trialBalance,
+  ROUTES.finance.balanceSheet,
+  ROUTES.finance.profitLoss,
+  ROUTES.finance.ledgerStatement,
+  ROUTES.finance.ledgerEntries,
+  ROUTES.finance.reconciliation,
+  ROUTES.alumni.list,
+  ROUTES.alumni.events,
   ROUTES.settings.general,
   ROUTES.settings.languages,
   ROUTES.settings.currency,
@@ -118,6 +127,7 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.reports.hr,
   ROUTES.reports.transport,
   ROUTES.reports.library,
+  ROUTES.reports.alumni,
 ]);
 
 export function isImplementedPath(path: string): boolean {

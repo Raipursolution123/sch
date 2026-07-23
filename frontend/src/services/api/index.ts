@@ -76,6 +76,7 @@ export { messagesService } from './messages.service';
 export { ledgersService } from './ledgers.service';
 export { ledgerGroupsService } from './ledger-groups.service';
 export { financeReportsService } from './finance-reports.service';
+export { alumniService } from './alumni.service';
 export { journalEntriesService } from './journal-entries.service';
 export { feeMapperService } from './fee-mapper.service';
 export { homeworkService, dailyAssignmentsService } from './homework.service';

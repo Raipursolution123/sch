@@ -463,6 +463,34 @@ export const queryKeys = {
       all: ['finance', 'mapper'] as const,
       list: () => [...queryKeys.finance.mapper.all, 'list'] as const,
     },
+    reports: {
+      all: ['finance', 'reports'] as const,
+      index: () => [...queryKeys.finance.reports.all, 'index'] as const,
+      trialBalance: (from = '', to = '') =>
+        [...queryKeys.finance.reports.all, 'trial-balance', from, to] as const,
+      balanceSheet: (asOf = '') =>
+        [...queryKeys.finance.reports.all, 'balance-sheet', asOf] as const,
+      profitLoss: (from = '', to = '') =>
+        [...queryKeys.finance.reports.all, 'profit-loss', from, to] as const,
+      ledgerStatement: (ledgerId: number, from = '', to = '') =>
+        [...queryKeys.finance.reports.all, 'ledger-statement', ledgerId, from, to] as const,
+      ledgerEntries: (ledgerId = 0, from = '', to = '') =>
+        [...queryKeys.finance.reports.all, 'ledger-entries', ledgerId, from, to] as const,
+      reconciliation: (ledgerId = 0) =>
+        [...queryKeys.finance.reports.all, 'reconciliation', ledgerId] as const,
+    },
+  },
+  alumni: {
+    all: ['alumni'] as const,
+    students: {
+      list: (query = '') => [...queryKeys.alumni.all, 'students', 'list', query] as const,
+    },
+    events: {
+      list: (query = '') => [...queryKeys.alumni.all, 'events', 'list', query] as const,
+    },
+    report: {
+      list: (query = '') => [...queryKeys.alumni.all, 'report', 'list', query] as const,
+    },
   },
   library: {
     all: ['library'] as const,

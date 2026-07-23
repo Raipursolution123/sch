@@ -11,7 +11,15 @@ from apps.cyc_extensions.api.views.ledger_groups import (
     LedgerGroupsView,
 )
 from apps.cyc_extensions.api.views.ledgers import LedgersDetailView, LedgersView
-from apps.cyc_extensions.api.views.reports import TrialBalanceReportView
+from apps.cyc_extensions.api.views.reports import (
+    BalanceSheetReportView,
+    FinanceReportsIndexView,
+    LedgerEntriesReportView,
+    LedgerStatementReportView,
+    ProfitLossReportView,
+    ReconciliationReportView,
+    TrialBalanceReportView,
+)
 
 urlpatterns = [
     # Ledger Groups
@@ -46,8 +54,38 @@ urlpatterns = [
     path("finance/mapper/<int:pk>/", FeeHeadMapperDetailView.as_view(), name="finance-mapper-detail"),
     # Reports
     path(
+        "finance/reports/",
+        FinanceReportsIndexView.as_view(),
+        name="finance-reports-index",
+    ),
+    path(
         "finance/reports/trial-balance/",
         TrialBalanceReportView.as_view(),
         name="finance-reports-tb",
+    ),
+    path(
+        "finance/reports/balance-sheet/",
+        BalanceSheetReportView.as_view(),
+        name="finance-reports-bs",
+    ),
+    path(
+        "finance/reports/profit-loss/",
+        ProfitLossReportView.as_view(),
+        name="finance-reports-pl",
+    ),
+    path(
+        "finance/reports/ledger-statement/",
+        LedgerStatementReportView.as_view(),
+        name="finance-reports-ledger-statement",
+    ),
+    path(
+        "finance/reports/ledger-entries/",
+        LedgerEntriesReportView.as_view(),
+        name="finance-reports-ledger-entries",
+    ),
+    path(
+        "finance/reports/reconciliation/",
+        ReconciliationReportView.as_view(),
+        name="finance-reports-reconciliation",
     ),
 ]

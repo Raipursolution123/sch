@@ -55,8 +55,138 @@ export type LedgerUpdatePayload = Partial<LedgerCreatePayload>;
 export interface TrialBalanceRow {
   ledger_id: number;
   ledger_name: string;
+  group_name?: string | null;
   total_dr: number | string;
   total_cr: number | string;
+  closing_dr?: number | string;
+  closing_cr?: number | string;
+}
+
+export interface TrialBalanceTotals {
+  total_dr: number | string;
+  total_cr: number | string;
+}
+
+export interface TrialBalanceReport {
+  from_date: string | null;
+  to_date: string | null;
+  rows: TrialBalanceRow[];
+  totals: TrialBalanceTotals;
+}
+
+export interface BalanceSheetLine {
+  ledger_id: number;
+  ledger_name: string;
+  group_name?: string | null;
+  amount: number | string;
+}
+
+export interface BalanceSheetTotals {
+  assets: number | string;
+  liabilities: number | string;
+  difference: number | string;
+}
+
+export interface BalanceSheetReport {
+  as_of: string | null;
+  assets: BalanceSheetLine[];
+  liabilities: BalanceSheetLine[];
+  totals: BalanceSheetTotals;
+}
+
+export interface ProfitLossLine {
+  ledger_id: number;
+  ledger_name: string;
+  group_name?: string | null;
+  affects_gross?: number;
+  amount: number | string;
+}
+
+export interface ProfitLossTotals {
+  gross_profit: number | string;
+  net_profit: number | string;
+  total_income: number | string;
+  total_expenses: number | string;
+}
+
+export interface ProfitLossReport {
+  from_date: string | null;
+  to_date: string | null;
+  income: ProfitLossLine[];
+  expenses: ProfitLossLine[];
+  totals: ProfitLossTotals;
+}
+
+export interface LedgerStatementLine {
+  entry_id: number;
+  item_id: number;
+  date: string | null;
+  entry_number?: number | null;
+  narration: string;
+  dc: string;
+  amount: number | string;
+  running_balance: number | string;
+  reconciliation_date?: string | null;
+}
+
+export interface LedgerStatementReport {
+  ledger_id: number;
+  ledger_name: string;
+  from_date: string | null;
+  to_date: string | null;
+  opening_balance: number | string;
+  closing_balance: number | string;
+  lines: LedgerStatementLine[];
+}
+
+export interface LedgerEntryRow {
+  entry_id: number;
+  date: string | null;
+  entry_number?: number | null;
+  ledger_id: number;
+  ledger_name: string;
+  dc: string;
+  amount: number | string;
+  narration: string;
+}
+
+export interface LedgerEntriesReport {
+  from_date: string | null;
+  to_date: string | null;
+  ledger_id: number | null;
+  rows: LedgerEntryRow[];
+}
+
+export interface ReconciliationItem {
+  item_id: number;
+  ledger_id: number;
+  ledger_name?: string | null;
+  entry_id: number;
+  date: string | null;
+  amount: number | string;
+  dc: string;
+  narration?: string | null;
+  reconciliation_date: string | null;
+  is_reconciled: boolean;
+}
+
+export interface ReconciliationReport {
+  ledgers: Array<{ id: number; name: string }>;
+  items: ReconciliationItem[];
+}
+
+export interface ReconciliationUpdatePayload {
+  item_id: number;
+  reconciliation_date: string | null;
+}
+
+export interface FinanceReportsIndex {
+  reports: Array<{ key: string; label: string; path: string }>;
+}
+
+export interface DateRangeFilters {
+  from_date?: string;
+  to_date?: string;
 }
 
 export interface EntryType {

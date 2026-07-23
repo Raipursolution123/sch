@@ -51,6 +51,8 @@ urlpatterns = [
     path("hostel/", include("apps.hostel.urls")),
     # communications
     path("communications/", include("apps.communications.urls")),
+    # alumni
+    path("alumni/", include("apps.alumni.urls")),
     # cyc_extensions (Finance / accounting)
     path("", include("apps.cyc_extensions.urls")),
 ]
