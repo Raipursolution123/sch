@@ -219,6 +219,54 @@ const PrintHeaderFooterPage = lazy(() =>
   })),
 );
 
+const ModulesPage = lazy(() =>
+  import('@features/settings/modules/pages/ModulesPage').then((m) => ({
+    default: m.ModulesPage,
+  })),
+);
+
+const CustomFieldsPage = lazy(() =>
+  import('@features/settings/custom-fields/pages/CustomFieldsPage').then((m) => ({
+    default: m.CustomFieldsPage,
+  })),
+);
+
+const CaptchaPage = lazy(() =>
+  import('@features/settings/captcha/pages/CaptchaPage').then((m) => ({
+    default: m.CaptchaPage,
+  })),
+);
+
+const SystemFieldsPage = lazy(() =>
+  import('@features/settings/system-fields/pages/SystemFieldsPage').then((m) => ({
+    default: m.SystemFieldsPage,
+  })),
+);
+
+const OnlineAdmissionSettingsPage = lazy(() =>
+  import('@features/settings/online-admission-settings/pages/OnlineAdmissionSettingsPage').then(
+    (m) => ({ default: m.OnlineAdmissionSettingsPage }),
+  ),
+);
+
+const SidebarMenuPage = lazy(() =>
+  import('@features/settings/sidebar-menu/pages/SidebarMenuPage').then((m) => ({
+    default: m.SidebarMenuPage,
+  })),
+);
+
+const BackupPage = lazy(() =>
+  import('@features/settings/backup/pages/BackupPage').then((m) => ({
+    default: m.BackupPage,
+  })),
+);
+
+const FileTypesPage = lazy(() =>
+  import('@features/settings/file-types/pages/FileTypesPage').then((m) => ({
+    default: m.FileTypesPage,
+  })),
+);
+
 const ClassesPage = lazy(() =>
   import('@features/academics/classes/pages/ClassesPage').then((m) => ({
     default: m.ClassesPage,
@@ -950,6 +998,14 @@ export const adminRoutes: RouteObject[] = [
     { path: 'print-header-footer', element: <PrintHeaderFooterPage /> },
     { path: 'roles', element: <RolesPage /> },
     { path: 'users', element: <UsersPage /> },
+    { path: 'modules', element: <ModulesPage /> },
+    { path: 'custom-fields', element: <CustomFieldsPage /> },
+    { path: 'captcha', element: <CaptchaPage /> },
+    { path: 'system-fields', element: <SystemFieldsPage /> },
+    { path: 'online-admission', element: <OnlineAdmissionSettingsPage /> },
+    { path: 'sidebar-menu', element: <SidebarMenuPage /> },
+    { path: 'backup', element: <BackupPage /> },
+    { path: 'file-types', element: <FileTypesPage /> },
   ]),
 
   createModuleRoutes('/front-office', ROUTES.frontOffice.enquiry, [

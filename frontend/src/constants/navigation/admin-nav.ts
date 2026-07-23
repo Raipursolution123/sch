@@ -1199,7 +1199,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'settings-custom-fields',
         label: 'Custom Fields',
         path: ROUTES.settings.customFields,
-        permissionKeys: ['custom_field'],
+        permissionKeys: ['custom_fields'],
       },
       {
         id: 'settings-captcha',
@@ -1211,7 +1211,7 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'settings-system-fields',
         label: 'System Fields',
         path: ROUTES.settings.systemFields,
-        permissionKeys: ['system_field'],
+        permissionKeys: ['system_fields'],
       },
       {
         id: 'settings-online-admission',

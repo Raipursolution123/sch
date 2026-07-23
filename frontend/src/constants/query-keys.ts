@@ -56,6 +56,50 @@ export const queryKeys = {
       detail: (id: number) => [...queryKeys.settings.users.all, 'detail', id] as const,
       roleOptions: () => [...queryKeys.settings.users.all, 'role-options'] as const,
     },
+    modules: {
+      all: ['settings', 'modules'] as const,
+      list: (page: number, search: string) =>
+        [...queryKeys.settings.modules.all, 'list', page, search] as const,
+    },
+    customFields: {
+      all: ['settings', 'custom-fields'] as const,
+      list: (page: number, search: string, belongTo: string) =>
+        [...queryKeys.settings.customFields.all, 'list', page, search, belongTo] as const,
+    },
+    captcha: {
+      all: ['settings', 'captcha'] as const,
+      list: (page: number) => [...queryKeys.settings.captcha.all, 'list', page] as const,
+    },
+    systemFields: {
+      all: ['settings', 'system-fields'] as const,
+      detail: () => [...queryKeys.settings.systemFields.all, 'detail'] as const,
+    },
+    onlineAdmissionSettings: {
+      all: ['settings', 'online-admission-settings'] as const,
+      detail: () => [...queryKeys.settings.onlineAdmissionSettings.all, 'detail'] as const,
+    },
+    onlineAdmissionFields: {
+      all: ['settings', 'online-admission-fields'] as const,
+      list: (page: number) =>
+        [...queryKeys.settings.onlineAdmissionFields.all, 'list', page] as const,
+    },
+    sidebarMenus: {
+      all: ['settings', 'sidebar-menus'] as const,
+      list: (page: number) => [...queryKeys.settings.sidebarMenus.all, 'list', page] as const,
+    },
+    sidebarSubmenus: {
+      all: ['settings', 'sidebar-submenus'] as const,
+      list: (page: number, menuId: number | null) =>
+        [...queryKeys.settings.sidebarSubmenus.all, 'list', page, menuId] as const,
+    },
+    fileTypes: {
+      all: ['settings', 'file-types'] as const,
+      detail: () => [...queryKeys.settings.fileTypes.all, 'detail'] as const,
+    },
+    backups: {
+      all: ['settings', 'backups'] as const,
+      list: () => [...queryKeys.settings.backups.all, 'list'] as const,
+    },
   },
   academics: {
     classes: {

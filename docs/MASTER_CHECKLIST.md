@@ -1,7 +1,7 @@
 # School ERP — Master Implementation Checklist
 
 **Last updated:** 2026-07-23  
-**Current phase:** Phase 28 — Settings system config (Notifications / SMS / Email / Payment / Print) ✅ COMPLETE  
+**Current phase:** Phase 29 — Residual Settings menus ✅ COMPLETE  
 **Branch:** `main`
 
 ---
@@ -10,19 +10,19 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Project Progress** | Phases 0–28 complete |
-| **Current Phase** | Phase 28 — Settings system config ✅ |
+| **Overall Project Progress** | Phases 0–29 complete |
+| **Current Phase** | Phase 29 — Residual Settings ✅ |
 | **Current Task** | Ops: prod deploy + UAT |
-| **Completed Phases** | Phase 0 ✅ … Phase 28 ✅ |
-| **Remaining Phases** | Ops / UAT; residual Settings (modules, custom fields, captcha, backup, etc.) |
+| **Completed Phases** | Phase 0 ✅ … Phase 29 ✅ |
+| **Remaining Phases** | Ops / UAT |
 | **Open Bugs** | 0 |
-| **Backend Completion** | ~99% |
-| **Frontend Completion** | ~99% |
-| **API Integration Status** | Settings notification/SMS/email/payment/print APIs |
-| **UI Completion Status** | Settings Soon badges cleared for Notifications, SMS, Email, Payment Methods, Print Header & Footer |
-| **Testing Status** | system_config service tests + frontend typecheck + Docker verification |
-| **Production Readiness** | Code-ready — pending prod deploy, UAT |
-| **Technical Debt Remaining** | Residual Settings: modules, custom fields, captcha, system fields, online admission settings, sidebar menu editor, backup/restore, file types |
+| **Backend Completion** | ~100% (Settings module complete) |
+| **Frontend Completion** | ~100% (Settings Soon badges cleared) |
+| **API Integration Status** | Full Settings APIs including modules/custom fields/captcha/backup |
+| **UI Completion Status** | All Settings nav items implemented |
+| **Testing Status** | advanced_settings + system_config tests; frontend typecheck |
+| **Production Readiness** | Code-ready — pending prod deploy, UAT; restore gated by `ALLOW_DATABASE_RESTORE` |
+| **Technical Debt Remaining** | Live SMTP/SMS delivery wiring; binary uploads; UAT |
 
 ---
 
@@ -1047,10 +1047,53 @@ New API to assign/manage pickup points on routes (matching `route_pickup_point` 
 - Secrets (`authkey`, `password`, SMTP password, API keys, gateway salts) are masked on read; blank/masked values on update keep the stored secret.
 - SMS uses legacy `enabled`/`disabled`; email & payment use `yes`/`no`.
 - Fees → Payment Gateways remains a read-only fees-module list (`offline_bank_payments`); Settings → Payment Methods is the writable config under `system_settings`.
-- Residual Settings Soon items (modules, custom fields, captcha, backup, etc.) are intentionally deferred.
+
+---
+
+## Phase 29 — Residual Settings menus ✅ SIGNED OFF
+
+**Signed off:** 2026-07-23  
+**Objective:** Complete remaining Settings Soon items (modules, custom fields, captcha, system fields, online admission settings, sidebar menu, backup/restore, file types).
+
+| ID | Task | Status |
+|----|------|--------|
+| 29.1 | Modules API + UI (`permission_group` toggles, superadmin) | ✅ |
+| 29.2 | Custom Fields API + UI (CRUD definitions; nav key `custom_fields`) | ✅ |
+| 29.3 | Captcha API + UI (status toggles, superadmin) | ✅ |
+| 29.4 | System Fields API + UI (`sch_settings` student/staff flags) | ✅ |
+| 29.5 | Online Admission settings API + UI (module `online_admission`) | ✅ |
+| 29.6 | Sidebar Menu API + UI (activate/reorder menus + submenus) | ✅ |
+| 29.7 | Backup / Restore API + UI (`mysqldump`; restore gated) | ✅ |
+| 29.8 | File Types API + UI (singleton allow-list, superadmin) | ✅ |
+| 29.9 | Nav privilege fixes + tests + typecheck | ✅ |
+
+### Implementation details
+
+| Submenu | Privilege / gate | Endpoints |
+|---------|------------------|-----------|
+| Modules | `IsSuperAdmin` | `/settings/modules/` |
+| Custom Fields | `custom_fields` (view-mapped mutations) | `/settings/custom-fields/` |
+| Captcha | `IsSuperAdmin` | `/settings/captcha/` |
+| System Fields | `system_fields` | `/settings/system-fields/` |
+| Online Admission | `online_admission` module+category | `/settings/online-admission/` |
+| Sidebar Menu | `sidebar_menu` | `/settings/sidebar-menus/`, `/settings/sidebar-submenus/` |
+| Backup / Restore | `backup` | `/settings/backups/` |
+| File Types | `IsSuperAdmin` | `/settings/file-types/` |
+
+### Testing status
+
+- Backend: `test_advanced_settings_services.py` + existing system_config tests
+- Frontend: `npm run typecheck` pass
+- Restore requires `ALLOW_DATABASE_RESTORE=true` (default off)
+
+### Notes
+
+- SPA admin nav remains React `ADMIN_NAV`; sidebar DB toggles affect legacy CI menus / future DB-driven nav.
+- System Fields and General Settings share `sch_settings` id=1 with disjoint field allowlists.
+- Backup create needs `mysqldump` on the host/container PATH.
 
 ---
 
 ## Roadmap Complete ✅
 
-Phases 0–28 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and residual backlog (remaining Settings screens, student online exam attempt, binary uploads, etc.).
+Phases 0–29 signed off for implemented scope. Remaining work is **operational** (prod deploy, UAT) and residual product backlog (live SMTP/SMS delivery, binary uploads, etc.).

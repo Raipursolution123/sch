@@ -90,3 +90,13 @@ export {
   printHeaderFooterService,
   smsConfigService,
 } from './system-config.service';
+export {
+  backupsService,
+  captchaService,
+  customFieldsService,
+  fileTypesService,
+  modulesService,
+  onlineAdmissionSettingsService,
+  sidebarMenuService,
+  systemFieldsService,
+} from './advanced-settings.service';
