@@ -24,7 +24,10 @@ interface EntityFormDialogProps {
   submitDisabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-  /** Scrollable body for long multi-section forms (e.g. staff profile). */
+  /**
+   * Keep header/footer fixed and scroll the body when content exceeds the viewport.
+   * Defaults to true so dialogs never clip at the top/bottom of the screen.
+   */
   scrollable?: boolean;
 }
 
@@ -49,7 +52,7 @@ export function EntityFormDialog({
   submitDisabled,
   size = 'md',
   className,
-  scrollable,
+  scrollable = true,
 }: EntityFormDialogProps) {
   const resolvedSubmit = submitLabel ?? (isEdit ? 'Save changes' : 'Create');
 
@@ -58,7 +61,8 @@ export function EntityFormDialog({
       <DialogContent
         className={cn(
           sizeClassName[size],
-          scrollable && 'flex max-h-[90vh] flex-col overflow-hidden',
+          // Override DialogContent `grid` so header/body/footer can flex within max-height.
+          scrollable && 'flex max-h-[90dvh] max-h-[90vh] flex-col gap-0 overflow-hidden',
           className,
         )}
       >
@@ -67,7 +71,7 @@ export function EntityFormDialog({
           noValidate
           className={scrollable ? 'flex min-h-0 flex-1 flex-col overflow-hidden' : undefined}
         >
-          <DialogHeader className={scrollable ? 'shrink-0' : undefined}>
+          <DialogHeader className={scrollable ? 'shrink-0 pr-6' : undefined}>
             <DialogTitle>{title}</DialogTitle>
             {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
@@ -75,7 +79,7 @@ export function EntityFormDialog({
           <div
             className={
               scrollable
-                ? 'min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain py-4 pr-1'
+                ? 'min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain py-4 pr-1'
                 : 'space-y-4 py-4'
             }
           >
