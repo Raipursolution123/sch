@@ -266,7 +266,6 @@ const FileTypesPage = lazy(() =>
     default: m.FileTypesPage,
   })),
 );
-
 const ClassesPage = lazy(() =>
   import('@features/academics/classes/pages/ClassesPage').then((m) => ({
     default: m.ClassesPage,

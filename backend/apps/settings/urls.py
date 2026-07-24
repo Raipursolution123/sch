@@ -1,4 +1,4 @@
-﻿from django.urls import path
+from django.urls import path
 
 from apps.settings.api.views.advanced_settings import (
     BackupDetailView,
@@ -71,6 +71,7 @@ urlpatterns = [
         CurrenciesActivateView.as_view(),
         name="currencies_activate",
     ),
+<<<<<<< Updated upstream
     path(
         "notification-settings/",
         NotificationSettingsListCreateView.as_view(),
@@ -198,4 +199,5 @@ urlpatterns = [
         "users/role-options/", UserRoleOptionsView.as_view(), name="users_role_options"
     ),
     path("users/<int:pk>/", UserDetailView.as_view(), name="users_detail"),
+
 ]
