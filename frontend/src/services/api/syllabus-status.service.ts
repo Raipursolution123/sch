@@ -1,10 +1,10 @@
 import { apiClient } from './client';
-import type { ApiSuccessResponse, PaginatedResponse } from '@/types/api';
+import type { ApiSuccessResponse, PaginatedResponse } from '@app-types/api';
 import type {
   SyllabusStatus,
   SyllabusStatusUpdatePayload,
   SyllabusStatusCreatePayload,
-} from '@/types/academics/syllabus-status';
+} from '@app-types/academics/syllabus-status';
 
 const BASE_PATH = '/academics/syllabus-status';
 

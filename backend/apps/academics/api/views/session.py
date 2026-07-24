@@ -19,10 +19,7 @@ from apps.academics.domain.session_exceptions import (
     SessionNotFoundError,
     SessionValidationError,
 )
-from apps.academics.selectors.session_selectors import (
-    get_current_session_id,
-    session_to_dict,
-)
+from apps.academics.selectors import session_selectors as selectors
 from apps.academics.services.session_service import SessionService
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
@@ -41,20 +38,17 @@ class SessionListCreateView(APIView):
 
     def get(self, request):
         active_only = request.query_params.get("active_only", "false").lower() == "true"
-        service = SessionService()
-        sessions_qs = service.list_sessions(active_only=active_only)
+        sessions_data = selectors.list_sessions_data(active_only=active_only)
 
         paginator = StandardResultsSetPagination()
-        page = paginator.paginate_queryset(sessions_qs, request, view=self)
-        current_id = get_current_session_id()
-        rows = page if page is not None else sessions_qs
-        sessions_data = [session_to_dict(s, current_id) for s in rows]
+        page = paginator.paginate_queryset(sessions_data, request, view=self)
+        rows = page if page is not None else sessions_data
 
         if page is not None:
-            return paginator.get_paginated_response({"sessions": sessions_data})
+            return paginator.get_paginated_response(rows)
 
         return APIResponse.success(
-            data={"sessions": sessions_data},
+            data={"sessions": rows},
             message="Sessions retrieved successfully.",
         )
 

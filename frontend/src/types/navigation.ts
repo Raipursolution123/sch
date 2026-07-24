@@ -21,6 +21,8 @@ export interface NavItem {
   label: string;
   path?: string;
   disabled?: boolean;
+  /** True when the route exists in nav but has no real page yet. */
+  comingSoon?: boolean;
   icon?: LucideIcon;
   section?: NavSection;
   /** When set, item is visible if the user has ANY listed permission. */

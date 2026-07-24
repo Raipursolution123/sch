@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
+import { REFERENCE_DATA_STALE_TIME } from '@constants/query-stale-times';
 import { subjectsService } from '@services/api';
 import type { CreateSubjectPayload, UpdateSubjectPayload } from '@app-types/academics/subject';
 import { getApiErrorMessage } from '@utils/session';
@@ -9,6 +10,7 @@ export function useSubjects(page: number = 1) {
   return useQuery({
     queryKey: [...queryKeys.academics.subjects.list(), page],
     queryFn: () => subjectsService.list(page),
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 

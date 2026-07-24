@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
-import { useCreateLedgerGroup, useLedgerGroups } from '@/hooks/useLedgerGroups';
-import type { LedgerGroupCreatePayload } from '@/types/finance';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui/dialog';
+import { Input } from '@components/ui/input';
+import { Label } from '@components/ui/label';
+import { Button } from '@components/ui/button';
+import { Select } from '@components/ui/select';
+import { useCreateLedgerGroup, useLedgerGroups } from '@hooks/useLedgerGroups';
+import type { LedgerGroupCreatePayload, LedgerGroup } from '@app-types/finance';
 
 interface LedgerGroupCreateDialogProps {
   open: boolean;
@@ -78,8 +78,10 @@ export const LedgerGroupCreateDialog = ({ open, onOpenChange }: LedgerGroupCreat
                 onChange={(e) => setParentId(e.target.value)}
                 options={[
                   { value: '', label: 'None (Top Level)' },
-                  ...(ledgerGroupsData?.map((g: any) => ({ value: String(g.id), label: g.name })) ||
-                    []),
+                  ...(ledgerGroupsData?.map((g: LedgerGroup) => ({
+                    value: String(g.id),
+                    label: g.name,
+                  })) || []),
                 ]}
               />
             </div>

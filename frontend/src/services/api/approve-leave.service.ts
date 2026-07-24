@@ -1,6 +1,6 @@
 import { apiClient } from './client';
 import { API_ENDPOINTS } from '@constants/api-endpoints';
-import type { ApiSuccessResponse, PaginatedResponse } from '@/types/api';
+import type { ApiSuccessResponse, PaginatedResponse } from '@app-types/api';
 
 export interface ApproveLeave {
   id: string;

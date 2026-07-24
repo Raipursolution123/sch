@@ -25,6 +25,8 @@ from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
+LESSON_PLAN_MODULE = "lesson_plan"
+
 
 def _handle_exception(exc: Exception):
     if isinstance(exc, LessonPlanValidationError):
@@ -47,6 +49,7 @@ def _handle_exception(exc: Exception):
 
 class LessonListCreateView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = LESSON_PLAN_MODULE
     legacy_permission_category = "lesson"
 
     def get(self, request):
@@ -97,6 +100,7 @@ class LessonListCreateView(APIView):
 
 class LessonDetailView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = LESSON_PLAN_MODULE
     legacy_permission_category = "lesson"
 
     def get(self, request, pk):
@@ -142,6 +146,7 @@ class LessonDetailView(APIView):
 
 class TopicListCreateView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = LESSON_PLAN_MODULE
     legacy_permission_category = "topic"
 
     def get(self, request):
@@ -187,6 +192,7 @@ class TopicListCreateView(APIView):
 
 class TopicDetailView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = LESSON_PLAN_MODULE
     legacy_permission_category = "topic"
 
     def get(self, request, pk):
@@ -232,6 +238,7 @@ class TopicDetailView(APIView):
 
 class SyllabusListCreateView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = LESSON_PLAN_MODULE
     legacy_permission_category = "syllabus"
 
     def get(self, request):
@@ -278,6 +285,7 @@ class SyllabusListCreateView(APIView):
 
 class SyllabusDetailView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = LESSON_PLAN_MODULE
     legacy_permission_category = "syllabus"
 
     def get(self, request, pk):
@@ -323,6 +331,7 @@ class SyllabusDetailView(APIView):
 
 class SyllabusCommentListCreateView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = LESSON_PLAN_MODULE
     legacy_permission_category = "syllabus_comment"
 
     def get(self, request, syllabus_id):

@@ -4,7 +4,8 @@ import logging
 from django.db import transaction
 from django.utils import timezone
 
-from apps.academics.models import Classes, Sections, Sessions
+from apps.academics.models import Classes, Sections
+from apps.academics.selectors.session_selectors import get_current_session
 from apps.attendance.domain.attendance_exceptions import (
     AttendanceNotFoundError,
     AttendanceValidationError,
@@ -45,17 +46,13 @@ class AttendanceService:
         except ValueError:
             raise AttendanceValidationError("Invalid date format. Use YYYY-MM-DD.")
 
-        today = timezone.now().date()
-        if target_date > today:
-            raise AttendanceValidationError("Attendance cannot be marked or viewed for future dates.")
-
         try:
             school_class = Classes.objects.get(pk=class_id)
             section = Sections.objects.get(pk=section_id)
         except (Classes.DoesNotExist, Sections.DoesNotExist):
             raise AttendanceNotFoundError("Class or section not found.")
 
-        current_session = Sessions.objects.filter(is_active="yes").first()
+        current_session = get_current_session()
         if current_session:
             sessions = StudentSession.objects.filter(
                 class_id=class_id,
@@ -68,8 +65,20 @@ class AttendanceService:
             )
 
         session_map = {s.student_id: s for s in sessions}
+        student_ids = list(session_map.keys())
+        if not student_ids:
+            return {
+                "class_id": int(class_id),
+                "class_name": school_class.class_field,
+                "section_id": int(section_id),
+                "section_name": section.section,
+                "date": date_str,
+                "entries": [],
+            }
 
-        students = Students.objects.filter(id__in=session_map.keys(), is_active="yes")
+        students = Students.objects.filter(
+            id__in=student_ids, is_active="yes"
+        ).order_by("roll_no", "firstname", "lastname")
 
         session_ids = [s.id for s in sessions]
         attendances = StudentAttendences.objects.filter(
@@ -77,9 +86,8 @@ class AttendanceService:
         )
         attendance_map = {a.student_session_id: a for a in attendances}
 
-        types = AttendenceType.objects.all()
+        types = AttendenceType.objects.filter(is_active="yes")
         type_map = {t.id: t for t in types}
-        absent_type = next((t for t in types if (t.key_value and t.key_value.lower() == 'absent') or t.type.lower() == 'absent'), None)
 
         entries = []
         for student in students:
@@ -88,19 +96,11 @@ class AttendanceService:
                 continue
 
             record = attendance_map.get(sess.id)
-            if record:
-                type_id = record.attendence_type_id
-            else:
-                # Check if student was admitted after target_date
-                if student.admission_date and student.admission_date > target_date:
-                    type_id = absent_type.id if absent_type else 2
-                else:
-                    type_id = 1
-
+            type_id = record.attendence_type_id if record else 1
             att_type = type_map.get(type_id)
 
-            status_label = att_type.type if att_type else ("Absent" if (student.admission_date and student.admission_date > target_date) else "Present")
-            status_key = ATTENDANCE_TYPE_KEY_MAP.get(status_label, att_type.key_value.lower() if att_type and att_type.key_value else status_label.lower())
+            status_label = att_type.type if att_type else "Present"
+            status_key = ATTENDANCE_TYPE_KEY_MAP.get(status_label, "present")
 
             entries.append(
                 {
@@ -111,7 +111,7 @@ class AttendanceService:
                     "attendence_type_id": type_id,
                     "status_key": status_key,
                     "status_label": status_label,
-                    "remark": record.remark if record else ("Not admitted on this date" if (not record and student.admission_date and student.admission_date > target_date) else ""),
+                    "remark": record.remark if record else "",
                 }
             )
 
@@ -148,11 +148,7 @@ class AttendanceService:
         except ValueError:
             raise AttendanceValidationError("Invalid date format. Use YYYY-MM-DD.")
 
-        today = timezone.now().date()
-        if target_date > today:
-            raise AttendanceValidationError("Attendance cannot be marked for future dates.")
-
-        current_session = Sessions.objects.filter(is_active="yes").first()
+        current_session = get_current_session()
         if current_session:
             sessions = StudentSession.objects.filter(
                 class_id=class_id,
@@ -213,7 +209,7 @@ class AttendanceService:
 
         qs = StudentAttendences.objects.filter(date__gte=from_date, date__lte=to_date)
 
-        current_session = Sessions.objects.filter(is_active="yes").first()
+        current_session = get_current_session()
 
         if class_id or section_id or current_session:
             sessions_filter = {}

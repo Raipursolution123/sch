@@ -9,21 +9,18 @@ from apps.transport.api.serializers.transport_fees import (
 )
 from apps.transport.domain.transport_exceptions import TransportError, TransportNotFoundError
 from apps.transport.services.transport_fee_service import TransportFeeService
-from common.pagination.standard import StandardResultsSetPagination
+from common.exceptions.legacy_errors import legacy_domain_error_response
 from common.responses.api import APIResponse
+from common.views.legacy_crud_helpers import paginate_list_response, validation_error_response
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
 MODULE = "transport"
-CATEGORY = "transport_fees"
+CATEGORY = "transport_fees_master"
 
 
 def transport_error_response(exc: TransportError):
-    if isinstance(exc, TransportNotFoundError):
-        return APIResponse.error(
-            message=exc.message, status_code=status.HTTP_404_NOT_FOUND
-        )
-    return APIResponse.error(
-        message=exc.message, status_code=status.HTTP_400_BAD_REQUEST
+    return legacy_domain_error_response(
+        exc, not_found_type=TransportNotFoundError
     )
 
 
@@ -42,24 +39,19 @@ class TransportFeesListCreateView(APIView):
 
         service = TransportFeeService()
         qs = service.list_fees(session_id=session_id)
-        paginator = StandardResultsSetPagination()
-        page = paginator.paginate_queryset(qs, request, view=self)
-        rows = list(page if page is not None else qs)
+        rows = list(qs)
         serializer = TransportFeeMasterSerializer(rows, many=True)
-        if page is not None:
-            return paginator.get_paginated_response(serializer.data)
-        return APIResponse.success(
-            data=serializer.data, message="Transport fees retrieved successfully."
+        return paginate_list_response(
+            request,
+            self,
+            serializer.data,
+            list_message="Transport fees retrieved successfully.",
         )
 
     def post(self, request):
         serializer = TransportFeeMasterCreateSerializer(data=request.data)
         if not serializer.is_valid():
-            return APIResponse.error(
-                message="Validation failed",
-                data=serializer.errors,
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
+            return validation_error_response(serializer.errors)
         try:
             fee = TransportFeeService().create_fee(serializer.validated_data)
             response_serializer = TransportFeeMasterSerializer(fee)
@@ -94,11 +86,7 @@ class TransportFeesDetailView(APIView):
     def put(self, request, pk):
         serializer = TransportFeeMasterUpdateSerializer(data=request.data, partial=True)
         if not serializer.is_valid():
-            return APIResponse.error(
-                message="Validation failed",
-                data=serializer.errors,
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
+            return validation_error_response(serializer.errors)
         try:
             fee = TransportFeeService().update_fee(pk, serializer.validated_data)
             response_serializer = TransportFeeMasterSerializer(fee)

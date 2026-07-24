@@ -24,7 +24,10 @@ interface EntityFormDialogProps {
   submitDisabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-  /** Scrollable body for long multi-section forms (e.g. staff profile). */
+  /**
+   * Keep header/footer fixed and scroll the body when content exceeds the viewport.
+   * Defaults to true so dialogs never clip at the top/bottom of the screen.
+   */
   scrollable?: boolean;
 }
 
@@ -49,34 +52,41 @@ export function EntityFormDialog({
   submitDisabled,
   size = 'md',
   className,
-  scrollable,
+  scrollable = true,
 }: EntityFormDialogProps) {
   const resolvedSubmit = submitLabel ?? (isEdit ? 'Save changes' : 'Create');
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn(sizeClassName[size], scrollable && 'flex max-h-[90vh] flex-col', className)}
+        className={cn(
+          sizeClassName[size],
+          // Override DialogContent `grid` so header/body/footer can flex within max-height.
+          scrollable && 'flex max-h-[90dvh] max-h-[90vh] flex-col gap-0 overflow-hidden',
+          className,
+        )}
       >
         <form
           onSubmit={onSubmit}
           noValidate
-          className={scrollable ? 'flex min-h-0 flex-1 flex-col' : undefined}
+          className={scrollable ? 'flex min-h-0 flex-1 flex-col overflow-hidden' : undefined}
         >
-          <DialogHeader>
+          <DialogHeader className={scrollable ? 'shrink-0 pr-6' : undefined}>
             <DialogTitle>{title}</DialogTitle>
             {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
 
           <div
             className={
-              scrollable ? 'min-h-0 flex-1 space-y-6 overflow-y-auto py-4 pr-1' : 'space-y-4 py-4'
+              scrollable
+                ? 'min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain py-4 pr-1'
+                : 'space-y-4 py-4'
             }
           >
             {children}
           </div>
 
-          <DialogFooter>
+          <DialogFooter className={scrollable ? 'shrink-0' : undefined}>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               {cancelLabel}
             </Button>

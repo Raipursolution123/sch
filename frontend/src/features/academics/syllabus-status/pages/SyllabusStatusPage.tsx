@@ -8,12 +8,12 @@ import {
   useUpdateSyllabusStatus,
   useCreateSyllabusStatus,
   useDeleteSyllabusStatus,
-} from '@/hooks/useSyllabusStatus';
+} from '@hooks/useSyllabusStatus';
 import type {
   SyllabusStatus,
   SyllabusStatusCreatePayload,
   SyllabusStatusUpdatePayload,
-} from '@/types/academics/syllabus-status';
+} from '@app-types/academics/syllabus-status';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { Plus } from 'lucide-react';
 

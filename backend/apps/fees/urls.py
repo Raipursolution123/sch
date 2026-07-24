@@ -18,20 +18,65 @@ from apps.fees.api.views.fee_discount_assign import (
 from apps.fees.api.views.fee_group import FeeGroupDetailView, FeeGroupsListView
 from apps.fees.api.views.fee_reminder import FeeReminderDetailView, FeeRemindersListView
 from apps.fees.api.views.fee_search import FeeDueSearchView, FeePaymentSearchView
+from apps.fees.api.views.fee_student_assign import (
+    FeeCarryForwardApplyView,
+    FeeCarryForwardPreviewView,
+    FeeStudentAssignRosterView,
+    FeeStudentAssignSaveView,
+)
 from apps.fees.api.views.fee_type import FeeTypeDetailView, FeeTypesListView
-from apps.fees.api.views.payment_settings import PaymentGatewaysListView, PaymentGatewayDetailView
-
-from apps.fees.api.views.fee_master import FeeMasterDetailView, FeeMasterListView
-from apps.fees.api.views.financial_report import FinancialReportView
+from apps.fees.api.views.offline_bank_payments import (
+    OfflineBankPaymentApproveView,
+    OfflineBankPaymentDetailView,
+    OfflineBankPaymentRejectView,
+    OfflineBankPaymentsListView,
+)
+from apps.fees.api.views.payment_settings import PaymentGatewaysListView
 
 urlpatterns = [
     path("collect/roster/", FeeCollectRosterView.as_view(), name="fee-collect-roster"),
-    path("fee-masters/", FeeMasterListView.as_view(), name="fee-masters-list"),
-    path("fee-masters/<int:pk>/", FeeMasterDetailView.as_view(), name="fee-master-detail"),
-    path("fee-master/", FeeMasterListView.as_view(), name="fee-master-list"),
-    path("fee-master/<int:pk>/", FeeMasterDetailView.as_view(), name="fee-master-detail-alias"),
     path("search/due/", FeeDueSearchView.as_view(), name="fee-due-search"),
     path("search/payments/", FeePaymentSearchView.as_view(), name="fee-payment-search"),
+    path(
+        "student-assignments/roster/",
+        FeeStudentAssignRosterView.as_view(),
+        name="fee-student-assign-roster",
+    ),
+    path(
+        "student-assignments/",
+        FeeStudentAssignSaveView.as_view(),
+        name="fee-student-assign-save",
+    ),
+    path(
+        "carry-forward/preview/",
+        FeeCarryForwardPreviewView.as_view(),
+        name="fee-carry-forward-preview",
+    ),
+    path(
+        "carry-forward/",
+        FeeCarryForwardApplyView.as_view(),
+        name="fee-carry-forward-apply",
+    ),
+    path(
+        "offline-payments/",
+        OfflineBankPaymentsListView.as_view(),
+        name="offline-bank-payments-list",
+    ),
+    path(
+        "offline-payments/<int:pk>/",
+        OfflineBankPaymentDetailView.as_view(),
+        name="offline-bank-payments-detail",
+    ),
+    path(
+        "offline-payments/<int:pk>/approve/",
+        OfflineBankPaymentApproveView.as_view(),
+        name="offline-bank-payments-approve",
+    ),
+    path(
+        "offline-payments/<int:pk>/reject/",
+        OfflineBankPaymentRejectView.as_view(),
+        name="offline-bank-payments-reject",
+    ),
     path("categories/", FeeCategoriesListView.as_view(), name="fee-categories-list"),
     path(
         "categories/<int:pk>/",
@@ -79,15 +124,5 @@ urlpatterns = [
         "payment-gateways/",
         PaymentGatewaysListView.as_view(),
         name="payment-gateways-list",
-    ),
-    path(
-        "payment-gateways/<int:pk>/",
-        PaymentGatewayDetailView.as_view(),
-        name="payment-gateways-detail",
-    ),
-    path(
-        "financial-report/",
-        FinancialReportView.as_view(),
-        name="financial-report",
     ),
 ]

@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated
 
 from apps.academics.api.serializers.homework import (
     DailyAssignmentSerializer,
@@ -12,9 +13,15 @@ from apps.academics.models.daily_assignment import DailyAssignment
 from apps.academics.models.homework import Homework
 from apps.academics.models.homework_evaluation import HomeworkEvaluation
 from apps.academics.models.submit_assignment import SubmitAssignment
+from core.permissions.legacy_privilege import HasLegacyPrivilege
+
+MODULE = "homework"
 
 
 class HomeworkListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "homework"
     queryset = Homework.objects.all().order_by("-homework_date")
     serializer_class = HomeworkSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
@@ -29,11 +36,17 @@ class HomeworkListCreateView(generics.ListCreateAPIView):
 
 
 class HomeworkDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "homework"
     queryset = Homework.objects.all()
     serializer_class = HomeworkSerializer
 
 
 class HomeworkEvaluationListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "homework_evaluation"
     queryset = HomeworkEvaluation.objects.all().order_by("-date")
     serializer_class = HomeworkEvaluationSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
@@ -42,11 +55,17 @@ class HomeworkEvaluationListCreateView(generics.ListCreateAPIView):
 
 
 class HomeworkEvaluationDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "homework_evaluation"
     queryset = HomeworkEvaluation.objects.all()
     serializer_class = HomeworkEvaluationSerializer
 
 
 class DailyAssignmentListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "daily_assignment"
     queryset = DailyAssignment.objects.all().order_by("-date")
     serializer_class = DailyAssignmentSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
@@ -59,11 +78,17 @@ class DailyAssignmentListCreateView(generics.ListCreateAPIView):
 
 
 class DailyAssignmentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "daily_assignment"
     queryset = DailyAssignment.objects.all()
     serializer_class = DailyAssignmentSerializer
 
 
 class SubmitAssignmentListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "homework"
     queryset = SubmitAssignment.objects.all().order_by("-created_at")
     serializer_class = SubmitAssignmentSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
@@ -72,5 +97,8 @@ class SubmitAssignmentListCreateView(generics.ListCreateAPIView):
 
 
 class SubmitAssignmentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "homework"
     queryset = SubmitAssignment.objects.all()
     serializer_class = SubmitAssignmentSerializer

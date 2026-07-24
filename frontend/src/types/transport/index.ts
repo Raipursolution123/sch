@@ -154,8 +154,32 @@ export interface StudentTransportAssignment {
   pickup_points: StudentTransportPickupPoint[];
 }
 
-export interface UpdateStudentTransportPayload {
+export type UpdateStudentTransportPayload = {
   vehroute_id?: number | null;
   route_pickup_point_id?: number | null;
   transport_fees?: number;
+};
+
+export interface RoutePickupPoint {
+  id: number;
+  transport_route_id: number;
+  pickup_point_id: number;
+  fees: number | null;
+  destination_distance: number | null;
+  pickup_time: string | null;
+  order_number: string;
+  created_at: string;
 }
+
+export interface CreateRoutePickupPointPayload {
+  transport_route_id: number;
+  pickup_point_id: number;
+  fees?: number | null;
+  destination_distance?: number | null;
+  pickup_time?: string | null;
+  order_number?: string;
+}
+
+export type UpdateRoutePickupPointPayload = Partial<
+  Omit<CreateRoutePickupPointPayload, 'transport_route_id' | 'pickup_point_id'>
+>;

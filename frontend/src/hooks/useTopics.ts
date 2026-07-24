@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { topicService } from '@/services/api/topic.service';
-import type { TopicCreatePayload, TopicUpdatePayload } from '@/types/academics/topic';
+import { toast } from 'sonner';
+import { topicService } from '@services/api';
+import type { TopicCreatePayload, TopicUpdatePayload } from '@app-types/academics/topic';
+import { getApiErrorMessage } from '@utils/session';
 
 export const TOPIC_KEYS = {
   all: ['topics'] as const,
@@ -22,7 +24,9 @@ export const useCreateTopic = () => {
     mutationFn: (data: TopicCreatePayload) => topicService.createTopic(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TOPIC_KEYS.lists() });
+      toast.success('Topic created');
     },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create topic')),
   });
 };
 
@@ -34,7 +38,9 @@ export const useUpdateTopic = () => {
       topicService.updateTopic(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TOPIC_KEYS.lists() });
+      toast.success('Topic updated');
     },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update topic')),
   });
 };
 
@@ -45,6 +51,8 @@ export const useDeleteTopic = () => {
     mutationFn: (id: number) => topicService.deleteTopic(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TOPIC_KEYS.lists() });
+      toast.success('Topic deleted');
     },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete topic')),
   });
 };

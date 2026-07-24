@@ -2,14 +2,13 @@ import { lazy } from 'react';
 import { Navigate, type RouteObject } from 'react-router-dom';
 import { ROUTES, LEGACY_SETTINGS_SESSIONS } from '@constants/routes';
 import { ModuleLayout } from '@layouts/ModuleLayout';
-import { HostelLayout } from '@layouts/HostelLayout';
-import { HomeworkLayout } from '@layouts/HomeworkLayout';
-import { DashboardPage } from '@features/dashboard/pages/DashboardPage';
-import {
-  buildPlaceholderChildren,
-  createModuleRoutes,
-  createPlaceholderModule,
-} from '@routes/module-routes';
+import { buildPlaceholderChildren, createModuleRoutes } from '@routes/module-routes';
+
+const DashboardPage = lazy(() =>
+  import('@features/dashboard/pages/DashboardPage').then((m) => ({
+    default: m.DashboardPage,
+  })),
+);
 
 // Finance
 const LedgersPage = lazy(() =>
@@ -25,17 +24,135 @@ const LedgerGroupsPage = lazy(() =>
 );
 
 const JournalEntriesPage = lazy(() =>
-  import('@features/finance/journal-entries/pages/JournalEntriesPage').then((m) => ({
+  import('@features/finance/entries/pages/JournalEntriesPage').then((m) => ({
     default: m.JournalEntriesPage,
   })),
 );
 
-const FinancialReportPage = lazy(() =>
-  import('@features/finance/financial-report/pages/FinancialReportPage').then((m) => ({
-    default: m.FinancialReportPage,
+const FeeMapperPage = lazy(() =>
+  import('@features/finance/mapper/pages/FeeMapperPage').then((m) => ({
+    default: m.FeeMapperPage,
   })),
 );
 
+const ChartOfAccountsPage = lazy(() =>
+  import('@features/finance/chart-of-accounts/pages/ChartOfAccountsPage').then((m) => ({
+    default: m.ChartOfAccountsPage,
+  })),
+);
+
+const FinanceReportsHubPage = lazy(() =>
+  import('@features/finance/reports/pages/FinanceReportsHubPage').then((m) => ({
+    default: m.FinanceReportsHubPage,
+  })),
+);
+const TrialBalancePage = lazy(() =>
+  import('@features/finance/reports/pages/TrialBalancePage').then((m) => ({
+    default: m.TrialBalancePage,
+  })),
+);
+const BalanceSheetPage = lazy(() =>
+  import('@features/finance/reports/pages/BalanceSheetPage').then((m) => ({
+    default: m.BalanceSheetPage,
+  })),
+);
+const ProfitLossPage = lazy(() =>
+  import('@features/finance/reports/pages/ProfitLossPage').then((m) => ({
+    default: m.ProfitLossPage,
+  })),
+);
+const LedgerStatementPage = lazy(() =>
+  import('@features/finance/reports/pages/LedgerStatementPage').then((m) => ({
+    default: m.LedgerStatementPage,
+  })),
+);
+const LedgerEntriesPage = lazy(() =>
+  import('@features/finance/reports/pages/LedgerEntriesPage').then((m) => ({
+    default: m.LedgerEntriesPage,
+  })),
+);
+const ReconciliationPage = lazy(() =>
+  import('@features/finance/reports/pages/ReconciliationPage').then((m) => ({
+    default: m.ReconciliationPage,
+  })),
+);
+
+const AlumniListPage = lazy(() =>
+  import('@features/alumni/pages/AlumniListPage').then((m) => ({
+    default: m.AlumniListPage,
+  })),
+);
+const AlumniEventsPage = lazy(() =>
+  import('@features/alumni/pages/AlumniEventsPage').then((m) => ({
+    default: m.AlumniEventsPage,
+  })),
+);
+const AlumniReportPage = lazy(() =>
+  import('@features/reports/alumni/pages/AlumniReportPage').then((m) => ({
+    default: m.AlumniReportPage,
+  })),
+);
+const InventoryReportPage = lazy(() =>
+  import('@features/reports/inventory/pages/InventoryReportPage').then((m) => ({
+    default: m.InventoryReportPage,
+  })),
+);
+const HomeworkReportPage = lazy(() =>
+  import('@features/reports/homework/pages/HomeworkReportPage').then((m) => ({
+    default: m.HomeworkReportPage,
+  })),
+);
+
+const LeadsPage = lazy(() =>
+  import('@features/leads/pages/LeadsPage').then((m) => ({ default: m.LeadsPage })),
+);
+const CampaignsPage = lazy(() =>
+  import('@features/leads/pages/CampaignsPage').then((m) => ({ default: m.CampaignsPage })),
+);
+const CampaignTypesPage = lazy(() =>
+  import('@features/leads/pages/CampaignTypesPage').then((m) => ({
+    default: m.CampaignTypesPage,
+  })),
+);
+const PromotersPage = lazy(() =>
+  import('@features/leads/pages/PromotersPage').then((m) => ({ default: m.PromotersPage })),
+);
+const FollowupStatusPage = lazy(() =>
+  import('@features/leads/pages/FollowupStatusPage').then((m) => ({
+    default: m.FollowupStatusPage,
+  })),
+);
+const FollowupsPage = lazy(() =>
+  import('@features/leads/pages/FollowupsPage').then((m) => ({ default: m.FollowupsPage })),
+);
+const LeadReportsPage = lazy(() =>
+  import('@features/leads/pages/LeadReportsPage').then((m) => ({ default: m.LeadReportsPage })),
+);
+
+const CmsEventsPage = lazy(() =>
+  import('@features/cms/pages/EventsPage').then((m) => ({ default: m.EventsPage })),
+);
+const CmsGalleryPage = lazy(() =>
+  import('@features/cms/pages/GalleryPage').then((m) => ({ default: m.GalleryPage })),
+);
+const CmsMediaPage = lazy(() =>
+  import('@features/cms/pages/MediaPage').then((m) => ({ default: m.MediaPage })),
+);
+const CmsNoticesPage = lazy(() =>
+  import('@features/cms/pages/NoticesPage').then((m) => ({ default: m.NoticesPage })),
+);
+const CmsPagesPage = lazy(() =>
+  import('@features/cms/pages/PagesPage').then((m) => ({ default: m.PagesPage })),
+);
+const CmsMenusPage = lazy(() =>
+  import('@features/cms/pages/MenusPage').then((m) => ({ default: m.MenusPage })),
+);
+const CmsBannersPage = lazy(() =>
+  import('@features/cms/pages/BannersPage').then((m) => ({ default: m.BannersPage })),
+);
+const CmsSettingsPage = lazy(() =>
+  import('@features/cms/pages/SettingsPage').then((m) => ({ default: m.SettingsPage })),
+);
 const SessionsPage = lazy(() =>
   import('@features/academics/sessions/pages/SessionsPage').then((m) => ({
     default: m.SessionsPage,
@@ -60,6 +177,24 @@ const CurrencyPage = lazy(() =>
   })),
 );
 
+const RolesPage = lazy(() =>
+  import('@features/settings/roles/pages/RolesPage').then((m) => ({
+    default: m.RolesPage,
+  })),
+);
+
+const UsersPage = lazy(() =>
+  import('@features/settings/users/pages/UsersPage').then((m) => ({
+    default: m.UsersPage,
+  })),
+);
+
+const NotificationSettingsPage = lazy(() =>
+  import('@features/settings/notifications/pages/NotificationSettingsPage').then((m) => ({
+    default: m.NotificationSettingsPage,
+  })),
+);
+
 const SmsSettingsPage = lazy(() =>
   import('@features/settings/sms/pages/SmsSettingsPage').then((m) => ({
     default: m.SmsSettingsPage,
@@ -72,9 +207,9 @@ const EmailSettingsPage = lazy(() =>
   })),
 );
 
-const NotificationSettingsPage = lazy(() =>
-  import('@features/settings/notifications/pages/NotificationSettingsPage').then((m) => ({
-    default: m.NotificationSettingsPage,
+const PaymentMethodsPage = lazy(() =>
+  import('@features/settings/payment-methods/pages/PaymentMethodsPage').then((m) => ({
+    default: m.PaymentMethodsPage,
   })),
 );
 
@@ -84,15 +219,51 @@ const PrintHeaderFooterPage = lazy(() =>
   })),
 );
 
-const PaymentMethodsPage = lazy(() =>
-  import('@features/settings/payment-methods/pages/PaymentMethodsPage').then((m) => ({
-    default: m.PaymentMethodsPage,
+const ModulesPage = lazy(() =>
+  import('@features/settings/modules/pages/ModulesPage').then((m) => ({
+    default: m.ModulesPage,
   })),
 );
 
-const RolesPage = lazy(() =>
-  import('@features/settings/roles/pages/RolesPage').then((m) => ({
-    default: m.RolesPage,
+const CustomFieldsPage = lazy(() =>
+  import('@features/settings/custom-fields/pages/CustomFieldsPage').then((m) => ({
+    default: m.CustomFieldsPage,
+  })),
+);
+
+const CaptchaPage = lazy(() =>
+  import('@features/settings/captcha/pages/CaptchaPage').then((m) => ({
+    default: m.CaptchaPage,
+  })),
+);
+
+const SystemFieldsPage = lazy(() =>
+  import('@features/settings/system-fields/pages/SystemFieldsPage').then((m) => ({
+    default: m.SystemFieldsPage,
+  })),
+);
+
+const OnlineAdmissionSettingsPage = lazy(() =>
+  import('@features/settings/online-admission-settings/pages/OnlineAdmissionSettingsPage').then(
+    (m) => ({ default: m.OnlineAdmissionSettingsPage }),
+  ),
+);
+
+const SidebarMenuPage = lazy(() =>
+  import('@features/settings/sidebar-menu/pages/SidebarMenuPage').then((m) => ({
+    default: m.SidebarMenuPage,
+  })),
+);
+
+const BackupPage = lazy(() =>
+  import('@features/settings/backup/pages/BackupPage').then((m) => ({
+    default: m.BackupPage,
+  })),
+);
+
+const FileTypesPage = lazy(() =>
+  import('@features/settings/file-types/pages/FileTypesPage').then((m) => ({
+    default: m.FileTypesPage,
   })),
 );
 
@@ -181,19 +352,19 @@ const DisabledStudentsPage = lazy(() =>
 );
 
 const StudentCategoriesPage = lazy(() =>
-  import('@features/students/categories/pages/StudentCategoriesPage').then((m) => ({
+  import('@features/students/pages/StudentCategoriesPage').then((m) => ({
     default: m.StudentCategoriesPage,
   })),
 );
 
 const StudentHousesPage = lazy(() =>
-  import('@features/students/houses/pages/StudentHousesPage').then((m) => ({
+  import('@features/students/pages/StudentHousesPage').then((m) => ({
     default: m.StudentHousesPage,
   })),
 );
 
 const ImportStudentsPage = lazy(() =>
-  import('@features/students/import/pages/ImportStudentsPage').then((m) => ({
+  import('@features/students/pages/ImportStudentsPage').then((m) => ({
     default: m.ImportStudentsPage,
   })),
 );
@@ -207,30 +378,6 @@ const StaffPage = lazy(() =>
 const LeaveTypesPage = lazy(() =>
   import('@features/staff/leave-types/pages/LeaveTypesPage').then((m) => ({
     default: m.LeaveTypesPage,
-  })),
-);
-
-const DepartmentsPage = lazy(() =>
-  import('@features/staff/departments/pages/DepartmentsPage').then((m) => ({
-    default: m.DepartmentsPage,
-  })),
-);
-
-const DesignationsPage = lazy(() =>
-  import('@features/staff/designations/pages/DesignationsPage').then((m) => ({
-    default: m.DesignationsPage,
-  })),
-);
-
-const StaffAttendancePage = lazy(() =>
-  import('@features/staff/attendance/pages/StaffAttendancePage').then((m) => ({
-    default: m.StaffAttendancePage,
-  })),
-);
-
-const StaffPayrollPage = lazy(() =>
-  import('@features/staff/payroll/pages/StaffPayrollPage').then((m) => ({
-    default: m.StaffPayrollPage,
   })),
 );
 
@@ -252,6 +399,30 @@ const StaffProfilePage = lazy(() =>
   })),
 );
 
+const StaffAttendancePage = lazy(() =>
+  import('@features/staff/pages/StaffAttendancePage').then((m) => ({
+    default: m.StaffAttendancePage,
+  })),
+);
+
+const StaffPayrollPage = lazy(() =>
+  import('@features/staff/pages/StaffPayrollPage').then((m) => ({
+    default: m.StaffPayrollPage,
+  })),
+);
+
+const StaffDepartmentsPage = lazy(() =>
+  import('@features/staff/pages/StaffDepartmentsPage').then((m) => ({
+    default: m.StaffDepartmentsPage,
+  })),
+);
+
+const StaffDesignationsPage = lazy(() =>
+  import('@features/staff/pages/StaffDesignationsPage').then((m) => ({
+    default: m.StaffDesignationsPage,
+  })),
+);
+
 const FeeTypesPage = lazy(() =>
   import('@features/fees/fee-types/pages/FeeTypesPage').then((m) => ({
     default: m.FeeTypesPage,
@@ -270,12 +441,6 @@ const FeeDiscountsPage = lazy(() =>
   })),
 );
 
-const FeeMastersPage = lazy(() =>
-  import('@features/fees/fee-masters/pages/FeeMastersPage').then((m) => ({
-    default: m.FeeMastersPage,
-  })),
-);
-
 const AssignDiscountsPage = lazy(() =>
   import('@features/fees/discounts/pages/AssignDiscountsPage').then((m) => ({
     default: m.AssignDiscountsPage,
@@ -285,6 +450,18 @@ const AssignDiscountsPage = lazy(() =>
 const FeeAssignPage = lazy(() =>
   import('@features/fees/assign/pages/FeeAssignPage').then((m) => ({
     default: m.FeeAssignPage,
+  })),
+);
+
+const AssignFeesToStudentsPage = lazy(() =>
+  import('@features/fees/assign/pages/AssignFeesToStudentsPage').then((m) => ({
+    default: m.AssignFeesToStudentsPage,
+  })),
+);
+
+const FeeCarryForwardPage = lazy(() =>
+  import('@features/fees/carry-forward/pages/FeeCarryForwardPage').then((m) => ({
+    default: m.FeeCarryForwardPage,
   })),
 );
 
@@ -327,6 +504,48 @@ const SubjectAttendancePage = lazy(() =>
 const AttendanceReportPage = lazy(() =>
   import('@features/attendance/report/pages/AttendanceReportPage').then((m) => ({
     default: m.AttendanceReportPage,
+  })),
+);
+
+const StudentReportPage = lazy(() =>
+  import('@features/reports/students/pages/StudentReportPage').then((m) => ({
+    default: m.StudentReportPage,
+  })),
+);
+
+const FeesReportPage = lazy(() =>
+  import('@features/reports/fees/pages/FeesReportPage').then((m) => ({
+    default: m.FeesReportPage,
+  })),
+);
+
+const ExamReportPage = lazy(() =>
+  import('@features/reports/examinations/pages/ExamReportPage').then((m) => ({
+    default: m.ExamReportPage,
+  })),
+);
+
+const IncomeExpenseReportPage = lazy(() =>
+  import('@features/reports/finance/pages/IncomeExpenseReportPage').then((m) => ({
+    default: m.IncomeExpenseReportPage,
+  })),
+);
+
+const StaffReportPage = lazy(() =>
+  import('@features/reports/hr/pages/StaffReportPage').then((m) => ({
+    default: m.StaffReportPage,
+  })),
+);
+
+const TransportHostelReportPage = lazy(() =>
+  import('@features/reports/transport/pages/TransportHostelReportPage').then((m) => ({
+    default: m.TransportHostelReportPage,
+  })),
+);
+
+const LibraryReportPage = lazy(() =>
+  import('@features/reports/library/pages/LibraryReportPage').then((m) => ({
+    default: m.LibraryReportPage,
   })),
 );
 
@@ -378,9 +597,57 @@ const ExamEnrollPage = lazy(() =>
   })),
 );
 
+const AdmitCardTemplatesPage = lazy(() =>
+  import('@features/examinations/admit-card/pages/AdmitCardTemplatesPage').then((m) => ({
+    default: m.AdmitCardTemplatesPage,
+  })),
+);
+
+const MarksheetTemplatesPage = lazy(() =>
+  import('@features/examinations/marksheet/pages/MarksheetTemplatesPage').then((m) => ({
+    default: m.MarksheetTemplatesPage,
+  })),
+);
+
 const EnquiryPage = lazy(() =>
   import('@features/front-office/enquiry/pages/EnquiryPage').then((m) => ({
     default: m.EnquiryPage,
+  })),
+);
+
+const VisitorsPage = lazy(() =>
+  import('@features/front-office/visitors/pages/VisitorsPage').then((m) => ({
+    default: m.VisitorsPage,
+  })),
+);
+
+const PhoneCallLogPage = lazy(() =>
+  import('@features/front-office/phone-calls/pages/PhoneCallLogPage').then((m) => ({
+    default: m.PhoneCallLogPage,
+  })),
+);
+
+const VisitorPurposePage = lazy(() =>
+  import('@features/front-office/visitor-purpose/pages/VisitorPurposePage').then((m) => ({
+    default: m.VisitorPurposePage,
+  })),
+);
+
+const ComplaintsPage = lazy(() =>
+  import('@features/front-office/complaints/pages/ComplaintsPage').then((m) => ({
+    default: m.ComplaintsPage,
+  })),
+);
+
+const PostalDispatchPage = lazy(() =>
+  import('@features/front-office/postal/pages/PostalRecordsPage').then((m) => ({
+    default: m.PostalDispatchPage,
+  })),
+);
+
+const PostalReceivePage = lazy(() =>
+  import('@features/front-office/postal/pages/PostalRecordsPage').then((m) => ({
+    default: m.PostalReceivePage,
   })),
 );
 
@@ -393,18 +660,6 @@ const OnlineAdmissionsPage = lazy(() =>
 const CbseExamsPage = lazy(() =>
   import('@features/examinations/cbse-exams/pages/CbseExamsPage').then((m) => ({
     default: m.CbseExamsPage,
-  })),
-);
-
-const MarksheetPage = lazy(() =>
-  import('@features/examinations/marksheet/pages/MarksheetPage').then((m) => ({
-    default: m.MarksheetPage,
-  })),
-);
-
-const AdmitCardPage = lazy(() =>
-  import('@features/examinations/admit-card/pages/AdmitCardPage').then((m) => ({
-    default: m.AdmitCardPage,
   })),
 );
 
@@ -432,21 +687,177 @@ const PaymentGatewaysPage = lazy(() =>
   })),
 );
 
+const OfflineBankPaymentsPage = lazy(() =>
+  import('@features/fees/offline-payments/pages/OfflineBankPaymentsPage').then((m) => ({
+    default: m.OfflineBankPaymentsPage,
+  })),
+);
+
+const LibraryBooksPage = lazy(() =>
+  import('@features/library/books/pages/BooksPage').then((m) => ({
+    default: m.BooksPage,
+  })),
+);
+
+const LibraryIssueReturnPage = lazy(() =>
+  import('@features/library/issue-return/pages/IssueReturnPage').then((m) => ({
+    default: m.IssueReturnPage,
+  })),
+);
+
+const ItemCategoriesPage = lazy(() =>
+  import('@features/inventory/categories/pages/ItemCategoriesPage').then((m) => ({
+    default: m.ItemCategoriesPage,
+  })),
+);
+
+const ItemStoresPage = lazy(() =>
+  import('@features/inventory/stores/pages/ItemStoresPage').then((m) => ({
+    default: m.ItemStoresPage,
+  })),
+);
+
+const ItemSuppliersPage = lazy(() =>
+  import('@features/inventory/suppliers/pages/ItemSuppliersPage').then((m) => ({
+    default: m.ItemSuppliersPage,
+  })),
+);
+
+const InventoryItemsPage = lazy(() =>
+  import('@features/inventory/items/pages/InventoryItemsPage').then((m) => ({
+    default: m.InventoryItemsPage,
+  })),
+);
+
+const ItemStockPage = lazy(() =>
+  import('@features/inventory/stock/pages/ItemStockPage').then((m) => ({
+    default: m.ItemStockPage,
+  })),
+);
+
+const ItemIssuePage = lazy(() =>
+  import('@features/inventory/issue/pages/ItemIssuePage').then((m) => ({
+    default: m.ItemIssuePage,
+  })),
+);
+
+const IncomeListPage = lazy(() =>
+  import('@features/income/list/pages/IncomeListPage').then((m) => ({
+    default: m.IncomeListPage,
+  })),
+);
+
+const IncomeHeadsPage = lazy(() =>
+  import('@features/income/heads/pages/IncomeHeadsPage').then((m) => ({
+    default: m.IncomeHeadsPage,
+  })),
+);
+
+const ExpenseListPage = lazy(() =>
+  import('@features/expense/list/pages/ExpenseListPage').then((m) => ({
+    default: m.ExpenseListPage,
+  })),
+);
+
+const ExpenseHeadsPage = lazy(() =>
+  import('@features/expense/heads/pages/ExpenseHeadsPage').then((m) => ({
+    default: m.ExpenseHeadsPage,
+  })),
+);
+
+const CertificateTemplatesPage = lazy(() =>
+  import('@features/certificates/templates/pages/CertificateTemplatesPage').then((m) => ({
+    default: m.CertificateTemplatesPage,
+  })),
+);
+
+const GenerateCertificatePage = lazy(() =>
+  import('@features/certificates/generate/pages/GenerateCertificatePage').then((m) => ({
+    default: m.GenerateCertificatePage,
+  })),
+);
+
+const StudentIdCardTemplatesPage = lazy(() =>
+  import('@features/certificates/id-cards/pages/StudentIdCardTemplatesPage').then((m) => ({
+    default: m.StudentIdCardTemplatesPage,
+  })),
+);
+
+const GenerateStudentIdCardPage = lazy(() =>
+  import('@features/certificates/id-cards/pages/GenerateStudentIdCardPage').then((m) => ({
+    default: m.GenerateStudentIdCardPage,
+  })),
+);
+
+const StaffIdCardTemplatesPage = lazy(() =>
+  import('@features/certificates/id-cards/pages/StaffIdCardTemplatesPage').then((m) => ({
+    default: m.StaffIdCardTemplatesPage,
+  })),
+);
+
+const GenerateStaffIdCardPage = lazy(() =>
+  import('@features/certificates/id-cards/pages/GenerateStaffIdCardPage').then((m) => ({
+    default: m.GenerateStaffIdCardPage,
+  })),
+);
+
+const ContentTypesPage = lazy(() =>
+  import('@features/download-center/pages/ContentTypesPage').then((m) => ({
+    default: m.ContentTypesPage,
+  })),
+);
+
+const UploadContentPage = lazy(() =>
+  import('@features/download-center/pages/UploadContentPage').then((m) => ({
+    default: m.UploadContentPage,
+  })),
+);
+
+const VideoTutorialsPage = lazy(() =>
+  import('@features/download-center/pages/VideoTutorialsPage').then((m) => ({
+    default: m.VideoTutorialsPage,
+  })),
+);
+
+const OnlineExamsPage = lazy(() =>
+  import('@features/online-examinations/exams/pages/OnlineExamsPage').then((m) => ({
+    default: m.OnlineExamsPage,
+  })),
+);
+
+const QuestionBankPage = lazy(() =>
+  import('@features/online-examinations/question-bank/pages/QuestionBankPage').then((m) => ({
+    default: m.QuestionBankPage,
+  })),
+);
+
 const NoticesPage = lazy(() =>
   import('@features/communications/notices/pages/NoticesPage').then((m) => ({
     default: m.NoticesPage,
   })),
 );
 
+const EmailSmsPage = lazy(() =>
+  import('@features/communications/email-sms/pages/EmailSmsPage').then((m) => ({
+    default: m.EmailSmsPage,
+  })),
+);
+
+const BulkEmailPage = lazy(() =>
+  import('@features/communications/bulk-email/pages/BulkEmailPage').then((m) => ({
+    default: m.BulkEmailPage,
+  })),
+);
+
 const HomeworkPage = lazy(() =>
-  import('@features/homework/pages/HomeworkPage').then((m) => ({
+  import('@features/homework/assignments/pages/HomeworkPage').then((m) => ({
     default: m.HomeworkPage,
   })),
 );
 
-const DailyAssignmentPage = lazy(() =>
-  import('@features/homework/pages/DailyAssignmentPage').then((m) => ({
-    default: m.DailyAssignmentPage,
+const DailyAssignmentsPage = lazy(() =>
+  import('@features/homework/daily/pages/DailyAssignmentsPage').then((m) => ({
+    default: m.DailyAssignmentsPage,
   })),
 );
 
@@ -480,6 +891,12 @@ const VehicleRouteAssignPage = lazy(() =>
   })),
 );
 
+const RoutePickupPointsPage = lazy(() =>
+  import('@features/transport/route-pickup-points/pages/RoutePickupPointsPage').then((m) => ({
+    default: m.RoutePickupPointsPage,
+  })),
+);
+
 /** Authenticated admin routes mounted under DashboardLayout. */
 export const adminRoutes: RouteObject[] = [
   { path: 'dashboard', element: <DashboardPage /> },
@@ -509,8 +926,8 @@ export const adminRoutes: RouteObject[] = [
       { index: true, element: <StudentsPage /> },
       { path: 'categories', element: <StudentCategoriesPage /> },
       { path: 'houses', element: <StudentHousesPage /> },
-      { path: 'import', element: <ImportStudentsPage /> },
       { path: 'disabled', element: <DisabledStudentsPage /> },
+      { path: 'import', element: <ImportStudentsPage /> },
       { path: 'online-admission', element: <OnlineAdmissionsPage /> },
       { path: ':studentId', element: <StudentProfilePage /> },
       ...buildPlaceholderChildren('/students'),
@@ -522,13 +939,13 @@ export const adminRoutes: RouteObject[] = [
     element: <ModuleLayout />,
     children: [
       { index: true, element: <StaffPage /> },
-      { path: 'departments', element: <DepartmentsPage /> },
-      { path: 'designations', element: <DesignationsPage /> },
       { path: 'attendance', element: <StaffAttendancePage /> },
       { path: 'payroll', element: <StaffPayrollPage /> },
       { path: 'leave-types', element: <LeaveTypesPage /> },
       { path: 'leave', element: <StaffLeaveRequestsPage /> },
       { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
+      { path: 'departments', element: <StaffDepartmentsPage /> },
+      { path: 'designations', element: <StaffDesignationsPage /> },
       { path: ':staffId', element: <StaffProfilePage /> },
       ...buildPlaceholderChildren('/staff'),
     ],
@@ -545,16 +962,16 @@ export const adminRoutes: RouteObject[] = [
     { path: 'collect', element: <CollectFeesPage /> },
     { path: 'due-search', element: <DueFeesSearchPage /> },
     { path: 'payment-search', element: <PaymentSearchPage /> },
+    { path: 'master', element: <FeeAssignPage /> },
     { path: 'fee-types', element: <FeeTypesPage /> },
     { path: 'fee-groups', element: <FeeGroupsPage /> },
-    { path: 'fee-masters', element: <FeeMastersPage /> },
-    { path: 'master', element: <FeeMastersPage /> },
     { path: 'discounts', element: <FeeDiscountsPage /> },
     { path: 'discounts/assign', element: <AssignDiscountsPage /> },
-    { path: 'assign', element: <FeeAssignPage /> },
+    { path: 'assign', element: <AssignFeesToStudentsPage /> },
+    { path: 'carry-forward', element: <FeeCarryForwardPage /> },
     { path: 'reminders', element: <FeeRemindersPage /> },
     { path: 'payment-gateways', element: <PaymentGatewaysPage /> },
-    { path: 'offline-payments', element: <PaymentGatewaysPage /> },
+    { path: 'offline-payments', element: <OfflineBankPaymentsPage /> },
   ]),
 
   createModuleRoutes('/examinations', ROUTES.examinations.groups, [
@@ -563,62 +980,82 @@ export const adminRoutes: RouteObject[] = [
     { path: 'enroll', element: <ExamEnrollPage /> },
     { path: 'schedule', element: <ExamSchedulePage /> },
     { path: 'results', element: <ExamResultsPage /> },
+    { path: 'admit-card', element: <AdmitCardTemplatesPage /> },
+    { path: 'marksheet', element: <MarksheetTemplatesPage /> },
     { path: 'grades', element: <GradesPage /> },
     { path: 'divisions', element: <MarkDivisionsPage /> },
     { path: 'cbse-exams', element: <CbseExamsPage /> },
-    { path: 'marksheet', element: <MarksheetPage /> },
-    { path: 'admit-card', element: <AdmitCardPage /> },
   ]),
 
   createModuleRoutes('/settings', ROUTES.settings.general, [
     { path: 'general', element: <GeneralSettingsPage /> },
     { path: 'languages', element: <LanguagesPage /> },
     { path: 'currency', element: <CurrencyPage /> },
+    { path: 'notifications', element: <NotificationSettingsPage /> },
     { path: 'sms', element: <SmsSettingsPage /> },
     { path: 'email', element: <EmailSettingsPage /> },
-    { path: 'notifications', element: <NotificationSettingsPage /> },
-    { path: 'print-header-footer', element: <PrintHeaderFooterPage /> },
     { path: 'payment-methods', element: <PaymentMethodsPage /> },
+    { path: 'print-header-footer', element: <PrintHeaderFooterPage /> },
     { path: 'roles', element: <RolesPage /> },
+    { path: 'users', element: <UsersPage /> },
+    { path: 'modules', element: <ModulesPage /> },
+    { path: 'custom-fields', element: <CustomFieldsPage /> },
+    { path: 'captcha', element: <CaptchaPage /> },
+    { path: 'system-fields', element: <SystemFieldsPage /> },
+    { path: 'online-admission', element: <OnlineAdmissionSettingsPage /> },
+    { path: 'sidebar-menu', element: <SidebarMenuPage /> },
+    { path: 'backup', element: <BackupPage /> },
+    { path: 'file-types', element: <FileTypesPage /> },
   ]),
 
   createModuleRoutes('/front-office', ROUTES.frontOffice.enquiry, [
     { path: 'enquiry', element: <EnquiryPage /> },
+    { path: 'visitors', element: <VisitorsPage /> },
+    { path: 'phone-calls', element: <PhoneCallLogPage /> },
+    { path: 'complaints', element: <ComplaintsPage /> },
+    { path: 'dispatch', element: <PostalDispatchPage /> },
+    { path: 'receive', element: <PostalReceivePage /> },
+    { path: 'visitor-purpose', element: <VisitorPurposePage /> },
   ]),
-  createPlaceholderModule('/library', ROUTES.library.books),
+  createModuleRoutes('/library', ROUTES.library.books, [
+    { path: 'books', element: <LibraryBooksPage /> },
+    { path: 'issue-return', element: <LibraryIssueReturnPage /> },
+  ]),
   createModuleRoutes('/transport', ROUTES.transport.fees, [
     { path: 'fees', element: <TransportFeesPage /> },
     { path: 'pickup-points', element: <PickupPointsPage /> },
     { path: 'routes', element: <TransportRoutesPage /> },
     { path: 'vehicles', element: <VehiclesPage /> },
     { path: 'assign-vehicle', element: <VehicleRouteAssignPage /> },
+    { path: 'route-pickup-points', element: <RoutePickupPointsPage /> },
   ]),
-  {
-    path: 'hostel',
-    element: <HostelLayout />,
-    children: [
-      { index: true, element: <Navigate to={ROUTES.hostel.rooms} replace /> },
-      { path: 'buildings', element: <HostelsPage /> },
-      { path: 'rooms', element: <HostelRoomsPage /> },
-      { path: 'room-types', element: <RoomTypesPage /> },
-      ...buildPlaceholderChildren('/hostel'),
-    ],
-  },
-  createPlaceholderModule('/inventory', ROUTES.inventory.issue),
-  {
-    path: 'homework',
-    element: <HomeworkLayout />,
-    children: [
-      { index: true, element: <Navigate to={ROUTES.homework.assignments} replace /> },
-      { path: 'assignments', element: <HomeworkPage /> },
-      { path: 'daily', element: <DailyAssignmentPage /> },
-      ...buildPlaceholderChildren('/homework'),
-    ],
-  },
+  createModuleRoutes('/hostel', ROUTES.hostel.rooms, [
+    { path: 'buildings', element: <HostelsPage /> },
+    { path: 'rooms', element: <HostelRoomsPage /> },
+    { path: 'room-types', element: <RoomTypesPage /> },
+  ]),
+  createModuleRoutes('/inventory', ROUTES.inventory.items, [
+    { path: 'categories', element: <ItemCategoriesPage /> },
+    { path: 'stores', element: <ItemStoresPage /> },
+    { path: 'suppliers', element: <ItemSuppliersPage /> },
+    { path: 'items', element: <InventoryItemsPage /> },
+    { path: 'stock', element: <ItemStockPage /> },
+    { path: 'issue', element: <ItemIssuePage /> },
+  ]),
+  createModuleRoutes('/homework', ROUTES.homework.assignments, [
+    { path: 'assignments', element: <HomeworkPage /> },
+    { path: 'daily', element: <DailyAssignmentsPage /> },
+  ]),
   createModuleRoutes('/communicate', ROUTES.communicate.notices, [
     { path: 'notices', element: <NoticesPage /> },
+    { path: 'email-sms', element: <EmailSmsPage /> },
+    { path: 'bulk-email', element: <BulkEmailPage /> },
   ]),
-  createPlaceholderModule('/download-center', ROUTES.downloadCenter.contentTypes),
+  createModuleRoutes('/download-center', ROUTES.downloadCenter.contentTypes, [
+    { path: 'content-types', element: <ContentTypesPage /> },
+    { path: 'content', element: <UploadContentPage /> },
+    { path: 'videos', element: <VideoTutorialsPage /> },
+  ]),
   createModuleRoutes('/lesson-plan', ROUTES.lessonPlan.syllabusStatus, [
     {
       path: 'syllabus-status',
@@ -635,18 +1072,74 @@ export const adminRoutes: RouteObject[] = [
       },
     },
   ]),
-  createPlaceholderModule('/online-examinations', ROUTES.onlineExams.exams),
-  createPlaceholderModule('/income', ROUTES.income.list),
-  createPlaceholderModule('/expense', ROUTES.expense.list),
+  createModuleRoutes('/online-examinations', ROUTES.onlineExams.exams, [
+    { path: 'exams', element: <OnlineExamsPage /> },
+    { path: 'question-bank', element: <QuestionBankPage /> },
+  ]),
+  createModuleRoutes('/income', ROUTES.income.list, [
+    { path: 'list', element: <IncomeListPage /> },
+    { path: 'heads', element: <IncomeHeadsPage /> },
+  ]),
+  createModuleRoutes('/expense', ROUTES.expense.list, [
+    { path: 'list', element: <ExpenseListPage /> },
+    { path: 'heads', element: <ExpenseHeadsPage /> },
+  ]),
   createModuleRoutes('/finance', ROUTES.finance.chartOfAccounts, [
+    { path: 'chart-of-accounts', element: <ChartOfAccountsPage /> },
     { path: 'ledgers', element: <LedgersPage /> },
     { path: 'groups', element: <LedgerGroupsPage /> },
     { path: 'entries', element: <JournalEntriesPage /> },
-    { path: 'reports', element: <FinancialReportPage /> },
+    { path: 'mapper', element: <FeeMapperPage /> },
+    { path: 'reports', element: <FinanceReportsHubPage /> },
+    { path: 'reports/trial-balance', element: <TrialBalancePage /> },
+    { path: 'reports/balance-sheet', element: <BalanceSheetPage /> },
+    { path: 'reports/profit-loss', element: <ProfitLossPage /> },
+    { path: 'reports/ledger-statement', element: <LedgerStatementPage /> },
+    { path: 'reports/ledger-entries', element: <LedgerEntriesPage /> },
+    { path: 'reports/reconciliation', element: <ReconciliationPage /> },
   ]),
-  createPlaceholderModule('/reports', ROUTES.reports.students),
-  createPlaceholderModule('/certificates', ROUTES.certificates.templates),
-  createPlaceholderModule('/alumni', ROUTES.alumni.list),
-  createPlaceholderModule('/leads', ROUTES.leads.all),
-  createPlaceholderModule('/cms', ROUTES.cms.events),
+  createModuleRoutes('/reports', ROUTES.reports.students, [
+    { path: 'students', element: <StudentReportPage /> },
+    { path: 'attendance', element: <AttendanceReportPage /> },
+    { path: 'fees', element: <FeesReportPage /> },
+    { path: 'examinations', element: <ExamReportPage /> },
+    { path: 'finance', element: <IncomeExpenseReportPage /> },
+    { path: 'hr', element: <StaffReportPage /> },
+    { path: 'transport', element: <TransportHostelReportPage /> },
+    { path: 'library', element: <LibraryReportPage /> },
+    { path: 'inventory', element: <InventoryReportPage /> },
+    { path: 'homework', element: <HomeworkReportPage /> },
+    { path: 'alumni', element: <AlumniReportPage /> },
+  ]),
+  createModuleRoutes('/certificates', ROUTES.certificates.templates, [
+    { path: 'templates', element: <CertificateTemplatesPage /> },
+    { path: 'generate', element: <GenerateCertificatePage /> },
+    { path: 'student-id-card', element: <StudentIdCardTemplatesPage /> },
+    { path: 'generate-id-card', element: <GenerateStudentIdCardPage /> },
+    { path: 'staff-id-card', element: <StaffIdCardTemplatesPage /> },
+    { path: 'generate-staff-id-card', element: <GenerateStaffIdCardPage /> },
+  ]),
+  createModuleRoutes('/alumni', ROUTES.alumni.list, [
+    { path: 'list', element: <AlumniListPage /> },
+    { path: 'events', element: <AlumniEventsPage /> },
+  ]),
+  createModuleRoutes('/leads', ROUTES.leads.all, [
+    { path: 'all', element: <LeadsPage /> },
+    { path: 'campaigns', element: <CampaignsPage /> },
+    { path: 'campaign-types', element: <CampaignTypesPage /> },
+    { path: 'promoters', element: <PromotersPage /> },
+    { path: 'follow-up-status', element: <FollowupStatusPage /> },
+    { path: 'follow-ups', element: <FollowupsPage /> },
+    { path: 'reports', element: <LeadReportsPage /> },
+  ]),
+  createModuleRoutes('/cms', ROUTES.cms.events, [
+    { path: 'events', element: <CmsEventsPage /> },
+    { path: 'gallery', element: <CmsGalleryPage /> },
+    { path: 'notices', element: <CmsNoticesPage /> },
+    { path: 'media', element: <CmsMediaPage /> },
+    { path: 'pages', element: <CmsPagesPage /> },
+    { path: 'menus', element: <CmsMenusPage /> },
+    { path: 'banners', element: <CmsBannersPage /> },
+    { path: 'settings', element: <CmsSettingsPage /> },
+  ]),
 ];

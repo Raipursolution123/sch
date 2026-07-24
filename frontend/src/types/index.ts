@@ -29,11 +29,30 @@ export type {
   VehicleRouteAssignment,
   CreateVehicleRouteAssignmentPayload,
   UpdateVehicleRouteAssignmentPayload,
+  RoutePickupPoint,
+  CreateRoutePickupPointPayload,
+  UpdateRoutePickupPointPayload,
   StudentTransportPickupPoint,
   StudentTransportAssignment,
   UpdateStudentTransportPayload,
 } from './transport';
 export type { Enquiry, CreateEnquiryPayload, UpdateEnquiryPayload } from './front-office/enquiry';
+export type {
+  VisitorsBookEntry,
+  CreateVisitorsBookPayload,
+  UpdateVisitorsBookPayload,
+} from './front-office/visitors-book';
+export type {
+  Complaint,
+  CreateComplaintPayload,
+  UpdateComplaintPayload,
+} from './front-office/complaint';
+export type {
+  PostalRecord,
+  PostalRecordType,
+  CreatePostalRecordPayload,
+  UpdatePostalRecordPayload,
+} from './front-office/postal';
 export type {
   OnlineAdmission,
   CreateOnlineAdmissionPayload,

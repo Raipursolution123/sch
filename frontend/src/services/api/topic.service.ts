@@ -1,6 +1,6 @@
 import { apiClient } from './client';
-import type { ApiSuccessResponse, PaginatedResponse } from '@/types/api';
-import type { Topic, TopicCreatePayload, TopicUpdatePayload } from '@/types/academics/topic';
+import type { ApiSuccessResponse, PaginatedResponse } from '@app-types/api';
+import type { Topic, TopicCreatePayload, TopicUpdatePayload } from '@app-types/academics/topic';
 
 const BASE_PATH = '/academics/topics';
 

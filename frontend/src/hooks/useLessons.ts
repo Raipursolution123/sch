@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { lessonService } from '@/services/api/lesson.service';
-import type { LessonCreatePayload, LessonUpdatePayload } from '@/types/academics/lesson';
+import { toast } from 'sonner';
+import { lessonService } from '@services/api';
+import type { LessonCreatePayload, LessonUpdatePayload } from '@app-types/academics/lesson';
+import { getApiErrorMessage } from '@utils/session';
 
 export const LESSON_KEYS = {
   all: ['lessons'] as const,
@@ -22,7 +24,9 @@ export const useCreateLesson = () => {
     mutationFn: (data: LessonCreatePayload) => lessonService.createLesson(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: LESSON_KEYS.lists() });
+      toast.success('Lesson created');
     },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create lesson')),
   });
 };
 
@@ -34,7 +38,9 @@ export const useUpdateLesson = () => {
       lessonService.updateLesson(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: LESSON_KEYS.lists() });
+      toast.success('Lesson updated');
     },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update lesson')),
   });
 };
 
@@ -45,6 +51,8 @@ export const useDeleteLesson = () => {
     mutationFn: (id: number) => lessonService.deleteLesson(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: LESSON_KEYS.lists() });
+      toast.success('Lesson deleted');
     },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete lesson')),
   });
 };

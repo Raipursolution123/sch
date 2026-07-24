@@ -14,11 +14,11 @@ import { Select } from '@components/ui/select';
 import type {
   SyllabusStatus,
   SyllabusStatusUpdatePayload,
-} from '@/types/academics/syllabus-status';
-import { useSubjectGroups, useSubjectGroup } from '@/hooks/useSubjectGroups';
-import { useLessonList } from '@/hooks/useLessons';
-import { useTopicList } from '@/hooks/useTopics';
-import { useActiveSession } from '@/hooks/useSessions';
+} from '@app-types/academics/syllabus-status';
+import { useSubjectGroups, useSubjectGroup } from '@hooks/useSubjectGroups';
+import { useLessonList } from '@hooks/useLessons';
+import { useTopicList } from '@hooks/useTopics';
+import { useActiveSession } from '@hooks/useSessions';
 
 interface SyllabusStatusUpdateDialogProps {
   open: boolean;

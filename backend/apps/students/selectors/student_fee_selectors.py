@@ -99,6 +99,142 @@ def _fetch_class_fee_lines(class_id: int, session_id: int) -> list[dict[str, Any
         return _cursor_rows_to_dicts(cursor)
 
 
+def _fetch_student_fee_master_lines_batch(
+    student_session_ids: list[int],
+) -> dict[int, list[dict[str, Any]]]:
+    if not student_session_ids:
+        return {}
+
+    placeholders = ",".join(["%s"] * len(student_session_ids))
+    with connection.cursor() as cursor:
+        cursor.execute(
+            f"""
+            SELECT
+                sfm.student_session_id,
+                sfm.id as student_fees_master_id,
+                fsg.id as assignment_id,
+                fg.name as fee_group_name,
+                fgft.id as line_id,
+                fgft.feetype_id,
+                ft.code as feetype_code,
+                ft.type as feetype_name,
+                fgft.amount,
+                fgft.due_date
+            FROM student_fees_master sfm
+            JOIN fee_session_groups fsg ON sfm.fee_session_group_id = fsg.id
+            JOIN fee_groups fg ON fsg.fee_groups_id = fg.id
+            JOIN fee_groups_feetype fgft ON fgft.fee_session_group_id = fsg.id
+            JOIN feetype ft ON fgft.feetype_id = ft.id
+            WHERE sfm.student_session_id IN ({placeholders})
+              AND sfm.is_active = 'yes'
+              AND fgft.is_active = 'yes'
+            """,
+            student_session_ids,
+        )
+        rows = _cursor_rows_to_dicts(cursor)
+
+    grouped: dict[int, list[dict[str, Any]]] = {}
+    for row in rows:
+        session_id = row.pop("student_session_id")
+        grouped.setdefault(session_id, []).append(row)
+    return grouped
+
+
+def _fetch_deposite_payments_batch(
+    student_session_ids: list[int],
+) -> dict[int, list[dict[str, Any]]]:
+    if not student_session_ids:
+        return {}
+
+    placeholders = ",".join(["%s"] * len(student_session_ids))
+    grouped: dict[int, list[dict[str, Any]]] = {}
+    with connection.cursor() as cursor:
+        cursor.execute(
+            f"""
+            SELECT
+                sfm.student_session_id,
+                sfd.id as deposite_id,
+                sfd.student_fees_master_id,
+                sfd.fee_groups_feetype_id,
+                sfd.amount_detail,
+                fgft.feetype_id,
+                ft.type as feetype_name,
+                ft.code as feetype_code
+            FROM student_fees_deposite sfd
+            JOIN student_fees_master sfm ON sfd.student_fees_master_id = sfm.id
+            JOIN fee_groups_feetype fgft ON sfd.fee_groups_feetype_id = fgft.id
+            JOIN feetype ft ON fgft.feetype_id = ft.id
+            WHERE sfm.student_session_id IN ({placeholders}) AND sfd.is_active = 'yes'
+            """,
+            student_session_ids,
+        )
+        for row in cursor.fetchall():
+            (
+                student_session_id,
+                dep_id,
+                _master_id,
+                fgft_id,
+                amount_detail_str,
+                feetype_id,
+                feetype_name,
+                feetype_code,
+            ) = row
+            if not amount_detail_str:
+                continue
+            try:
+                detail_dict = json.loads(amount_detail_str)
+            except (json.JSONDecodeError, TypeError):
+                continue
+
+            for trans_id, detail in detail_dict.items():
+                grouped.setdefault(student_session_id, []).append(
+                    {
+                        "id": f"dep-{dep_id}-{trans_id}",
+                        "deposite_id": dep_id,
+                        "trans_id": trans_id,
+                        "date": safe_date_str(detail.get("date")),
+                        "amount": float(detail.get("amount") or 0),
+                        "amount_discount": float(detail.get("amount_discount") or 0),
+                        "amount_fine": float(detail.get("amount_fine") or 0),
+                        "payment_mode": detail.get("payment_mode", "Cash"),
+                        "description": detail.get("description", ""),
+                        "feetype_name": feetype_name,
+                        "feetype_id": feetype_id,
+                        "feetype_code": feetype_code,
+                        "fgft_id": fgft_id,
+                    }
+                )
+    return grouped
+
+
+def batch_fee_totals_for_roster(
+    student_session_ids: list[int],
+    class_id: int,
+    session_id: int,
+) -> dict[int, dict[str, float]]:
+    """Batch-compute fee totals for fee-collect roster (avoids per-student queries)."""
+    if not student_session_ids:
+        return {}
+
+    master_lines_by_session = _fetch_student_fee_master_lines_batch(student_session_ids)
+    payments_by_session = _fetch_deposite_payments_batch(student_session_ids)
+    class_lines = _fetch_class_fee_lines(class_id, session_id)
+
+    totals: dict[int, dict[str, float]] = {}
+    for student_session_id in student_session_ids:
+        assigned_lines = master_lines_by_session.get(student_session_id) or class_lines
+        payments = payments_by_session.get(student_session_id, [])
+        lines = build_fee_lines(assigned_lines, payments)
+        total_due = sum(line["amount"] for line in lines)
+        total_paid = sum(line["amount_paid"] for line in lines)
+        totals[student_session_id] = {
+            "total_due": total_due,
+            "total_paid": total_paid,
+            "total_balance": max(0.0, total_due - total_paid),
+        }
+    return totals
+
+
 def fetch_assigned_fee_lines(student_session_id: int) -> list[dict[str, Any]]:
     lines = _fetch_student_fee_master_lines(student_session_id)
     if lines:

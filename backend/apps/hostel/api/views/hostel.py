@@ -18,6 +18,7 @@ from apps.hostel.api.serializers.hostel import (
 )
 from apps.hostel.domain.hostel_exceptions import HostelError, HostelNotFoundError
 from apps.hostel.services.hostel_service import HostelService, HostelRoomService, RoomTypeService, HostelRoomBedService
+from common.exceptions.legacy_errors import legacy_domain_error_response
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
@@ -26,13 +27,7 @@ MODULE = "hostel"
 
 
 def hostel_error_response(exc: HostelError):
-    if isinstance(exc, HostelNotFoundError):
-        return APIResponse.error(
-            message=exc.message, status_code=status.HTTP_404_NOT_FOUND
-        )
-    return APIResponse.error(
-        message=exc.message, status_code=status.HTTP_400_BAD_REQUEST
-    )
+    return legacy_domain_error_response(exc, not_found_type=HostelNotFoundError)
 
 
 # --- Hostel Buildings ---
@@ -214,7 +209,7 @@ class HostelRoomDetailView(APIView):
 class RoomTypeListCreateView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE
-    legacy_permission_category = "hostel_room_type"
+    legacy_permission_category = "room_type"
 
     def get(self, request):
         service = RoomTypeService()
@@ -252,7 +247,7 @@ class RoomTypeListCreateView(APIView):
 class RoomTypeDetailView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE
-    legacy_permission_category = "hostel_room_type"
+    legacy_permission_category = "room_type"
 
     def get(self, request, pk):
         try:

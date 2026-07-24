@@ -11,15 +11,15 @@ import {
   useCreateLesson,
   useUpdateLesson,
   useDeleteLesson,
-} from '@/hooks/useLessons';
-import type { Lesson, LessonCreatePayload, LessonUpdatePayload } from '@/types/academics/lesson';
+} from '@hooks/useLessons';
+import type { Lesson, LessonCreatePayload, LessonUpdatePayload } from '@app-types/academics/lesson';
 
 // Topic Imports
 import { TopicTable } from '../../topics/components/TopicTable';
 import { TopicCreateDialog } from '../../topics/components/TopicCreateDialog';
 import { TopicUpdateDialog } from '../../topics/components/TopicUpdateDialog';
-import { useTopicList, useCreateTopic, useUpdateTopic, useDeleteTopic } from '@/hooks/useTopics';
-import type { Topic, TopicCreatePayload, TopicUpdatePayload } from '@/types/academics/topic';
+import { useTopicList, useCreateTopic, useUpdateTopic, useDeleteTopic } from '@hooks/useTopics';
+import type { Topic, TopicCreatePayload, TopicUpdatePayload } from '@app-types/academics/topic';
 
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { Plus } from 'lucide-react';

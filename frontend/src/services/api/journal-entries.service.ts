@@ -1,41 +1,42 @@
 import { apiClient } from './client';
-import type { JournalEntry, JournalEntryCreatePayload } from '@/types/finance';
-import type { ApiSuccessResponse, PaginatedResponse } from '@/types/api';
-
-const BASE_PATH = '/finance/entries/';
+import { API_ENDPOINTS } from '@constants/index';
+import type { ApiSuccessResponse, PaginatedResponse } from '@app-types/api';
+import type { EntryType, JournalEntry, JournalEntryCreatePayload } from '@app-types/finance';
 
 export const journalEntriesService = {
-  getEntries: async (page = 1) => {
+  listEntryTypes: async (): Promise<EntryType[]> => {
+    const response = await apiClient.get<ApiSuccessResponse<EntryType[]>>(
+      API_ENDPOINTS.finance.entryTypes,
+    );
+    return response.data.data ?? [];
+  },
+
+  list: async (page = 1): Promise<PaginatedResponse<JournalEntry>> => {
     const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<JournalEntry>>>(
-      BASE_PATH,
-      {
-        params: { page },
-      },
+      API_ENDPOINTS.finance.entries,
+      { params: { page } },
     );
     return response.data.data;
   },
 
-  createEntry: async (data: JournalEntryCreatePayload) => {
-    const response = await apiClient.post<{ data: JournalEntry; message: string }>(BASE_PATH, data);
-    return response.data;
-  },
-
-  getEntry: async (id: number) => {
-    const response = await apiClient.get<{ data: JournalEntry; message: string }>(
-      `${BASE_PATH}${id}/`,
+  get: async (id: number): Promise<JournalEntry> => {
+    const response = await apiClient.get<ApiSuccessResponse<JournalEntry>>(
+      API_ENDPOINTS.finance.entryDetail(id),
     );
     return response.data.data;
   },
 
-  deleteEntry: async (id: number) => {
-    const response = await apiClient.delete<{ message: string }>(`${BASE_PATH}${id}/`);
+  create: async (payload: JournalEntryCreatePayload) => {
+    const response = await apiClient.post<{ data: JournalEntry; message: string }>(
+      API_ENDPOINTS.finance.entries,
+      payload,
+    );
     return response.data;
   },
 
-  updateEntry: async (id: number, data: JournalEntryCreatePayload) => {
-    const response = await apiClient.put<{ data: JournalEntry; message: string }>(
-      `${BASE_PATH}${id}/`,
-      data,
+  delete: async (id: number) => {
+    const response = await apiClient.delete<{ message: string }>(
+      API_ENDPOINTS.finance.entryDetail(id),
     );
     return response.data;
   },

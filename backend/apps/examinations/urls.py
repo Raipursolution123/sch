@@ -19,16 +19,27 @@ from apps.examinations.api.views.exam_schedules import (
     ExamSchedulesDetailView,
     ExamSchedulesListCreateView,
 )
+from apps.examinations.api.views.exam_templates import (
+    AdmitCardTemplateDetailView,
+    AdmitCardTemplateListCreateView,
+    MarksheetTemplateDetailView,
+    MarksheetTemplateListCreateView,
+)
 from apps.examinations.api.views.grades import GradesDetailView, GradesListCreateView
 from apps.examinations.api.views.mark_divisions import (
     MarkDivisionsDetailView,
     MarkDivisionsListCreateView,
 )
-from apps.examinations.api.views.templates import (
-    AdmitCardTemplateDetailView,
-    AdmitCardTemplatesView,
-    MarksheetTemplateDetailView,
-    MarksheetTemplatesView,
+from apps.examinations.api.views.online_exam import (
+    OnlineExamDetailView,
+    OnlineExamListCreateView,
+    OnlineExamQuestionDetailView,
+    OnlineExamQuestionsView,
+    OnlineExamStudentsAssignView,
+    OnlineExamStudentsRosterView,
+    OnlineExamStudentUnassignView,
+    QuestionBankDetailView,
+    QuestionBankListCreateView,
 )
 
 app_name = "examinations"
@@ -61,6 +72,26 @@ urlpatterns = [
         name="mark_divisions_detail",
     ),
     path(
+        "admit-cards/",
+        AdmitCardTemplateListCreateView.as_view(),
+        name="admit_card_templates",
+    ),
+    path(
+        "admit-cards/<int:pk>/",
+        AdmitCardTemplateDetailView.as_view(),
+        name="admit_card_template_detail",
+    ),
+    path(
+        "marksheets/",
+        MarksheetTemplateListCreateView.as_view(),
+        name="marksheet_templates",
+    ),
+    path(
+        "marksheets/<int:pk>/",
+        MarksheetTemplateDetailView.as_view(),
+        name="marksheet_template_detail",
+    ),
+    path(
         "results/roster/",
         ExamResultRosterView.as_view(),
         name="exam_results_roster",
@@ -86,8 +117,49 @@ urlpatterns = [
         CbseExamsListCreateView.as_view(),
         name="cbse_exams_list_create",
     ),
-    path("templates/marksheets/", MarksheetTemplatesView.as_view(), name="marksheet_templates"),
-    path("templates/marksheets/<int:pk>/", MarksheetTemplateDetailView.as_view(), name="marksheet_template_detail"),
-    path("templates/admit-cards/", AdmitCardTemplatesView.as_view(), name="admitcard_templates"),
-    path("templates/admit-cards/<int:pk>/", AdmitCardTemplateDetailView.as_view(), name="admitcard_template_detail"),
+    path(
+        "questions/",
+        QuestionBankListCreateView.as_view(),
+        name="question_bank_list_create",
+    ),
+    path(
+        "questions/<int:pk>/",
+        QuestionBankDetailView.as_view(),
+        name="question_bank_detail",
+    ),
+    path(
+        "online-exams/",
+        OnlineExamListCreateView.as_view(),
+        name="online_exams_list_create",
+    ),
+    path(
+        "online-exams/<int:pk>/",
+        OnlineExamDetailView.as_view(),
+        name="online_exams_detail",
+    ),
+    path(
+        "online-exams/<int:pk>/questions/",
+        OnlineExamQuestionsView.as_view(),
+        name="online_exams_questions",
+    ),
+    path(
+        "online-exams/<int:pk>/questions/<int:link_id>/",
+        OnlineExamQuestionDetailView.as_view(),
+        name="online_exams_question_detail",
+    ),
+    path(
+        "online-exams/<int:pk>/students/roster/",
+        OnlineExamStudentsRosterView.as_view(),
+        name="online_exams_students_roster",
+    ),
+    path(
+        "online-exams/<int:pk>/students/",
+        OnlineExamStudentsAssignView.as_view(),
+        name="online_exams_students_assign",
+    ),
+    path(
+        "online-exams/<int:pk>/students/<int:assignment_id>/",
+        OnlineExamStudentUnassignView.as_view(),
+        name="online_exams_students_unassign",
+    ),
 ]

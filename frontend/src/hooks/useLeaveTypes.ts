@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
+import { REFERENCE_DATA_STALE_TIME } from '@constants/query-stale-times';
 import { leaveTypesService } from '@services/api';
 import type { CreateLeaveTypePayload, UpdateLeaveTypePayload } from '@app-types/staff/leave-type';
 import { getApiErrorMessage } from '@utils/session';
@@ -9,6 +10,7 @@ export function useLeaveTypes() {
   return useQuery({
     queryKey: queryKeys.staff.leaveTypes.list(),
     queryFn: leaveTypesService.list,
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 

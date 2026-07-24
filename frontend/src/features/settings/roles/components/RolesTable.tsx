@@ -1,94 +1,84 @@
-import { Pencil, Trash2, ShieldAlert } from 'lucide-react';
-import { Button } from '@components/ui/button';
 import { Badge } from '@components/ui/badge';
+import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
-import type { Role } from '@/types/settings/roles';
+import { Pagination } from '@components/ui';
+import { Pencil } from 'lucide-react';
+import type { RoleSummary } from '@app-types/settings/roles';
 
 interface RolesTableProps {
-  roles: Role[];
-  onEdit: (role: Role) => void;
-  onDelete: (role: Role) => void;
-  onManagePermissions: (role: Role) => void;
+  roles: RoleSummary[];
+  totalCount: number;
+  page: number;
+  onPageChange: (page: number) => void;
+  onEditPermissions: (role: RoleSummary) => void;
 }
 
-const columns = (
-  onManagePermissions: (role: Role) => void
-): DataTableColumn<Role>[] => [
+const columns: DataTableColumn<RoleSummary>[] = [
   {
     id: 'name',
-    header: 'Role Name',
+    header: 'Role',
     cellClassName: 'font-medium',
-    cell: (row) => row.name,
+    cell: (row) => row.name || row.slug || `Role #${row.id}`,
   },
   {
-    id: 'type',
-    header: 'Type',
-    cell: (row) => {
-      const isSystem = row.is_system === 1 || row.is_superadmin === 1;
-      return isSystem ? (
-        <Badge variant="default" className="bg-blue-500 hover:bg-blue-600">System Role</Badge>
-      ) : (
-        <Badge variant="secondary">Custom Role</Badge>
-      );
-    },
-  },
-  {
-    id: 'permissions',
-    header: 'Access Control',
+    id: 'slug',
+    header: 'Slug',
     cell: (row) => (
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => onManagePermissions(row)}
-        className="space-x-1"
-      >
-        <ShieldAlert className="h-4 w-4 text-primary" />
-        <span>Permissions</span>
-      </Button>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.slug || '—'}</code>
+    ),
+  },
+  {
+    id: 'flags',
+    header: 'Flags',
+    cell: (row) => (
+      <div className="flex flex-wrap gap-1">
+        {row.is_active ? (
+          <Badge variant="secondary">Active</Badge>
+        ) : (
+          <Badge variant="outline">Inactive</Badge>
+        )}
+        {row.is_system ? <Badge variant="outline">System</Badge> : null}
+        {row.is_superadmin ? <Badge>Superadmin</Badge> : null}
+      </div>
     ),
   },
 ];
 
 export function RolesTable({
   roles,
-  onEdit,
-  onDelete,
-  onManagePermissions,
+  totalCount,
+  page,
+  onPageChange,
+  onEditPermissions,
 }: RolesTableProps) {
   return (
-    <DataTable
-      data={roles}
-      columns={columns(onManagePermissions)}
-      getRowKey={(role) => role.id}
-      actions={(role) => {
-        const isSuper = role.is_superadmin === 1;
-
-        return (
-          <>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onEdit(role)}
-              aria-label={`Edit ${role.name}`}
-            >
-              <Pencil className="h-4 w-4 text-blue-500" />
-            </Button>
-            {!isSuper && (
-              <Button
-                variant="ghost"
-                size="sm"
-                disabled={role.is_system === 1}
-                onClick={() => onDelete(role)}
-                aria-label={`Delete ${role.name}`}
-                className="text-destructive hover:text-destructive"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            )}
-          </>
-        );
-      }}
-    />
+    <div className="space-y-4">
+      <DataTable
+        data={roles}
+        columns={columns}
+        getRowKey={(role) => role.id}
+        actions={(role) => (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onEditPermissions(role)}
+            disabled={role.is_superadmin}
+            title={
+              role.is_superadmin
+                ? 'Superadmin role permissions cannot be edited'
+                : `Edit permissions for ${role.name}`
+            }
+            aria-label={`Edit permissions for ${role.name}`}
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+        )}
+      />
+      <Pagination
+        currentPage={page}
+        totalPages={Math.max(1, Math.ceil(totalCount / 20))}
+        onPageChange={onPageChange}
+      />
+    </div>
   );
 }
-export default RolesTable;

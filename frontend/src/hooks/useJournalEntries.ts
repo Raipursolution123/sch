@@ -1,65 +1,47 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { journalEntriesService } from '@/services/api';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import type { JournalEntryCreatePayload } from '@/types/finance';
+import { queryKeys } from '@constants/query-keys';
+import { REFERENCE_DATA_STALE_TIME } from '@constants/query-stale-times';
+import { journalEntriesService } from '@services/api';
+import type { JournalEntryCreatePayload } from '@app-types/finance';
+import { getApiErrorMessage } from '@utils/session';
 
-export const useJournalEntries = (page = 1) => {
+export function useEntryTypes() {
   return useQuery({
-    queryKey: ['journal-entries', page],
-    queryFn: () => journalEntriesService.getEntries(page),
+    queryKey: queryKeys.finance.entryTypes(),
+    queryFn: () => journalEntriesService.listEntryTypes(),
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
-};
+}
 
-export const useJournalEntry = (id: number) => {
+export function useJournalEntries(page = 1) {
   return useQuery({
-    queryKey: ['journal-entries', id],
-    queryFn: () => journalEntriesService.getEntry(id),
-    enabled: !!id,
+    queryKey: queryKeys.finance.entries.list(page),
+    queryFn: () => journalEntriesService.list(page),
+    placeholderData: keepPreviousData,
   });
-};
+}
 
-export const useCreateJournalEntry = () => {
+export function useCreateJournalEntry() {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (data: JournalEntryCreatePayload) => journalEntriesService.createEntry(data),
+    mutationFn: (payload: JournalEntryCreatePayload) => journalEntriesService.create(payload),
     onSuccess: (response) => {
-      toast.success(response.message || 'Journal entry created successfully');
-      queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.finance.entries.all });
+      toast.success(response.message || 'Journal entry created');
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to create journal entry');
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create journal entry')),
   });
-};
+}
 
-export const useDeleteJournalEntry = () => {
+export function useDeleteJournalEntry() {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (id: number) => journalEntriesService.deleteEntry(id),
+    mutationFn: (id: number) => journalEntriesService.delete(id),
     onSuccess: (response) => {
-      toast.success(response.message || 'Journal entry deleted successfully');
-      queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.finance.entries.all });
+      toast.success(response.message || 'Journal entry deleted');
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to delete journal entry');
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete journal entry')),
   });
-};
-
-export const useUpdateJournalEntry = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: JournalEntryCreatePayload }) =>
-      journalEntriesService.updateEntry(id, data),
-    onSuccess: (response) => {
-      toast.success(response.message || 'Journal entry updated successfully');
-      queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to update journal entry');
-    },
-  });
-};
+}

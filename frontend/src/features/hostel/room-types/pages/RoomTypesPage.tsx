@@ -8,7 +8,7 @@ import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
 import { FormTextField, FormTextareaField } from '@components/forms/fields';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
-import { Button } from '@components/ui/button';
+import { PermissionButton } from '@components/rbac/PermissionButton';
 import {
   useCreateRoomType,
   useDeleteRoomType,
@@ -88,10 +88,10 @@ export function RoomTypesPage() {
   };
 
   const addAction = (
-    <Button onClick={openCreate} className="gap-1">
+    <PermissionButton permission="settings.manage" onClick={openCreate} className="gap-1">
       <Plus className="h-4 w-4" aria-hidden="true" />
       Add Room Type
-    </Button>
+    </PermissionButton>
   );
 
   return (
@@ -148,10 +148,17 @@ export function RoomTypesPage() {
         getRowKey={(row) => row.id}
         actions={(row) => (
           <>
-            <Button variant="ghost" size="sm" onClick={() => openEdit(row)} aria-label="Edit">
+            <PermissionButton
+              permission="settings.manage"
+              variant="ghost"
+              size="sm"
+              onClick={() => openEdit(row)}
+              aria-label="Edit"
+            >
               <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
+            </PermissionButton>
+            <PermissionButton
+              permission="settings.manage"
               variant="ghost"
               size="sm"
               onClick={() => setDeleteTarget(row)}
@@ -159,7 +166,7 @@ export function RoomTypesPage() {
               className="text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </PermissionButton>
           </>
         )}
       />

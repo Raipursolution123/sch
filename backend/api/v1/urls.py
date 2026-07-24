@@ -8,11 +8,6 @@ from apps.accounts.views import (
     MeView,
     RegisterView,
 )
-from apps.accounts.views.roles import (
-    RolesListCreateView,
-    RoleDetailView,
-    RolePermissionsView,
-)
 
 app_name = "accounts"
 
@@ -23,10 +18,6 @@ urlpatterns = [
     path("auth/me/", MeView.as_view(), name="me"),
     path("auth/token/", CustomTokenObtainPairView.as_view(), name="token_obtain"),
     path("auth/token/refresh/", CustomTokenRefreshView.as_view(), name="token_refresh"),
-    # roles
-    path("roles/", RolesListCreateView.as_view(), name="roles_list"),
-    path("roles/<int:pk>/", RoleDetailView.as_view(), name="role_detail"),
-    path("roles/<int:role_id>/permissions/", RolePermissionsView.as_view(), name="role_permissions"),
     # settings
     path("settings/", include("apps.settings.urls")),
     # attendance
@@ -41,17 +32,31 @@ urlpatterns = [
     path("examinations/", include("apps.examinations.urls")),
     # fees
     path("fees/", include("apps.fees.urls")),
+    # income / expense (cashbook; models under fees)
+    path("income/", include("apps.fees.urls_income")),
+    path("expense/", include("apps.fees.urls_expense")),
     # transport
     path("transport/", include("apps.transport.urls")),
     # front office
     path("front-office/", include("apps.front_office.urls")),
-    # Admissions
+    # admissions
     path("admissions/", include("apps.admissions.urls")),
-    # Hostel
+    # library
+    path("library/", include("apps.library.urls")),
+    # inventory
+    path("inventory/", include("apps.inventory.urls")),
+    # certificates / documents
+    path("documents/", include("apps.documents.urls")),
+    # hostel
     path("hostel/", include("apps.hostel.urls")),
-    # Communications
+    # communications
     path("communications/", include("apps.communications.urls")),
-    # Cyc Extensions (Finance / Accounting)
+    # alumni
+    path("alumni/", include("apps.alumni.urls")),
+    # leads / CRM
+    path("leads/", include("apps.cyc_extensions.urls_leads")),
+    # front cms
+    path("cms/", include("apps.cms.urls")),
+    # cyc_extensions (Finance / accounting)
     path("", include("apps.cyc_extensions.urls")),
 ]
-

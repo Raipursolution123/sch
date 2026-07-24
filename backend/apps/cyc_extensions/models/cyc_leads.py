@@ -20,7 +20,7 @@ class CycLeads(models.Model):
     l_taken_data = models.TextField(blank=True, null=True)
     l_reverse_data = models.TextField(blank=True, null=True)
     l_follow_up_data = models.TextField(blank=True, null=True)
-    l_status = models.CharField(max_length=255, default='Open')
+    l_status = models.CharField(max_length=255, default="Open")
     is_closed = models.IntegerField(default=0)
     closed_date = models.DateField()
     closed_by = models.IntegerField(blank=True, null=True)

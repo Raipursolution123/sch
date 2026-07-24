@@ -12,13 +12,16 @@ export { subjectGroupsService } from './subject-groups.service';
 export { timetableService } from './timetable.service';
 export { classTeachersService } from './class-teachers.service';
 export { studentsService } from './students.service';
+export { studentMastersService } from './student-masters.service';
 export { staffService } from './staff.service';
+export { staffMastersService } from './staff-masters.service';
+export { staffAttendanceService } from './staff-attendance.service';
+export { staffPayrollService } from './staff-payroll.service';
 export { leaveTypesService } from './leave-types.service';
 export { staffLeaveRequestsService } from './staff-leave-requests.service';
 export { staffLeaveAllotmentsService } from './staff-leave-allotments.service';
 export { feeTypesService } from './fee-types.service';
 export { feeGroupsService } from './fee-groups.service';
-export { feeMastersService } from './fee-masters.service';
 export { feeDiscountsService } from './fee-discounts.service';
 export { feeDiscountAssignmentsService } from './fee-discount-assignments.service';
 export { feeRemindersService } from './fee-reminders.service';
@@ -27,7 +30,11 @@ export { studentFeesService } from './student-fees.service';
 export { collectFeesService } from './collect-fees.service';
 export { feeSearchService } from './fee-search.service';
 export { attendanceService } from './attendance.service';
+export { subjectAttendanceService } from './subject-attendance.service';
+export { feeStudentAssignService, feeCarryForwardService } from './fee-student-assign.service';
 export { examGroupsService } from './exam-groups.service';
+export { examTemplatesService } from './exam-templates.service';
+export { phoneCallLogService, visitorPurposeService } from './phone-call-purpose.service';
 export { examsService } from './exams.service';
 export { examSchedulesService } from './exam-schedules.service';
 export { examResultsService } from './exam-results.service';
@@ -42,25 +49,54 @@ export { pickupPointsService } from './pickup-points.service';
 export { routesService } from './routes.service';
 export { vehiclesService } from './vehicles.service';
 export { syllabusStatusService } from './syllabus-status.service';
+export { lessonService } from './lesson.service';
+export { topicService } from './topic.service';
 export { vehicleRoutesService } from './vehicle-routes.service';
-export { ledgersService } from './ledgers.service';
 export { enquiryService } from './enquiry.service';
+export { visitorsBookService } from './visitors-book.service';
+export { complaintsService } from './complaints.service';
+export { postalService } from './postal.service';
+export { routePickupPointsService } from './route-pickup-points.service';
 export { onlineAdmissionsService } from './online-admissions.service';
 export { hostelService } from './hostel.service';
 export { hostelRoomsService } from './hostel-rooms.service';
 export { roomTypesService } from './room-types.service';
 export { cbseExamsService } from './cbse-exams.service';
 export { paymentGatewaysService } from './payment-gateways.service';
+export { offlineBankPaymentsService } from './offline-bank-payments.service';
+export { libraryService } from './library.service';
+export { inventoryService } from './inventory.service';
+export { incomeExpenseService } from './income-expense.service';
+export { certificatesService } from './certificates.service';
+export { idCardsService } from './id-cards.service';
+export { downloadCenterService } from './download-center.service';
+export { onlineExamsService } from './online-exams.service';
 export { noticesService } from './notices.service';
+export { messagesService } from './messages.service';
+export { ledgersService } from './ledgers.service';
 export { ledgerGroupsService } from './ledger-groups.service';
-export { homeworkService } from './homework.service';
-export { examTemplatesService } from './exam-templates.service';
+export { financeReportsService } from './finance-reports.service';
+export { alumniService } from './alumni.service';
+export { leadsService } from './leads.service';
+export { cmsService } from './cms.service';
 export { journalEntriesService } from './journal-entries.service';
-export { entryTypesService } from './entry-types.service';
-export { smsService } from './sms.service';
-export { emailService } from './email.service';
-export { notificationSettingsService } from './notification-settings.service';
-export { printHeaderFooterService } from './print-header-footer.service';
-export { paymentMethodsService } from './payment-methods.service';
-export { rolesService } from './roles.service';
-export { financialReportService } from './financial-report.service';
+export { feeMapperService } from './fee-mapper.service';
+export { homeworkService, dailyAssignmentsService } from './homework.service';
+export { rolesService, usersService } from './roles.service';
+export {
+  emailConfigService,
+  notificationSettingsService,
+  paymentMethodsService,
+  printHeaderFooterService,
+  smsConfigService,
+} from './system-config.service';
+export {
+  backupsService,
+  captchaService,
+  customFieldsService,
+  fileTypesService,
+  modulesService,
+  onlineAdmissionSettingsService,
+  sidebarMenuService,
+  systemFieldsService,
+} from './advanced-settings.service';

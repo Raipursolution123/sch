@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
+import { REFERENCE_DATA_STALE_TIME } from '@constants/query-stale-times';
 import { sectionsService } from '@services/api';
 import type { CreateSectionPayload, UpdateSectionPayload } from '@app-types/academics/section';
 import { getApiErrorMessage } from '@utils/session';
@@ -9,6 +10,7 @@ export function useSections(page: number = 1) {
   return useQuery({
     queryKey: [...queryKeys.academics.sections.list(), page],
     queryFn: () => sectionsService.list(page),
+    staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
 

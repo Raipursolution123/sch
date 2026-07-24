@@ -98,6 +98,7 @@ export const ROUTES = {
     routes: '/transport/routes',
     vehicles: '/transport/vehicles',
     assignVehicle: '/transport/assign-vehicle',
+    routePickupPoints: '/transport/route-pickup-points',
   },
   hostel: {
     root: '/hostel',
@@ -163,6 +164,7 @@ export const ROUTES = {
     hr: '/reports/hr',
     transport: '/reports/transport',
     homework: '/reports/homework',
+    alumni: '/reports/alumni',
   },
   certificates: {
     root: '/certificates',
@@ -207,7 +209,12 @@ export const ROUTES = {
     groups: '/finance/groups',
     ledgers: '/finance/ledgers',
     reports: '/finance/reports',
-    financialReport: '/finance/financial-report',
+    trialBalance: '/finance/reports/trial-balance',
+    balanceSheet: '/finance/reports/balance-sheet',
+    profitLoss: '/finance/reports/profit-loss',
+    ledgerStatement: '/finance/reports/ledger-statement',
+    ledgerEntries: '/finance/reports/ledger-entries',
+    reconciliation: '/finance/reports/reconciliation',
   },
   settings: {
     root: '/settings',

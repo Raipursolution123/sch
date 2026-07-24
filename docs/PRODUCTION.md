@@ -37,7 +37,15 @@ cd /path/to/school-erp
 ./scripts/prod-deploy.sh <sha>
 ```
 
-## TLS
+## Health checks
+
+After deploy:
+
+```bash
+BASE_URL=https://your-domain ./scripts/prod-healthcheck.sh
+```
+
+Manual probes: `GET /health/` (liveness), `GET /health/ready/` (DB + onboarding).
 
 1. Replace `PROD_DOMAIN` in `nginx/nginx.prod.conf` with the real hostname (or template cert paths from `SSL_CERT_PATH` / `SSL_KEY_PATH`).
 2. Mount Let's Encrypt certs into the nginx container (same pattern as staging).

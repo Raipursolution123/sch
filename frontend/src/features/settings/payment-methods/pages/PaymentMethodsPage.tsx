@@ -1,285 +1,347 @@
-import { useState, useEffect } from 'react';
-import { PageHeader } from '@/components/layout/PageHeader';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { usePaymentGateways, useUpdatePaymentGateway } from '@/hooks/usePaymentMethods';
-import { CreditCard, ToggleLeft, ToggleRight, Check } from 'lucide-react';
-import type { PaymentGateway } from '@/types/settings/payment-methods';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Pencil, Plus, Trash2, Zap } from 'lucide-react';
+import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormSelectField, FormSwitchField, FormTextField } from '@components/forms/fields';
+import { DataTable, type DataTableColumn } from '@components/data/DataTable';
+import { StatusBadge } from '@components/feedback/StatusBadge';
+import { Button, Pagination } from '@components/ui';
+import {
+  useActivatePaymentMethod,
+  useCreatePaymentMethod,
+  useDeletePaymentMethod,
+  usePaymentMethods,
+  useUpdatePaymentMethod,
+} from '@hooks/useSystemConfig';
+import type { PaymentMethod } from '@app-types/settings/system-config';
+import { ModuleListPack } from '@workflow-packs';
 
-export const PaymentMethodsPage = () => {
-  const { data: gateways, isLoading } = usePaymentGateways();
-  const { mutate: updateGateway, isPending } = useUpdatePaymentGateway();
-  const [selectedGatewayId, setSelectedGatewayId] = useState<number | null>(null);
+const schema = z.object({
+  payment_type: z.string().trim().min(1, 'Payment type is required').max(200),
+  api_username: z.string().trim().max(200),
+  api_secret_key: z.string().trim().max(200),
+  salt: z.string().trim().max(200),
+  api_publishable_key: z.string().trim().max(200),
+  api_password: z.string().trim().max(200),
+  api_signature: z.string().trim().max(200),
+  api_email: z.string().trim().max(200),
+  paypal_demo: z.string().trim().max(100),
+  account_no: z.string().trim().max(200),
+  gateway_mode: z.enum(['0', '1']),
+  paytm_website: z.string().trim().max(255),
+  paytm_industrytype: z.string().trim().max(255),
+  is_active: z.boolean(),
+});
 
-  // Form states
-  const [apiUsername, setApiUsername] = useState('');
-  const [apiSecretKey, setApiSecretKey] = useState('');
-  const [apiPublishableKey, setApiPublishableKey] = useState('');
-  const [salt, setSalt] = useState('');
-  const [accountNo, setAccountNo] = useState('');
-  const [paypalDemo, setPaypalDemo] = useState('');
-  const [paytmWebsite, setPaytmWebsite] = useState('');
-  const [paytmIndustrytype, setPaytmIndustrytype] = useState('');
+type FormValues = z.infer<typeof schema>;
 
-  // Find the selected gateway object from the latest query data
-  const selectedGateway = gateways?.find((g) => g.id === selectedGatewayId) || null;
+const defaults: FormValues = {
+  payment_type: '',
+  api_username: '',
+  api_secret_key: '',
+  salt: '',
+  api_publishable_key: '',
+  api_password: '',
+  api_signature: '',
+  api_email: '',
+  paypal_demo: '',
+  account_no: '',
+  gateway_mode: '0',
+  paytm_website: '',
+  paytm_industrytype: '',
+  is_active: false,
+};
+
+function toForm(row: PaymentMethod): FormValues {
+  return {
+    payment_type: row.payment_type,
+    api_username: row.api_username,
+    api_secret_key: '',
+    salt: '',
+    api_publishable_key: row.api_publishable_key,
+    api_password: '',
+    api_signature: '',
+    api_email: row.api_email,
+    paypal_demo: row.paypal_demo,
+    account_no: row.account_no,
+    gateway_mode: row.gateway_mode === 1 ? '1' : '0',
+    paytm_website: row.paytm_website,
+    paytm_industrytype: row.paytm_industrytype,
+    is_active: row.is_active === 'yes',
+  };
+}
+
+export function PaymentMethodsPage() {
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError, error, refetch } = usePaymentMethods(page);
+  const rows = data?.results ?? [];
+  const totalCount = data?.count ?? 0;
+  const createMutation = useCreatePaymentMethod();
+  const updateMutation = useUpdatePaymentMethod();
+  const activateMutation = useActivatePaymentMethod();
+  const deleteMutation = useDeletePaymentMethod();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selected, setSelected] = useState<PaymentMethod | null>(null);
+  const [activateTarget, setActivateTarget] = useState<PaymentMethod | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<PaymentMethod | null>(null);
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({ resolver: zodResolver(schema), defaultValues: defaults });
 
   useEffect(() => {
-    if (gateways && gateways.length > 0 && selectedGatewayId === null) {
-      const active = gateways.find((g) => g.is_active === 'yes') || gateways[0];
-      setSelectedGatewayId(active.id);
+    if (dialogOpen) reset(selected ? toForm(selected) : defaults);
+  }, [dialogOpen, selected, reset]);
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+    setSelected(null);
+  };
+
+  const onSubmit = (values: FormValues) => {
+    const payload = {
+      payment_type: values.payment_type,
+      api_username: values.api_username,
+      api_publishable_key: values.api_publishable_key,
+      api_email: values.api_email,
+      paypal_demo: values.paypal_demo,
+      account_no: values.account_no,
+      gateway_mode: Number(values.gateway_mode),
+      paytm_website: values.paytm_website,
+      paytm_industrytype: values.paytm_industrytype,
+      is_active: values.is_active ? 'yes' : 'no',
+      api_secret_key: values.api_secret_key || undefined,
+      salt: values.salt || undefined,
+      api_password: values.api_password || undefined,
+      api_signature: values.api_signature || undefined,
+    };
+    if (selected) {
+      updateMutation.mutate({ id: selected.id, payload }, { onSuccess: closeDialog });
+      return;
     }
-  }, [gateways, selectedGatewayId]);
-
-  // Sync form inputs when selected gateway changes
-  useEffect(() => {
-    if (selectedGateway) {
-      setApiUsername(selectedGateway.api_username || '');
-      setApiSecretKey(selectedGateway.api_secret_key || '');
-      setApiPublishableKey(selectedGateway.api_publishable_key || '');
-      setSalt(selectedGateway.salt || '');
-      setAccountNo(selectedGateway.account_no || '');
-      setPaypalDemo(selectedGateway.paypal_demo || '');
-      setPaytmWebsite(selectedGateway.paytm_website || '');
-      setPaytmIndustrytype(selectedGateway.paytm_industrytype || '');
-    }
-  }, [selectedGatewayId, gateways]);
-
-  const handleSelectGateway = (gateway: PaymentGateway) => {
-    setSelectedGatewayId(gateway.id);
+    createMutation.mutate(payload, { onSuccess: closeDialog });
   };
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedGateway) return;
+  const columns: DataTableColumn<PaymentMethod>[] = [
+    {
+      id: 'type',
+      header: 'Gateway',
+      cellClassName: 'font-medium',
+      cell: (r) => r.payment_type,
+    },
+    { id: 'account', header: 'Account', cell: (r) => r.account_no || '—' },
+    {
+      id: 'mode',
+      header: 'Mode',
+      cell: (r) => (r.gateway_mode === 1 ? 'Live' : 'Test'),
+    },
+    {
+      id: 'status',
+      header: 'Status',
+      cell: (r) => <StatusBadge isActive={r.is_active === 'yes' ? 'yes' : 'no'} />,
+    },
+  ];
 
-    updateGateway({
-      id: selectedGateway.id,
-      data: {
-        api_username: apiUsername,
-        api_secret_key: apiSecretKey,
-        api_publishable_key: apiPublishableKey,
-        salt,
-        account_no: accountNo,
-        paypal_demo: paypalDemo,
-        paytm_website: paytmWebsite,
-        paytm_industrytype: paytmIndustrytype,
-      },
-    });
-  };
-
-  const handleToggleActive = (gateway: PaymentGateway) => {
-    const newStatus = gateway.is_active === 'yes' ? 'no' : 'yes';
-    updateGateway({
-      id: gateway.id,
-      data: {
-        is_active: newStatus,
-      },
-    });
-  };
-
-  if (isLoading) {
-    return <div className="p-6 text-center text-muted-foreground">Loading payment gateways...</div>;
-  }
+  const addAction = (
+    <PermissionButton
+      permission="settings.manage"
+      onClick={() => {
+        setSelected(null);
+        setDialogOpen(true);
+      }}
+      className="gap-1"
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Payment Method
+    </PermissionButton>
+  );
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Payment Gateways"
-        description="Configure third-party payment integration gateways for student fee collections."
-      />
+    <ModuleListPack
+      title="Payment Methods"
+      description="Manage online payment gateways. Secrets are masked; leave blank when editing to keep values."
+      actions={addAction}
+      isLoading={isLoading}
+      loadingMessage="Loading payment methods..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && rows.length === 0}
+      emptyTitle="No payment methods"
+      emptyDescription="Add Razorpay, PayU, Paytm, or other gateway credentials."
+      emptyAction={addAction}
+      footer={
+        <>
+          <EntityFormDialog
+            open={dialogOpen}
+            onOpenChange={(open) => {
+              if (!open) closeDialog();
+              else setDialogOpen(true);
+            }}
+            isEdit={Boolean(selected)}
+            isLoading={createMutation.isPending || updateMutation.isPending}
+            title={selected ? 'Edit Payment Method' : 'Add Payment Method'}
+            description="Configure gateway credentials. Only one method can be active."
+            submitLabel={selected ? 'Save changes' : 'Create method'}
+            onSubmit={handleSubmit(onSubmit)}
+            size="lg"
+          >
+            <FormErrorSummary errors={errors} />
+            <FormTextField control={control} name="payment_type" label="Gateway type" required />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormTextField control={control} name="api_username" label="API username" />
+              <FormTextField control={control} name="api_email" label="API email" />
+              <FormTextField
+                control={control}
+                name="api_secret_key"
+                label="API secret key"
+                type="password"
+                hint={selected ? 'Leave blank to keep current secret' : undefined}
+              />
+              <FormTextField
+                control={control}
+                name="salt"
+                label="Salt"
+                type="password"
+                hint={selected ? 'Leave blank to keep current salt' : undefined}
+              />
+              <FormTextField control={control} name="api_publishable_key" label="Publishable key" />
+              <FormTextField
+                control={control}
+                name="api_password"
+                label="API password"
+                type="password"
+                hint={selected ? 'Leave blank to keep current password' : undefined}
+              />
+              <FormTextField
+                control={control}
+                name="api_signature"
+                label="API signature"
+                type="password"
+                hint={selected ? 'Leave blank to keep current signature' : undefined}
+              />
+              <FormTextField control={control} name="account_no" label="Account number" />
+              <FormTextField control={control} name="paypal_demo" label="PayPal demo flag" />
+              <FormSelectField
+                control={control}
+                name="gateway_mode"
+                label="Gateway mode"
+                options={[
+                  { value: '0', label: 'Test' },
+                  { value: '1', label: 'Live' },
+                ]}
+              />
+              <FormTextField control={control} name="paytm_website" label="Paytm website" />
+              <FormTextField
+                control={control}
+                name="paytm_industrytype"
+                label="Paytm industry type"
+              />
+            </div>
+            <FormSwitchField
+              control={control}
+              name="is_active"
+              label="Set as active gateway"
+              hint="Activating this will disable other payment methods."
+            />
+          </EntityFormDialog>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {/* Left list of Gateways */}
-        <div className="space-y-4 md:col-span-1">
-          <Label className="text-sm font-semibold text-muted-foreground">Gateway Providers</Label>
-          {gateways?.map((gateway) => {
-            const isActive = gateway.is_active === 'yes';
-            const isSelected = selectedGatewayId === gateway.id;
+          <ConfirmDialog
+            open={Boolean(activateTarget)}
+            onOpenChange={(open) => {
+              if (!open) setActivateTarget(null);
+            }}
+            title="Activate payment method?"
+            description={
+              activateTarget ? `Set ${activateTarget.payment_type} as the active gateway?` : ''
+            }
+            confirmLabel="Activate"
+            onConfirm={() => {
+              if (!activateTarget) return;
+              activateMutation.mutate(activateTarget.id, {
+                onSuccess: () => setActivateTarget(null),
+              });
+            }}
+            isLoading={activateMutation.isPending}
+          />
 
+          <ConfirmDialog
+            open={Boolean(deleteTarget)}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete payment method?"
+            description={deleteTarget ? `Permanently delete ${deleteTarget.payment_type}?` : ''}
+            confirmLabel="Delete"
+            destructive
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, {
+                onSuccess: () => setDeleteTarget(null),
+              });
+            }}
+            isLoading={deleteMutation.isPending}
+          />
+        </>
+      }
+    >
+      <div className="space-y-4">
+        <DataTable
+          data={rows}
+          columns={columns}
+          getRowKey={(row) => row.id}
+          actions={(row) => {
+            const isActive = row.is_active === 'yes';
             return (
-              <div
-                key={gateway.id}
-                onClick={() => handleSelectGateway(gateway)}
-                className={`rounded-lg border bg-card text-card-foreground shadow-sm cursor-pointer transition-all hover:border-primary/50 ${
-                  isSelected ? 'border-primary ring-1 ring-primary' : ''
-                }`}
-              >
-                <div className="flex items-center justify-between p-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="rounded-full bg-primary/10 p-2 text-primary">
-                      <CreditCard className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm">{gateway.payment_type}</p>
-                      {isActive && (
-                        <span className="inline-flex items-center rounded-full bg-green-500/10 px-1.5 py-0.5 text-xs font-medium text-green-500">
-                          <Check className="mr-0.5 h-3 w-3" /> Active
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleToggleActive(gateway);
-                    }}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {isActive ? (
-                      <ToggleRight className="h-6 w-6 text-green-500" />
-                    ) : (
-                      <ToggleLeft className="h-6 w-6" />
-                    )}
-                  </button>
-                </div>
-              </div>
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSelected(row);
+                    setDialogOpen(true);
+                  }}
+                  aria-label={`Edit ${row.payment_type}`}
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={isActive}
+                  onClick={() => setActivateTarget(row)}
+                  aria-label={`Activate ${row.payment_type}`}
+                >
+                  <Zap className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={isActive}
+                  onClick={() => setDeleteTarget(row)}
+                  aria-label={`Delete ${row.payment_type}`}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </>
             );
-          })}
-        </div>
-
-        {/* Right configuration form */}
-        <div className="md:col-span-2">
-          {selectedGateway ? (
-            <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-              <div className="flex flex-col space-y-1.5 p-6">
-                <h3 className="text-xl font-semibold leading-none tracking-tight flex items-center space-x-2">
-                  <span>Configure {selectedGateway.payment_type}</span>
-                  {selectedGateway.is_active === 'yes' && (
-                    <span className="rounded bg-green-500/10 px-2 py-0.5 text-xs font-semibold text-green-500 uppercase">
-                      Active
-                    </span>
-                  )}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Update integration keys and operational mode parameters.
-                </p>
-              </div>
-              <div className="p-6 pt-0">
-                <form onSubmit={handleSave} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {selectedGateway.payment_type.toLowerCase() === 'paypal' ? (
-                      <>
-                        <div className="space-y-2">
-                          <Label htmlFor="api_username">API Username</Label>
-                          <Input
-                            id="api_username"
-                            value={apiUsername}
-                            onChange={(e) => setApiUsername(e.target.value)}
-                            placeholder="PayPal API Username"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="paypal_demo">Sandbox Mode</Label>
-                          <select
-                            id="paypal_demo"
-                            value={paypalDemo}
-                            onChange={(e) => setPaypalDemo(e.target.value)}
-                            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                          >
-                            <option value="sandbox">Sandbox (Testing)</option>
-                            <option value="live">Live (Production)</option>
-                          </select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="account_no">Account Number</Label>
-                          <Input
-                            id="account_no"
-                            value={accountNo}
-                            onChange={(e) => setAccountNo(e.target.value)}
-                            placeholder="PayPal Merchant ID"
-                          />
-                        </div>
-                      </>
-                    ) : selectedGateway.payment_type.toLowerCase() === 'paytm' ? (
-                      <>
-                        <div className="space-y-2">
-                          <Label htmlFor="api_username">Merchant ID</Label>
-                          <Input
-                            id="api_username"
-                            value={apiUsername}
-                            onChange={(e) => setApiUsername(e.target.value)}
-                            placeholder="Paytm MID"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="paytm_website">Website</Label>
-                          <Input
-                            id="paytm_website"
-                            value={paytmWebsite}
-                            onChange={(e) => setPaytmWebsite(e.target.value)}
-                            placeholder="e.g. WEBSTAGING / DEFAULT"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="paytm_industrytype">Industry Type</Label>
-                          <Input
-                            id="paytm_industrytype"
-                            value={paytmIndustrytype}
-                            onChange={(e) => setPaytmIndustrytype(e.target.value)}
-                            placeholder="e.g. Retail"
-                          />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="space-y-2">
-                          <Label htmlFor="api_publishable_key">Publishable Key</Label>
-                          <Input
-                            id="api_publishable_key"
-                            value={apiPublishableKey}
-                            onChange={(e) => setApiPublishableKey(e.target.value)}
-                            placeholder="API Publishable Key"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="salt">Salt Key</Label>
-                          <Input
-                            id="salt"
-                            value={salt}
-                            onChange={(e) => setSalt(e.target.value)}
-                            placeholder="Salt token/value"
-                          />
-                        </div>
-                      </>
-                    )}
-
-                    <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="api_secret_key">Secret Key / Private Key *</Label>
-                      <Input
-                        id="api_secret_key"
-                        type="password"
-                        value={apiSecretKey}
-                        onChange={(e) => setApiSecretKey(e.target.value)}
-                        placeholder="••••••••••••••••••••••••••••••••"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end pt-4 border-t">
-                    <Button type="submit" disabled={isPending}>
-                      Save Configuration
-                    </Button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          ) : (
-            <div className="flex h-full min-h-[300px] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-              <CreditCard className="h-10 w-10 text-muted-foreground/50 mb-2" />
-              <h3 className="font-semibold text-lg">No Gateway Selected</h3>
-              <p className="text-sm text-muted-foreground max-w-sm mt-1">
-                Select a gateway from the list on the left to configure integration parameters.
-              </p>
-            </div>
-          )}
-        </div>
+          }}
+        />
+        <Pagination
+          currentPage={page}
+          totalPages={Math.max(1, Math.ceil(totalCount / 20))}
+          onPageChange={setPage}
+        />
       </div>
-    </div>
+    </ModuleListPack>
   );
-};
-export default PaymentMethodsPage;
+}

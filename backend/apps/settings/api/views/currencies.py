@@ -27,7 +27,7 @@ class CurrenciesListCreateView(APIView):
         currencies_data = [currency_to_dict(row) for row in rows]
 
         if page is not None:
-            return paginator.get_paginated_response({"currencies": currencies_data})
+            return paginator.get_paginated_response(currencies_data)
 
         return APIResponse.success(
             data={"currencies": currencies_data},

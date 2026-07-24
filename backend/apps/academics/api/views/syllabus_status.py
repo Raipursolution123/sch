@@ -17,6 +17,8 @@ from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
+LESSON_PLAN_MODULE = "lesson_plan"
+
 
 def _handle_exception(exc: Exception):
     if isinstance(exc, LessonPlanValidationError):
@@ -39,6 +41,7 @@ def _handle_exception(exc: Exception):
 
 class SyllabusStatusListCreateView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = LESSON_PLAN_MODULE
     # The distinct permission category for the Syllabus Status module
     legacy_permission_category = "manage_syllabus_status"
 
@@ -86,6 +89,7 @@ class SyllabusStatusListCreateView(APIView):
 
 class SyllabusStatusDetailView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = LESSON_PLAN_MODULE
     legacy_permission_category = "manage_syllabus_status"
 
     def get(self, request, pk):

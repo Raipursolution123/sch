@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
-import { ledgersService } from '@/services/api';
-import type { LedgerCreatePayload, LedgerUpdatePayload } from '@/types/finance';
+import { ledgersService } from '@services/api';
+import type { LedgerCreatePayload, LedgerUpdatePayload } from '@app-types/finance';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@utils/session';
 
 export const LEDGERS_KEYS = {
   all: ['ledgers'] as const,
@@ -9,10 +10,10 @@ export const LEDGERS_KEYS = {
   list: (page: number) => [...LEDGERS_KEYS.lists(), { page }] as const,
 };
 
-export const useLedgersList = (page = 1) => {
+export const useLedgersList = (page = 1, pageSize = 20) => {
   return useQuery({
-    queryKey: LEDGERS_KEYS.list(page),
-    queryFn: () => ledgersService.getLedgers(page),
+    queryKey: [...LEDGERS_KEYS.list(page), pageSize] as const,
+    queryFn: () => ledgersService.getLedgers(page, pageSize),
     placeholderData: keepPreviousData,
   });
 };
@@ -33,9 +34,7 @@ export const useCreateLedger = () => {
       toast.success(response.message || 'Ledger created successfully');
       queryClient.invalidateQueries({ queryKey: LEDGERS_KEYS.lists() });
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to create ledger');
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create ledger')),
   });
 };
 
@@ -49,9 +48,7 @@ export const useUpdateLedger = () => {
       toast.success(response.message || 'Ledger updated successfully');
       queryClient.invalidateQueries({ queryKey: LEDGERS_KEYS.lists() });
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to update ledger');
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update ledger')),
   });
 };
 
@@ -64,8 +61,6 @@ export const useDeleteLedger = () => {
       toast.success(response.message || 'Ledger deleted successfully');
       queryClient.invalidateQueries({ queryKey: LEDGERS_KEYS.lists() });
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to delete ledger');
-    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete ledger')),
   });
 };

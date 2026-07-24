@@ -1,9 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { syllabusStatusService } from '@/services/api/syllabus-status.service';
+import { toast } from 'sonner';
+import { syllabusStatusService } from '@services/api';
 import type {
   SyllabusStatusUpdatePayload,
   SyllabusStatusCreatePayload,
-} from '@/types/academics/syllabus-status';
+} from '@app-types/academics/syllabus-status';
+import { getApiErrorMessage } from '@utils/session';
 
 export const SYLLABUS_STATUS_KEYS = {
   all: ['syllabus-status'] as const,
@@ -26,7 +28,9 @@ export const useUpdateSyllabusStatus = () => {
       syllabusStatusService.updateSyllabusStatus(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SYLLABUS_STATUS_KEYS.lists() });
+      toast.success('Syllabus status updated');
     },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update syllabus status')),
   });
 };
 
@@ -38,7 +42,9 @@ export const useCreateSyllabusStatus = () => {
       syllabusStatusService.createSyllabusStatus(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SYLLABUS_STATUS_KEYS.lists() });
+      toast.success('Syllabus status created');
     },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create syllabus status')),
   });
 };
 
@@ -49,6 +55,8 @@ export const useDeleteSyllabusStatus = () => {
     mutationFn: (id: number) => syllabusStatusService.deleteSyllabusStatus(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SYLLABUS_STATUS_KEYS.lists() });
+      toast.success('Syllabus status deleted');
     },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete syllabus status')),
   });
 };

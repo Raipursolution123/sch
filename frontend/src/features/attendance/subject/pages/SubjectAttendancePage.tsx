@@ -1,95 +1,114 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Save } from 'lucide-react';
-import { Input } from '@components/ui/input';
-import { PermissionButton } from '@components/rbac/PermissionButton';
-import { Select } from '@components/ui/select';
+import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { FormField } from '@components/forms/FormField';
+import { PermissionButton } from '@components/rbac/PermissionButton';
+import { Input } from '@components/ui/input';
+import { Select } from '@components/ui/select';
+import { AttendanceStatusBadge } from '@features/attendance/components/AttendanceStatusBadge';
 import {
-  MarkAttendanceTable,
-  type MarkAttendanceRow,
-} from '@features/attendance/mark/components/MarkAttendanceTable';
+  firstSectionIdForClass,
+  sectionOptionsForClass,
+} from '@features/students/utils/class-section-options';
+import { useAttendanceTypes } from '@hooks/useAttendance';
 import {
-  useSubjectAttendanceRoster,
-  useAttendanceTypes,
   useSaveSubjectAttendance,
-} from '@hooks/useAttendance';
+  useSubjectAttendancePeriods,
+  useSubjectAttendanceRoster,
+} from '@hooks/useSubjectAttendance';
 import { useClasses } from '@hooks/useClasses';
-import { useSections } from '@hooks/useSections';
-import { useSubjects } from '@hooks/useSubjects';
+import { useClassSections } from '@hooks/useClassSections';
+import type { AttendanceStatusKey } from '@app-types/attendance/attendance';
+import type { SubjectAttendanceRosterEntry } from '@app-types/attendance/subject-attendance';
 import { todayIsoDate } from '@utils/student';
-import { getApiErrorMessage } from '@utils/error-message';
 import { ModuleMarkGridPack } from '@workflow-packs';
+
+type MarkRow = SubjectAttendanceRosterEntry;
 
 export function SubjectAttendancePage() {
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  const { data: sectionsData } = useSections();
-  const sections = sectionsData?.results || [];
-  const { data: subjectsData } = useSubjects(1);
-  const subjects = subjectsData?.results || [];
+  const { data: classSectionsData } = useClassSections();
+  const classSections = classSectionsData?.results || [];
   const { data: types = [] } = useAttendanceTypes();
 
   const [date, setDate] = useState(todayIsoDate());
   const [classId, setClassId] = useState(0);
   const [sectionId, setSectionId] = useState(0);
-  const [subjectId, setSubjectId] = useState(0);
-  const [rows, setRows] = useState<MarkAttendanceRow[]>([]);
+  const [periodId, setPeriodId] = useState(0);
+  const [rows, setRows] = useState<MarkRow[]>([]);
 
   const activeClasses = useMemo(
     () => classes.filter((c) => c.is_active === 'yes').sort((a, b) => a.sort_order - b.sort_order),
     [classes],
   );
-  const activeSections = useMemo(
-    () =>
-      [...sections]
-        .filter((s) => s.is_active === 'yes')
-        .sort((a, b) => a.section_name.localeCompare(b.section_name)),
-    [sections],
+  const sectionOptions = useMemo(
+    () => sectionOptionsForClass(classSections, classId),
+    [classSections, classId],
   );
 
-  const filtersReady = classId > 0 && sectionId > 0 && subjectId > 0 && Boolean(date);
+  const filtersReady = classId > 0 && sectionId > 0 && Boolean(date);
+  const { data: periods = [] } = useSubjectAttendancePeriods(
+    classId,
+    sectionId,
+    date,
+    filtersReady,
+  );
+  const rosterReady = filtersReady && periodId > 0;
   const {
     data: roster,
     isLoading,
     isError,
     error,
     refetch,
-  } = useSubjectAttendanceRoster(classId, sectionId, subjectId, date, filtersReady);
-
+  } = useSubjectAttendanceRoster(periodId, date, rosterReady);
   const saveMutation = useSaveSubjectAttendance();
 
   useEffect(() => {
-    if (activeClasses.length > 0 && classId === 0) {
-      setClassId(activeClasses[0].id);
-    }
+    if (activeClasses.length > 0 && classId === 0) setClassId(activeClasses[0].id);
   }, [activeClasses, classId]);
 
   useEffect(() => {
-    if (activeSections.length > 0 && sectionId === 0) {
-      setSectionId(activeSections[0].id);
-    }
-  }, [activeSections, sectionId]);
+    if (classId <= 0) return;
+    const next = firstSectionIdForClass(classSections, classId);
+    if (next && sectionId !== next) setSectionId(next);
+  }, [classId, classSections, sectionId]);
 
   useEffect(() => {
-    if (subjects.length > 0 && subjectId === 0) {
-      setSubjectId(subjects[0].id);
-    }
-  }, [subjects, subjectId]);
+    setPeriodId(0);
+  }, [classId, sectionId, date]);
 
   useEffect(() => {
-    if (roster) {
-      setRows(roster.entries);
-    }
+    if (periods.length > 0 && periodId === 0) setPeriodId(periods[0].id);
+  }, [periods, periodId]);
+
+  useEffect(() => {
+    if (roster) setRows(roster.entries);
   }, [roster]);
 
-  const handleStatusChange = (studentId: number, attendenceTypeId: number) => {
-    const type = types.find((t) => t.id === attendenceTypeId);
+  const periodOptions = periods.map((p) => ({
+    value: String(p.id),
+    label: [
+      p.subject_name || 'Subject',
+      p.time_from || p.start_time || '',
+      p.staff_name ? `(${p.staff_name})` : '',
+    ]
+      .filter(Boolean)
+      .join(' · '),
+  }));
+
+  const typeOptions = types
+    .filter((t) => t.is_active === 'yes')
+    .map((t) => ({ value: String(t.id), label: t.label }));
+
+  const handleStatusChange = (studentId: number, typeId: number) => {
+    const type = types.find((t) => t.id === typeId);
     setRows((prev) =>
       prev.map((row) =>
         row.student_id === studentId
           ? {
               ...row,
-              attendence_type_id: attendenceTypeId,
+              attendence_type_id: typeId,
               status_key: type?.key ?? row.status_key,
               status_label: type?.label ?? row.status_label,
             }
@@ -98,43 +117,87 @@ export function SubjectAttendancePage() {
     );
   };
 
-  const handleRemarkChange = (studentId: number, remark: string) => {
-    setRows((prev) => prev.map((row) => (row.student_id === studentId ? { ...row, remark } : row)));
-  };
-
-  const handleSave = () => {
-    if (!filtersReady) return;
-    saveMutation.mutate({
-      class_id: classId,
-      section_id: sectionId,
-      subject_id: subjectId,
-      date,
-      entries: rows.map((row) => ({
-        student_id: row.student_id,
-        attendence_type_id: row.attendence_type_id,
-        remark: row.remark,
-      })),
-    });
-  };
-
-  const canMark = activeClasses.length > 0 && activeSections.length > 0 && subjects.length > 0 && types.length > 0;
-
-  const apiErrorMessage = error ? getApiErrorMessage(error) : '';
-  const isSubjectNotAssigned = apiErrorMessage.toLowerCase().includes('subject is not assigned');
-
-  const showAsError = isError && !isSubjectNotAssigned;
-  const showAsEmpty = (!isLoading && !isError && rows.length === 0) || isSubjectNotAssigned;
+  const columns: DataTableColumn<MarkRow>[] = [
+    {
+      id: 'roll',
+      header: 'Roll',
+      cellClassName: 'tabular-nums text-muted-foreground w-16',
+      cell: (row) => (row.roll_no != null ? row.roll_no : '—'),
+    },
+    {
+      id: 'student',
+      header: 'Student',
+      cellClassName: 'font-medium',
+      cell: (row) => (
+        <div>
+          <span>{row.full_name}</span>
+          <p className="text-xs font-normal text-muted-foreground">{row.admission_no}</p>
+        </div>
+      ),
+    },
+    {
+      id: 'status',
+      header: 'Status',
+      cell: (row) => (
+        <Select
+          aria-label={`Status for ${row.full_name}`}
+          options={typeOptions}
+          value={String(row.attendence_type_id)}
+          onChange={(e) => handleStatusChange(row.student_id, Number(e.target.value))}
+        />
+      ),
+    },
+    {
+      id: 'preview',
+      header: 'Mark',
+      cell: (row) => (
+        <AttendanceStatusBadge
+          label={row.status_label}
+          statusKey={(row.status_key as AttendanceStatusKey) || 'present'}
+        />
+      ),
+    },
+    {
+      id: 'remark',
+      header: 'Remark',
+      cell: (row) => (
+        <Input
+          aria-label={`Remark for ${row.full_name}`}
+          value={row.remark}
+          placeholder="Optional"
+          onChange={(e) =>
+            setRows((prev) =>
+              prev.map((r) =>
+                r.student_id === row.student_id ? { ...r, remark: e.target.value } : r,
+              ),
+            )
+          }
+        />
+      ),
+    },
+  ];
 
   return (
     <ModuleMarkGridPack
       title="Subject Attendance"
-      description="Record student attendance by subject, class, and section."
+      description="Mark period-wise attendance for students based on the class timetable."
       actions={
         <PermissionButton
           permission="attendance.mark"
-          onClick={handleSave}
+          onClick={() => {
+            if (!rosterReady) return;
+            saveMutation.mutate({
+              subject_timetable_id: periodId,
+              date,
+              entries: rows.map((row) => ({
+                student_id: row.student_id,
+                attendence_type_id: row.attendence_type_id,
+                remark: row.remark,
+              })),
+            });
+          }}
           className="gap-1"
-          disabled={!filtersReady || rows.length === 0}
+          disabled={!rosterReady || rows.length === 0}
           isLoading={saveMutation.isPending}
         >
           <Save className="h-4 w-4" aria-hidden="true" />
@@ -142,75 +205,67 @@ export function SubjectAttendancePage() {
         </PermissionButton>
       }
       prerequisiteHint={
-        !canMark ? (
+        activeClasses.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Configure active classes, sections, and subjects under Academics before marking attendance.
+            Configure classes and timetable periods under Academics before marking subject
+            attendance.
           </p>
         ) : undefined
       }
       filters={
         <>
-          <FormField label="Date" htmlFor="attendance_date">
+          <FormField label="Date" htmlFor="subject_att_date">
             <Input
-              id="attendance_date"
+              id="subject_att_date"
               type="date"
-              max={todayIsoDate()}
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />
           </FormField>
-          <FormField label="Class" htmlFor="attendance_class">
+          <FormField label="Class" htmlFor="subject_att_class">
             <Select
-              id="attendance_class"
-              placeholder="Select class"
-              options={activeClasses.map((c) => ({ value: String(c.id), label: c.class_name }))}
+              id="subject_att_class"
+              options={activeClasses.map((c) => ({
+                value: String(c.id),
+                label: c.class_name,
+              }))}
               value={classId ? String(classId) : ''}
               onChange={(e) => setClassId(Number(e.target.value))}
-              disabled={!canMark}
+              placeholder="Select class"
             />
           </FormField>
-          <FormField label="Section" htmlFor="attendance_section">
+          <FormField label="Section" htmlFor="subject_att_section">
             <Select
-              id="attendance_section"
-              placeholder="Select section"
-              options={activeSections.map((s) => ({ value: String(s.id), label: s.section_name }))}
+              id="subject_att_section"
+              options={sectionOptions}
               value={sectionId ? String(sectionId) : ''}
               onChange={(e) => setSectionId(Number(e.target.value))}
-              disabled={!canMark}
+              placeholder="Select section"
             />
           </FormField>
-          <FormField label="Subject" htmlFor="attendance_subject">
+          <FormField label="Period" htmlFor="subject_att_period">
             <Select
-              id="attendance_subject"
-              placeholder="Select subject"
-              options={subjects.map((sub) => ({ value: String(sub.id), label: sub.name }))}
-              value={subjectId ? String(subjectId) : ''}
-              onChange={(e) => setSubjectId(Number(e.target.value))}
-              disabled={!canMark}
+              id="subject_att_period"
+              options={periodOptions}
+              value={periodId ? String(periodId) : ''}
+              onChange={(e) => setPeriodId(Number(e.target.value))}
+              placeholder={periods.length ? 'Select period' : 'No periods for this day'}
+              disabled={!filtersReady || periods.length === 0}
             />
           </FormField>
         </>
       }
-      filtersReady={filtersReady}
+      filtersReady={rosterReady}
       isLoading={isLoading}
       loadingMessage="Loading subject roster..."
-      isError={showAsError}
+      isError={isError}
       error={error}
       onRetry={() => void refetch()}
-      isEmpty={showAsEmpty}
-      emptyTitle={isSubjectNotAssigned ? 'Subject Not Assigned' : 'No students in this class section'}
-      emptyDescription={
-        isSubjectNotAssigned
-          ? 'This subject is not assigned to the selected class and section.'
-          : 'Enroll students in the selected class and section to mark attendance.'
-      }
+      isEmpty={!isLoading && !isError && rows.length === 0}
+      emptyTitle="No students to mark"
+      emptyDescription="No active students found for this class section, or no timetable period is selected."
     >
-      <MarkAttendanceTable
-        entries={rows}
-        types={types}
-        onStatusChange={handleStatusChange}
-        onRemarkChange={handleRemarkChange}
-      />
+      <DataTable data={rows} columns={columns} getRowKey={(row) => row.student_id} />
     </ModuleMarkGridPack>
   );
 }

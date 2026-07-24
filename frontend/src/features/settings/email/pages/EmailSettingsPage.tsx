@@ -1,195 +1,336 @@
-import { useState, useEffect } from 'react';
-import { PageHeader } from '@/components/layout/PageHeader';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select } from '@/components/ui/select';
-import { useEmailSettings, useUpdateEmailSetting } from '@/hooks/useEmailSettings';
-import { Mail, Check, ToggleLeft, ToggleRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Pencil, Plus, Trash2, Zap } from 'lucide-react';
+import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { PermissionButton } from '@components/rbac/PermissionButton';
+import { EntityFormDialog } from '@components/forms/EntityFormDialog';
+import { FormErrorSummary } from '@components/forms/FormErrorSummary';
+import { FormSelectField, FormSwitchField, FormTextField } from '@components/forms/fields';
+import { DataTable, type DataTableColumn } from '@components/data/DataTable';
+import { StatusBadge } from '@components/feedback/StatusBadge';
+import { Button, Pagination } from '@components/ui';
+import {
+  useActivateEmailConfig,
+  useCreateEmailConfig,
+  useDeleteEmailConfig,
+  useEmailConfigs,
+  useUpdateEmailConfig,
+} from '@hooks/useSystemConfig';
+import type { EmailConfig } from '@app-types/settings/system-config';
+import { ModuleListPack } from '@workflow-packs';
 
-export const EmailSettingsPage = () => {
-  const { data: config, isLoading } = useEmailSettings();
-  const { mutate: updateConfig, isPending } = useUpdateEmailSetting();
+const schema = z.object({
+  email_type: z.string().trim().min(1, 'Email type is required').max(100),
+  smtp_server: z.string().trim().max(100),
+  smtp_port: z.string().trim().max(100),
+  smtp_username: z.string().trim().max(100),
+  smtp_password: z.string().trim().max(100),
+  ssl_tls: z.string().trim().max(100),
+  smtp_auth: z.string().trim().max(10),
+  api_key: z.string().trim().max(255),
+  api_secret: z.string().trim().max(255),
+  region: z.string().trim().max(255),
+  is_active: z.boolean(),
+});
 
-  // Form states
-  const [smtpServer, setSmtpServer] = useState('');
-  const [smtpPort, setSmtpPort] = useState('');
-  const [smtpUsername, setSmtpUsername] = useState('');
-  const [smtpPassword, setSmtpPassword] = useState('');
-  const [sslTls, setSslTls] = useState('tls');
-  const [smtpAuth, setSmtpAuth] = useState('yes');
-  const [isActive, setIsActive] = useState<'yes' | 'no'>('no');
+type FormValues = z.infer<typeof schema>;
+
+const defaults: FormValues = {
+  email_type: 'smtp',
+  smtp_server: '',
+  smtp_port: '587',
+  smtp_username: '',
+  smtp_password: '',
+  ssl_tls: 'tls',
+  smtp_auth: 'true',
+  api_key: '',
+  api_secret: '',
+  region: '',
+  is_active: false,
+};
+
+function toForm(row: EmailConfig): FormValues {
+  return {
+    email_type: row.email_type || 'smtp',
+    smtp_server: row.smtp_server,
+    smtp_port: row.smtp_port,
+    smtp_username: row.smtp_username,
+    smtp_password: '',
+    ssl_tls: row.ssl_tls,
+    smtp_auth: row.smtp_auth || 'true',
+    api_key: '',
+    api_secret: '',
+    region: row.region,
+    is_active: row.is_active === 'yes',
+  };
+}
+
+export function EmailSettingsPage() {
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError, error, refetch } = useEmailConfigs(page);
+  const rows = data?.results ?? [];
+  const totalCount = data?.count ?? 0;
+  const createMutation = useCreateEmailConfig();
+  const updateMutation = useUpdateEmailConfig();
+  const activateMutation = useActivateEmailConfig();
+  const deleteMutation = useDeleteEmailConfig();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selected, setSelected] = useState<EmailConfig | null>(null);
+  const [activateTarget, setActivateTarget] = useState<EmailConfig | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<EmailConfig | null>(null);
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({ resolver: zodResolver(schema), defaultValues: defaults });
 
   useEffect(() => {
-    if (config) {
-      setSmtpServer(config.smtp_server || '');
-      setSmtpPort(config.smtp_port || '');
-      setSmtpUsername(config.smtp_username || '');
-      setSmtpPassword(config.smtp_password || '');
-      setSslTls(config.ssl_tls || 'tls');
-      setSmtpAuth(config.smtp_auth || 'yes');
-      setIsActive(config.is_active || 'no');
-    }
-  }, [config]);
+    if (dialogOpen) reset(selected ? toForm(selected) : defaults);
+  }, [dialogOpen, selected, reset]);
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateConfig({
-      smtp_server: smtpServer,
-      smtp_port: smtpPort,
-      smtp_username: smtpUsername,
-      smtp_password: smtpPassword,
-      ssl_tls: sslTls,
-      smtp_auth: smtpAuth,
-      is_active: isActive,
-    });
+  const closeDialog = () => {
+    setDialogOpen(false);
+    setSelected(null);
   };
 
-  if (isLoading) {
-    return <div className="p-6 text-center text-muted-foreground">Loading Email settings...</div>;
-  }
+  const onSubmit = (values: FormValues) => {
+    const payload = {
+      ...values,
+      is_active: values.is_active ? 'yes' : 'no',
+      smtp_password: values.smtp_password || undefined,
+      api_key: values.api_key || undefined,
+      api_secret: values.api_secret || undefined,
+    };
+    if (selected) {
+      updateMutation.mutate({ id: selected.id, payload }, { onSuccess: closeDialog });
+      return;
+    }
+    createMutation.mutate(payload, { onSuccess: closeDialog });
+  };
+
+  const columns: DataTableColumn<EmailConfig>[] = [
+    {
+      id: 'type',
+      header: 'Type',
+      cellClassName: 'font-medium',
+      cell: (r) => r.email_type || '—',
+    },
+    { id: 'server', header: 'SMTP server', cell: (r) => r.smtp_server || '—' },
+    { id: 'port', header: 'Port', cell: (r) => r.smtp_port || '—' },
+    { id: 'user', header: 'Username', cell: (r) => r.smtp_username || '—' },
+    {
+      id: 'status',
+      header: 'Status',
+      cell: (r) => <StatusBadge isActive={r.is_active === 'yes' ? 'yes' : 'no'} />,
+    },
+  ];
+
+  const addAction = (
+    <PermissionButton
+      permission="settings.manage"
+      onClick={() => {
+        setSelected(null);
+        setDialogOpen(true);
+      }}
+      className="gap-1"
+    >
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add Email Config
+    </PermissionButton>
+  );
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Email Settings"
-        description="Configure SMTP server settings to send emails from your institution."
-      />
-
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {/* Left Side Status Card */}
-        <div className="md:col-span-1">
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-            <div className="flex flex-col space-y-1.5 p-6">
-              <h3 className="text-xl font-semibold leading-none tracking-tight">SMTP Service</h3>
-              <p className="text-sm text-muted-foreground">Current status of outbound emails</p>
+    <ModuleListPack
+      title="Email Config"
+      description="Configure SMTP or API mailers. Only one config can be active."
+      actions={addAction}
+      isLoading={isLoading}
+      loadingMessage="Loading email configs..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && rows.length === 0}
+      emptyTitle="No email configs"
+      emptyDescription="Add an SMTP or API mailer to enable outbound email from Communicate."
+      emptyAction={addAction}
+      footer={
+        <>
+          <EntityFormDialog
+            open={dialogOpen}
+            onOpenChange={(open) => {
+              if (!open) closeDialog();
+              else setDialogOpen(true);
+            }}
+            isEdit={Boolean(selected)}
+            isLoading={createMutation.isPending || updateMutation.isPending}
+            title={selected ? 'Edit Email Config' : 'Add Email Config'}
+            description="Leave password/API secrets blank when editing to keep existing values."
+            submitLabel={selected ? 'Save changes' : 'Create config'}
+            onSubmit={handleSubmit(onSubmit)}
+            size="lg"
+          >
+            <FormErrorSummary errors={errors} />
+            <FormSelectField
+              control={control}
+              name="email_type"
+              label="Email type"
+              options={[
+                { value: 'smtp', label: 'SMTP' },
+                { value: 'ses', label: 'Amazon SES' },
+                { value: 'sendgrid', label: 'SendGrid' },
+                { value: 'mailgun', label: 'Mailgun' },
+              ]}
+              required
+            />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormTextField control={control} name="smtp_server" label="SMTP server" />
+              <FormTextField control={control} name="smtp_port" label="SMTP port" />
+              <FormTextField control={control} name="smtp_username" label="SMTP username" />
+              <FormTextField
+                control={control}
+                name="smtp_password"
+                label="SMTP password"
+                type="password"
+                hint={selected ? 'Leave blank to keep current password' : undefined}
+              />
+              <FormSelectField
+                control={control}
+                name="ssl_tls"
+                label="Encryption"
+                options={[
+                  { value: 'tls', label: 'TLS' },
+                  { value: 'ssl', label: 'SSL' },
+                  { value: 'none', label: 'None' },
+                ]}
+              />
+              <FormSelectField
+                control={control}
+                name="smtp_auth"
+                label="SMTP auth"
+                options={[
+                  { value: 'true', label: 'Enabled' },
+                  { value: 'false', label: 'Disabled' },
+                ]}
+              />
+              <FormTextField
+                control={control}
+                name="api_key"
+                label="API key"
+                hint={selected ? 'Leave blank to keep current key' : undefined}
+              />
+              <FormTextField
+                control={control}
+                name="api_secret"
+                label="API secret"
+                type="password"
+                hint={selected ? 'Leave blank to keep current secret' : undefined}
+              />
+              <FormTextField control={control} name="region" label="Region" />
             </div>
-            <div className="p-6 pt-0 space-y-4">
-              <div className="flex items-center space-x-3 rounded-md border p-3">
-                <div className="rounded-full bg-primary/10 p-2 text-primary">
-                  <Mail className="h-5 w-5" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-sm">SMTP Gateway</p>
-                  <p className="text-xs text-muted-foreground">
-                    {isActive === 'yes' ? 'Sending enabled' : 'Sending disabled'}
-                  </p>
-                </div>
+            <FormSwitchField
+              control={control}
+              name="is_active"
+              label="Set as active mailer"
+              hint="Activating this will disable other email configs."
+            />
+          </EntityFormDialog>
+
+          <ConfirmDialog
+            open={Boolean(activateTarget)}
+            onOpenChange={(open) => {
+              if (!open) setActivateTarget(null);
+            }}
+            title="Activate email config?"
+            description={
+              activateTarget
+                ? `Set ${activateTarget.email_type || 'this'} config as the active mailer?`
+                : ''
+            }
+            confirmLabel="Activate"
+            onConfirm={() => {
+              if (!activateTarget) return;
+              activateMutation.mutate(activateTarget.id, {
+                onSuccess: () => setActivateTarget(null),
+              });
+            }}
+            isLoading={activateMutation.isPending}
+          />
+
+          <ConfirmDialog
+            open={Boolean(deleteTarget)}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
+            }}
+            title="Delete email config?"
+            description={
+              deleteTarget ? `Permanently delete ${deleteTarget.email_type || 'this'} config?` : ''
+            }
+            confirmLabel="Delete"
+            destructive
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, {
+                onSuccess: () => setDeleteTarget(null),
+              });
+            }}
+            isLoading={deleteMutation.isPending}
+          />
+        </>
+      }
+    >
+      <div className="space-y-4">
+        <DataTable
+          data={rows}
+          columns={columns}
+          getRowKey={(row) => row.id}
+          actions={(row) => {
+            const isActive = row.is_active === 'yes';
+            return (
+              <>
                 <Button
-                  type="button"
                   variant="ghost"
-                  size="icon"
-                  onClick={() => setIsActive(isActive === 'yes' ? 'no' : 'yes')}
-                  className={isActive === 'yes' ? 'text-green-600' : 'text-muted-foreground'}
+                  size="sm"
+                  onClick={() => {
+                    setSelected(row);
+                    setDialogOpen(true);
+                  }}
+                  aria-label={`Edit ${row.email_type}`}
                 >
-                  {isActive === 'yes' ? (
-                    <ToggleRight className="h-7 w-7" />
-                  ) : (
-                    <ToggleLeft className="h-7 w-7" />
-                  )}
+                  <Pencil className="h-4 w-4" />
                 </Button>
-              </div>
-
-              {isActive === 'yes' && (
-                <div className="flex items-center rounded-md bg-green-50 p-2 text-xs text-green-800">
-                  <Check className="mr-1 h-4 w-4" /> System is configured to route emails through your server.
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side Form Card */}
-        <div className="md:col-span-2">
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-            <div className="flex flex-col space-y-1.5 p-6">
-              <h3 className="text-xl font-semibold leading-none tracking-tight">SMTP Credentials</h3>
-              <p className="text-sm text-muted-foreground">Enter the host, port, and security credentials of your SMTP provider.</p>
-            </div>
-            <div className="p-6 pt-0">
-              <form onSubmit={handleSave} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2 col-span-2">
-                    <Label htmlFor="smtp_server">SMTP Server Hostname *</Label>
-                    <Input
-                      id="smtp_server"
-                      value={smtpServer}
-                      onChange={(e) => setSmtpServer(e.target.value)}
-                      placeholder="e.g. smtp.gmail.com"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="smtp_port">SMTP Port *</Label>
-                    <Input
-                      id="smtp_port"
-                      value={smtpPort}
-                      onChange={(e) => setSmtpPort(e.target.value)}
-                      placeholder="e.g. 587 or 465"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="ssl_tls">Security Protocol *</Label>
-                    <Select
-                      id="ssl_tls"
-                      value={sslTls}
-                      onChange={(e) => setSslTls(e.target.value)}
-                      options={[
-                        { value: 'ssl', label: 'SSL' },
-                        { value: 'tls', label: 'TLS' },
-                        { value: 'none', label: 'None' },
-                      ]}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="smtp_username">SMTP Username / Email *</Label>
-                    <Input
-                      id="smtp_username"
-                      type="email"
-                      value={smtpUsername}
-                      onChange={(e) => setSmtpUsername(e.target.value)}
-                      placeholder="e.g. school@gmail.com"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="smtp_password">SMTP Password *</Label>
-                    <Input
-                      id="smtp_password"
-                      type="password"
-                      value={smtpPassword}
-                      onChange={(e) => setSmtpPassword(e.target.value)}
-                      placeholder="Email Application Password"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="smtp_auth">SMTP Authentication *</Label>
-                    <Select
-                      id="smtp_auth"
-                      value={smtpAuth}
-                      onChange={(e) => setSmtpAuth(e.target.value)}
-                      options={[
-                        { value: 'yes', label: 'Yes (Authenticated)' },
-                        { value: 'no', label: 'No (Anonymous)' },
-                      ]}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="flex justify-end pt-4 border-t">
-                  <Button type="submit" disabled={isPending}>
-                    Save Email Configuration
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={isActive}
+                  onClick={() => setActivateTarget(row)}
+                  aria-label={`Activate ${row.email_type}`}
+                >
+                  <Zap className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={isActive}
+                  onClick={() => setDeleteTarget(row)}
+                  aria-label={`Delete ${row.email_type}`}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </>
+            );
+          }}
+        />
+        <Pagination
+          currentPage={page}
+          totalPages={Math.max(1, Math.ceil(totalCount / 20))}
+          onPageChange={setPage}
+        />
       </div>
-    </div>
+    </ModuleListPack>
   );
-};
+}

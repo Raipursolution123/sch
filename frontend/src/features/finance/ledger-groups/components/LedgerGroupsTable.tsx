@@ -1,9 +1,9 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
-import type { LedgerGroup } from '@/types/finance';
+import type { LedgerGroup } from '@app-types/finance';
 import type { DataTablePaginationConfig } from '@components/data/data-table-types';
-import { useLedgerGroups } from '@/hooks/useLedgerGroups';
+import { useLedgerGroups } from '@hooks/useLedgerGroups';
 
 interface LedgerGroupsTableProps {
   groups: LedgerGroup[];
@@ -45,7 +45,7 @@ export const LedgerGroupsTable = ({
       header: 'Parent Group',
       cell: (row) => {
         if (!row.parent_id) return '-';
-        const parent = allGroups?.find((g: any) => g.id === row.parent_id);
+        const parent = allGroups?.find((g: LedgerGroup) => g.id === row.parent_id);
         return parent ? parent.code || parent.name : row.parent_id;
       },
     },
