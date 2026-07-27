@@ -9,6 +9,8 @@ export interface User {
   is_superadmin: boolean;
   created_at: string;
   updated_at: string | null;
+  first_name?: string;
+  last_name?: string;
   /** Legacy permission_category keys with can_view — from backend enrich_user_payload. */
   permissions?: string[];
   /** Full legacy RBAC map from `/auth/me` and login. */

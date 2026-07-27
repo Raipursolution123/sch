@@ -56,5 +56,3 @@ export { DataTableSkeleton } from './data/DataTableSkeleton';
 export { DataTableToolbar } from './data/DataTableToolbar';
 export { TableActions } from './data/TableActions';
 
-/** Workflow packs — composable module layouts. */
-export * from '@workflow-packs';

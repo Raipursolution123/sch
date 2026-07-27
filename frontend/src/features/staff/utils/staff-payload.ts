@@ -31,6 +31,7 @@ export function staffToFormValues(staff: StaffDetail): StaffFormValues {
     contract_type: staff.contract_type,
     basic_salary: staff.basic_salary ?? null,
     is_active: staff.is_active === 'yes',
+    password: '',
   };
 }
 
@@ -60,5 +61,6 @@ export function toStaffPayload(values: StaffFormValues): CreateStaffPayload {
     contract_type: values.contract_type,
     basic_salary: values.basic_salary ?? null,
     is_active: (values.is_active ? 'yes' : 'no') as ActiveFlag,
+    password: values.password || undefined,
   };
 }

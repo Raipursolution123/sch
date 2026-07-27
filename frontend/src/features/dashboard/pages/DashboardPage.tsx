@@ -36,8 +36,9 @@ export function DashboardPage() {
   const { data: activeSession } = useActiveSession();
   const { data, isLoading, isError, error, refetch } = useDashboardOverview();
 
-  const displayName =
-    user?.role && user.role.toLowerCase() !== user?.username?.toLowerCase()
+  const displayName = user?.first_name
+    ? user.first_name
+    : user?.role && user.role.toLowerCase() !== user?.username?.toLowerCase()
       ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
       : user?.username?.includes('@')
         ? 'Admin'

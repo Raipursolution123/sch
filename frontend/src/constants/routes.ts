@@ -6,6 +6,8 @@ export const ROUTES = {
   home: '/',
   login: '/login',
   register: '/register',
+  adminLogin: '/admin/login',
+  staffLogin: '/staff/login',
   dashboard: '/dashboard',
   academics: {
     root: '/academics',

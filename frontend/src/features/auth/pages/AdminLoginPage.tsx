@@ -1,13 +1,14 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
 import { ROUTES } from '@constants/index';
 import { authService } from '@services/api';
 import { useAuthStore } from '@store/index';
+import { ShieldCheck } from 'lucide-react';
 
-export function LoginPage() {
+export function AdminLoginPage() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
   const [username, setUsername] = useState('');
@@ -17,37 +18,37 @@ export function LoginPage() {
   const loginMutation = useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
-      const roleStr = data.user.role?.toLowerCase() || '';
-      if (roleStr !== 'admin' && roleStr !== 'super admin') {
-        setError('Access denied. Admin privileges required.');
+      // Allow if the user has staff role or is a superadmin.
+      // If we only want to restrict in backend, we can remove this, but for UX:
+      if (data.user.role !== 'staff' && !data.user.is_superadmin) {
+        setError('Access denied. Staff privileges required.');
         return;
       }
       setAuth(data.user, data.tokens.access, data.tokens.refresh);
       navigate(ROUTES.dashboard, { replace: true });
     },
-    onError: () => setError('Invalid username or password'),
+    onError: () => setError('Invalid credentials or insufficient permissions'),
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
-    const formData = new FormData(e.currentTarget);
-    const formUsername = formData.get('username') as string;
-    const formPassword = formData.get('password') as string;
-    loginMutation.mutate({
-      username: formUsername || username,
-      password: formPassword || password,
-    });
+    loginMutation.mutate({ username, password });
   };
 
   return (
-    <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
-      <h1 className="text-2xl font-bold text-foreground">Sign in</h1>
-      <p className="mt-1 text-sm text-muted-foreground">Access your School ERP account</p>
+    <div className="rounded-xl border border-border bg-card p-8 shadow-lg ring-1 ring-primary/10">
+      <div className="flex flex-col items-center mb-6 space-y-2">
+        <div className="rounded-full bg-primary/10 p-3">
+          <ShieldCheck className="h-8 w-8 text-primary" />
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Admin Portal</h1>
+        <p className="text-sm text-muted-foreground">Secure access for administrators</p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <Input
-          label="Username"
+          label="Admin Username"
           type="text"
           name="username"
           value={username}
@@ -64,18 +65,15 @@ export function LoginPage() {
           required
           autoComplete="current-password"
         />
-        {error && <p className="text-sm text-destructive">{error}</p>}
-        <Button type="submit" isLoading={loginMutation.isPending} className="w-full">
-          Sign in
+        {error && (
+          <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+        <Button type="submit" isLoading={loginMutation.isPending} className="w-full" size="lg">
+          Login as Admin
         </Button>
       </form>
-
-      <p className="mt-4 text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{' '}
-        <Link to={ROUTES.register} className="font-medium text-primary hover:underline">
-          Register
-        </Link>
-      </p>
 
       <div className="mt-6 flex flex-col space-y-4">
         <div className="relative">
@@ -83,12 +81,15 @@ export function LoginPage() {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-2 text-muted-foreground">Or log in as</span>
+            <span className="bg-card px-2 text-muted-foreground">Or</span>
           </div>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" className="w-full" onClick={() => navigate(ROUTES.login)}>
+            Student Login
+          </Button>
           <Button variant="outline" className="w-full" onClick={() => navigate(ROUTES.staffLogin)}>
-            Staff
+            Staff Login
           </Button>
         </div>
       </div>
