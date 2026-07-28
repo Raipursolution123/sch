@@ -5,6 +5,8 @@ import { DashboardLayout } from '@layouts/DashboardLayout';
 import { HomePage } from '@features/home/pages/HomePage';
 import { LoginPage } from '@features/auth/pages/LoginPage';
 import { RegisterPage } from '@features/auth/pages/RegisterPage';
+import { AdminLoginPage } from '@features/auth/pages/AdminLoginPage';
+import { StaffLoginPage } from '@features/auth/pages/StaffLoginPage';
 import { NotFoundPage } from '@features/errors/pages/NotFoundPage';
 import { RouteErrorPage } from '@features/errors/pages/RouteErrorPage';
 import { ROUTES } from '@constants/routes';
@@ -21,7 +23,8 @@ export const router = createBrowserRouter([
     children: [
       { path: ROUTES.login, element: <LoginPage /> },
       { path: ROUTES.register, element: <RegisterPage /> },
-      { path: '/admin/login', element: <Navigate to={ROUTES.login} replace /> },
+      { path: ROUTES.adminLogin, element: <AdminLoginPage /> },
+      { path: ROUTES.staffLogin, element: <StaffLoginPage /> },
     ],
   },
   {

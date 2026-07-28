@@ -117,7 +117,10 @@ def staff_detail(staff: Staff) -> dict[str, Any]:
 
 
 def list_staff_qs():
-    return Staff.objects.all().order_by("name", "surname")
+    from apps.accounts.models.user import User
+    # Hide Admins from the staff directory so only actual staff members show up
+    admin_user_ids = User.objects.filter(role__in=['ADMIN', 'superadmin']).values_list('id', flat=True)
+    return Staff.objects.exclude(user_id__in=admin_user_ids).order_by("name", "surname")
 
 
 def get_staff_by_id(staff_id: int) -> Staff | None:

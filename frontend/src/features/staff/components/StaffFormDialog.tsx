@@ -260,8 +260,16 @@ export function StaffFormDialog({
               required
             />
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2">
             <FormTextField control={control} name="email" label="Email" type="email" required />
+            <FormTextField
+              control={control}
+              name="password"
+              label={isEdit ? "New password (leave blank to keep)" : "Password (for login)"}
+              type="password"
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
             <FormTextField control={control} name="contact_no" label="Contact number" required />
             <FormTextField
               control={control}

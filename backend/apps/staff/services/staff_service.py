@@ -103,6 +103,11 @@ class StaffService:
         if not defaults.get("permanent_address"):
             defaults["permanent_address"] = defaults.get("local_address") or ""
 
+        # Ensure password is securely hashed if provided
+        from core.provisioning.school_setup import hash_staff_password
+        if defaults.get("password"):
+            defaults["password"] = hash_staff_password(defaults["password"])
+
         staff = Staff.objects.create(
             employee_id=employee_id,
             name=name,
@@ -189,6 +194,10 @@ class StaffService:
 
         if "is_active" in payload:
             staff.is_active = 1 if str(payload["is_active"]).lower() == "yes" else 0
+
+        if payload.get("password"):
+            from core.provisioning.school_setup import hash_staff_password
+            staff.password = hash_staff_password(payload["password"])
 
         staff.save()
         logger.info("Staff ID %s updated.", staff_id)

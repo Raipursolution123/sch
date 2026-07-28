@@ -27,6 +27,19 @@ def enrich_user_payload(user) -> dict:
         for category, actions in legacy_permissions.items()
         if actions.get("can_view")
     ]
+    
+    first_name = ""
+    last_name = ""
+    if user.role and user.role.lower() in ("admin", "staff", "superadmin"):
+        from apps.staff.models.staff import Staff
+        staff = Staff.objects.filter(user_id=user.id).first()
+        if staff:
+            first_name = staff.name or ""
+            last_name = staff.surname or ""
+            
+    user_data["first_name"] = first_name
+    user_data["last_name"] = last_name
+    
     return user_data
 
 
@@ -90,73 +103,83 @@ class RegisterView(APIView):
         from apps.staff.models import Staff
         from core.provisioning.school_setup import hash_staff_password
 
-        if Staff.objects.filter(email=email).exists():
-            return APIResponse.error(
-                message="User with this email already exists",
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
-
-        import uuid
-
+        existing_staff = Staff.objects.filter(email=email).first()
         now = timezone.now()
+
         try:
-            staff = Staff.objects.create(
-                employee_id=f"EMP-{uuid.uuid4().hex[:8].upper()}",
-                lang_id=4,
-                currency_id=1,
-                name=first_name,
-                surname=last_name,
-                email=email,
-                password=hash_staff_password(password),
-                dob="2000-01-01",
-                date_of_joining=now.date(),
-                gender="Other",
-                is_active=1,
-                user_id=0,
-                qualification="",
-                work_exp="",
-                father_name="",
-                mother_name="",
-                contact_no="",
-                emergency_contact_no="",
-                marital_status="",
-                local_address="",
-                permanent_address="",
-                note="",
-                image="",
-                account_title="",
-                bank_account_no="",
-                bank_name="",
-                ifsc_code="",
-                bank_branch="",
-                payscale="",
-                epf_no="",
-                contract_type="",
-                shift="",
-                location="",
-                facebook="",
-                twitter="",
-                linkedin="",
-                instagram="",
-                resume="",
-                joining_letter="",
-                resignation_letter="",
-                other_document_name="",
-                other_document_file="",
-                verification_code="",
-            )
+            if existing_staff:
+                if existing_staff.user_id > 0:
+                    return APIResponse.error(
+                        message="User with this email already has a registered account.",
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                    )
+                # Link the existing staff profile to the new Admin registration
+                staff = existing_staff
+                staff.name = first_name
+                if last_name:
+                    staff.surname = last_name
+                staff.password = hash_staff_password(password)
+                staff.save()
+            else:
+                import uuid
+                staff = Staff.objects.create(
+                    employee_id=f"EMP-{uuid.uuid4().hex[:8].upper()}",
+                    lang_id=4,
+                    currency_id=1,
+                    name=first_name,
+                    surname=last_name,
+                    email=email,
+                    password=hash_staff_password(password),
+                    dob="2000-01-01",
+                    date_of_joining=now.date(),
+                    gender="Other",
+                    is_active=1,
+                    user_id=0,
+                    qualification="",
+                    work_exp="",
+                    father_name="",
+                    mother_name="",
+                    contact_no="",
+                    emergency_contact_no="",
+                    marital_status="",
+                    local_address="",
+                    permanent_address="",
+                    note="",
+                    image="",
+                    account_title="",
+                    bank_account_no="",
+                    bank_name="",
+                    ifsc_code="",
+                    bank_branch="",
+                    payscale="",
+                    epf_no="",
+                    contract_type="",
+                    shift="",
+                    location="",
+                    facebook="",
+                    twitter="",
+                    linkedin="",
+                    instagram="",
+                    resume="",
+                    joining_letter="",
+                    resignation_letter="",
+                    other_document_name="",
+                    other_document_file="",
+                    verification_code="",
+                )
 
             user = ensure_staff_user_bridge(staff)
 
-            from apps.accounts.models import Role, StaffRole
-
-            admin_role = Role.objects.filter(name="ADMIN").first()
-            if admin_role:
-                StaffRole.objects.get_or_create(
-                    staff_id=staff.id,
-                    role=admin_role,
-                    defaults={"is_active": 1, "created_at": now},
-                )
+            # Only grant ADMIN role if this is a brand new account created via register page
+            if not existing_staff:
+                from apps.accounts.models import Role, StaffRole
+                admin_role = Role.objects.filter(name="ADMIN").first()
+                if admin_role:
+                    StaffRole.objects.get_or_create(
+                        staff_id=staff.id,
+                        role=admin_role,
+                        defaults={"is_active": 1, "created_at": now},
+                    )
         except Exception as e:
             return APIResponse.error(
                 message=f"Database creation error: {str(e)}",

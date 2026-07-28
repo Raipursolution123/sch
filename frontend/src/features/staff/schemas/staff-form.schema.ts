@@ -7,6 +7,7 @@ export const staffFormSchema = z.object({
   gender: z.string().min(1, 'Gender is required'),
   dob: z.string().min(1, 'Date of birth is required'),
   email: z.string().trim().email('Enter a valid email'),
+  password: z.string().optional(),
   contact_no: z.string().trim().min(1, 'Contact number is required'),
   emergency_contact_no: z.string().trim().min(1, 'Emergency contact is required'),
   department_id: z.number().optional(),

@@ -94,6 +94,7 @@ export interface CreateStaffPayload {
   contract_type: string;
   basic_salary: number | null;
   is_active: ActiveFlag;
+  password?: string;
 }
 
 export type UpdateStaffPayload = CreateStaffPayload;

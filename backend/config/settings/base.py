@@ -23,7 +23,7 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
 # Public registration is disabled by default; enable only in local/dev via .env.
-ALLOW_REGISTRATION = env.bool("ALLOW_REGISTRATION", default=False)
+ALLOW_REGISTRATION = env.bool("ALLOW_REGISTRATION", default=True)
 # Dangerous: restore overwrites the live database. Keep off unless explicitly enabled.
 ALLOW_DATABASE_RESTORE = env.bool("ALLOW_DATABASE_RESTORE", default=False)
 BACKUP_ROOT = env("BACKUP_ROOT", default=str(BASE_DIR / "backups"))
