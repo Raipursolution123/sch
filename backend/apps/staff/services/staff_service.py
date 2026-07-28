@@ -54,6 +54,16 @@ CREATE_DEFAULTS = {
 }
 
 
+def _clean_fk_id(val: Any) -> int | None:
+    if val is None:
+        return None
+    try:
+        int_val = int(val)
+        return int_val if int_val > 0 else None
+    except (ValueError, TypeError):
+        return None
+
+
 class StaffService:
     def list_staff(self):
         return selectors.list_staff_qs()
@@ -74,26 +84,31 @@ class StaffService:
             raise StaffValidationError("Employee ID is required.")
         if not name:
             raise StaffValidationError("Name is required.")
+        dob = payload.get("dob")
+        if not dob:
+            raise StaffValidationError("Date of birth is required.")
         if Staff.objects.filter(employee_id__iexact=employee_id).exists():
             raise StaffConflictError(
                 f"Staff with employee ID '{employee_id}' already exists."
             )
 
-        department = payload.get("department_id") or payload.get("department")
-        designation = payload.get("designation_id") or payload.get("designation")
+        department = _clean_fk_id(payload.get("department_id") or payload.get("department"))
+        designation = _clean_fk_id(payload.get("designation_id") or payload.get("designation"))
         is_active = 1 if str(payload.get("is_active", "yes")).lower() == "yes" else 0
-        defaults = {k: payload.get(k, v) for k, v in CREATE_DEFAULTS.items()}
-        if not payload.get("permanent_address"):
-            defaults["permanent_address"] = payload.get(
-                "local_address", defaults["permanent_address"]
-            )
+        defaults = {}
+        for k, v in CREATE_DEFAULTS.items():
+            val = payload.get(k)
+            defaults[k] = v if val is None else val
+
+        if not defaults.get("permanent_address"):
+            defaults["permanent_address"] = defaults.get("local_address") or ""
 
         staff = Staff.objects.create(
             employee_id=employee_id,
             name=name,
             department=department,
             designation=designation,
-            dob=payload.get("dob") or None,
+            dob=dob,
             date_of_joining=payload.get("date_of_joining") or timezone.now().date(),
             date_of_leaving=payload.get("date_of_leaving") or None,
             is_active=is_active,
@@ -130,14 +145,19 @@ class StaffService:
             staff.name = name_clean
 
         if "department_id" in payload:
-            staff.department = payload["department_id"]
+            staff.department = _clean_fk_id(payload["department_id"])
         elif "department" in payload:
-            staff.department = payload["department"]
+            staff.department = _clean_fk_id(payload["department"])
 
         if "designation_id" in payload:
-            staff.designation = payload["designation_id"]
+            staff.designation = _clean_fk_id(payload["designation_id"])
         elif "designation" in payload:
-            staff.designation = payload["designation"]
+            staff.designation = _clean_fk_id(payload["designation"])
+
+        if "dob" in payload:
+            if not payload["dob"]:
+                raise StaffValidationError("Date of birth is required.")
+            staff.dob = payload["dob"]
 
         for field in (
             "surname",
@@ -146,18 +166,23 @@ class StaffService:
             "email",
             "contact_no",
             "emergency_contact_no",
-            "dob",
             "marital_status",
-            "date_of_joining",
-            "date_of_leaving",
             "local_address",
             "permanent_address",
             "gender",
             "qualification",
             "work_exp",
             "contract_type",
-            "basic_salary",
             "note",
+        ):
+            if field in payload:
+                val = payload[field]
+                setattr(staff, field, "" if val is None else val)
+
+        for field in (
+            "date_of_joining",
+            "date_of_leaving",
+            "basic_salary",
         ):
             if field in payload:
                 setattr(staff, field, payload[field])

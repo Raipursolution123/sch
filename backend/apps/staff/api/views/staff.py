@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.staff.api.views.common import MODULE, staff_error_response
-from apps.staff.domain.staff_exceptions import StaffError
+from apps.staff.domain.staff_exceptions import StaffError, StaffValidationError
 from apps.staff.services.staff_service import StaffService
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
@@ -58,10 +58,17 @@ class StaffDetailView(APIView):
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
+    def _parse_pk(self, pk) -> int:
+        try:
+            return int(str(pk).lstrip(':'))
+        except ValueError:
+            raise StaffValidationError("Invalid staff ID format.")
+
     def get(self, request, pk):
         try:
+            staff_id = self._parse_pk(pk)
             return APIResponse.success(
-                data=StaffService().get_staff(pk),
+                data=StaffService().get_staff(staff_id),
                 message="Staff details retrieved successfully.",
             )
         except StaffError as exc:
@@ -72,7 +79,8 @@ class StaffDetailView(APIView):
 
     def put(self, request, pk):
         try:
-            data = StaffService().update_staff(pk, request.data)
+            staff_id = self._parse_pk(pk)
+            data = StaffService().update_staff(staff_id, request.data)
             return APIResponse.success(
                 data=data,
                 message="Staff updated successfully.",
@@ -82,7 +90,8 @@ class StaffDetailView(APIView):
 
     def delete(self, request, pk):
         try:
-            staff_name = StaffService().delete_staff(pk)
+            staff_id = self._parse_pk(pk)
+            staff_name = StaffService().delete_staff(staff_id)
             return APIResponse.success(
                 message=f"Staff '{staff_name}' deleted successfully."
             )

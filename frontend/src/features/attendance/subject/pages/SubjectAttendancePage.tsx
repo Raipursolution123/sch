@@ -71,15 +71,22 @@ export function SubjectAttendancePage() {
   useEffect(() => {
     if (classId <= 0) return;
     const next = firstSectionIdForClass(classSections, classId);
-    if (next && sectionId !== next) setSectionId(next);
-  }, [classId, classSections, sectionId]);
+    if (next) setSectionId(next);
+  }, [classId, classSections]);
 
   useEffect(() => {
     setPeriodId(0);
   }, [classId, sectionId, date]);
 
   useEffect(() => {
-    if (periods.length > 0 && periodId === 0) setPeriodId(periods[0].id);
+    if (periods.length > 0) {
+      const exists = periods.some((p) => p.id === periodId);
+      if (!exists) {
+        setPeriodId(periods[0].id);
+      }
+    } else {
+      setPeriodId(0);
+    }
   }, [periods, periodId]);
 
   useEffect(() => {

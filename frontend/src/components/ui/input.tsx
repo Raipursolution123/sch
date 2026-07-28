@@ -6,10 +6,13 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   /** @deprecated Prefer FormField wrapper for labels */
   label?: string;
   error?: string;
+  inputId?: string;
+  hintId?: string;
+  errorId?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, label, error, id, ...props }, ref) => {
+  ({ className, type, label, error, id, inputId, hintId, errorId, ...props }, ref) => {
     const inputElement = (
       <input
         type={type}

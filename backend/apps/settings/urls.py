@@ -71,7 +71,6 @@ urlpatterns = [
         CurrenciesActivateView.as_view(),
         name="currencies_activate",
     ),
-<<<<<<< Updated upstream
     path(
         "notification-settings/",
         NotificationSettingsListCreateView.as_view(),
