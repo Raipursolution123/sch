@@ -82,7 +82,7 @@ export const studentsService = {
   },
 
   disable: async (id: number, payload: DisableStudentPayload): Promise<void> => {
-    await apiClient.delete(API_ENDPOINTS.students.detail(id), { data: payload });
+    await apiClient.post(API_ENDPOINTS.students.disable(id), payload);
   },
 
   listDisableReasons: async (): Promise<DisableReason[]> => {

@@ -123,7 +123,11 @@ export function DisabledStudentsTable({
         open={studentToEnable !== null}
         onOpenChange={(open) => !open && setStudentToEnable(null)}
         title="Re-enable student"
-        description={`Restore ${studentToEnable?.full_name} to the active student list and reactivate portal access?`}
+        description={
+          studentToEnable
+            ? `Restore ${studentToEnable.full_name} to the active student list and reactivate portal access?`
+            : ''
+        }
         confirmLabel="Re-enable"
         isLoading={enableMutation.isPending}
         onConfirm={handleEnable}

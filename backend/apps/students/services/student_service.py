@@ -244,18 +244,18 @@ class StudentService:
             raise StudentValidationError("Student is already disabled.")
 
         reason_id = payload.get("disable_reason_id")
-        if not reason_id:
-            raise StudentValidationError("Disable reason is required.")
-
-        reason = selectors.get_disable_reason_by_id(int(reason_id))
-        if reason is None:
-            raise StudentValidationError("Selected disable reason is not valid.")
+        if reason_id:
+            reason = selectors.get_disable_reason_by_id(int(reason_id))
+            if reason is None:
+                raise StudentValidationError("Selected disable reason is not valid.")
+            student.dis_reason = reason.id
+        else:
+            student.dis_reason = 0
 
         dis_note = str(payload.get("dis_note", "")).strip()
 
         with transaction.atomic():
             student.is_active = "no"
-            student.dis_reason = reason.id
             student.dis_note = dis_note
             student.disable_at = selectors.today_date()
             student.updated_at = selectors.today_date()
@@ -273,7 +273,7 @@ class StudentService:
                 user_id=student.id, role__in=["student", "parent"]
             ).update(is_active="no")
 
-        logger.info("Student disabled id=%s reason_id=%s", student_id, reason.id)
+        logger.info("Student disabled id=%s reason_id=%s", student_id, student.dis_reason)
 
     def enable_student(self, student_id: int) -> None:
         student = selectors.get_student_by_id(student_id)

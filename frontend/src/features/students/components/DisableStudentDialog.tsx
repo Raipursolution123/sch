@@ -25,7 +25,7 @@ export function DisableStudentDialog({
   onSubmit,
   isLoading,
 }: DisableStudentDialogProps) {
-  const { data: reasons = [], isLoading: reasonsLoading } = useDisableReasons(open);
+  const { data: reasons, isLoading: reasonsLoading } = useDisableReasons(open);
 
   const {
     control,
@@ -33,19 +33,19 @@ export function DisableStudentDialog({
     reset,
     formState: { errors },
   } = useForm<DisableStudentFormValues>({
-    resolver: zodResolver(disableStudentSchema),
+    resolver: zodResolver(disableStudentSchema as any),
     defaultValues: { disable_reason_id: 0, dis_note: '' },
   });
 
   useEffect(() => {
     if (!open) return;
     reset({
-      disable_reason_id: reasons[0]?.id ?? 0,
+      disable_reason_id: reasons?.[0]?.id ?? 0,
       dis_note: '',
     });
-  }, [open, reasonsLoading, reset]);
+  }, [open, reasonsLoading, reset, reasons]);
 
-  const reasonOptions = reasons.map((reason) => ({
+  const reasonOptions = (reasons ?? []).map((reason) => ({
     value: String(reason.id),
     label: reason.reason,
   }));
@@ -59,8 +59,8 @@ export function DisableStudentDialog({
       title="Disable student"
       description={`Disable ${studentName}? The student will be removed from the active list but their records are kept.`}
       submitLabel="Disable student"
-      submitDisabled={reasonOptions.length === 0}
       onSubmit={handleSubmit(onSubmit)}
+      submitDisabled={reasonOptions.length === 0}
       size="sm"
     >
       <FormErrorSummary errors={errors} />

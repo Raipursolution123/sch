@@ -4,6 +4,7 @@ from apps.students.api.views.student import (
     StudentAcademicSessionsView,
     StudentDetailView,
     StudentDisableReasonListView,
+    StudentDisableView,
     StudentEnableView,
     StudentListCreateView,
 )
@@ -68,6 +69,7 @@ urlpatterns = [
         StudentImportView.as_view(),
         name="student-import",
     ),
+    path("<int:pk>/disable/", StudentDisableView.as_view(), name="student-disable"),
     path("<int:pk>/enable/", StudentEnableView.as_view(), name="student-enable"),
     path("<int:pk>/", StudentDetailView.as_view(), name="student-detail"),
     path("<int:pk>/fees/", StudentFeesView.as_view(), name="student-fees"),

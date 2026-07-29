@@ -88,13 +88,6 @@ class StudentDetailView(APIView):
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
-    def initial(self, request, *args, **kwargs):
-        if request.method == "DELETE":
-            self.legacy_permission_category = DISABLE_CATEGORY
-        else:
-            self.legacy_permission_category = CATEGORY
-        super().initial(request, *args, **kwargs)
-
     def get(self, request, pk):
         try:
             return APIResponse.success(
@@ -119,7 +112,14 @@ class StudentDetailView(APIView):
         except StudentError as exc:
             return _error_response(exc)
 
-    def delete(self, request, pk):
+
+class StudentDisableView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = DISABLE_CATEGORY
+    legacy_method_actions = {"POST": "can_delete"}
+
+    def post(self, request, pk):
         serializer = StudentDisableSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
