@@ -11,7 +11,10 @@ export const smsService = {
   },
 
   updateConfig: async (id: number, data: SmsConfigUpdatePayload) => {
-    const response = await apiClient.put<{ data: SmsConfig; message: string }>(`${BASE_PATH}${id}/`, data);
+    const response = await apiClient.put<{ data: SmsConfig; message: string }>(
+      `${BASE_PATH}${id}/`,
+      data,
+    );
     return response.data;
   },
 };

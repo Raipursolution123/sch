@@ -2,7 +2,7 @@ export interface NotificationSetting {
   id: number;
   type?: string | null;
   is_mail?: string | null; // typically '0' or '1'
-  is_sms?: string | null;  // typically '0' or '1'
+  is_sms?: string | null; // typically '0' or '1'
   is_notification: number;
   display_notification: number;
   display_sms: number;
@@ -19,4 +19,6 @@ export interface NotificationSetting {
   created_at: string;
 }
 
-export type NotificationSettingUpdatePayload = Partial<Omit<NotificationSetting, 'id' | 'created_at'>>;
+export type NotificationSettingUpdatePayload = Partial<
+  Omit<NotificationSetting, 'id' | 'created_at'>
+>;

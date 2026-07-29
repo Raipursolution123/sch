@@ -2,8 +2,19 @@ import { useState } from 'react';
 import { Plus, Trash2, FileText, Printer } from 'lucide-react';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { PermissionButton } from '@components/rbac/PermissionButton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table';
-import { useMarksheetTemplates, useDeleteMarksheetTemplate, type MarksheetTemplate } from '@hooks/useExamTemplates';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table';
+import {
+  useMarksheetTemplates,
+  useDeleteMarksheetTemplate,
+  type MarksheetTemplate,
+} from '@hooks/useExamTemplates';
 import { useStudents } from '@hooks/useStudents';
 import { PrintDocumentModal } from '@features/examinations/components/PrintDocumentModal';
 import { ModuleListPack } from '@workflow-packs';
@@ -18,59 +29,66 @@ export function MarksheetPage() {
 
   const activeStudent = students.length > 0 ? students[0] : null;
 
-  const displayTemplates = (templates && templates.length > 0) ? templates : [
-    {
-      id: 1,
-      template: 'Official Annual Progress Marksheet',
-      heading: 'ANNUAL PROGRESS REPORT CARD (2025-2026)',
-      title: 'SPRINGFIELD PUBLIC SCHOOL',
-      exam_name: 'Annual Assessment 2026',
-      school_name: 'SPRINGFIELD PUBLIC SCHOOL',
-      exam_center: 'Main Campus',
-      is_name: 1,
-      is_father_name: 1,
-      is_mother_name: 1,
-      is_dob: 1,
-      is_admission_no: 1,
-      is_roll_no: 1,
-      is_photo: 1,
-      is_division: 1,
-      is_rank: 1,
-      is_class: 1,
-      is_teacher_remark: 1,
-      is_section: 1,
-      content: 'Passed with Distinction',
-      content_footer: 'Promoted to Next Higher Class.',
-    },
-    {
-      id: 2,
-      template: 'CBSE Pattern Comprehensive Marksheet',
-      heading: 'COMPREHENSIVE EVALUATION REPORT',
-      title: 'SPRINGFIELD PUBLIC SCHOOL',
-      exam_name: 'CBSE Board Pattern Exam 2026',
-      school_name: 'SPRINGFIELD PUBLIC SCHOOL',
-      exam_center: 'Main Campus',
-      is_name: 1,
-      is_father_name: 1,
-      is_mother_name: 1,
-      is_dob: 1,
-      is_admission_no: 1,
-      is_roll_no: 1,
-      is_photo: 1,
-      is_division: 1,
-      is_rank: 1,
-      is_class: 1,
-      is_teacher_remark: 1,
-      is_section: 1,
-      content: 'Excellent Performance',
-      content_footer: 'Keep up the good work!',
-    }
-  ];
+  const displayTemplates =
+    templates && templates.length > 0
+      ? templates
+      : [
+          {
+            id: 1,
+            template: 'Official Annual Progress Marksheet',
+            heading: 'ANNUAL PROGRESS REPORT CARD (2025-2026)',
+            title: 'SPRINGFIELD PUBLIC SCHOOL',
+            exam_name: 'Annual Assessment 2026',
+            school_name: 'SPRINGFIELD PUBLIC SCHOOL',
+            exam_center: 'Main Campus',
+            is_name: 1,
+            is_father_name: 1,
+            is_mother_name: 1,
+            is_dob: 1,
+            is_admission_no: 1,
+            is_roll_no: 1,
+            is_photo: 1,
+            is_division: 1,
+            is_rank: 1,
+            is_class: 1,
+            is_teacher_remark: 1,
+            is_section: 1,
+            content: 'Passed with Distinction',
+            content_footer: 'Promoted to Next Higher Class.',
+          },
+          {
+            id: 2,
+            template: 'CBSE Pattern Comprehensive Marksheet',
+            heading: 'COMPREHENSIVE EVALUATION REPORT',
+            title: 'SPRINGFIELD PUBLIC SCHOOL',
+            exam_name: 'CBSE Board Pattern Exam 2026',
+            school_name: 'SPRINGFIELD PUBLIC SCHOOL',
+            exam_center: 'Main Campus',
+            is_name: 1,
+            is_father_name: 1,
+            is_mother_name: 1,
+            is_dob: 1,
+            is_admission_no: 1,
+            is_roll_no: 1,
+            is_photo: 1,
+            is_division: 1,
+            is_rank: 1,
+            is_class: 1,
+            is_teacher_remark: 1,
+            is_section: 1,
+            content: 'Excellent Performance',
+            content_footer: 'Keep up the good work!',
+          },
+        ];
 
   const addTemplateAction = (
     <PermissionButton
       permission="exams.create"
-      onClick={() => alert('Template design mode active. Select Print Marksheet to view student report card layout.')}
+      onClick={() =>
+        alert(
+          'Template design mode active. Select Print Marksheet to view student report card layout.',
+        )
+      }
       className="gap-1"
     >
       <Plus className="h-4 w-4" aria-hidden="true" />
@@ -101,7 +119,9 @@ export function MarksheetPage() {
             }}
             title="Delete template"
             description={
-              deleteTarget ? `Delete marksheet template "${deleteTarget.template || deleteTarget.title || deleteTarget.id}"?` : ''
+              deleteTarget
+                ? `Delete marksheet template "${deleteTarget.template || deleteTarget.title || deleteTarget.id}"?`
+                : ''
             }
             confirmLabel="Delete"
             destructive

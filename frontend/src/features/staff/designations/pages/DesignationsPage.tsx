@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { Plus, Trash2, Briefcase, Pencil } from 'lucide-react';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { PermissionButton } from '@components/rbac/PermissionButton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormField } from '@components/forms/FormField';
 import { Input } from '@components/ui/input';
@@ -53,11 +60,7 @@ export function DesignationsPage() {
   };
 
   const addDesignationAction = (
-    <PermissionButton
-      permission="staff.create"
-      onClick={handleOpenCreate}
-      className="gap-1"
-    >
+    <PermissionButton permission="staff.create" onClick={handleOpenCreate} className="gap-1">
       <Plus className="h-4 w-4" aria-hidden="true" />
       Add Designation
     </PermissionButton>
@@ -106,7 +109,9 @@ export function DesignationsPage() {
             }}
             title="Delete designation"
             description={
-              deleteTarget ? `Delete designation "${deleteTarget.name}"? This action cannot be undone.` : ''
+              deleteTarget
+                ? `Delete designation "${deleteTarget.name}"? This action cannot be undone.`
+                : ''
             }
             confirmLabel="Delete"
             destructive

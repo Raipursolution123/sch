@@ -1,9 +1,22 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, Home } from 'lucide-react';
 import { ModuleListPack } from '@workflow-packs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table';
 import { Button } from '@components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@components/ui/dialog';
 import { FormField } from '@components/forms/FormField';
 import { Input } from '@components/ui/input';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
@@ -29,7 +42,9 @@ export function StudentHousesPage() {
   const { data, isLoading, isError, error, refetch } = useQuery<SchoolHouseItem[]>({
     queryKey: ['student-houses'],
     queryFn: async () => {
-      const response = await apiClient.get<{ data: SchoolHouseItem[] }>(API_ENDPOINTS.students.houses);
+      const response = await apiClient.get<{ data: SchoolHouseItem[] }>(
+        API_ENDPOINTS.students.houses,
+      );
       return response.data.data;
     },
   });
@@ -45,7 +60,13 @@ export function StudentHousesPage() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, payload }: { id: number; payload: { house_name: string; description: string } }) => {
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: number;
+      payload: { house_name: string; description: string };
+    }) => {
       await apiClient.put(API_ENDPOINTS.students.houseDetail(id), payload);
     },
     onSuccess: () => {
@@ -81,7 +102,10 @@ export function StudentHousesPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedRecord) {
-      updateMutation.mutate({ id: selectedRecord.id, payload: { house_name: houseName, description } });
+      updateMutation.mutate({
+        id: selectedRecord.id,
+        payload: { house_name: houseName, description },
+      });
     } else {
       createMutation.mutate({ house_name: houseName, description });
     }
@@ -139,7 +163,10 @@ export function StudentHousesPage() {
                   <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+                  <Button
+                    type="submit"
+                    disabled={createMutation.isPending || updateMutation.isPending}
+                  >
                     {selectedRecord ? 'Update' : 'Save'}
                   </Button>
                 </DialogFooter>
@@ -185,13 +212,20 @@ export function StudentHousesPage() {
                     <span>{item.house_name}</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-muted-foreground text-xs">{item.description || '—'}</TableCell>
+                <TableCell className="text-xs text-muted-foreground">
+                  {item.description || '—'}
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-1">
                     <Button variant="ghost" size="sm" onClick={() => openEditDialog(item)}>
                       <Edit2 className="h-3.5 w-3.5" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => setDeleteTarget(item)} className="text-destructive">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setDeleteTarget(item)}
+                      className="text-destructive"
+                    >
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                   </div>

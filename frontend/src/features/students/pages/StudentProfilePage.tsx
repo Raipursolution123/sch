@@ -13,7 +13,12 @@ import { DisableStudentDialog } from '@features/students/components/DisableStude
 import type { DisableStudentFormValues } from '@features/students/schemas/disable-student.schema';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { toStudentPayload } from '@features/students/utils/student-payload';
-import { useStudent, useUpdateStudent, useDisableStudent, useEnableStudent } from '@hooks/useStudents';
+import {
+  useStudent,
+  useUpdateStudent,
+  useDisableStudent,
+  useEnableStudent,
+} from '@hooks/useStudents';
 import { useClasses } from '@hooks/useClasses';
 import { ROUTES } from '@constants/index';
 import { ModuleProfilePack } from '@workflow-packs';
@@ -112,7 +117,7 @@ export function StudentProfilePage() {
               variant="default"
               size="sm"
               onClick={() => setEnableConfirmOpen(true)}
-              className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="gap-2 bg-emerald-600 text-white hover:bg-emerald-700"
             >
               <UserCheck className="h-4 w-4" />
               Enable Student

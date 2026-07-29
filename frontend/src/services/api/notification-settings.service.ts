@@ -1,5 +1,8 @@
 import { apiClient } from './client';
-import type { NotificationSetting, NotificationSettingUpdatePayload } from '@/types/settings/notifications';
+import type {
+  NotificationSetting,
+  NotificationSettingUpdatePayload,
+} from '@/types/settings/notifications';
 import type { ApiSuccessResponse } from '@/types/api';
 
 const BASE_PATH = '/settings/notifications/';
@@ -11,7 +14,10 @@ export const notificationSettingsService = {
   },
 
   updateSetting: async (id: number, data: NotificationSettingUpdatePayload) => {
-    const response = await apiClient.put<{ data: NotificationSetting; message: string }>(`${BASE_PATH}${id}/`, data);
+    const response = await apiClient.put<{ data: NotificationSetting; message: string }>(
+      `${BASE_PATH}${id}/`,
+      data,
+    );
     return response.data;
   },
 };

@@ -85,4 +85,3 @@ export type {
   CreateDailyAssignmentPayload,
   UpdateDailyAssignmentPayload,
 } from './academics/homework';
-

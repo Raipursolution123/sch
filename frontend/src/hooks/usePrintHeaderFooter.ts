@@ -1,6 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { printHeaderFooterService } from '@/services/api';
-import type { PrintHeaderFooterCreatePayload, PrintHeaderFooterUpdatePayload } from '@/types/settings/print-header-footer';
+import type {
+  PrintHeaderFooterCreatePayload,
+  PrintHeaderFooterUpdatePayload,
+} from '@/types/settings/print-header-footer';
 import { toast } from 'sonner';
 
 export const usePrintHeaderFooterList = () => {
@@ -14,7 +17,8 @@ export const useCreatePrintHeaderFooter = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: PrintHeaderFooterCreatePayload) => printHeaderFooterService.createTemplate(data),
+    mutationFn: (data: PrintHeaderFooterCreatePayload) =>
+      printHeaderFooterService.createTemplate(data),
     onSuccess: (response) => {
       toast.success(response.message || 'Print template created successfully');
       queryClient.invalidateQueries({ queryKey: ['print-header-footers'] });

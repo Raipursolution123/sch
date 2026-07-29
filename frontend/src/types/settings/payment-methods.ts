@@ -18,4 +18,6 @@ export interface PaymentGateway {
   updated_at: string | null;
 }
 
-export type PaymentGatewayUpdatePayload = Partial<Omit<PaymentGateway, 'id' | 'payment_type' | 'created_at' | 'updated_at'>>;
+export type PaymentGatewayUpdatePayload = Partial<
+  Omit<PaymentGateway, 'id' | 'payment_type' | 'created_at' | 'updated_at'>
+>;

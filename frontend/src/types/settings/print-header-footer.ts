@@ -8,5 +8,8 @@ export interface PrintHeaderFooter {
   created_at: string;
 }
 
-export type PrintHeaderFooterCreatePayload = Omit<PrintHeaderFooter, 'id' | 'created_by' | 'entry_date' | 'created_at'>;
+export type PrintHeaderFooterCreatePayload = Omit<
+  PrintHeaderFooter,
+  'id' | 'created_by' | 'entry_date' | 'created_at'
+>;
 export type PrintHeaderFooterUpdatePayload = Partial<PrintHeaderFooterCreatePayload>;

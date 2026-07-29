@@ -52,8 +52,13 @@ export function useStaffPayroll(month?: string, year?: string) {
 export function useGeneratePayslip() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: { staff_id: number; month: string; year: string; basic_salary?: number; payment_mode?: string }) =>
-      staffService.generatePayslip(payload),
+    mutationFn: (payload: {
+      staff_id: number;
+      month: string;
+      year: string;
+      basic_salary?: number;
+      payment_mode?: string;
+    }) => staffService.generatePayslip(payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['staff', 'payroll'] });
       toast.success('Payslip generated successfully');
@@ -84,7 +89,8 @@ export function useCreateDepartment() {
 export function useUpdateDepartment() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, name }: { id: number; name: string }) => staffService.updateDepartment(id, name),
+    mutationFn: ({ id, name }: { id: number; name: string }) =>
+      staffService.updateDepartment(id, name),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.staff.departments() });
       toast.success('Department updated successfully');
@@ -127,7 +133,8 @@ export function useCreateDesignation() {
 export function useUpdateDesignation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, name }: { id: number; name: string }) => staffService.updateDesignation(id, name),
+    mutationFn: ({ id, name }: { id: number; name: string }) =>
+      staffService.updateDesignation(id, name),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.staff.designations() });
       toast.success('Designation updated successfully');

@@ -61,17 +61,24 @@ export function OnlineAdmissionPage() {
           id: 'config',
           label: 'General Configuration',
           content: (
-            <form onSubmit={handleSave} className="space-y-4 max-w-2xl bg-white p-6 rounded-xl border border-gray-200">
+            <form
+              onSubmit={handleSave}
+              className="max-w-2xl space-y-4 rounded-xl border border-gray-200 bg-white p-6"
+            >
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="block text-sm font-medium text-gray-900">Online Admission Portal</label>
+                  <label className="block text-sm font-medium text-gray-900">
+                    Online Admission Portal
+                  </label>
                   <p className="text-xs text-gray-500">Allow public access to application forms.</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setOnlineAdmission(onlineAdmission === 1 ? 0 : 1)}
                   className={`rounded-full px-4 py-1 text-xs font-semibold shadow-sm transition-all ${
-                    onlineAdmission === 1 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                    onlineAdmission === 1
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-gray-100 text-gray-800'
                   }`}
                 >
                   {onlineAdmission === 1 ? 'Enabled' : 'Disabled'}
@@ -79,11 +86,13 @@ export function OnlineAdmissionPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Admission Fee Requirement</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Admission Fee Requirement
+                </label>
                 <select
                   value={onlineAdmissionPayment}
                   onChange={(e) => setOnlineAdmissionPayment(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
+                  className="focus:border-primary-500 mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none"
                 >
                   <option value="no">Free / No Payment</option>
                   <option value="yes">Paid application</option>
@@ -92,35 +101,41 @@ export function OnlineAdmissionPage() {
 
               {onlineAdmissionPayment === 'yes' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Application Amount ($ / ₹)</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Application Amount ($ / ₹)
+                  </label>
                   <input
                     type="text"
                     value={onlineAdmissionAmount}
                     onChange={(e) => setOnlineAdmissionAmount(e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
+                    className="focus:border-primary-500 mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none"
                   />
                 </div>
               )}
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Instructions for applicants</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Instructions for applicants
+                </label>
                 <textarea
                   rows={3}
                   value={onlineAdmissionInstruction}
                   onChange={(e) => setOnlineAdmissionInstruction(e.target.value)}
                   placeholder="Enter guidelines..."
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
+                  className="focus:border-primary-500 mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Terms & Conditions</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Terms & Conditions
+                </label>
                 <textarea
                   rows={3}
                   value={onlineAdmissionConditions}
                   onChange={(e) => setOnlineAdmissionConditions(e.target.value)}
                   placeholder="Enter terms..."
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
+                  className="focus:border-primary-500 mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none"
                 />
               </div>
 

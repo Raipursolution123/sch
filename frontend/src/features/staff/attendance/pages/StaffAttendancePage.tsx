@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { Save, UserCheck } from 'lucide-react';
 import { PermissionButton } from '@components/rbac/PermissionButton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table';
 import { Input } from '@components/ui/input';
 import { FormField } from '@components/forms/FormField';
 import { Select } from '@components/ui/select';
@@ -21,10 +28,18 @@ const ATTENDANCE_TYPES = [
 
 export function StaffAttendancePage() {
   const [selectedDate, setSelectedDate] = useState<string>(todayIsoDate());
-  const { data: attendanceRes, isLoading, isError, error, refetch } = useStaffAttendance(selectedDate);
+  const {
+    data: attendanceRes,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useStaffAttendance(selectedDate);
   const markMutation = useMarkStaffAttendance();
 
-  const [rosterState, setRosterState] = useState<Record<number, { type: string; remark: string }>>({});
+  const [rosterState, setRosterState] = useState<Record<number, { type: string; remark: string }>>(
+    {},
+  );
 
   const listData = attendanceRes?.results || [];
 
@@ -50,7 +65,10 @@ export function StaffAttendancePage() {
 
   const handleSaveAttendance = () => {
     const payload = listData.map((item) => {
-      const state = rosterState[item.staff_id] || { type: String(item.attendance_type_id || 1), remark: item.remark || '' };
+      const state = rosterState[item.staff_id] || {
+        type: String(item.attendance_type_id || 1),
+        remark: item.remark || '',
+      };
       return {
         staff_id: item.staff_id,
         attendance_type_id: parseInt(state.type, 10),
@@ -88,7 +106,7 @@ export function StaffAttendancePage() {
       emptyDescription="Add staff members first to start marking attendance."
     >
       {/* Date Filter Bar */}
-      <div className="p-4 bg-card rounded-md border mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between rounded-md border bg-card p-4">
         <div className="flex items-center gap-4">
           <div className="w-56">
             <FormField label="Attendance Date" htmlFor="attendance_date">
@@ -101,8 +119,9 @@ export function StaffAttendancePage() {
               />
             </FormField>
           </div>
-          <div className="text-xs text-muted-foreground mt-4">
-            Showing attendance roster for <strong className="text-foreground">{selectedDate}</strong>
+          <div className="mt-4 text-xs text-muted-foreground">
+            Showing attendance roster for{' '}
+            <strong className="text-foreground">{selectedDate}</strong>
           </div>
         </div>
       </div>
@@ -120,12 +139,15 @@ export function StaffAttendancePage() {
           </TableHeader>
           <TableBody>
             {listData.map((item) => {
-              const currentType = rosterState[item.staff_id]?.type ?? String(item.attendance_type_id || 1);
+              const currentType =
+                rosterState[item.staff_id]?.type ?? String(item.attendance_type_id || 1);
               const currentRemark = rosterState[item.staff_id]?.remark ?? (item.remark || '');
 
               return (
                 <TableRow key={item.staff_id}>
-                  <TableCell className="font-mono text-xs text-muted-foreground">{item.staff_id}</TableCell>
+                  <TableCell className="font-mono text-xs text-muted-foreground">
+                    {item.staff_id}
+                  </TableCell>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
                       <UserCheck className="h-4 w-4 text-muted-foreground" />

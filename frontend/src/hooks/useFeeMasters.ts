@@ -1,7 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
-import { feeMastersService, type CreateFeeMasterPayload, type UpdateFeeMasterPayload } from '@services/api/fee-masters.service';
+import {
+  feeMastersService,
+  type CreateFeeMasterPayload,
+  type UpdateFeeMasterPayload,
+} from '@services/api/fee-masters.service';
 import { getApiErrorMessage } from '@utils/session';
 
 export function useFeeMasters() {
