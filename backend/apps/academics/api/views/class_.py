@@ -29,7 +29,14 @@ class ClassListCreateView(APIView):
         if request.method == "GET":
             user = request.user
             from apps.accounts.services.legacy_rbac import user_has_privilege
-            for cat in ["class", "student", "collect_fees", "promote_student", "online_admission"]:
+
+            for cat in [
+                "class",
+                "student",
+                "collect_fees",
+                "promote_student",
+                "online_admission",
+            ]:
                 if user_has_privilege(user, cat, "can_view"):
                     self.legacy_permission_category = cat
                     break
@@ -39,7 +46,7 @@ class ClassListCreateView(APIView):
         active_only = request.query_params.get("active_only", "false").lower() == "true"
         no_paginate = request.query_params.get("no_paginate", "false").lower() == "true"
         qs = ClassService().list_classes(active_only=active_only)
-        
+
         if no_paginate:
             page = None
             rows = list(qs)
@@ -47,7 +54,7 @@ class ClassListCreateView(APIView):
             paginator = StandardResultsSetPagination()
             page = paginator.paginate_queryset(qs, request, view=self)
             rows = list(page)
-        
+
         sections_map = active_sections_for_classes([c.id for c in rows])
         data = [class_to_dict(c, sections_map.get(c.id, [])) for c in rows]
         if page is not None:

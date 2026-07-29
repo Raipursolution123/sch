@@ -27,19 +27,20 @@ def enrich_user_payload(user) -> dict:
         for category, actions in legacy_permissions.items()
         if actions.get("can_view")
     ]
-    
+
     first_name = ""
     last_name = ""
     if user.role and user.role.lower() in ("admin", "staff", "superadmin"):
         from apps.staff.models.staff import Staff
+
         staff = Staff.objects.filter(user_id=user.id).first()
         if staff:
             first_name = staff.name or ""
             last_name = staff.surname or ""
-            
+
     user_data["first_name"] = first_name
     user_data["last_name"] = last_name
-    
+
     return user_data
 
 
@@ -122,6 +123,7 @@ class RegisterView(APIView):
                 staff.save()
             else:
                 import uuid
+
                 staff = Staff.objects.create(
                     employee_id=f"EMP-{uuid.uuid4().hex[:8].upper()}",
                     lang_id=4,
@@ -173,6 +175,7 @@ class RegisterView(APIView):
             # Only grant ADMIN role if this is a brand new account created via register page
             if not existing_staff:
                 from apps.accounts.models import Role, StaffRole
+
                 admin_role = Role.objects.filter(name="ADMIN").first()
                 if admin_role:
                     StaffRole.objects.get_or_create(

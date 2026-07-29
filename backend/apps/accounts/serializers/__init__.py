@@ -4,9 +4,9 @@ from apps.accounts.serializers.auth import (
     UserSerializer,
 )
 from apps.accounts.serializers.role import (
-    RoleSerializer,
     PermissionCategorySerializer,
     RolePermissionSerializer,
+    RoleSerializer,
 )
 
 __all__ = [

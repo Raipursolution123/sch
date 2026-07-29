@@ -2,12 +2,12 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
+from apps.documents.models.template_admitcards import TemplateAdmitcards
 from apps.examinations.api.serializers.templates import (
     TemplateAdmitcardsSerializer,
     TemplateMarksheetsSerializer,
 )
-from apps.examinations.api.views.common import MODULE, examination_error_response
-from apps.documents.models.template_admitcards import TemplateAdmitcards
+from apps.examinations.api.views.common import MODULE
 from apps.examinations.models.template_marksheets import TemplateMarksheets
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
@@ -29,7 +29,7 @@ class MarksheetTemplatesView(APIView):
     def post(self, request):
         serializer = TemplateMarksheetsSerializer(data=request.data)
         if serializer.is_valid():
-            instance = serializer.save()
+            serializer.save()
             return APIResponse.success(
                 data=serializer.data,
                 message="Marksheet template created successfully.",
@@ -56,24 +56,41 @@ class MarksheetTemplateDetailView(APIView):
     def get(self, request, pk):
         obj = self.get_object(pk)
         if not obj:
-            return APIResponse.error(message="Marksheet template not found.", status_code=status.HTTP_404_NOT_FOUND)
+            return APIResponse.error(
+                message="Marksheet template not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
         serializer = TemplateMarksheetsSerializer(obj)
-        return APIResponse.success(data=serializer.data, message="Marksheet template retrieved.")
+        return APIResponse.success(
+            data=serializer.data, message="Marksheet template retrieved."
+        )
 
     def put(self, request, pk):
         obj = self.get_object(pk)
         if not obj:
-            return APIResponse.error(message="Marksheet template not found.", status_code=status.HTTP_404_NOT_FOUND)
+            return APIResponse.error(
+                message="Marksheet template not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
         serializer = TemplateMarksheetsSerializer(obj, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return APIResponse.success(data=serializer.data, message="Marksheet template updated successfully.")
-        return APIResponse.error(message="Validation error", errors=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.success(
+                data=serializer.data, message="Marksheet template updated successfully."
+            )
+        return APIResponse.error(
+            message="Validation error",
+            errors=serializer.errors,
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
 
     def delete(self, request, pk):
         obj = self.get_object(pk)
         if not obj:
-            return APIResponse.error(message="Marksheet template not found.", status_code=status.HTTP_404_NOT_FOUND)
+            return APIResponse.error(
+                message="Marksheet template not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
         obj.delete()
         return APIResponse.success(message="Marksheet template deleted successfully.")
 
@@ -121,23 +138,41 @@ class AdmitCardTemplateDetailView(APIView):
     def get(self, request, pk):
         obj = self.get_object(pk)
         if not obj:
-            return APIResponse.error(message="Admit card template not found.", status_code=status.HTTP_404_NOT_FOUND)
+            return APIResponse.error(
+                message="Admit card template not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
         serializer = TemplateAdmitcardsSerializer(obj)
-        return APIResponse.success(data=serializer.data, message="Admit card template retrieved.")
+        return APIResponse.success(
+            data=serializer.data, message="Admit card template retrieved."
+        )
 
     def put(self, request, pk):
         obj = self.get_object(pk)
         if not obj:
-            return APIResponse.error(message="Admit card template not found.", status_code=status.HTTP_404_NOT_FOUND)
+            return APIResponse.error(
+                message="Admit card template not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
         serializer = TemplateAdmitcardsSerializer(obj, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return APIResponse.success(data=serializer.data, message="Admit card template updated successfully.")
-        return APIResponse.error(message="Validation error", errors=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.success(
+                data=serializer.data,
+                message="Admit card template updated successfully.",
+            )
+        return APIResponse.error(
+            message="Validation error",
+            errors=serializer.errors,
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
 
     def delete(self, request, pk):
         obj = self.get_object(pk)
         if not obj:
-            return APIResponse.error(message="Admit card template not found.", status_code=status.HTTP_404_NOT_FOUND)
+            return APIResponse.error(
+                message="Admit card template not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
         obj.delete()
         return APIResponse.success(message="Admit card template deleted successfully.")

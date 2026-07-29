@@ -58,7 +58,7 @@ class StudentFeeService:
                   AND sfd.status = 'assigned'
                   AND sfd.is_active = 'yes'
                 """,
-                [student_session.id]
+                [student_session.id],
             )
             discounts = cursor.fetchall()
         total_discount = sum(float(row[0] or 0) for row in discounts)

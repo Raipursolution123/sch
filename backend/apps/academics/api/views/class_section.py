@@ -31,7 +31,14 @@ class ClassSectionListCreateView(APIView):
         if request.method == "GET":
             user = request.user
             from apps.accounts.services.legacy_rbac import user_has_privilege
-            for cat in ["class", "student", "collect_fees", "promote_student", "online_admission"]:
+
+            for cat in [
+                "class",
+                "student",
+                "collect_fees",
+                "promote_student",
+                "online_admission",
+            ]:
                 if user_has_privilege(user, cat, "can_view"):
                     self.legacy_permission_category = cat
                     break
@@ -41,7 +48,7 @@ class ClassSectionListCreateView(APIView):
         active_only = request.query_params.get("active_only", "false").lower() == "true"
         no_paginate = request.query_params.get("no_paginate", "false").lower() == "true"
         qs = ClassSectionService().list_mappings(active_only=active_only)
-        
+
         if no_paginate:
             page = None
             rows = list(qs)

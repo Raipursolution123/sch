@@ -35,7 +35,7 @@ class Command(BaseCommand):
             | Q(slug__in=SUPER_ADMIN_ROLE_NAMES)
             | Q(is_superadmin=1)
         ).first()
-        
+
         if not super_admin_role:
             super_admin_role = Role.objects.create(
                 name="Super Admin",
@@ -43,7 +43,7 @@ class Command(BaseCommand):
                 is_superadmin=1,
                 is_active=1,
                 is_system=1,
-                created_at=timezone.now()
+                created_at=timezone.now(),
             )
         elif not super_admin_role.is_superadmin:
             super_admin_role.is_superadmin = 1
@@ -112,7 +112,9 @@ class Command(BaseCommand):
                 )
                 continue
 
-            staff_role = StaffRole.objects.filter(staff_id=staff.id, is_active=1).first()
+            staff_role = StaffRole.objects.filter(
+                staff_id=staff.id, is_active=1
+            ).first()
             if staff_role:
                 if staff_role.role_id != target_role.id:
                     staff_role.role = target_role

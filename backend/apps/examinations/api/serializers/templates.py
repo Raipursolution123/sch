@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from apps.examinations.models.template_marksheets import TemplateMarksheets
+
 from apps.documents.models.template_admitcards import TemplateAdmitcards
+from apps.examinations.models.template_marksheets import TemplateMarksheets
 
 
 class TemplateMarksheetsSerializer(serializers.ModelSerializer):

@@ -40,7 +40,9 @@ class HasLegacyPrivilege(BasePermission):
 
         module_code = getattr(view, "legacy_module_short_code", None)
         if module_code and not is_module_active(module_code):
-            print(f"[DEBUG HasLegacyPrivilege] FAILED: module {module_code} is not active")
+            print(
+                f"[DEBUG HasLegacyPrivilege] FAILED: module {module_code} is not active"
+            )
             return False
 
         action = getattr(view, "legacy_permission_action", None)
@@ -58,6 +60,8 @@ class HasLegacyPrivilege(BasePermission):
         has_priv = user_has_privilege(user, category, action)
         if not has_priv:
             is_super = is_superadmin_user(user)
-            print(f"[DEBUG HasLegacyPrivilege] FAILED: user={user.username}, is_superadmin={is_super}, category={category}, action={action}")
-        
+            print(
+                f"[DEBUG HasLegacyPrivilege] FAILED: user={user.username}, is_superadmin={is_super}, category={category}, action={action}"
+            )
+
         return has_priv

@@ -5,7 +5,6 @@ from rest_framework.response import Response
 
 from apps.fees.domain.fee_exceptions import (
     FeeConflictError,
-    FeeError,
     FeeNotFoundError,
     FeeValidationError,
 )
@@ -19,11 +18,13 @@ MODULE = "fees_collection"
 def fee_error_response(exc: Exception) -> Response:
     if isinstance(exc, FeeNotFoundError):
         return APIResponse.error(
-            message=getattr(exc, 'message', str(exc)), status_code=status.HTTP_404_NOT_FOUND
+            message=getattr(exc, "message", str(exc)),
+            status_code=status.HTTP_404_NOT_FOUND,
         )
     if isinstance(exc, (FeeValidationError, FeeConflictError)):
         return APIResponse.error(
-            message=getattr(exc, 'message', str(exc)), status_code=status.HTTP_400_BAD_REQUEST
+            message=getattr(exc, "message", str(exc)),
+            status_code=status.HTTP_400_BAD_REQUEST,
         )
     logger.exception("Unexpected fee error: %s", exc)
     return APIResponse.error(

@@ -1,5 +1,9 @@
 from django.urls import path
 
+from apps.students.api.views.categories_houses import (
+    StudentCategoriesListView,
+    StudentHousesListView,
+)
 from apps.students.api.views.student import (
     StudentAcademicSessionsView,
     StudentDetailView,
@@ -18,20 +22,20 @@ from apps.students.api.views.student_masters import (
 )
 from apps.students.api.views.student_transport import StudentTransportView
 
-from apps.students.api.views.categories_houses import (
-    StudentCategoriesListView,
-    StudentCategoryDetailView,
-    StudentHousesListView,
-    StudentHouseDetailView,
-    StudentImportView,
-)
-
 urlpatterns = [
     path("", StudentListCreateView.as_view(), name="students-list"),
     path("categories/", StudentCategoriesListView.as_view(), name="student-categories"),
-    path("categories/<int:pk>/", StudentCategoryDetailView.as_view(), name="student-category-detail"),
+    path(
+        "categories/<int:pk>/",
+        StudentCategoryDetailView.as_view(),
+        name="student-category-detail",
+    ),
     path("houses/", StudentHousesListView.as_view(), name="student-houses"),
-    path("houses/<int:pk>/", StudentHouseDetailView.as_view(), name="student-house-detail"),
+    path(
+        "houses/<int:pk>/",
+        StudentHouseDetailView.as_view(),
+        name="student-house-detail",
+    ),
     path("import/", StudentImportView.as_view(), name="student-import"),
     path(
         "disable-reasons/",

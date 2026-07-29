@@ -19,7 +19,8 @@ class DepartmentListView(APIView):
         try:
             data = StaffLookupService().list_departments()
             return APIResponse.success(
-                data={"results": data, "count": len(data)}, message="Departments retrieved successfully."
+                data={"results": data, "count": len(data)},
+                message="Departments retrieved successfully.",
             )
         except StaffError as exc:
             return staff_error_response(exc)
@@ -76,7 +77,8 @@ class DesignationListView(APIView):
         try:
             data = StaffLookupService().list_designations()
             return APIResponse.success(
-                data={"results": data, "count": len(data)}, message="Designations retrieved successfully."
+                data={"results": data, "count": len(data)},
+                message="Designations retrieved successfully.",
             )
         except StaffError as exc:
             return staff_error_response(exc)

@@ -72,25 +72,35 @@ class DailyAssignmentSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_at"]
 
     def validate(self, attrs):
-        from django.utils import timezone
         from django.db import connection
+        from django.utils import timezone
+
         from apps.students.models.student_session import StudentSession
-        
+
         student_session_id = attrs.get("student_session_id")
-        if not student_session_id or not StudentSession.objects.filter(id=student_session_id).exists():
+        if (
+            not student_session_id
+            or not StudentSession.objects.filter(id=student_session_id).exists()
+        ):
             first_session = StudentSession.objects.first()
             if first_session:
                 attrs["student_session_id"] = first_session.id
             else:
                 attrs["student_session_id"] = 1
-        
+
         # Translate subject_group_subject_id if it doesn't match an existing row
         subject_group_subject_id = attrs.get("subject_group_subject_id")
         if subject_group_subject_id:
             cursor = connection.cursor()
-            cursor.execute("SELECT id FROM subject_group_subjects WHERE id = %s", [subject_group_subject_id])
+            cursor.execute(
+                "SELECT id FROM subject_group_subjects WHERE id = %s",
+                [subject_group_subject_id],
+            )
             if not cursor.fetchone():
-                cursor.execute("SELECT id FROM subject_group_subjects WHERE subject_id = %s LIMIT 1", [subject_group_subject_id])
+                cursor.execute(
+                    "SELECT id FROM subject_group_subjects WHERE subject_id = %s LIMIT 1",
+                    [subject_group_subject_id],
+                )
                 row = cursor.fetchone()
                 if row:
                     attrs["subject_group_subject_id"] = row[0]
@@ -99,10 +109,10 @@ class DailyAssignmentSerializer(serializers.ModelSerializer):
                     first_row = cursor.fetchone()
                     if first_row:
                         attrs["subject_group_subject_id"] = first_row[0]
-        
+
         if not attrs.get("created_at"):
             attrs["created_at"] = timezone.now()
-            
+
         return attrs
 
 

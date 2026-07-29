@@ -29,7 +29,9 @@ def test_create_rejects_duplicate_employee_id(service):
     with patch("apps.staff.services.staff_service.Staff.objects.filter") as filter_mock:
         filter_mock.return_value.exists.return_value = True
         with pytest.raises(StaffConflictError, match="employee ID"):
-            service.create_staff({"employee_id": "EMP-001", "name": "Jane", "dob": "1990-01-01"})
+            service.create_staff(
+                {"employee_id": "EMP-001", "name": "Jane", "dob": "1990-01-01"}
+            )
 
 
 def test_create_requires_dob(service):
