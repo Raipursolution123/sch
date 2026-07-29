@@ -287,6 +287,7 @@ class PromotionService:
         ).first()
         if mapping is None:
             raise PromotionValidationError(
-                "No active class-section mapping exists for the given class and section."
+                "No active class-section mapping exists for the "
+                "given class and section."
             )
         return mapping.id

@@ -280,7 +280,6 @@ export function PromoteWizard() {
               value={toSubjectGroupId}
               onChange={(v) => setToSubjectGroupId(v)}
               disabled={toSessionId === undefined}
-              allowEmpty
             />
           </div>
           <div className="flex justify-between">
@@ -421,7 +420,6 @@ interface FilterSelectProps {
   value: number | undefined;
   onChange: (value: number | undefined) => void;
   disabled?: boolean;
-  allowEmpty?: boolean;
 }
 
 function FilterSelect({
@@ -430,7 +428,6 @@ function FilterSelect({
   value,
   onChange,
   disabled,
-  allowEmpty,
 }: FilterSelectProps) {
   const id = useMemo(() => `promote_${label.toLowerCase().replace(/\s+/g, '_')}`, [label]);
   return (
