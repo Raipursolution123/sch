@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { Printer, CreditCard, DollarSign } from 'lucide-react';
 import { PermissionButton } from '@components/rbac/PermissionButton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table';
 import { Select } from '@components/ui/select';
 import { FormField } from '@components/forms/FormField';
 import { useStaffPayroll, useGeneratePayslip } from '@hooks/useStaff';
@@ -84,7 +91,7 @@ export function StaffPayrollPage() {
       }
     >
       {/* Filters Toolbar */}
-      <div className="p-4 bg-card rounded-md border mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between rounded-md border bg-card p-4">
         <div className="flex items-center gap-4">
           <div className="w-44">
             <FormField label="Select Month" htmlFor="payroll_month">
@@ -109,7 +116,10 @@ export function StaffPayrollPage() {
         </div>
 
         <div className="text-xs text-muted-foreground">
-          Showing salary records for <strong className="text-foreground">{month} {year}</strong>
+          Showing salary records for{' '}
+          <strong className="text-foreground">
+            {month} {year}
+          </strong>
         </div>
       </div>
 
@@ -134,7 +144,9 @@ export function StaffPayrollPage() {
 
               return (
                 <TableRow key={item.staff_id}>
-                  <TableCell className="font-mono text-xs text-muted-foreground">{item.staff_id}</TableCell>
+                  <TableCell className="font-mono text-xs text-muted-foreground">
+                    {item.staff_id}
+                  </TableCell>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
                       <CreditCard className="h-4 w-4 text-muted-foreground" />
@@ -142,10 +154,14 @@ export function StaffPayrollPage() {
                     </div>
                   </TableCell>
                   <TableCell className="font-mono text-xs">{item.employee_id || '—'}</TableCell>
-                  <TableCell className="font-mono">₹{item.basic_salary?.toLocaleString()}</TableCell>
+                  <TableCell className="font-mono">
+                    ₹{item.basic_salary?.toLocaleString()}
+                  </TableCell>
                   <TableCell className="w-40">
                     {isPaid ? (
-                      <span className="text-xs font-semibold uppercase text-primary font-mono">{item.payment_mode || 'Cash'}</span>
+                      <span className="font-mono text-xs font-semibold uppercase text-primary">
+                        {item.payment_mode || 'Cash'}
+                      </span>
                     ) : (
                       <Select
                         options={PAYMENT_MODES}
@@ -154,13 +170,15 @@ export function StaffPayrollPage() {
                       />
                     )}
                   </TableCell>
-                  <TableCell className="font-mono font-semibold text-emerald-700">₹{item.net_salary?.toLocaleString()}</TableCell>
+                  <TableCell className="font-mono font-semibold text-emerald-700">
+                    ₹{item.net_salary?.toLocaleString()}
+                  </TableCell>
                   <TableCell>
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                      className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-medium ${
                         isPaid
-                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                          : 'bg-amber-100 text-amber-800 border border-amber-200'
+                          ? 'border border-emerald-200 bg-emerald-100 text-emerald-800'
+                          : 'border border-amber-200 bg-amber-100 text-amber-800'
                       }`}
                     >
                       {isPaid ? 'Paid' : 'Unpaid'}

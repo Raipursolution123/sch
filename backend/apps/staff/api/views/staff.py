@@ -60,7 +60,7 @@ class StaffDetailView(APIView):
 
     def _parse_pk(self, pk) -> int:
         try:
-            return int(str(pk).lstrip(':'))
+            return int(str(pk).lstrip(":"))
         except ValueError:
             raise StaffValidationError("Invalid staff ID format.")
 

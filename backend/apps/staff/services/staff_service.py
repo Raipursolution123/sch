@@ -92,8 +92,12 @@ class StaffService:
                 f"Staff with employee ID '{employee_id}' already exists."
             )
 
-        department = _clean_fk_id(payload.get("department_id") or payload.get("department"))
-        designation = _clean_fk_id(payload.get("designation_id") or payload.get("designation"))
+        department = _clean_fk_id(
+            payload.get("department_id") or payload.get("department")
+        )
+        designation = _clean_fk_id(
+            payload.get("designation_id") or payload.get("designation")
+        )
         is_active = 1 if str(payload.get("is_active", "yes")).lower() == "yes" else 0
         defaults = {}
         for k, v in CREATE_DEFAULTS.items():
@@ -105,6 +109,7 @@ class StaffService:
 
         # Ensure password is securely hashed if provided
         from core.provisioning.school_setup import hash_staff_password
+
         if defaults.get("password"):
             defaults["password"] = hash_staff_password(defaults["password"])
 
@@ -197,6 +202,7 @@ class StaffService:
 
         if payload.get("password"):
             from core.provisioning.school_setup import hash_staff_password
+
             staff.password = hash_staff_password(payload["password"])
 
         staff.save()

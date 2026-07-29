@@ -137,7 +137,9 @@ export function DailyAssignmentPage() {
       date: values.date,
       remark: values.remark,
       student_session_id: 1, // Default or loaded student session
-      evaluated_by: selected ? (selected.evaluated_by ?? user?.user_id ?? 291) : (user?.user_id ?? 291),
+      evaluated_by: selected
+        ? (selected.evaluated_by ?? user?.user_id ?? 291)
+        : (user?.user_id ?? 291),
     };
 
     if (selected) {

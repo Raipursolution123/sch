@@ -1,12 +1,13 @@
+from django.utils import timezone
+
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from django.utils import timezone
 
 from apps.settings.models.categories import Categories
 from apps.settings.models.school_houses import SchoolHouses
-from common.responses.api import APIResponse
 from apps.students.models.students import Students
+from common.responses.api import APIResponse
 
 MODULE = "student_information"
 
@@ -26,15 +27,22 @@ class StudentCategoriesListView(APIView):
                 }
                 for c in cats
             ]
-            return APIResponse.success(data=data, message="Categories retrieved successfully.")
+            return APIResponse.success(
+                data=data, message="Categories retrieved successfully."
+            )
         except Exception as exc:
-            return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+            )
 
     def post(self, request):
         try:
             category_name = str(request.data.get("category") or "").strip()
             if not category_name:
-                return APIResponse.error(message="Category name is required.", status_code=status.HTTP_400_BAD_REQUEST)
+                return APIResponse.error(
+                    message="Category name is required.",
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
             c = Categories.objects.create(
                 category=category_name,
                 is_active="yes",
@@ -46,7 +54,9 @@ class StudentCategoriesListView(APIView):
                 status_code=status.HTTP_201_CREATED,
             )
         except Exception as exc:
-            return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class StudentCategoryDetailView(APIView):
@@ -57,13 +67,17 @@ class StudentCategoryDetailView(APIView):
             category_name = str(request.data.get("category") or "").strip()
             c = Categories.objects.filter(pk=pk).first()
             if not c:
-                return APIResponse.error(message="Category not found.", status_code=status.HTTP_404_NOT_FOUND)
+                return APIResponse.error(
+                    message="Category not found.", status_code=status.HTTP_404_NOT_FOUND
+                )
             if category_name:
                 c.category = category_name
                 c.save()
             return APIResponse.success(message="Category updated successfully.")
         except Exception as exc:
-            return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+            )
 
     def delete(self, request, pk):
         try:
@@ -72,7 +86,9 @@ class StudentCategoryDetailView(APIView):
                 c.delete()
             return APIResponse.success(message="Category deleted successfully.")
         except Exception as exc:
-            return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class StudentHousesListView(APIView):
@@ -90,16 +106,23 @@ class StudentHousesListView(APIView):
                 }
                 for h in houses
             ]
-            return APIResponse.success(data=data, message="Houses retrieved successfully.")
+            return APIResponse.success(
+                data=data, message="Houses retrieved successfully."
+            )
         except Exception as exc:
-            return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+            )
 
     def post(self, request):
         try:
             house_name = str(request.data.get("house_name") or "").strip()
             description = str(request.data.get("description") or "").strip()
             if not house_name:
-                return APIResponse.error(message="House name is required.", status_code=status.HTTP_400_BAD_REQUEST)
+                return APIResponse.error(
+                    message="House name is required.",
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
             h = SchoolHouses.objects.create(
                 house_name=house_name,
                 description=description,
@@ -111,7 +134,9 @@ class StudentHousesListView(APIView):
                 status_code=status.HTTP_201_CREATED,
             )
         except Exception as exc:
-            return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class StudentHouseDetailView(APIView):
@@ -123,7 +148,9 @@ class StudentHouseDetailView(APIView):
             description = str(request.data.get("description") or "").strip()
             h = SchoolHouses.objects.filter(pk=pk).first()
             if not h:
-                return APIResponse.error(message="House not found.", status_code=status.HTTP_404_NOT_FOUND)
+                return APIResponse.error(
+                    message="House not found.", status_code=status.HTTP_404_NOT_FOUND
+                )
             if house_name:
                 h.house_name = house_name
             if description is not None:
@@ -131,7 +158,9 @@ class StudentHouseDetailView(APIView):
             h.save()
             return APIResponse.success(message="House updated successfully.")
         except Exception as exc:
-            return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+            )
 
     def delete(self, request, pk):
         try:
@@ -140,7 +169,9 @@ class StudentHouseDetailView(APIView):
                 h.delete()
             return APIResponse.success(message="House deleted successfully.")
         except Exception as exc:
-            return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class StudentImportView(APIView):
@@ -151,12 +182,16 @@ class StudentImportView(APIView):
             students_data = request.data.get("students", [])
             imported_count = 0
             for item in students_data:
-                first_name = str(item.get("firstname") or item.get("first_name") or "").strip()
+                first_name = str(
+                    item.get("firstname") or item.get("first_name") or ""
+                ).strip()
                 admission_no = str(item.get("admission_no") or "").strip()
                 if first_name and admission_no:
                     Students.objects.create(
                         firstname=first_name,
-                        lastname=str(item.get("lastname") or item.get("last_name") or "").strip(),
+                        lastname=str(
+                            item.get("lastname") or item.get("last_name") or ""
+                        ).strip(),
                         admission_no=admission_no,
                         gender=str(item.get("gender") or "male").lower(),
                         is_active="yes",
@@ -168,4 +203,6 @@ class StudentImportView(APIView):
                 status_code=status.HTTP_201_CREATED,
             )
         except Exception as exc:
-            return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+            return APIResponse.error(
+                message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+            )

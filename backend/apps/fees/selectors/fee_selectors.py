@@ -128,8 +128,16 @@ def assignment_to_dict(fsg: FeeSessionGroups) -> dict[str, Any]:
         )
         total_amount += amt
 
-    class_name = getattr(school_class, "class_field", None) or getattr(school_class, "name", "—") if school_class else "—"
-    session_name = getattr(session, "session", None) or getattr(session, "name", "—") if session else "—"
+    class_name = (
+        getattr(school_class, "class_field", None) or getattr(school_class, "name", "—")
+        if school_class
+        else "—"
+    )
+    session_name = (
+        getattr(session, "session", None) or getattr(session, "name", "—")
+        if session
+        else "—"
+    )
     fee_group_name = getattr(fee_group, "name", "—") if fee_group else "—"
 
     return {

@@ -101,7 +101,10 @@ function assertUniquePair(classId: number, sectionId: number, excludeId?: number
 }
 
 export const classSectionsService = {
-  list: async (page = 1, noPaginate = false): Promise<{ results: ClassSection[]; count: number }> => {
+  list: async (
+    page = 1,
+    noPaginate = false,
+  ): Promise<{ results: ClassSection[]; count: number }> => {
     if (USE_MOCK) {
       const allData = await enrich(mockList());
       const sorted = allData.sort(

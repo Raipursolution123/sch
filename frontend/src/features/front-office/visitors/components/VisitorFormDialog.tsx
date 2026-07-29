@@ -79,7 +79,7 @@ export function VisitorFormDialog({
         name: visitor.name,
         contact: visitor.contact,
         purpose: visitor.purpose,
-        email: visitor.email ?? '',
+        email: visitor.email && visitor.email.includes('@') ? visitor.email : '',
         source: visitor.source ?? '',
         id_proof: visitor.id_proof ?? '',
         no_of_people: visitor.no_of_people,
@@ -128,8 +128,8 @@ export function VisitorFormDialog({
         <FormTextField control={control} name="id_proof" label="ID proof" optional />
         <FormNumberField control={control} name="no_of_people" label="No. of people" optional />
         <FormTextField control={control} name="date" label="Visit date" type="date" />
-        <FormTextField control={control} name="in_time" label="In time" optional />
-        <FormTextField control={control} name="out_time" label="Out time" optional />
+        <FormTextField control={control} name="in_time" label="In time" type="time" optional />
+        <FormTextField control={control} name="out_time" label="Out time" type="time" optional />
         <FormTextField control={control} name="meeting_with" label="Meeting with" optional />
       </div>
       <FormTextareaField control={control} name="note" label="Note" optional />

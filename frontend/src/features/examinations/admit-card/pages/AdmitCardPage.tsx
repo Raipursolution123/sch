@@ -2,8 +2,19 @@ import { useState } from 'react';
 import { Plus, Trash2, CreditCard, Printer } from 'lucide-react';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { PermissionButton } from '@components/rbac/PermissionButton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table';
-import { useAdmitCardTemplates, useDeleteAdmitCardTemplate, type AdmitCardTemplate } from '@hooks/useExamTemplates';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table';
+import {
+  useAdmitCardTemplates,
+  useDeleteAdmitCardTemplate,
+  type AdmitCardTemplate,
+} from '@hooks/useExamTemplates';
 import { useStudents } from '@hooks/useStudents';
 import { PrintDocumentModal } from '@features/examinations/components/PrintDocumentModal';
 import { ModuleListPack } from '@workflow-packs';
@@ -18,53 +29,58 @@ export function AdmitCardPage() {
 
   const activeStudent = students.length > 0 ? students[0] : null;
 
-  const displayTemplates = (templates && templates.length > 0) ? templates : [
-    {
-      id: 1,
-      template: 'Standard Annual Exam Admit Card',
-      heading: 'ANNUAL EXAMINATION ADMIT CARD 2026',
-      title: 'SPRINGFIELD PUBLIC SCHOOL',
-      exam_name: 'Annual Examination 2026',
-      school_name: 'SPRINGFIELD PUBLIC SCHOOL',
-      exam_center: 'Main Campus Examination Hall A',
-      is_letter_head: 1,
-      is_name: 1,
-      is_father_name: 1,
-      is_mother_name: 1,
-      is_dob: 1,
-      is_admission_no: 1,
-      is_roll_no: 1,
-      is_photo: 1,
-      is_class: 1,
-      is_section: 1,
-      content_footer: 'Please carry valid School ID card along with Admit Card.',
-    },
-    {
-      id: 2,
-      template: 'Terminal Mid-Term Admit Card',
-      heading: 'MID-TERM EXAMINATION ADMIT CARD',
-      title: 'SPRINGFIELD PUBLIC SCHOOL',
-      exam_name: 'Mid-Term Exam 2025',
-      school_name: 'SPRINGFIELD PUBLIC SCHOOL',
-      exam_center: 'Block C Examination Wing',
-      is_letter_head: 1,
-      is_name: 1,
-      is_father_name: 1,
-      is_mother_name: 1,
-      is_dob: 1,
-      is_admission_no: 1,
-      is_roll_no: 1,
-      is_photo: 1,
-      is_class: 1,
-      is_section: 1,
-      content_footer: 'Mobile phones are strictly prohibited in the exam hall.',
-    }
-  ];
+  const displayTemplates =
+    templates && templates.length > 0
+      ? templates
+      : [
+          {
+            id: 1,
+            template: 'Standard Annual Exam Admit Card',
+            heading: 'ANNUAL EXAMINATION ADMIT CARD 2026',
+            title: 'SPRINGFIELD PUBLIC SCHOOL',
+            exam_name: 'Annual Examination 2026',
+            school_name: 'SPRINGFIELD PUBLIC SCHOOL',
+            exam_center: 'Main Campus Examination Hall A',
+            is_letter_head: 1,
+            is_name: 1,
+            is_father_name: 1,
+            is_mother_name: 1,
+            is_dob: 1,
+            is_admission_no: 1,
+            is_roll_no: 1,
+            is_photo: 1,
+            is_class: 1,
+            is_section: 1,
+            content_footer: 'Please carry valid School ID card along with Admit Card.',
+          },
+          {
+            id: 2,
+            template: 'Terminal Mid-Term Admit Card',
+            heading: 'MID-TERM EXAMINATION ADMIT CARD',
+            title: 'SPRINGFIELD PUBLIC SCHOOL',
+            exam_name: 'Mid-Term Exam 2025',
+            school_name: 'SPRINGFIELD PUBLIC SCHOOL',
+            exam_center: 'Block C Examination Wing',
+            is_letter_head: 1,
+            is_name: 1,
+            is_father_name: 1,
+            is_mother_name: 1,
+            is_dob: 1,
+            is_admission_no: 1,
+            is_roll_no: 1,
+            is_photo: 1,
+            is_class: 1,
+            is_section: 1,
+            content_footer: 'Mobile phones are strictly prohibited in the exam hall.',
+          },
+        ];
 
   const addTemplateAction = (
     <PermissionButton
       permission="exams.create"
-      onClick={() => alert('Template design mode active. Select Print Sample to view student admit card layout.')}
+      onClick={() =>
+        alert('Template design mode active. Select Print Sample to view student admit card layout.')
+      }
       className="gap-1"
     >
       <Plus className="h-4 w-4" aria-hidden="true" />
@@ -95,7 +111,9 @@ export function AdmitCardPage() {
             }}
             title="Delete template"
             description={
-              deleteTarget ? `Delete admit card template "${deleteTarget.template || deleteTarget.heading || deleteTarget.id}"?` : ''
+              deleteTarget
+                ? `Delete admit card template "${deleteTarget.template || deleteTarget.heading || deleteTarget.id}"?`
+                : ''
             }
             confirmLabel="Delete"
             destructive

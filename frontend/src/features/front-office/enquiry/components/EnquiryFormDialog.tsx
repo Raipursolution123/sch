@@ -56,7 +56,7 @@ export function EnquiryFormDialog({
       reset({
         name: enquiry.name,
         contact: enquiry.contact,
-        email: enquiry.email ?? '',
+        email: enquiry.email && enquiry.email.includes('@') ? enquiry.email : '',
         source: enquiry.source ?? '',
         status: enquiry.status,
         date: enquiry.date,

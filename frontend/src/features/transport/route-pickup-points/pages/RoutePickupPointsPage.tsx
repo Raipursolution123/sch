@@ -37,7 +37,7 @@ export function RoutePickupPointsPage() {
             fees: values.fees,
             destination_distance: values.destination_distance,
             pickup_time: values.pickup_time?.trim() || null,
-            order_number: values.order_number?.trim() ?? '',
+            order_number: values.order_number ?? 0,
           },
         },
         { onSuccess: () => setFormOpen(false) },
@@ -52,7 +52,7 @@ export function RoutePickupPointsPage() {
         fees: values.fees,
         destination_distance: values.destination_distance,
         pickup_time: values.pickup_time?.trim() || null,
-        order_number: values.order_number?.trim() ?? '',
+        order_number: values.order_number ?? 0,
       },
       { onSuccess: () => setFormOpen(false) },
     );

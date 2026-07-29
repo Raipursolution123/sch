@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { Checkbox } from '@components/ui/checkbox';
+import { FormField } from '@components/forms/FormField';
 import { Select } from '@components/ui/select';
 import { PromotePreviewTable } from '@features/academics/promote/components/PromotePreviewTable';
 import { useActiveSession, useSessions } from '@features/academics/sessions/hooks/useSessions';
@@ -231,7 +232,7 @@ export function PromoteWizard() {
           <p className="text-sm text-muted-foreground">
             Select the session, class, and section students are moving from.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid gap-4 sm:grid-cols-3">
             <FilterSelect
               label="Source session"
               options={sessionOptions}
@@ -276,7 +277,7 @@ export function PromoteWizard() {
           <p className="text-sm text-muted-foreground">
             Select where students will be enrolled in the new session.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <FilterSelect
               label="Target session"
               options={sessionOptions.filter((o) => o.value !== String(fromSessionId))}
@@ -308,7 +309,6 @@ export function PromoteWizard() {
               value={toSubjectGroupId}
               onChange={(v) => setToSubjectGroupId(v)}
               disabled={toSessionId === undefined}
-              allowEmpty
             />
           </div>
           <div className="flex justify-between">
@@ -388,7 +388,7 @@ export function PromoteWizard() {
         </div>
       )}
 
-      {step === 'Confirm' && preview && previewParams && (
+      {step === 'Confirm' && (
         <div className="space-y-4">
           <div className="space-y-2 rounded-md border p-4 text-sm">
             <p>
@@ -454,31 +454,23 @@ interface FilterSelectProps {
   value: number | undefined;
   onChange: (value: number | undefined) => void;
   disabled?: boolean;
-  allowEmpty?: boolean;
 }
 
-function FilterSelect({
-  label,
-  options,
-  value,
-  onChange,
-  disabled,
-  allowEmpty,
-}: FilterSelectProps) {
+function FilterSelect({ label, options, value, onChange, disabled }: FilterSelectProps) {
+  const id = useMemo(() => `promote_${label.toLowerCase().replace(/\s+/g, '_')}`, [label]);
   return (
-    <div>
-      <label className="mb-1 block text-xs text-muted-foreground">{label}</label>
+    <FormField label={label} htmlFor={id}>
       <Select
-        className="w-44"
+        id={id}
         options={options}
         placeholder={`Select ${label.toLowerCase()}`}
-        value={value !== undefined ? String(value) : allowEmpty ? '' : ''}
+        value={value !== undefined ? String(value) : ''}
         onChange={(e) => {
           const raw = e.target.value;
           onChange(raw === '' ? undefined : Number(raw));
         }}
         disabled={disabled}
       />
-    </div>
+    </FormField>
   );
 }

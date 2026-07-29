@@ -263,7 +263,12 @@ export function HomeworkPage() {
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <FormDateField control={control} name="homework_date" label="Homework Date" required />
+              <FormDateField
+                control={control}
+                name="homework_date"
+                label="Homework Date"
+                required
+              />
               <FormDateField control={control} name="submit_date" label="Submit Date" required />
             </div>
             <FormNumberField control={control} name="marks" label="Max Marks" optional />

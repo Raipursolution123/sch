@@ -1,9 +1,22 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, Tag, Layers, Upload, CheckCircle2 } from 'lucide-react';
 import { ModuleListPack } from '@workflow-packs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table';
 import { Button } from '@components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@components/ui/dialog';
 import { FormField } from '@components/forms/FormField';
 import { Input } from '@components/ui/input';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
@@ -27,7 +40,9 @@ export function StudentCategoriesPage() {
   const { data, isLoading, isError, error, refetch } = useQuery<StudentCategoryItem[]>({
     queryKey: ['student-categories'],
     queryFn: async () => {
-      const response = await apiClient.get<{ data: StudentCategoryItem[] }>(API_ENDPOINTS.students.categories);
+      const response = await apiClient.get<{ data: StudentCategoryItem[] }>(
+        API_ENDPOINTS.students.categories,
+      );
       return response.data.data;
     },
   });
@@ -111,7 +126,9 @@ export function StudentCategoriesPage() {
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle>{selectedRecord ? 'Edit Category' : 'Add Student Category'}</DialogTitle>
+                <DialogTitle>
+                  {selectedRecord ? 'Edit Category' : 'Add Student Category'}
+                </DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4 py-2">
                 <FormField label="Category Name" htmlFor="cat_name" required>
@@ -127,7 +144,10 @@ export function StudentCategoriesPage() {
                   <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+                  <Button
+                    type="submit"
+                    disabled={createMutation.isPending || updateMutation.isPending}
+                  >
                     {selectedRecord ? 'Update' : 'Save'}
                   </Button>
                 </DialogFooter>
@@ -177,7 +197,12 @@ export function StudentCategoriesPage() {
                     <Button variant="ghost" size="sm" onClick={() => openEditDialog(item)}>
                       <Edit2 className="h-3.5 w-3.5" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => setDeleteTarget(item)} className="text-destructive">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setDeleteTarget(item)}
+                      className="text-destructive"
+                    >
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                   </div>

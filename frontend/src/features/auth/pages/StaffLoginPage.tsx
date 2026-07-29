@@ -37,7 +37,7 @@ export function StaffLoginPage() {
 
   return (
     <div className="rounded-xl border border-border bg-card p-8 shadow-lg ring-1 ring-primary/10">
-      <div className="flex flex-col items-center mb-6 space-y-2">
+      <div className="mb-6 flex flex-col items-center space-y-2">
         <div className="rounded-full bg-primary/10 p-3">
           <Users className="h-8 w-8 text-primary" />
         </div>
@@ -65,15 +65,12 @@ export function StaffLoginPage() {
           autoComplete="current-password"
         />
         {error && (
-          <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-            {error}
-          </div>
+          <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">{error}</div>
         )}
         <Button type="submit" isLoading={loginMutation.isPending} className="w-full" size="lg">
           Login as Staff
         </Button>
       </form>
-
     </div>
   );
 }

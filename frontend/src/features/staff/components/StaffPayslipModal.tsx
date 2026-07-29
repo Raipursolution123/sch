@@ -1,4 +1,10 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@components/ui/dialog';
 import { Button } from '@components/ui/button';
 import { Printer, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
@@ -36,45 +42,59 @@ export function StaffPayslipModal({ open, onOpenChange, record }: StaffPayslipMo
           </DialogTitle>
         </DialogHeader>
 
-        <div className="p-6 bg-white border-2 border-primary/20 rounded-lg shadow-md font-sans text-gray-900 my-2">
+        <div className="my-2 rounded-lg border-2 border-primary/20 bg-white p-6 font-sans text-gray-900 shadow-md">
           {/* Header */}
-          <div className="border-b-2 border-primary pb-3 mb-4 flex justify-between items-center">
+          <div className="mb-4 flex items-center justify-between border-b-2 border-primary pb-3">
             <div>
-              <h2 className="text-xl font-bold uppercase text-primary">SPRINGFIELD PUBLIC SCHOOL</h2>
-              <p className="text-xs text-muted-foreground font-semibold">
+              <h2 className="text-xl font-bold uppercase text-primary">
+                SPRINGFIELD PUBLIC SCHOOL
+              </h2>
+              <p className="text-xs font-semibold text-muted-foreground">
                 SALARY PAYSLIP FOR {record.month.toUpperCase()} {record.year}
               </p>
             </div>
-            <span className="px-3 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold rounded-full flex items-center gap-1">
+            <span className="flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
               <CheckCircle2 className="h-3.5 w-3.5" />
               {record.status.toUpperCase()}
             </span>
           </div>
 
           {/* Staff Details Grid */}
-          <div className="grid grid-cols-2 gap-4 text-xs mb-6 bg-muted/20 p-3 rounded border">
+          <div className="mb-6 grid grid-cols-2 gap-4 rounded border bg-muted/20 p-3 text-xs">
             <div>
-              <span className="text-gray-500 block text-[10px] uppercase font-semibold">Staff Name</span>
-              <span className="font-bold text-sm text-gray-900">{record.staff_name}</span>
+              <span className="block text-[10px] font-semibold uppercase text-gray-500">
+                Staff Name
+              </span>
+              <span className="text-sm font-bold text-gray-900">{record.staff_name}</span>
             </div>
             <div>
-              <span className="text-gray-500 block text-[10px] uppercase font-semibold">Employee ID</span>
-              <span className="font-semibold text-gray-900 font-mono">{record.employee_id}</span>
+              <span className="block text-[10px] font-semibold uppercase text-gray-500">
+                Employee ID
+              </span>
+              <span className="font-mono font-semibold text-gray-900">{record.employee_id}</span>
             </div>
             <div>
-              <span className="text-gray-500 block text-[10px] uppercase font-semibold">Pay Period</span>
-              <span className="font-semibold text-gray-900">{record.month} {record.year}</span>
+              <span className="block text-[10px] font-semibold uppercase text-gray-500">
+                Pay Period
+              </span>
+              <span className="font-semibold text-gray-900">
+                {record.month} {record.year}
+              </span>
             </div>
             <div>
-              <span className="text-gray-500 block text-[10px] uppercase font-semibold">Payment Mode</span>
-              <span className="font-bold text-primary uppercase">{record.payment_mode || 'Cash'}</span>
+              <span className="block text-[10px] font-semibold uppercase text-gray-500">
+                Payment Mode
+              </span>
+              <span className="font-bold uppercase text-primary">
+                {record.payment_mode || 'Cash'}
+              </span>
             </div>
           </div>
 
           {/* Salary Breakup Table */}
-          <div className="border rounded overflow-hidden mb-6">
-            <table className="w-full text-xs text-left">
-              <thead className="bg-gray-100 font-semibold border-b">
+          <div className="mb-6 overflow-hidden rounded border">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b bg-gray-100 font-semibold">
                 <tr>
                   <th className="p-2">Description</th>
                   <th className="p-2 text-right">Amount (₹)</th>
@@ -83,7 +103,9 @@ export function StaffPayslipModal({ open, onOpenChange, record }: StaffPayslipMo
               <tbody className="divide-y divide-gray-100">
                 <tr>
                   <td className="p-2 font-medium">Basic Pay / Monthly Salary</td>
-                  <td className="p-2 text-right font-mono">₹{record.basic_salary?.toLocaleString()}</td>
+                  <td className="p-2 text-right font-mono">
+                    ₹{record.basic_salary?.toLocaleString()}
+                  </td>
                 </tr>
                 <tr>
                   <td className="p-2 font-medium">Allowances & Bonuses</td>
@@ -93,9 +115,9 @@ export function StaffPayslipModal({ open, onOpenChange, record }: StaffPayslipMo
                   <td className="p-2 font-medium">Deductions (EPF / Tax)</td>
                   <td className="p-2 text-right font-mono text-destructive">- ₹0</td>
                 </tr>
-                <tr className="bg-primary/5 font-bold border-t border-primary/20">
+                <tr className="border-t border-primary/20 bg-primary/5 font-bold">
                   <td className="p-2 text-primary">Net Salary Paid ({record.payment_mode})</td>
-                  <td className="p-2 text-right text-emerald-700 text-sm font-mono font-bold">
+                  <td className="p-2 text-right font-mono text-sm font-bold text-emerald-700">
                     ₹{record.net_salary?.toLocaleString()}
                   </td>
                 </tr>
@@ -104,11 +126,11 @@ export function StaffPayslipModal({ open, onOpenChange, record }: StaffPayslipMo
           </div>
 
           {/* Signatures */}
-          <div className="pt-6 border-t border-gray-200 flex justify-between text-[10px] text-gray-500">
-            <div className="text-center border-t border-gray-400 pt-1 w-28">
+          <div className="flex justify-between border-t border-gray-200 pt-6 text-[10px] text-gray-500">
+            <div className="w-28 border-t border-gray-400 pt-1 text-center">
               <span>Employee Signature</span>
             </div>
-            <div className="text-center border-t border-gray-400 pt-1 w-28">
+            <div className="w-28 border-t border-gray-400 pt-1 text-center">
               <span>Accounts Authority</span>
             </div>
           </div>

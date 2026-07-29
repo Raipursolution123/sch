@@ -11,7 +11,10 @@ export const paymentMethodsService = {
   },
 
   updateGateway: async (id: number, data: PaymentGatewayUpdatePayload) => {
-    const response = await apiClient.put<{ data: PaymentGateway; message: string }>(`${BASE_PATH}${id}/`, data);
+    const response = await apiClient.put<{ data: PaymentGateway; message: string }>(
+      `${BASE_PATH}${id}/`,
+      data,
+    );
     return response.data;
   },
 };

@@ -1,10 +1,11 @@
 import datetime
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
+
 from django.utils import timezone
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+
 from apps.staff.api.views.common import MODULE, staff_error_response
-from apps.staff.domain.staff_exceptions import StaffError
 from apps.staff.models.staff import Staff
 from apps.staff.models.staff_attendance import StaffAttendance
 from apps.staff.models.staff_attendance_type import StaffAttendanceType
@@ -20,7 +21,9 @@ class StaffAttendanceView(APIView):
 
     def get(self, request):
         try:
-            date_str = request.query_params.get("date") or datetime.date.today().isoformat()
+            date_str = (
+                request.query_params.get("date") or datetime.date.today().isoformat()
+            )
             staff_members = list(Staff.objects.all())
 
             # Map existing attendance for the date
@@ -36,14 +39,20 @@ class StaffAttendanceView(APIView):
             for member in staff_members:
                 att = attendances.get(member.id)
                 name_part = f"{member.name or ''} {member.surname or ''}".strip()
-                results.append({
-                    "staff_id": member.id,
-                    "staff_name": name_part or f"Staff #{member.id}",
-                    "employee_id": member.employee_id or f"EMP-{member.id}",
-                    "date": date_str,
-                    "attendance_type_id": att.staff_attendance_type_id if (att and att.staff_attendance_type_id) else 1,
-                    "remark": att.remark if (att and att.remark) else "",
-                })
+                results.append(
+                    {
+                        "staff_id": member.id,
+                        "staff_name": name_part or f"Staff #{member.id}",
+                        "employee_id": member.employee_id or f"EMP-{member.id}",
+                        "date": date_str,
+                        "attendance_type_id": (
+                            att.staff_attendance_type_id
+                            if (att and att.staff_attendance_type_id)
+                            else 1
+                        ),
+                        "remark": att.remark if (att and att.remark) else "",
+                    }
+                )
 
             return APIResponse.success(
                 data={"results": results, "count": len(results), "date": date_str},
@@ -58,18 +67,50 @@ class StaffAttendanceView(APIView):
             attendance_list = request.data.get("attendance_data") or []
 
             # Prevent marking future dates
-            target_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date() if isinstance(date_str, str) else date_str
+            target_date = (
+                datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+                if isinstance(date_str, str)
+                else date_str
+            )
             if target_date > datetime.date.today():
-                return APIResponse.error(message="Cannot mark staff attendance for future dates.")
+                return APIResponse.error(
+                    message="Cannot mark staff attendance for future dates."
+                )
 
             # Ensure default StaffAttendanceType records exist for foreign key constraint
             if not StaffAttendanceType.objects.exists():
-                StaffAttendanceType.objects.bulk_create([
-                    StaffAttendanceType(id=1, type="Present", key_value="present", is_active="yes", created_at=timezone.now()),
-                    StaffAttendanceType(id=2, type="Late", key_value="late", is_active="yes", created_at=timezone.now()),
-                    StaffAttendanceType(id=3, type="Absent", key_value="absent", is_active="yes", created_at=timezone.now()),
-                    StaffAttendanceType(id=4, type="Half Day", key_value="half_day", is_active="yes", created_at=timezone.now()),
-                ])
+                StaffAttendanceType.objects.bulk_create(
+                    [
+                        StaffAttendanceType(
+                            id=1,
+                            type="Present",
+                            key_value="present",
+                            is_active="yes",
+                            created_at=timezone.now(),
+                        ),
+                        StaffAttendanceType(
+                            id=2,
+                            type="Late",
+                            key_value="late",
+                            is_active="yes",
+                            created_at=timezone.now(),
+                        ),
+                        StaffAttendanceType(
+                            id=3,
+                            type="Absent",
+                            key_value="absent",
+                            is_active="yes",
+                            created_at=timezone.now(),
+                        ),
+                        StaffAttendanceType(
+                            id=4,
+                            type="Half Day",
+                            key_value="half_day",
+                            is_active="yes",
+                            created_at=timezone.now(),
+                        ),
+                    ]
+                )
 
             for item in attendance_list:
                 staff_id = item.get("staff_id")
@@ -78,7 +119,9 @@ class StaffAttendanceView(APIView):
                 type_id = item.get("attendance_type_id", 1)
                 remark = item.get("remark", "")
 
-                att = StaffAttendance.objects.filter(staff_id=staff_id, date=target_date).first()
+                att = StaffAttendance.objects.filter(
+                    staff_id=staff_id, date=target_date
+                ).first()
                 if att:
                     att.staff_attendance_type_id = type_id
                     att.remark = remark
@@ -106,7 +149,9 @@ class StaffPayrollView(APIView):
 
     def get(self, request):
         try:
-            month = request.query_params.get("month") or datetime.date.today().strftime("%B")
+            month = request.query_params.get("month") or datetime.date.today().strftime(
+                "%B"
+            )
             year = request.query_params.get("year") or str(datetime.date.today().year)
 
             staff_members = list(Staff.objects.all())
@@ -120,22 +165,34 @@ class StaffPayrollView(APIView):
             for member in staff_members:
                 ps = payslips.get(member.id)
                 basic = float(member.basic_salary or 35000)
-                results.append({
-                    "id": ps.id if ps else member.id,
-                    "staff_id": member.id,
-                    "staff_name": f"{member.name or ''} {member.surname or ''}".strip() or f"Staff #{member.id}",
-                    "employee_id": member.employee_id or f"EMP-{member.id}",
-                    "basic_salary": basic,
-                    "net_salary": float(ps.net_salary) if (ps and ps.net_salary is not None) else basic,
-                    "status": ps.status if ps else "unpaid",
-                    "month": month,
-                    "year": year,
-                    "payment_mode": ps.payment_mode if ps else "Cash",
-                    "payment_date": ps.payment_date if ps else None,
-                })
+                results.append(
+                    {
+                        "id": ps.id if ps else member.id,
+                        "staff_id": member.id,
+                        "staff_name": f"{member.name or ''} {member.surname or ''}".strip()
+                        or f"Staff #{member.id}",
+                        "employee_id": member.employee_id or f"EMP-{member.id}",
+                        "basic_salary": basic,
+                        "net_salary": (
+                            float(ps.net_salary)
+                            if (ps and ps.net_salary is not None)
+                            else basic
+                        ),
+                        "status": ps.status if ps else "unpaid",
+                        "month": month,
+                        "year": year,
+                        "payment_mode": ps.payment_mode if ps else "Cash",
+                        "payment_date": ps.payment_date if ps else None,
+                    }
+                )
 
             return APIResponse.success(
-                data={"results": results, "count": len(results), "month": month, "year": year},
+                data={
+                    "results": results,
+                    "count": len(results),
+                    "month": month,
+                    "year": year,
+                },
                 message="Staff payroll list retrieved successfully.",
             )
         except Exception as exc:
@@ -153,7 +210,9 @@ class StaffPayrollView(APIView):
             net_salary = float(request.data.get("net_salary") or basic)
             payment_mode = request.data.get("payment_mode") or "Cash"
 
-            ps = StaffPayslip.objects.filter(staff_id=staff_id, month=month, year=year).first()
+            ps = StaffPayslip.objects.filter(
+                staff_id=staff_id, month=month, year=year
+            ).first()
             if ps:
                 ps.basic = basic
                 ps.net_salary = net_salary

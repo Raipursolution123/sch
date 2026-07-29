@@ -1,16 +1,15 @@
+from django.utils import timezone
+
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from django.utils import timezone
 
 from apps.fees.api.views.common import MODULE, fee_error_response
-from apps.fees.models.feemasters import Feemasters
 from apps.fees.models.fee_groups import FeeGroups
+from apps.fees.models.fee_groups_feetype import FeeGroupsFeetype
+from apps.fees.models.feemasters import Feemasters
 from apps.fees.models.feetype import Feetype
 from common.responses.api import APIResponse
-from core.permissions.legacy_privilege import HasLegacyPrivilege
-
-from apps.fees.models.fee_groups_feetype import FeeGroupsFeetype
 
 CATEGORY = "fees"
 
@@ -24,13 +23,17 @@ class FeeMasterListView(APIView):
         try:
             groups = {}
             try:
-                groups = {g.id: g.name for g in FeeGroups.objects.all() if g.id is not None}
+                groups = {
+                    g.id: g.name for g in FeeGroups.objects.all() if g.id is not None
+                }
             except Exception:
                 groups = {}
 
             types = {}
             try:
-                types = {t.id: t.type for t in Feetype.objects.all() if t.id is not None}
+                types = {
+                    t.id: t.type for t in Feetype.objects.all() if t.id is not None
+                }
             except Exception:
                 types = {}
 
@@ -39,7 +42,11 @@ class FeeMasterListView(APIView):
             # Map descriptions from Feemasters and Feetype
             fm_desc_by_id = {}
             fm_desc_by_combo = {}
-            ft_desc_by_id = {t.id: t.description for t in Feetype.objects.all() if t.id and t.description}
+            ft_desc_by_id = {
+                t.id: t.description
+                for t in Feetype.objects.all()
+                if t.id and t.description
+            }
             try:
                 for m in Feemasters.objects.all():
                     if m.description:
@@ -60,37 +67,59 @@ class FeeMasterListView(APIView):
                         or ft_desc_by_id.get(ft_id)
                         or (f"Due Date: {fgft.due_date}" if fgft.due_date else "")
                     )
-                    results.append({
-                        "id": fgft.id,
-                        "fee_group_id": fg_id,
-                        "fee_group_name": groups.get(fg_id, f"Group #{fg_id}") if fg_id else "Default Group",
-                        "fee_type_id": ft_id,
-                        "fee_type_name": types.get(ft_id, f"Type #{ft_id}") if ft_id else "General Fee",
-                        "amount": float(fgft.amount or 0.0),
-                        "description": desc,
-                        "is_active": fgft.is_active or "yes",
-                    })
+                    results.append(
+                        {
+                            "id": fgft.id,
+                            "fee_group_id": fg_id,
+                            "fee_group_name": (
+                                groups.get(fg_id, f"Group #{fg_id}")
+                                if fg_id
+                                else "Default Group"
+                            ),
+                            "fee_type_id": ft_id,
+                            "fee_type_name": (
+                                types.get(ft_id, f"Type #{ft_id}")
+                                if ft_id
+                                else "General Fee"
+                            ),
+                            "amount": float(fgft.amount or 0.0),
+                            "description": desc,
+                            "is_active": fgft.is_active or "yes",
+                        }
+                    )
             except Exception:
                 pass
 
             # Also add any standalone Feemasters rows not present in FeeGroupsFeetype
             try:
-                existing_combos = {(r["fee_group_id"], r["fee_type_id"]) for r in results}
+                existing_combos = {
+                    (r["fee_group_id"], r["fee_type_id"]) for r in results
+                }
                 for m in Feemasters.objects.all().order_by("-id"):
                     combo = (m.class_id, m.feetype_id)
                     if combo in existing_combos:
                         continue
                     existing_combos.add(combo)
-                    results.append({
-                        "id": m.id,
-                        "fee_group_id": m.class_id,
-                        "fee_group_name": groups.get(m.class_id, f"Group #{m.class_id}") if m.class_id else "Default Group",
-                        "fee_type_id": m.feetype_id,
-                        "fee_type_name": types.get(m.feetype_id, f"Type #{m.feetype_id}") if m.feetype_id else "General Fee",
-                        "amount": float(m.amount or 0.0),
-                        "description": m.description or "",
-                        "is_active": m.is_active or "yes",
-                    })
+                    results.append(
+                        {
+                            "id": m.id,
+                            "fee_group_id": m.class_id,
+                            "fee_group_name": (
+                                groups.get(m.class_id, f"Group #{m.class_id}")
+                                if m.class_id
+                                else "Default Group"
+                            ),
+                            "fee_type_id": m.feetype_id,
+                            "fee_type_name": (
+                                types.get(m.feetype_id, f"Type #{m.feetype_id}")
+                                if m.feetype_id
+                                else "General Fee"
+                            ),
+                            "amount": float(m.amount or 0.0),
+                            "description": m.description or "",
+                            "is_active": m.is_active or "yes",
+                        }
+                    )
             except Exception:
                 pass
 
@@ -170,7 +199,11 @@ class FeeMasterDetailView(APIView):
         try:
             fee_group_id = request.data.get("fee_group_id")
             fee_type_id = request.data.get("fee_type_id")
-            amount = float(request.data.get("amount") or 0.0) if "amount" in request.data else None
+            amount = (
+                float(request.data.get("amount") or 0.0)
+                if "amount" in request.data
+                else None
+            )
             description = request.data.get("description", "")
 
             fgft = FeeGroupsFeetype.objects.filter(pk=pk).first()
@@ -189,7 +222,9 @@ class FeeMasterDetailView(APIView):
             # Sync description to Feemasters table
             fm = Feemasters.objects.filter(pk=pk).first()
             if not fm and target_fg and target_ft:
-                fm = Feemasters.objects.filter(class_id=target_fg, feetype_id=target_ft).first()
+                fm = Feemasters.objects.filter(
+                    class_id=target_fg, feetype_id=target_ft
+                ).first()
 
             if fm:
                 if target_fg is not None:

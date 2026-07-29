@@ -198,5 +198,4 @@ urlpatterns = [
         "users/role-options/", UserRoleOptionsView.as_view(), name="users_role_options"
     ),
     path("users/<int:pk>/", UserDetailView.as_view(), name="users_detail"),
-
 ]

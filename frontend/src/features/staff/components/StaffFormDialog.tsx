@@ -265,7 +265,7 @@ export function StaffFormDialog({
             <FormTextField
               control={control}
               name="password"
-              label={isEdit ? "New password (leave blank to keep)" : "Password (for login)"}
+              label={isEdit ? 'New password (leave blank to keep)' : 'Password (for login)'}
               type="password"
             />
           </div>

@@ -26,7 +26,7 @@ const defaults: RoutePickupPointFormValues = {
   fees: 0,
   destination_distance: 0,
   pickup_time: '',
-  order_number: '',
+  order_number: 0,
 };
 
 export function RoutePickupPointFormDialog({
@@ -58,7 +58,7 @@ export function RoutePickupPointFormDialog({
         fees: assignment.fees ?? 0,
         destination_distance: assignment.destination_distance ?? 0,
         pickup_time: assignment.pickup_time ?? '',
-        order_number: assignment.order_number ?? '',
+        order_number: Number(assignment.order_number ?? 0),
       });
       return;
     }
@@ -81,6 +81,7 @@ export function RoutePickupPointFormDialog({
         control={control}
         name="transport_route_id"
         label="Route"
+        placeholder="Select route"
         options={routes.map((route) => ({
           value: String(route.id),
           label: route.route_title || `Route ${route.id}`,
@@ -92,6 +93,7 @@ export function RoutePickupPointFormDialog({
         control={control}
         name="pickup_point_id"
         label="Pickup point"
+        placeholder="Select pickup point"
         options={pickupPoints.map((point) => ({
           value: String(point.id),
           label: point.name,
@@ -109,7 +111,7 @@ export function RoutePickupPointFormDialog({
           type="time"
           optional
         />
-        <FormTextField control={control} name="order_number" label="Order" optional />
+        <FormNumberField control={control} name="order_number" label="Order" optional />
       </div>
     </EntityFormDialog>
   );

@@ -25,13 +25,13 @@ const columns: DataTableColumn<PrintHeaderFooter>[] = [
           <img
             src={row.header_image}
             alt={row.print_type}
-            className="h-10 max-w-[150px] object-contain rounded border bg-muted"
+            className="h-10 max-w-[150px] rounded border bg-muted object-contain"
             onError={(e) => {
               (e.target as HTMLImageElement).src = 'https://placehold.co/150x50/png?text=No+Image';
             }}
           />
         ) : (
-          <span className="text-muted-foreground text-xs">No image</span>
+          <span className="text-xs text-muted-foreground">No image</span>
         )}
       </div>
     ),

@@ -81,14 +81,14 @@ export function PrintHeaderFooterFormDialog({
             </div>
 
             {headerImage && (
-              <div className="mt-2 rounded-md border p-2 bg-muted/30">
-                <p className="text-xs font-semibold text-muted-foreground mb-1 flex items-center">
+              <div className="mt-2 rounded-md border bg-muted/30 p-2">
+                <p className="mb-1 flex items-center text-xs font-semibold text-muted-foreground">
                   <Image className="mr-1 h-3 w-3" /> Header Banner Preview:
                 </p>
                 <img
                   src={headerImage}
                   alt="Preview"
-                  className="max-h-20 object-contain rounded border"
+                  className="max-h-20 rounded border object-contain"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src =
                       'https://placehold.co/600x150/png?text=Invalid+Image+URL';
@@ -111,7 +111,7 @@ export function PrintHeaderFooterFormDialog({
             </div>
           </div>
 
-          <div className="flex justify-end space-x-2 pt-4 border-t">
+          <div className="flex justify-end space-x-2 border-t pt-4">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>

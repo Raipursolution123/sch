@@ -1,17 +1,35 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, Layers } from 'lucide-react';
 import { ModuleListPack } from '@workflow-packs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table';
 import { Button } from '@components/ui/button';
 import { PermissionButton } from '@components/rbac/PermissionButton';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@components/ui/dialog';
 import { FormField } from '@components/forms/FormField';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { useFeeGroups } from '@hooks/useFeeGroups';
 import { useFeeTypes } from '@hooks/useFeeTypes';
-import { useFeeMasters, useCreateFeeMaster, useUpdateFeeMaster, useDeleteFeeMaster } from '@hooks/useFeeMasters';
+import {
+  useFeeMasters,
+  useCreateFeeMaster,
+  useUpdateFeeMaster,
+  useDeleteFeeMaster,
+} from '@hooks/useFeeMasters';
 import type { FeeMasterItem } from '@services/api/fee-masters.service';
 
 export function FeeMastersPage() {
@@ -32,8 +50,14 @@ export function FeeMastersPage() {
   const [amount, setAmount] = useState<string>('');
   const [description, setDescription] = useState<string>('');
 
-  const groupOptions = (feeGroups || []).map((g) => ({ value: String(g.id), label: g.name || `Group #${g.id}` }));
-  const typeOptions = (feeTypes || []).map((t: any) => ({ value: String(t.id), label: t.type || t.name || t.code || `Type #${t.id}` }));
+  const groupOptions = (feeGroups || []).map((g) => ({
+    value: String(g.id),
+    label: g.name || `Group #${g.id}`,
+  }));
+  const typeOptions = (feeTypes || []).map((t: any) => ({
+    value: String(t.id),
+    label: t.type || t.name || t.code || `Type #${t.id}`,
+  }));
 
   const openCreateDialog = () => {
     setSelectedRecord(null);
@@ -63,7 +87,10 @@ export function FeeMastersPage() {
     };
 
     if (selectedRecord) {
-      updateMutation.mutate({ id: selectedRecord.id, payload }, { onSuccess: () => setDialogOpen(false) });
+      updateMutation.mutate(
+        { id: selectedRecord.id, payload },
+        { onSuccess: () => setDialogOpen(false) },
+      );
     } else {
       createMutation.mutate(payload, { onSuccess: () => setDialogOpen(false) });
     }
@@ -99,7 +126,9 @@ export function FeeMastersPage() {
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle>{selectedRecord ? 'Edit Fee Master Rule' : 'Assign Fee Master Rule'}</DialogTitle>
+                <DialogTitle>
+                  {selectedRecord ? 'Edit Fee Master Rule' : 'Assign Fee Master Rule'}
+                </DialogTitle>
               </DialogHeader>
 
               <form onSubmit={handleSubmit} className="space-y-4 py-2">
@@ -160,7 +189,11 @@ export function FeeMastersPage() {
               if (!open) setDeleteTarget(null);
             }}
             title="Delete Fee Master Rule"
-            description={deleteTarget ? `Delete rule for "${deleteTarget.fee_group_name} - ${deleteTarget.fee_type_name}"?` : ''}
+            description={
+              deleteTarget
+                ? `Delete rule for "${deleteTarget.fee_group_name} - ${deleteTarget.fee_type_name}"?`
+                : ''
+            }
             confirmLabel="Delete"
             destructive
             isLoading={deleteMutation.isPending}
@@ -195,10 +228,12 @@ export function FeeMastersPage() {
                   </div>
                 </TableCell>
                 <TableCell className="font-medium text-foreground">{item.fee_type_name}</TableCell>
-                <TableCell className="font-mono font-bold text-emerald-700">₹{item.amount?.toLocaleString()}</TableCell>
+                <TableCell className="font-mono font-bold text-emerald-700">
+                  ₹{item.amount?.toLocaleString()}
+                </TableCell>
                 <TableCell className="text-xs">
                   {item.description ? (
-                    <span className="inline-block bg-muted/50 px-2 py-0.5 rounded border text-foreground font-medium">
+                    <span className="inline-block rounded border bg-muted/50 px-2 py-0.5 font-medium text-foreground">
                       {item.description}
                     </span>
                   ) : (
@@ -210,7 +245,12 @@ export function FeeMastersPage() {
                     <Button variant="ghost" size="sm" onClick={() => openEditDialog(item)}>
                       <Edit2 className="h-3.5 w-3.5" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => setDeleteTarget(item)} className="text-destructive">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setDeleteTarget(item)}
+                      className="text-destructive"
+                    >
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                   </div>
