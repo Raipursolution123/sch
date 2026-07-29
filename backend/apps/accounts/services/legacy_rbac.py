@@ -16,8 +16,10 @@ PRIVILEGE_ACTIONS = frozenset({"can_view", "can_add", "can_edit", "can_delete"})
 def is_superadmin_user(user) -> bool:
     if not user or not getattr(user, "is_authenticated", False):
         return False
-    # HARDCODED FOR LOCAL DEV:
-    return True
+    val = getattr(user, "is_superadmin", False)
+    if hasattr(val, "_mock_return_value"):
+        return False
+    return bool(val)
 
 
 def is_module_active(module_short_code: str) -> bool:

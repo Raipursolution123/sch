@@ -422,13 +422,7 @@ interface FilterSelectProps {
   disabled?: boolean;
 }
 
-function FilterSelect({
-  label,
-  options,
-  value,
-  onChange,
-  disabled,
-}: FilterSelectProps) {
+function FilterSelect({ label, options, value, onChange, disabled }: FilterSelectProps) {
   const id = useMemo(() => `promote_${label.toLowerCase().replace(/\s+/g, '_')}`, [label]);
   return (
     <FormField label={label} htmlFor={id}>
