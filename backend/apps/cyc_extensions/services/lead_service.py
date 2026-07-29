@@ -172,6 +172,14 @@ class LeadService:
             ("l_address", "l_address"),
             ("l_phone_number", "l_phone_number"),
             ("l_status", "l_status"),
+        ):
+            if key in payload:
+                val = str(payload.get(key) or "").strip()
+                if field == "l_status" and not val:
+                    val = "Open"
+                setattr(row, field, val)
+
+        for field, key in (
             ("l_mother_name", "l_mother_name"),
             ("l_location", "l_location"),
             ("l_qualification", "l_qualification"),
