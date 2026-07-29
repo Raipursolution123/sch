@@ -15,6 +15,7 @@ PRIVILEGE_ACTIONS = frozenset({"can_view", "can_add", "can_edit", "can_delete"})
 
 def is_superadmin_user(user) -> bool:
     import sys
+
     if not user or not getattr(user, "is_authenticated", False):
         return False
     # If running unit tests (pytest), verify actual superadmin status
