@@ -11,10 +11,14 @@ from apps.transport.domain.transport_exceptions import (
 
 class RoutePickupPointService:
     def list_by_route(self, route_id: int):
-        return RoutePickupPoint.objects.filter(transport_route_id=route_id).order_by("order_number", "id")
+        return RoutePickupPoint.objects.filter(transport_route_id=route_id).order_by(
+            "order_number", "id"
+        )
 
     def list_all(self):
-        return RoutePickupPoint.objects.all().order_by("transport_route_id", "order_number")
+        return RoutePickupPoint.objects.all().order_by(
+            "transport_route_id", "order_number"
+        )
 
     def get(self, assignment_id: int) -> RoutePickupPoint:
         obj = RoutePickupPoint.objects.filter(id=assignment_id).first()
@@ -45,7 +49,7 @@ class RoutePickupPointService:
             fees=payload.get("fees") or 0.0,
             destination_distance=payload.get("destination_distance") or 0.0,
             pickup_time=payload.get("pickup_time"),
-            order_number=str(payload.get("order_number", "")).strip(),
+            order_number=float(payload.get("order_number") or 0.0),
             created_at=timezone.now(),
         )
 
@@ -59,7 +63,7 @@ class RoutePickupPointService:
         if "pickup_time" in payload:
             obj.pickup_time = payload["pickup_time"]
         if "order_number" in payload:
-            obj.order_number = str(payload["order_number"]).strip()
+            obj.order_number = float(payload["order_number"] or 0.0)
 
         obj.save()
         return obj

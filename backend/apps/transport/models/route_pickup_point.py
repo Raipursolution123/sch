@@ -10,7 +10,7 @@ class RoutePickupPoint(models.Model):
     fees = models.FloatField(blank=True, null=True, default=0.00)
     destination_distance = models.FloatField(blank=True, null=True, default=0.0)
     pickup_time = models.TimeField(blank=True, null=True)
-    order_number = models.TextField()
+    order_number = models.FloatField(default=0.0)
     created_at = models.DateTimeField()
 
     class Meta:

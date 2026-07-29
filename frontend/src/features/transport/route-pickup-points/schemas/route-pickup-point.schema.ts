@@ -6,7 +6,7 @@ export const routePickupPointFormSchema = z.object({
   fees: z.number().min(0).optional(),
   destination_distance: z.number().min(0).optional(),
   pickup_time: z.string().trim().optional(),
-  order_number: z.string().trim().optional(),
+  order_number: z.number().min(0).optional(),
 });
 
 export type RoutePickupPointFormValues = z.infer<typeof routePickupPointFormSchema>;
