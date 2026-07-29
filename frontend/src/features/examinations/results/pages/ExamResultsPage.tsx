@@ -11,6 +11,7 @@ import {
 import { useExamResultRoster, useSaveExamResults } from '@hooks/useExamResults';
 import { useExamSchedules } from '@hooks/useExamSchedules';
 import { useExams } from '@hooks/useExams';
+import { useSessions } from '@hooks/useSessions';
 import type { ExamResultAttendence } from '@app-types/examinations/exam-result';
 import { ModuleMarkGridPack } from '@workflow-packs';
 
@@ -18,12 +19,20 @@ export function ExamResultsPage() {
   const { data: examsData } = useExams();
   const exams = examsData?.results || [];
   const { data: schedules = [] } = useExamSchedules();
+  const { data: sessionsData } = useSessions();
+  const sessions = sessionsData?.results || [];
 
+  const activeSessions = useMemo(() => sessions.filter((s) => s.is_active === 'yes'), [sessions]);
+
+  const [sessionId, setSessionId] = useState(0);
   const [examId, setExamId] = useState(0);
   const [scheduleId, setScheduleId] = useState(0);
   const [rows, setRows] = useState<ExamResultRow[]>([]);
 
-  const activeExams = useMemo(() => exams.filter((e) => e.is_active === 'yes'), [exams]);
+  const activeExams = useMemo(
+    () => exams.filter((e) => e.is_active === 'yes' && (sessionId === 0 || e.session_id === sessionId)),
+    [exams, sessionId],
+  );
 
   const scheduleOptions = useMemo(
     () =>
@@ -49,12 +58,22 @@ export function ExamResultsPage() {
 
   const saveMutation = useSaveExamResults();
 
+  // 1) Select first active session if none selected
+  useEffect(() => {
+    if (sessionId === 0 && activeSessions.length > 0) {
+      setSessionId(activeSessions[0].id);
+    }
+  }, [sessionId, activeSessions]);
+
+  // 2) Select first exam if none selected, or deselect if none available
   useEffect(() => {
     if (activeExams.length > 0 && examId === 0) {
       setExamId(activeExams[0].id);
+    } else if (activeExams.length === 0 && examId > 0) {
+      setExamId(0);
     }
   }, [activeExams, examId]);
-
+  // 3) Select first schedule if none selected, or deselect if none available
   useEffect(() => {
     if (examId <= 0) {
       setScheduleId(0);
@@ -69,7 +88,6 @@ export function ExamResultsPage() {
       setScheduleId(forExam[0].id);
     }
   }, [examId, schedules, scheduleId]);
-
   useEffect(() => {
     if (roster) {
       setRows(roster.students);
@@ -138,6 +156,23 @@ export function ExamResultsPage() {
       }
       filters={
         <>
+          <FormField label="Session" htmlFor="exam_results_session">
+            <Select
+              id="exam_results_session"
+              placeholder="Select session"
+              options={activeSessions.map((s) => ({
+                value: String(s.id),
+                label: s.session,
+              }))}
+              value={sessionId ? String(sessionId) : ''}
+              onChange={(e) => {
+                setSessionId(Number(e.target.value));
+                setExamId(0);
+                setScheduleId(0);
+              }}
+              disabled={!canEnter}
+            />
+          </FormField>
           <FormField label="Exam" htmlFor="exam_results_exam">
             <Select
               id="exam_results_exam"

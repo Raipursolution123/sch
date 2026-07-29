@@ -14,6 +14,7 @@ import {
   useExamEnrollmentRoster,
   useUnenrollExamStudent,
 } from '@hooks/useExamEnrollments';
+import { useSessions } from '@hooks/useSessions';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
 import { useExams } from '@hooks/useExams';
@@ -28,14 +29,25 @@ export function ExamEnrollPage() {
   const classes = classesData?.results || [];
   const { data: classSectionsData } = useClassSections(1, { noPaginate: true });
   const classSections = classSectionsData?.results || [];
+  const { data: sessionsData } = useSessions();
+  const sessions = sessionsData?.results || [];
 
-  const activeExams = useMemo(() => exams.filter((e) => e.is_active === 'yes'), [exams]);
+  const activeSessions = useMemo(() => sessions.filter((s) => s.is_active === 'yes'), [sessions]);
 
+  const [sessionId, setSessionId] = useState(0);
   const [examId, setExamId] = useState(0);
   const [classId, setClassId] = useState(0);
   const [sectionId, setSectionId] = useState(0);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [unenrollTarget, setUnenrollTarget] = useState<ExamEnrollmentRosterStudent | null>(null);
+
+  const activeExams = useMemo(
+    () =>
+      exams.filter(
+        (e) => e.is_active === 'yes' && (sessionId === 0 || e.session_id === sessionId),
+      ),
+    [exams, sessionId],
+  );
 
   const activeClasses = useMemo(
     () => classes.filter((c) => c.is_active === 'yes').sort((a, b) => a.sort_order - b.sort_order),
@@ -60,16 +72,33 @@ export function ExamEnrollPage() {
   const unenrollMutation = useUnenrollExamStudent();
 
   useEffect(() => {
-    if (examId > 0) return;
-    const fromQuery = Number(searchParams.get('exam_id') || 0);
-    if (fromQuery > 0) {
-      setExamId(fromQuery);
-      return;
+    // Attempt to select from query first if not initialized
+    if (examId === 0) {
+      const fromQuery = Number(searchParams.get('exam_id') || 0);
+      if (fromQuery > 0) {
+        const examFromQuery = exams.find((e) => e.id === fromQuery);
+        if (examFromQuery) {
+          if (sessionId === 0) setSessionId(examFromQuery.session_id);
+          setExamId(fromQuery);
+          return;
+        }
+      }
     }
-    if (activeExams.length > 0) {
+
+    // Auto-select session if none selected
+    if (sessionId === 0 && activeSessions.length > 0) {
+      setSessionId(activeSessions[0].id);
+    }
+  }, [searchParams, exams, activeSessions, examId, sessionId]);
+
+  useEffect(() => {
+    // If we have exams for the session but none selected, select the first one
+    if (activeExams.length > 0 && examId === 0) {
       setExamId(activeExams[0].id);
+    } else if (activeExams.length === 0 && examId > 0) {
+      setExamId(0);
     }
-  }, [searchParams, activeExams, examId]);
+  }, [activeExams, examId]);
 
   useEffect(() => {
     if (activeClasses.length > 0 && classId === 0) {
@@ -130,6 +159,22 @@ export function ExamEnrollPage() {
         }
         filters={
           <>
+            <FormField label="Session" htmlFor="exam_enroll_session">
+              <Select
+                id="exam_enroll_session"
+                placeholder="Select session"
+                options={activeSessions.map((s) => ({
+                  value: String(s.id),
+                  label: s.session,
+                }))}
+                value={sessionId ? String(sessionId) : ''}
+                onChange={(e) => {
+                  setSessionId(Number(e.target.value));
+                  setExamId(0);
+                }}
+                disabled={!canEnroll}
+              />
+            </FormField>
             <FormField label="Exam" htmlFor="exam_enroll_exam">
               <Select
                 id="exam_enroll_exam"
@@ -147,7 +192,7 @@ export function ExamEnrollPage() {
                   else params.delete('exam_id');
                   setSearchParams(params, { replace: true });
                 }}
-                disabled={!canEnroll}
+                disabled={!canEnroll || activeExams.length === 0}
               />
             </FormField>
             <FormField label="Class" htmlFor="exam_enroll_class">
@@ -176,19 +221,6 @@ export function ExamEnrollPage() {
                 value={sectionId ? String(sectionId) : ''}
                 onChange={(e) => setSectionId(Number(e.target.value))}
                 disabled={!canEnroll || sectionOptions.length === 0}
-              />
-            </FormField>
-            <FormField label="Session" htmlFor="exam_enroll_session">
-              <Select
-                id="exam_enroll_session"
-                placeholder="Exam session"
-                options={
-                  roster?.session_name
-                    ? [{ value: roster.session_name, label: roster.session_name }]
-                    : []
-                }
-                value={roster?.session_name ?? ''}
-                disabled
               />
             </FormField>
           </>
