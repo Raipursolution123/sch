@@ -120,10 +120,39 @@ export function PromoteWizard() {
     label: c.class_name,
   }));
 
-  const subjectGroupOptions = [
-    { value: '', label: 'None (optional)' },
-    ...subjectGroups.map((g) => ({ value: String(g.id), label: g.name })),
-  ];
+  const targetClassSectionIds = useMemo(() => {
+    if (toClassId === undefined) return [];
+    if (toSectionId !== undefined) {
+      const cs = classSections.find((cs) => cs.class_id === toClassId && cs.section_id === toSectionId);
+      return cs ? [cs.id] : [];
+    }
+    return classSections.filter((cs) => cs.class_id === toClassId).map((cs) => cs.id);
+  }, [classSections, toClassId, toSectionId]);
+
+  const subjectGroupOptions = useMemo(() => {
+    const defaultOption = { value: '', label: 'None (optional)' };
+    if (toClassId === undefined) return [defaultOption];
+
+    const filtered = subjectGroups.filter((g) => {
+      if (!g.class_section_ids) return true;
+      if (g.class_section_ids.length === 0) return false;
+      return g.class_section_ids.some((id) => targetClassSectionIds.includes(Number(id)));
+    });
+
+    return [
+      defaultOption,
+      ...filtered.map((g) => ({ value: String(g.id), label: g.name })),
+    ];
+  }, [subjectGroups, toClassId, targetClassSectionIds]);
+
+  const debugInfo = JSON.stringify({
+    toClassId,
+    toSectionId,
+    targetClassSectionIds,
+    subjectGroupsCount: subjectGroups.length,
+    subjectGroupClassSectionIds: subjectGroups.map(g => g.class_section_ids),
+    classSectionsCount: classSections.length,
+  });
 
   const sourceReady =
     fromSessionId !== undefined && fromClassId !== undefined && fromSectionId !== undefined;
@@ -366,7 +395,12 @@ export function PromoteWizard() {
               Promote <strong>{selectedStudentIds.length}</strong> student(s) to the target
               session/class-section.
             </p>
-            <label className="flex items-center gap-2">
+            {toSubjectGroupId && (
+              <p className="text-muted-foreground">
+                Assigned Subject Group: <strong>{subjectGroups.find(g => g.id === toSubjectGroupId)?.name || 'Unknown'}</strong>
+              </p>
+            )}
+            <label className="flex items-center gap-2 mt-4">
               <Checkbox
                 checked={deactivateSource}
                 onChange={(e) => setDeactivateSource(e.target.checked)}

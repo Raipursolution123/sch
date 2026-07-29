@@ -119,6 +119,7 @@ export function StudentCategoriesPage() {
         open={open}
         onOpenChange={setOpen}
         title={selected ? 'Edit Category' : 'Add Category'}
+        submitLabel={selected ? 'Update' : 'Create'}
         onSubmit={handleSubmit((values) => {
           const payload = {
             name: values.name,

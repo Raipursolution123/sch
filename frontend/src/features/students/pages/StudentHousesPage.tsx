@@ -130,6 +130,7 @@ export function StudentHousesPage() {
         open={open}
         onOpenChange={setOpen}
         title={selected ? 'Edit House' : 'Add House'}
+        submitLabel={selected ? 'Update' : 'Create'}
         onSubmit={handleSubmit((values) => {
           const payload = {
             house_name: values.house_name,
