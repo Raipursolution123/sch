@@ -1,6 +1,9 @@
 from django.urls import path
 
-from apps.examinations.api.views.cbse_exam import CbseExamsListCreateView
+from apps.examinations.api.views.cbse_exam import (
+    CbseExamDetailView,
+    CbseExamsListCreateView,
+)
 from apps.examinations.api.views.exam import ExamsDetailView, ExamsListCreateView
 from apps.examinations.api.views.exam_enrollment import (
     ExamEnrollmentAssignView,
@@ -116,6 +119,11 @@ urlpatterns = [
         "cbse-exams/",
         CbseExamsListCreateView.as_view(),
         name="cbse_exams_list_create",
+    ),
+    path(
+        "cbse-exams/<int:pk>/",
+        CbseExamDetailView.as_view(),
+        name="cbse_exams_detail",
     ),
     path(
         "questions/",

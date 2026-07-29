@@ -1,7 +1,7 @@
 import { apiClient } from '@services/api/client';
 import { API_ENDPOINTS } from '@constants/index';
 import type { ApiSuccessResponse } from '@app-types/api';
-import type { CbseExam, CreateCbseExamPayload } from '@app-types/examinations/cbse-exam';
+import type { CbseExam, CreateCbseExamPayload, UpdateCbseExamPayload } from '@app-types/examinations/cbse-exam';
 import { type BackendPayload, extractList } from '@utils/api-response';
 
 export const cbseExamsService = {
@@ -16,5 +16,17 @@ export const cbseExamsService = {
       payload,
     );
     return data.data;
+  },
+
+  update: async (id: number, payload: UpdateCbseExamPayload): Promise<CbseExam> => {
+    const { data } = await apiClient.patch<ApiSuccessResponse<CbseExam>>(
+      API_ENDPOINTS.examinations.cbseExamDetail(id),
+      payload,
+    );
+    return data.data;
+  },
+
+  delete: async (id: number): Promise<void> => {
+    await apiClient.delete(API_ENDPOINTS.examinations.cbseExamDetail(id));
   },
 };

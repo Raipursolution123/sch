@@ -27,3 +27,5 @@ export interface CreateCbseExamPayload {
   is_publish?: number;
   is_active?: number;
 }
+
+export type UpdateCbseExamPayload = Partial<CreateCbseExamPayload>;

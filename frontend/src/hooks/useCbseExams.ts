@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
 import { cbseExamsService } from '@services/api';
-import type { CreateCbseExamPayload } from '@app-types/examinations/cbse-exam';
+import type { CreateCbseExamPayload, UpdateCbseExamPayload } from '@app-types/examinations/cbse-exam';
 import { getApiErrorMessage } from '@utils/session';
 
 export function useCbseExams() {
@@ -21,5 +21,30 @@ export function useCreateCbseExam() {
       toast.success('CBSE exam created');
     },
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to create CBSE exam')),
+  });
+}
+
+export function useUpdateCbseExam() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: number; payload: UpdateCbseExamPayload }) =>
+      cbseExamsService.update(id, payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.examinations.cbseExams.list() });
+      toast.success('CBSE exam updated');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update CBSE exam')),
+  });
+}
+
+export function useDeleteCbseExam() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => cbseExamsService.delete(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.examinations.cbseExams.list() });
+      toast.success('CBSE exam deleted');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete CBSE exam')),
   });
 }

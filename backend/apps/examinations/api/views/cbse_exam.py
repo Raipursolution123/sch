@@ -40,3 +40,34 @@ class CbseExamsListCreateView(APIView):
             )
         except ExaminationError as exc:
             return examination_error_response(exc)
+
+class CbseExamDetailView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = CATEGORY
+
+    def get(self, request, pk):
+        try:
+            data = CbseExamService().get_exam(pk)
+            return APIResponse.success(data=data)
+        except ExaminationError as exc:
+            return examination_error_response(exc)
+
+    def put(self, request, pk):
+        try:
+            data = CbseExamService().update_exam(pk, request.data)
+            return APIResponse.success(
+                data=data, message="CBSE exam updated successfully."
+            )
+        except ExaminationError as exc:
+            return examination_error_response(exc)
+
+    def patch(self, request, pk):
+        return self.put(request, pk)
+
+    def delete(self, request, pk):
+        try:
+            CbseExamService().delete_exam(pk)
+            return APIResponse.success(message="CBSE exam deleted successfully.")
+        except ExaminationError as exc:
+            return examination_error_response(exc)
