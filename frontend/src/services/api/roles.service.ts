@@ -60,6 +60,10 @@ export const usersService = {
     return data.data;
   },
 
+  delete: async (id: number): Promise<void> => {
+    await apiClient.delete(API_ENDPOINTS.settings.userDetail(id));
+  },
+
   roleOptions: async (): Promise<RoleSummary[]> => {
     const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.settings.userRoleOptions);
     return extractList<RoleSummary>(data);

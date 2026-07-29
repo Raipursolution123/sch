@@ -140,6 +140,14 @@ class UserAccountService:
             logger.info("Updated staff user id=%s", user.id)
         return self._serialize_user(user)
 
+    def delete_user(self, user_id: int) -> None:
+        user = self.get_user(user_id)
+        with transaction.atomic():
+            StaffRole.objects.filter(staff_id=user.user_id).delete()
+            user.delete()
+            invalidate_user_permissions_cache(user.id)
+            logger.info("Deleted staff user id=%s", user.id)
+
     def search_users(self, *, q: str = "") -> list[dict[str, Any]]:
         qs = self.list_staff_users()
         term = (q or "").strip()

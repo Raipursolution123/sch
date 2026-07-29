@@ -66,6 +66,8 @@ class BackupService:
             f"--host={host}",
             f"--port={port}",
             f"--user={user}",
+            "--ssl=0",
+            "--no-tablespaces",
             "--single-transaction",
             "--routines",
             "--triggers",
@@ -138,6 +140,7 @@ class BackupService:
             f"--host={host}",
             f"--port={port}",
             f"--user={user}",
+            "--ssl=0",
             name,
         ]
         try:

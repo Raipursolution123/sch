@@ -36,6 +36,13 @@ export function UserFormDialog({
     label: r.is_superadmin ? `${r.name} (Superadmin)` : r.name,
   }));
 
+  if (user?.role_id && !roleOptions.some((o) => o.value === String(user.role_id))) {
+    roleOptions.push({
+      value: String(user.role_id),
+      label: user.role_name ? `${user.role_name} (Inactive)` : `Role #${user.role_id} (Inactive)`,
+    });
+  }
+
   const {
     control,
     handleSubmit,

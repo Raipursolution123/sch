@@ -5,9 +5,10 @@ import {
   type UserFormValues,
 } from '@features/settings/users/components/UserFormDialog';
 import { UsersTable } from '@features/settings/users/components/UsersTable';
-import { useStaffUsers, useUpdateStaffUser } from '@hooks/useRoles';
+import { useStaffUsers, useUpdateStaffUser, useDeleteStaffUser } from '@hooks/useRoles';
 import type { StaffUserAccount } from '@app-types/settings/roles';
 import { ModuleListPack } from '@workflow-packs';
+import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 
 export function UsersPage() {
   const [page, setPage] = useState(1);
@@ -17,7 +18,9 @@ export function UsersPage() {
   const users = data?.results ?? [];
   const totalCount = data?.count ?? 0;
   const updateMutation = useUpdateStaffUser();
+  const deleteMutation = useDeleteStaffUser();
   const [selected, setSelected] = useState<StaffUserAccount | null>(null);
+  const [deletingUser, setDeletingUser] = useState<StaffUserAccount | null>(null);
 
   const handleSubmit = (values: UserFormValues) => {
     if (!selected) return;
@@ -31,6 +34,13 @@ export function UsersPage() {
       },
       { onSuccess: () => setSelected(null) },
     );
+  };
+
+  const handleDelete = () => {
+    if (!deletingUser) return;
+    deleteMutation.mutate(deletingUser.id, {
+      onSuccess: () => setDeletingUser(null),
+    });
   };
 
   return (
@@ -64,15 +74,29 @@ export function UsersPage() {
         </form>
       }
       footer={
-        <UserFormDialog
-          open={Boolean(selected)}
-          onOpenChange={(open) => {
-            if (!open) setSelected(null);
-          }}
-          user={selected}
-          onSubmit={handleSubmit}
-          isLoading={updateMutation.isPending}
-        />
+        <>
+          <UserFormDialog
+            open={Boolean(selected)}
+            onOpenChange={(open) => {
+              if (!open) setSelected(null);
+            }}
+            user={selected}
+            onSubmit={handleSubmit}
+            isLoading={updateMutation.isPending}
+          />
+          <ConfirmDialog
+            open={Boolean(deletingUser)}
+            onOpenChange={(open) => {
+              if (!open) setDeletingUser(null);
+            }}
+            title="Delete User Account"
+            description={`Are you sure you want to delete the login account for ${deletingUser?.username}? This action cannot be undone and they will lose all access.`}
+            confirmLabel="Delete Account"
+            confirmVariant="destructive"
+            onConfirm={handleDelete}
+            isConfirming={deleteMutation.isPending}
+          />
+        </>
       }
     >
       <UsersTable
@@ -81,6 +105,7 @@ export function UsersPage() {
         page={page}
         onPageChange={setPage}
         onEdit={setSelected}
+        onDelete={setDeletingUser}
       />
     </ModuleListPack>
   );

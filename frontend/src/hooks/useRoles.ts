@@ -59,6 +59,18 @@ export function useUpdateStaffUser() {
   });
 }
 
+export function useDeleteStaffUser() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => usersService.delete(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.settings.users.all });
+      toast.success('User deleted');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete user')),
+  });
+}
+
 export function useUserRoleOptions(enabled: boolean = true) {
   return useQuery({
     queryKey: queryKeys.settings.users.roleOptions(),

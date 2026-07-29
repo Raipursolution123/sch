@@ -28,16 +28,27 @@ def filetypes_to_dict(row: Filetypes) -> dict[str, Any]:
 
 
 class FileTypesService:
-    def get_settings(self) -> dict[str, Any]:
+    def _get_or_create_row(self) -> Filetypes:
         row = Filetypes.objects.order_by("id").first()
         if row is None:
-            raise SettingsNotFoundError("File types settings not found.")
+            from django.utils import timezone
+            row = Filetypes.objects.create(
+                file_extension="pdf,doc,docx,xls,xlsx,csv,txt",
+                file_mime="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain",
+                file_size=10485760,
+                image_extension="jpg,jpeg,png,gif,svg",
+                image_mime="image/jpeg,image/png,image/gif,image/svg+xml",
+                image_size=10485760,
+                created_at=timezone.now()
+            )
+        return row
+
+    def get_settings(self) -> dict[str, Any]:
+        row = self._get_or_create_row()
         return filetypes_to_dict(row)
 
     def update_settings(self, payload: dict[str, Any]) -> dict[str, Any]:
-        row = Filetypes.objects.order_by("id").first()
-        if row is None:
-            raise SettingsNotFoundError("File types settings not found.")
+        row = self._get_or_create_row()
 
         updates: list[str] = []
         for key in ("file_extension", "file_mime", "image_extension", "image_mime"):

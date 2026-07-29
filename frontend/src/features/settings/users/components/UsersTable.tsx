@@ -3,7 +3,7 @@ import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { Pagination } from '@components/ui';
 import { StatusBadge } from '@components/feedback/StatusBadge';
-import { Pencil } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import type { StaffUserAccount } from '@app-types/settings/roles';
 
 interface UsersTableProps {
@@ -12,6 +12,7 @@ interface UsersTableProps {
   page: number;
   onPageChange: (page: number) => void;
   onEdit: (user: StaffUserAccount) => void;
+  onDelete: (user: StaffUserAccount) => void;
 }
 
 const columns: DataTableColumn<StaffUserAccount>[] = [
@@ -53,7 +54,7 @@ const columns: DataTableColumn<StaffUserAccount>[] = [
   },
 ];
 
-export function UsersTable({ users, totalCount, page, onPageChange, onEdit }: UsersTableProps) {
+export function UsersTable({ users, totalCount, page, onPageChange, onEdit, onDelete }: UsersTableProps) {
   return (
     <div className="space-y-4">
       <DataTable
@@ -61,14 +62,25 @@ export function UsersTable({ users, totalCount, page, onPageChange, onEdit }: Us
         columns={columns}
         getRowKey={(user) => user.id}
         actions={(user) => (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onEdit(user)}
-            aria-label={`Edit ${user.username}`}
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center justify-end gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onEdit(user)}
+              aria-label={`Edit ${user.username}`}
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+              onClick={() => onDelete(user)}
+              aria-label={`Delete ${user.username}`}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
         )}
       />
       <Pagination

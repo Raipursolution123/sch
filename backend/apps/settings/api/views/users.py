@@ -56,6 +56,7 @@ class UserDetailView(APIView):
         "GET": "can_view",
         "PUT": "can_view",
         "PATCH": "can_view",
+        "DELETE": "can_view",
     }
 
     def get(self, request, pk):
@@ -78,3 +79,12 @@ class UserDetailView(APIView):
             return settings_error_response(exc)
 
     patch = put
+
+    def delete(self, request, pk):
+        try:
+            UserAccountService().delete_user(pk)
+            return APIResponse.success(
+                message="User deleted successfully.",
+            )
+        except SettingsError as exc:
+            return settings_error_response(exc)

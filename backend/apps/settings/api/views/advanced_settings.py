@@ -376,7 +376,7 @@ class BackupDetailView(APIView):
                 path.open("rb"),
                 as_attachment=True,
                 filename=Path(filename).name,
-                content_type="application/sql",
+                content_type="application/json",
             )
         except SettingsError as exc:
             return settings_error_response(exc)

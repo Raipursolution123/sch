@@ -26,7 +26,20 @@ def captcha_to_dict(row: Captcha) -> dict[str, Any]:
 
 class CaptchaService:
     def list_captchas(self):
-        return Captcha.objects.all().order_by("name", "id")
+        qs = Captcha.objects.all().order_by("name", "id")
+        if not qs.exists():
+            from django.utils import timezone
+            now = timezone.now()
+            default_captchas = [
+                "userlogin",
+                "userforgotpassword",
+                "adminlogin",
+                "adminforgotpassword",
+            ]
+            for name in default_captchas:
+                Captcha.objects.create(name=name, status=0, created_at=now)
+            qs = Captcha.objects.all().order_by("name", "id")
+        return qs
 
     def get_captcha(self, captcha_id: int) -> dict[str, Any]:
         row = Captcha.objects.filter(id=captcha_id).first()
