@@ -57,6 +57,8 @@ urlpatterns = [
     path("leads/", include("apps.cyc_extensions.urls_leads")),
     # front cms
     path("cms/", include("apps.cms.urls")),
+    # lms
+    path("lms/", include("apps.lms.urls")),
     # cyc_extensions (Finance / accounting)
     path("", include("apps.cyc_extensions.urls")),
 ]
