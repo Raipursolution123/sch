@@ -14,7 +14,7 @@ import { ModuleListPack } from '@workflow-packs';
 function IdCardPreviewCard({ preview }: { preview: IdCardPreview }) {
   return (
     <div
-      className="mx-auto overflow-hidden rounded-lg border bg-card shadow-sm print:border-0 print:shadow-none"
+      className="mx-auto overflow-hidden rounded-lg border bg-card text-white shadow-sm print:border-0 print:shadow-none"
       style={{
         maxWidth: preview.enable_vertical_card === 1 ? 280 : 420,
         borderTop: `6px solid ${preview.header_color || DEFAULT_ID_CARD_HEADER_COLOR}`,
@@ -71,33 +71,45 @@ export function GenerateStaffIdCardPage() {
       title="Generate Staff ID Card"
       description="Select a template and staff member, then print the ID card preview."
       actions={
-        <div className="flex flex-wrap items-end gap-3">
-          <FormField label="Template" htmlFor="staff-id-template">
-            <Select
-              id="staff-id-template"
-              className="w-64"
-              value={templateId}
-              onValueChange={(v) => {
-                setTemplateId(v);
-                setPreview(null);
-              }}
-              options={templateOptions}
-              placeholder="Select template"
-            />
-          </FormField>
-          <FormField label="Staff" htmlFor="staff-id-person">
-            <Select
-              id="staff-id-person"
-              className="w-72"
-              value={personId}
-              onValueChange={(v) => {
-                setPersonId(v);
-                setPreview(null);
-              }}
-              options={staffOptions}
-              placeholder="Select staff"
-            />
-          </FormField>
+        preview ? (
+          <Button variant="outline" className="gap-1 print:hidden" onClick={() => printReport()}>
+            <Printer className="h-4 w-4" />
+            Print
+          </Button>
+        ) : null
+      }
+      isLoading={templatesLoading || staffLoading}
+      loadingMessage="Loading staff and templates..."
+      isEmpty={false}
+    >
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 rounded-lg border border-border/80 bg-card p-4 shadow-sm print:hidden">
+        <FormField label="Template" htmlFor="staff-id-template">
+          <Select
+            id="staff-id-template"
+            className="w-full"
+            value={templateId}
+            onValueChange={(v) => {
+              setTemplateId(v);
+              setPreview(null);
+            }}
+            options={templateOptions}
+            placeholder="Select template"
+          />
+        </FormField>
+        <FormField label="Staff" htmlFor="staff-id-person">
+          <Select
+            id="staff-id-person"
+            className="w-full"
+            value={personId}
+            onValueChange={(v) => {
+              setPersonId(v);
+              setPreview(null);
+            }}
+            options={staffOptions}
+            placeholder="Select staff"
+          />
+        </FormField>
+        <div className="flex items-end">
           <PermissionButton
             permission="idcards.staff.generate"
             onClick={() => {
@@ -112,20 +124,37 @@ export function GenerateStaffIdCardPage() {
           >
             Generate
           </PermissionButton>
-          {preview ? (
-            <Button variant="outline" className="gap-1" onClick={() => printReport()}>
-              <Printer className="h-4 w-4" />
-              Print
-            </Button>
-          ) : null}
         </div>
-      }
-      isLoading={templatesLoading || staffLoading}
-      loadingMessage="Loading staff and templates..."
-      isEmpty={false}
-    >
+      </div>
+
       {preview ? (
-        <IdCardPreviewCard preview={preview} />
+        <>
+          <style type="text/css" media="print">
+            {`
+              @page {
+                margin: 0;
+              }
+              body * {
+                visibility: hidden;
+              }
+              #id-card-print-area, #id-card-print-area * {
+                visibility: visible;
+                color: white !important;
+              }
+              #id-card-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+              }
+            `}
+          </style>
+          <div id="id-card-print-area">
+            <IdCardPreviewCard preview={preview} />
+          </div>
+        </>
       ) : (
         <p className="text-sm text-muted-foreground">
           Choose a template and staff member, then click Generate to preview.

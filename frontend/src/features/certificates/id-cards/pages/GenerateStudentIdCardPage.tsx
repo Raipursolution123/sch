@@ -14,7 +14,7 @@ import { ModuleListPack } from '@workflow-packs';
 function IdCardPreviewCard({ preview }: { preview: IdCardPreview }) {
   return (
     <div
-      className="mx-auto overflow-hidden rounded-lg border bg-card shadow-sm print:border-0 print:shadow-none"
+      className="mx-auto overflow-hidden rounded-lg border bg-card text-white shadow-sm print:border-0 print:shadow-none"
       style={{
         maxWidth: preview.enable_vertical_card === 1 ? 280 : 420,
         borderTop: `6px solid ${preview.header_color || DEFAULT_ID_CARD_HEADER_COLOR}`,
@@ -70,33 +70,45 @@ export function GenerateStudentIdCardPage() {
       title="Generate Student ID Card"
       description="Select a template and student, then print the ID card preview."
       actions={
-        <div className="flex flex-wrap items-end gap-3">
-          <FormField label="Template" htmlFor="student-id-template">
-            <Select
-              id="student-id-template"
-              className="w-64"
-              value={templateId}
-              onValueChange={(v) => {
-                setTemplateId(v);
-                setPreview(null);
-              }}
-              options={templateOptions}
-              placeholder="Select template"
-            />
-          </FormField>
-          <FormField label="Student" htmlFor="student-id-person">
-            <Select
-              id="student-id-person"
-              className="w-72"
-              value={personId}
-              onValueChange={(v) => {
-                setPersonId(v);
-                setPreview(null);
-              }}
-              options={studentOptions}
-              placeholder="Select student"
-            />
-          </FormField>
+        preview ? (
+          <Button variant="outline" className="gap-1 print:hidden" onClick={() => printReport()}>
+            <Printer className="h-4 w-4" />
+            Print
+          </Button>
+        ) : null
+      }
+      isLoading={templatesLoading || studentsLoading}
+      loadingMessage="Loading students and templates..."
+      isEmpty={false}
+    >
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 rounded-lg border border-border/80 bg-card p-4 shadow-sm print:hidden">
+        <FormField label="Template" htmlFor="student-id-template">
+          <Select
+            id="student-id-template"
+            className="w-full"
+            value={templateId}
+            onValueChange={(v) => {
+              setTemplateId(v);
+              setPreview(null);
+            }}
+            options={templateOptions}
+            placeholder="Select template"
+          />
+        </FormField>
+        <FormField label="Student" htmlFor="student-id-person">
+          <Select
+            id="student-id-person"
+            className="w-full"
+            value={personId}
+            onValueChange={(v) => {
+              setPersonId(v);
+              setPreview(null);
+            }}
+            options={studentOptions}
+            placeholder="Select student"
+          />
+        </FormField>
+        <div className="flex items-end">
           <PermissionButton
             permission="idcards.student.generate"
             onClick={() => {
@@ -111,20 +123,37 @@ export function GenerateStudentIdCardPage() {
           >
             Generate
           </PermissionButton>
-          {preview ? (
-            <Button variant="outline" className="gap-1" onClick={() => printReport()}>
-              <Printer className="h-4 w-4" />
-              Print
-            </Button>
-          ) : null}
         </div>
-      }
-      isLoading={templatesLoading || studentsLoading}
-      loadingMessage="Loading students and templates..."
-      isEmpty={false}
-    >
+      </div>
+
       {preview ? (
-        <IdCardPreviewCard preview={preview} />
+        <>
+          <style type="text/css" media="print">
+            {`
+              @page {
+                margin: 0;
+              }
+              body * {
+                visibility: hidden;
+              }
+              #id-card-print-area, #id-card-print-area * {
+                visibility: visible;
+                color: white !important;
+              }
+              #id-card-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+              }
+            `}
+          </style>
+          <div id="id-card-print-area">
+            <IdCardPreviewCard preview={preview} />
+          </div>
+        </>
       ) : (
         <p className="text-sm text-muted-foreground">
           Choose a template and student, then click Generate to preview.

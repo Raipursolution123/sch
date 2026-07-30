@@ -46,33 +46,45 @@ export function GenerateCertificatePage() {
       title="Generate Certificate"
       description="Select a template and student, then print the merged certificate."
       actions={
-        <div className="flex flex-wrap items-end gap-3">
-          <FormField label="Template" htmlFor="cert-template">
-            <Select
-              id="cert-template"
-              className="w-64"
-              value={templateId}
-              onValueChange={(v) => {
-                setTemplateId(v);
-                setPreview(null);
-              }}
-              options={templateOptions}
-              placeholder="Select template"
-            />
-          </FormField>
-          <FormField label="Student" htmlFor="cert-student">
-            <Select
-              id="cert-student"
-              className="w-72"
-              value={studentId}
-              onValueChange={(v) => {
-                setStudentId(v);
-                setPreview(null);
-              }}
-              options={studentOptions}
-              placeholder="Select student"
-            />
-          </FormField>
+        preview ? (
+          <Button variant="outline" className="gap-1 print:hidden" onClick={() => printReport()}>
+            <Printer className="h-4 w-4" />
+            Print
+          </Button>
+        ) : null
+      }
+      isLoading={isLoading}
+      loadingMessage="Loading students and templates..."
+      isEmpty={false}
+    >
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 rounded-lg border border-border/80 bg-card p-4 shadow-sm print:hidden">
+        <FormField label="Template" htmlFor="cert-template">
+          <Select
+            id="cert-template"
+            className="w-full"
+            value={templateId}
+            onValueChange={(v) => {
+              setTemplateId(v);
+              setPreview(null);
+            }}
+            options={templateOptions}
+            placeholder="Select template"
+          />
+        </FormField>
+        <FormField label="Student" htmlFor="cert-student">
+          <Select
+            id="cert-student"
+            className="w-full"
+            value={studentId}
+            onValueChange={(v) => {
+              setStudentId(v);
+              setPreview(null);
+            }}
+            options={studentOptions}
+            placeholder="Select student"
+          />
+        </FormField>
+        <div className="flex items-end">
           <PermissionButton
             permission="certificates.generate.view"
             onClick={handleGenerate}
@@ -81,23 +93,40 @@ export function GenerateCertificatePage() {
           >
             Generate
           </PermissionButton>
-          {preview ? (
-            <Button variant="outline" className="gap-1" onClick={() => printReport()}>
-              <Printer className="h-4 w-4" />
-              Print
-            </Button>
-          ) : null}
         </div>
-      }
-      isLoading={isLoading}
-      loadingMessage="Loading students and templates..."
-      isEmpty={false}
-    >
+      </div>
+
       {preview ? (
-        <div
-          className="mx-auto rounded-lg border bg-card p-6 print:border-0 print:p-0"
-          style={{ maxWidth: preview.content_width || 800 }}
-        >
+        <>
+          <style type="text/css" media="print">
+            {`
+              @page {
+                margin: 0;
+              }
+              body * {
+                visibility: hidden;
+              }
+              #certificate-print-area, #certificate-print-area * {
+                visibility: visible;
+              }
+              #certificate-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 2rem !important;
+              }
+              #certificate-print-area * {
+                color: white !important;
+              }
+            `}
+          </style>
+          <div
+            id="certificate-print-area"
+            className="mx-auto rounded-lg border bg-card p-6 text-white print:border-0"
+            style={{ maxWidth: preview.content_width || 800 }}
+          >
           <div
             className="grid grid-cols-3 gap-2 text-sm"
             style={{ minHeight: preview.header_height || undefined }}
@@ -120,6 +149,7 @@ export function GenerateCertificatePage() {
             <div className="text-right">{preview.right_footer}</div>
           </div>
         </div>
+        </>
       ) : (
         <p className="text-sm text-muted-foreground">
           Choose a template and student, then click Generate to preview.
