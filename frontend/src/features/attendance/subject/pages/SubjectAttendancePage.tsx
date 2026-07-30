@@ -28,7 +28,7 @@ type MarkRow = SubjectAttendanceRosterEntry;
 export function SubjectAttendancePage() {
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-  const { data: classSectionsData } = useClassSections();
+  const { data: classSectionsData } = useClassSections(1, { noPaginate: true });
   const classSections = classSectionsData?.results || [];
   const { data: types = [] } = useAttendanceTypes();
 
@@ -42,10 +42,13 @@ export function SubjectAttendancePage() {
     () => classes.filter((c) => c.is_active === 'yes').sort((a, b) => a.sort_order - b.sort_order),
     [classes],
   );
-  const sectionOptions = useMemo(
-    () => sectionOptionsForClass(classSections, classId),
-    [classSections, classId],
-  );
+  const sectionOptions = useMemo(() => {
+    const opts = sectionOptionsForClass(classSections, classId);
+    if (classId > 0 && opts.length === 0) {
+      return [{ value: '0', label: 'No Sections (Auto-Selected)' }];
+    }
+    return opts;
+  }, [classSections, classId]);
 
   const filtersReady = classId > 0 && sectionId > 0 && Boolean(date);
   const { data: periods = [] } = useSubjectAttendancePeriods(

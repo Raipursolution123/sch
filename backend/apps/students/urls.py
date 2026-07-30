@@ -7,6 +7,7 @@ from apps.students.api.views.categories_houses import (
 from apps.students.api.views.student import (
     StudentAcademicSessionsView,
     StudentDetailView,
+    StudentDisableReasonDetailView,
     StudentDisableReasonListView,
     StudentDisableView,
     StudentEnableView,
@@ -42,6 +43,11 @@ urlpatterns = [
         "disable-reasons/",
         StudentDisableReasonListView.as_view(),
         name="student-disable-reasons",
+    ),
+    path(
+        "disable-reasons/<int:pk>/",
+        StudentDisableReasonDetailView.as_view(),
+        name="student-disable-reason-detail",
     ),
     path(
         "categories/",

@@ -111,6 +111,22 @@ class StudentDetailView(APIView):
             )
         except StudentError as exc:
             return _error_response(exc)
+    def delete(self, request, pk):
+        import json
+        payload = request.data
+        if not payload and request.body:
+            try:
+                payload = json.loads(request.body)
+            except Exception:
+                pass
+        serializer = StudentDisableSerializer(data=payload)
+        serializer.is_valid(raise_exception=True)
+        try:
+            with transaction.atomic():
+                StudentService().disable_student(pk, serializer.validated_data)
+            return APIResponse.success(message="Student disabled successfully.")
+        except StudentError as exc:
+            return _error_response(exc)
 
 
 class StudentDisableView(APIView):
@@ -140,6 +156,69 @@ class StudentDisableReasonListView(APIView):
             data=StudentService().list_disable_reasons(),
             message="Disable reasons retrieved successfully.",
         )
+
+    def post(self, request):
+        from apps.students.models.disable_reason import DisableReason
+        from django.utils import timezone
+
+        reason_text = str(request.data.get("reason") or "").strip()
+        if not reason_text:
+            return APIResponse.error(
+                message="Reason is required.",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        row = DisableReason.objects.create(
+            reason=reason_text,
+            created_at=timezone.now(),
+        )
+        return APIResponse.success(
+            data={"id": row.id, "reason": row.reason},
+            message="Disable reason created successfully.",
+            status_code=status.HTTP_201_CREATED,
+        )
+
+
+class StudentDisableReasonDetailView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = DISABLE_CATEGORY
+
+    def put(self, request, pk):
+        from apps.students.models.disable_reason import DisableReason
+
+        reason_text = str(request.data.get("reason") or "").strip()
+        row = DisableReason.objects.filter(pk=pk).first()
+        if not row:
+            return APIResponse.error(
+                message="Disable reason not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
+
+        if reason_text:
+            row.reason = reason_text
+            row.save()
+
+        return APIResponse.success(
+            data={"id": row.id, "reason": row.reason},
+            message="Disable reason updated successfully.",
+        )
+
+    def patch(self, request, pk):
+        return self.put(request, pk)
+
+    def delete(self, request, pk):
+        from apps.students.models.disable_reason import DisableReason
+
+        row = DisableReason.objects.filter(pk=pk).first()
+        if not row:
+            return APIResponse.error(
+                message="Disable reason not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
+
+        row.delete()
+        return APIResponse.success(message="Disable reason deleted successfully.")
 
 
 class StudentEnableView(APIView):

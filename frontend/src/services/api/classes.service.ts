@@ -94,14 +94,20 @@ function nextSortOrder(): number {
 }
 
 export const classesService = {
-  list: async (page = 1): Promise<{ results: SchoolClass[]; count: number }> => {
+  list: async (page = 1, noPaginate?: boolean): Promise<{ results: SchoolClass[]; count: number }> => {
     if (USE_MOCK) {
       const allData = await delay(mockList());
       return { results: allData, count: allData.length };
     }
-    // TODO: Wire when backend exposes GET /api/v1/academics/classes/
+    const params: Record<string, any> = {};
+    if (noPaginate) {
+      params.no_paginate = 'true';
+    } else {
+      params.page = page;
+    }
     const { data } = await apiClient.get<BackendPayload>(
-      `${API_ENDPOINTS.academics.classes}?page=${page}`,
+      API_ENDPOINTS.academics.classes,
+      { params }
     );
     const results = extractList<SchoolClass>(data, 'classes');
     const count = extractCount(data, results.length);

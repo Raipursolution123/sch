@@ -19,26 +19,50 @@ export const studentMastersService = {
     const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.students.categories, {
       params: { page_size: 100, ...(query ? { q: query } : {}) },
     });
-    return extractList<StudentCategory>(data);
+    const rawList = extractList<any>(data);
+    return rawList.map((item) => ({
+      id: item.id,
+      name: item.category || '',
+      is_active: item.is_active || 'yes',
+      created_at: item.created_at || null,
+    }));
   },
 
   createCategory: async (payload: CreateStudentCategoryPayload): Promise<StudentCategory> => {
-    const { data } = await apiClient.post<ApiSuccessResponse<StudentCategory>>(
+    const { data } = await apiClient.post<ApiSuccessResponse<any>>(
       API_ENDPOINTS.students.categories,
-      payload,
+      {
+        category: payload.name,
+        is_active: payload.is_active,
+      },
     );
-    return data.data;
+    const item = data.data;
+    return {
+      id: item.id,
+      name: item.category || '',
+      is_active: item.is_active || 'yes',
+      created_at: item.created_at || null,
+    };
   },
 
   updateCategory: async (
     id: number,
     payload: UpdateStudentCategoryPayload,
   ): Promise<StudentCategory> => {
-    const { data } = await apiClient.patch<ApiSuccessResponse<StudentCategory>>(
+    const { data } = await apiClient.put<ApiSuccessResponse<any>>(
       API_ENDPOINTS.students.categoryDetail(id),
-      payload,
+      {
+        category: payload.name,
+        is_active: payload.is_active,
+      },
     );
-    return data.data;
+    const item = data.data;
+    return {
+      id: id,
+      name: item?.category || payload.name || '',
+      is_active: item?.is_active || payload.is_active || 'yes',
+      created_at: item?.created_at || null,
+    };
   },
 
   deleteCategory: async (id: number): Promise<void> => {

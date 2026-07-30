@@ -6,8 +6,10 @@ import { ReportSummaryGrid } from '@components/reports';
 import { AttendanceReportTable } from '@features/attendance/report/components/AttendanceReportTable';
 import { useAttendanceReport } from '@hooks/useAttendance';
 import { useClasses } from '@hooks/useClasses';
+import { useClassSections } from '@hooks/useClassSections';
 import { useActiveSession } from '@hooks/useSessions';
 import { useSections } from '@hooks/useSections';
+import { sectionOptionsForClass } from '@features/students/utils/class-section-options';
 import { exportToCsv } from '@utils/export-csv';
 import { formatDate } from '@utils/format';
 import { printReport } from '@utils/print-report';
@@ -27,6 +29,8 @@ export function AttendanceReportPage() {
 
   const { data: sectionsData } = useSections();
   const sections = sectionsData?.results || [];
+  const { data: classSectionsData } = useClassSections(1, { noPaginate: true });
+  const classSections = classSectionsData?.results || [];
 
   const [fromDate, setFromDate] = useState(daysAgoIso(7));
   const [toDate, setToDate] = useState(todayIsoDate());
@@ -59,13 +63,27 @@ export function AttendanceReportPage() {
       .sort((a, b) => a.sort_order - b.sort_order)
       .map((c) => ({ value: String(c.id), label: c.class_name })),
   ];
-  const sectionOptions = [
-    { value: '', label: 'All sections' },
-    ...sections
-      .filter((s) => s.is_active === 'yes')
-      .sort((a, b) => a.section_name.localeCompare(b.section_name))
-      .map((s) => ({ value: String(s.id), label: s.section_name })),
-  ];
+  const sectionOptions = useMemo(() => {
+    const list = classId > 0
+      ? sectionOptionsForClass(classSections, classId)
+      : sections
+          .filter((s) => s.is_active === 'yes')
+          .map((s) => ({ value: String(s.id), label: s.section_name }));
+    
+    const sorted = [...list].sort((a, b) => a.label.localeCompare(b.label));
+    
+    if (classId > 0 && sorted.length === 0) {
+      return [
+        { value: '', label: 'All sections' },
+        { value: '0', label: 'No Sections (Auto-Selected)' }
+      ];
+    }
+    
+    return [
+      { value: '', label: 'All sections' },
+      ...sorted
+    ];
+  }, [classSections, classId, sections]);
 
   const printSubtitle = `${formatDate(fromDate)} – ${formatDate(toDate)}${
     activeSession ? ` · Session ${activeSession.session}` : ''

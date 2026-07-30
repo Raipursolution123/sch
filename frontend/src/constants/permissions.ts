@@ -11,6 +11,8 @@ const ALL_PERMISSIONS: Permission[] = [
   'students.houses.edit',
   'students.houses.delete',
   'students.import.view',
+  'students.disable_reasons.view',
+  'students.multi_class.view',
   'staff.view',
   'staff.create',
   'staff.edit',

@@ -29,6 +29,9 @@ export const ROUTES = {
     disabled: '/students/disabled',
     import: '/students/import',
     onlineAdmission: '/students/online-admission',
+    bulkDelete: '/students/bulk-delete',
+    disableReason: '/students/disable-reason',
+    multiClass: '/students/multi-class',
     detail: (id: number | string) => `/students/${id}`,
   },
   staff: {
@@ -48,6 +51,8 @@ export const ROUTES = {
     report: '/attendance/report',
     approveLeave: '/attendance/approve-leave',
     subject: '/attendance/subject',
+    periodAttendanceByDate: '/attendance/period-attendance-by-date',
+    hostel: '/attendance/hostel',
   },
   fees: {
     root: '/fees',
@@ -64,6 +69,9 @@ export const ROUTES = {
     reminders: '/fees/reminders',
     offlinePayments: '/fees/offline-payments',
     paymentGateways: '/fees/payment-gateways',
+    schemeScholarship: '/fees/scheme-scholarship',
+    applySchemeScholarship: '/fees/apply-scheme-scholarship',
+    positiveFeeAdjustment: '/fees/positive-fee-adjustment',
   },
   examinations: {
     root: '/examinations',
@@ -101,6 +109,7 @@ export const ROUTES = {
     vehicles: '/transport/vehicles',
     assignVehicle: '/transport/assign-vehicle',
     routePickupPoints: '/transport/route-pickup-points',
+    studentFees: '/transport/student-fees',
   },
   hostel: {
     root: '/hostel',

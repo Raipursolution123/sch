@@ -368,6 +368,24 @@ const ImportStudentsPage = lazy(() =>
   })),
 );
 
+const BulkDeletePage = lazy(() =>
+  import('@features/students/pages/BulkDeletePage').then((m) => ({
+    default: m.BulkDeletePage,
+  })),
+);
+
+const DisableReasonPage = lazy(() =>
+  import('@features/students/pages/DisableReasonPage').then((m) => ({
+    default: m.DisableReasonPage,
+  })),
+);
+
+const MultiClassPage = lazy(() =>
+  import('@features/students/pages/MultiClassPage').then((m) => ({
+    default: m.MultiClassPage,
+  })),
+);
+
 const StaffPage = lazy(() =>
   import('@features/staff/pages/StaffPage').then((m) => ({
     default: m.StaffPage,
@@ -488,6 +506,24 @@ const FeeRemindersPage = lazy(() =>
   })),
 );
 
+const SchemeScholarshipPage = lazy(() =>
+  import('@features/fees/pages/SchemeScholarshipPage').then((m) => ({
+    default: m.SchemeScholarshipPage,
+  })),
+);
+
+const ApplySchemeScholarshipPage = lazy(() =>
+  import('@features/fees/pages/ApplySchemeScholarshipPage').then((m) => ({
+    default: m.ApplySchemeScholarshipPage,
+  })),
+);
+
+const PositiveFeeAdjustmentPage = lazy(() =>
+  import('@features/fees/pages/PositiveFeeAdjustmentPage').then((m) => ({
+    default: m.PositiveFeeAdjustmentPage,
+  })),
+);
+
 const MarkAttendancePage = lazy(() =>
   import('@features/attendance/mark/pages/MarkAttendancePage').then((m) => ({
     default: m.MarkAttendancePage,
@@ -497,6 +533,18 @@ const MarkAttendancePage = lazy(() =>
 const SubjectAttendancePage = lazy(() =>
   import('@features/attendance/subject/pages/SubjectAttendancePage').then((m) => ({
     default: m.SubjectAttendancePage,
+  })),
+);
+
+const PeriodAttendanceByDatePage = lazy(() =>
+  import('@features/attendance/subject/pages/PeriodAttendanceByDatePage').then((m) => ({
+    default: m.PeriodAttendanceByDatePage,
+  })),
+);
+
+const HostelAttendancePage = lazy(() =>
+  import('@features/attendance/hostel/pages/HostelAttendancePage').then((m) => ({
+    default: m.HostelAttendancePage,
   })),
 );
 
@@ -914,6 +962,12 @@ const LmsCourseEditPage = lazy(() =>
   })),
 );
 
+const StudentTransportFeesPage = lazy(() =>
+  import('@features/transport/pages/StudentTransportFeesPage').then((m) => ({
+    default: m.StudentTransportFeesPage,
+  })),
+);
+
 /** Authenticated admin routes mounted under DashboardLayout. */
 export const adminRoutes: RouteObject[] = [
   { path: 'dashboard', element: <DashboardPage /> },
@@ -952,6 +1006,9 @@ export const adminRoutes: RouteObject[] = [
       { path: 'disabled', element: <DisabledStudentsPage /> },
       { path: 'import', element: <ImportStudentsPage /> },
       { path: 'online-admission', element: <OnlineAdmissionsPage /> },
+      { path: 'bulk-delete', element: <BulkDeletePage /> },
+      { path: 'disable-reason', element: <DisableReasonPage /> },
+      { path: 'multi-class', element: <MultiClassPage /> },
       { path: ':studentId', element: <StudentProfilePage /> },
       ...buildPlaceholderChildren('/students'),
     ],
@@ -979,6 +1036,8 @@ export const adminRoutes: RouteObject[] = [
     { path: 'report', element: <AttendanceReportPage /> },
     { path: 'approve-leave', element: <ApproveLeavePage /> },
     { path: 'subject', element: <SubjectAttendancePage /> },
+    { path: 'period-attendance-by-date', element: <PeriodAttendanceByDatePage /> },
+    { path: 'hostel', element: <HostelAttendancePage /> },
   ]),
 
   createModuleRoutes('/fees', ROUTES.fees.feeTypes, [
@@ -995,6 +1054,9 @@ export const adminRoutes: RouteObject[] = [
     { path: 'reminders', element: <FeeRemindersPage /> },
     { path: 'payment-gateways', element: <PaymentGatewaysPage /> },
     { path: 'offline-payments', element: <OfflineBankPaymentsPage /> },
+    { path: 'scheme-scholarship', element: <SchemeScholarshipPage /> },
+    { path: 'apply-scheme-scholarship', element: <ApplySchemeScholarshipPage /> },
+    { path: 'positive-fee-adjustment', element: <PositiveFeeAdjustmentPage /> },
   ]),
 
   createModuleRoutes('/examinations', ROUTES.examinations.groups, [
@@ -1051,6 +1113,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'vehicles', element: <VehiclesPage /> },
     { path: 'assign-vehicle', element: <VehicleRouteAssignPage /> },
     { path: 'route-pickup-points', element: <RoutePickupPointsPage /> },
+    { path: 'student-fees', element: <StudentTransportFeesPage /> },
   ]),
   createModuleRoutes('/hostel', ROUTES.hostel.rooms, [
     { path: 'buildings', element: <HostelsPage /> },

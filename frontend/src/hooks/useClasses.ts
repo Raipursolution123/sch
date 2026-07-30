@@ -6,10 +6,10 @@ import { classesService } from '@services/api';
 import type { CreateClassPayload, UpdateClassPayload } from '@app-types/academics/class';
 import { getApiErrorMessage } from '@utils/session';
 
-export function useClasses(page: number = 1) {
+export function useClasses(page: number = 1, noPaginate?: boolean) {
   return useQuery({
-    queryKey: [...queryKeys.academics.classes.list(), page],
-    queryFn: () => classesService.list(page),
+    queryKey: [...queryKeys.academics.classes.list(), page, noPaginate],
+    queryFn: () => classesService.list(page, noPaginate),
     staleTime: REFERENCE_DATA_STALE_TIME,
   });
 }
