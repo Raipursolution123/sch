@@ -896,6 +896,24 @@ const RoutePickupPointsPage = lazy(() =>
   })),
 );
 
+const LmsCourseListPage = lazy(() =>
+  import('@features/lms/courses/pages/CourseListPage').then((m) => ({
+    default: m.default,
+  })),
+);
+
+const LmsCourseCreatePage = lazy(() =>
+  import('@features/lms/courses/pages/CourseCreatePage').then((m) => ({
+    default: m.default,
+  })),
+);
+
+const LmsCourseEditPage = lazy(() =>
+  import('@features/lms/courses/pages/CourseEditPage').then((m) => ({
+    default: m.default,
+  })),
+);
+
 /** Authenticated admin routes mounted under DashboardLayout. */
 export const adminRoutes: RouteObject[] = [
   { path: 'dashboard', element: <DashboardPage /> },
@@ -916,6 +934,12 @@ export const adminRoutes: RouteObject[] = [
     { path: 'teacher-timetable', element: <TeacherTimetablePage /> },
     { path: 'class-teacher', element: <ClassTeacherPage /> },
     { path: 'promote', element: <PromoteStudentsPage /> },
+  ]),
+
+  createModuleRoutes('/lms', ROUTES.lms.courses.root, [
+    { path: 'courses', element: <LmsCourseListPage /> },
+    { path: 'courses/new', element: <LmsCourseCreatePage /> },
+    { path: 'courses/:id/edit', element: <LmsCourseEditPage /> },
   ]),
 
   {

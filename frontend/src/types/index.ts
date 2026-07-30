@@ -78,10 +78,9 @@ export type {
   Homework,
   CreateHomeworkPayload,
   UpdateHomeworkPayload,
-  HomeworkEvaluation,
-  CreateHomeworkEvaluationPayload,
-  UpdateHomeworkEvaluationPayload,
   DailyAssignment,
   CreateDailyAssignmentPayload,
   UpdateDailyAssignmentPayload,
 } from './academics/homework';
+export type { Course, CreateCoursePayload, UpdateCoursePayload } from './lms';
+

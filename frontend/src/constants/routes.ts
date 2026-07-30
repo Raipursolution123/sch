@@ -239,6 +239,14 @@ export const ROUTES = {
     backup: '/settings/backup',
     fileTypes: '/settings/file-types',
   },
+  lms: {
+    root: '/lms',
+    courses: {
+      root: '/lms/courses',
+      new: '/lms/courses/new',
+      edit: (id: number | string) => `/lms/courses/${id}/edit`,
+    },
+  },
   notFound: '*',
 } as const;
 

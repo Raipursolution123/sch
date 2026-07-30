@@ -100,3 +100,4 @@ export {
   sidebarMenuService,
   systemFieldsService,
 } from './advanced-settings.service';
+export { lmsService } from './lms.service';

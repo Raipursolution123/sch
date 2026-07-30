@@ -158,6 +158,7 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.cms.menus,
   ROUTES.cms.banners,
   ROUTES.cms.settings,
+  ROUTES.lms.courses.root,
 ]);
 
 export function isImplementedPath(path: string): boolean {

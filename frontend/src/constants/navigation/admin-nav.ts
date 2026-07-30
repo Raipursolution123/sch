@@ -18,6 +18,7 @@ import {
   Library,
   Mail,
   Megaphone,
+  Monitor,
   Package,
   Receipt,
   Settings,
@@ -1118,6 +1119,22 @@ export const ADMIN_NAV: NavItem[] = [
         label: 'CMS Settings',
         path: ROUTES.cms.settings,
         permissionKeys: ['front_cms_setting'],
+      },
+    ],
+  },
+  {
+    id: 'lms',
+    label: 'Online Courses',
+    path: ROUTES.lms.courses.root,
+    icon: Monitor,
+    section: 'operations',
+    permissionKeys: ['online_course'], // Or an appropriate permission
+    children: [
+      {
+        id: 'lms-courses',
+        label: 'Courses',
+        path: ROUTES.lms.courses.root,
+        permissionKeys: ['online_course'],
       },
     ],
   },
