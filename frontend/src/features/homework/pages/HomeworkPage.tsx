@@ -211,7 +211,7 @@ export function HomeworkPage() {
       isError={isError}
       error={error}
       onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && (data?.length ?? 0) === 0}
+      isEmpty={!isLoading && !isError && (data?.results?.length ?? 0) === 0}
       emptyTitle="No homework"
       emptyDescription="Add homework assignments for your classes."
       emptyAction={addAction}
@@ -293,7 +293,7 @@ export function HomeworkPage() {
       }
     >
       <DataTable
-        data={data ?? []}
+        data={data?.results ?? []}
         columns={columns}
         getRowKey={(row) => row.id}
         actions={(row) => (

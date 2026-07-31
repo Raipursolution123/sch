@@ -75,26 +75,26 @@ export function VehicleFormDialog({ open, onOpenChange, vehicle, onSubmit, isLoa
       <FormErrorSummary errors={errors} />
       <div className="grid gap-4 sm:grid-cols-2">
         <FormTextField
-          control={control}
+          control={control as any}
           name="registration_number"
           label="Registration number"
           required
         />
-        <FormTextField control={control} name="chasis_number" label="Chassis number" required />
+        <FormTextField control={control as any} name="chasis_number" label="Chassis number" required />
         <FormTextField
-          control={control}
+          control={control as any}
           name="max_seating_capacity"
           label="Seating capacity"
           type="number"
           required
         />
-        <FormTextField control={control} name="vehicle_no" label="Vehicle number" optional />
-        <FormTextField control={control} name="driver_name" label="Driver name" optional />
-        <FormTextField control={control} name="driver_contact" label="Driver contact" optional />
-        <FormTextField control={control} name="v_name" label="Tracking name" optional />
-        <FormTextField control={control} name="v_color" label="Vehicle color" optional />
-        <FormTextField control={control} name="v_group" label="Vehicle group" optional />
-        <FormTextField control={control} name="v_api_url" label="Tracking API URL" optional />
+        <FormTextField control={control as any} name="vehicle_no" label="Vehicle number" optional />
+        <FormTextField control={control as any} name="driver_name" label="Driver name" optional />
+        <FormTextField control={control as any} name="driver_contact" label="Driver contact" optional />
+        <FormTextField control={control as any} name="v_name" label="Tracking name" optional />
+        <FormTextField control={control as any} name="v_color" label="Vehicle color" optional />
+        <FormTextField control={control as any} name="v_group" label="Vehicle group" optional />
+        <FormTextField control={control as any} name="v_api_url" label="Tracking API URL" optional />
       </div>
     </EntityFormDialog>
   );

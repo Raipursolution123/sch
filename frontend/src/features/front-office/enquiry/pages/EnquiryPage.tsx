@@ -58,7 +58,7 @@ export function EnquiryPage() {
 
   const addAction = (
     <PermissionButton
-      permission="staff.create"
+      permission="front_office.enquiry.create"
       onClick={() => setDialogMode('create')}
       className="gap-1"
     >

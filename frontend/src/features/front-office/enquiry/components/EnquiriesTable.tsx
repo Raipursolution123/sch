@@ -61,7 +61,7 @@ export function EnquiriesTable({ enquiries, onEdit, onDelete }: EnquiriesTablePr
       actions={(row) => (
         <>
           <PermissionButton
-            permission="staff.edit"
+            permission="front_office.enquiry.edit"
             variant="ghost"
             size="sm"
             onClick={() => onEdit(row)}
@@ -70,7 +70,7 @@ export function EnquiriesTable({ enquiries, onEdit, onDelete }: EnquiriesTablePr
             <Pencil className="h-4 w-4" />
           </PermissionButton>
           <PermissionButton
-            permission="staff.delete"
+            permission="front_office.enquiry.delete"
             variant="ghost"
             size="sm"
             onClick={() => onDelete(row)}

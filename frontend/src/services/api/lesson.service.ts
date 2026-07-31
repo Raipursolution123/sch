@@ -27,4 +27,19 @@ export const lessonService = {
     const response = await apiClient.delete<ApiSuccessResponse<null>>(`${BASE_PATH}/${id}/`);
     return response.data;
   },
+
+  copyOldLessons: async (payload: {
+    from_session_id: number;
+    from_subject_group_id: number;
+    from_subject_id: number;
+    to_session_id: number;
+    to_subject_group_id: number;
+    to_subject_id: number;
+  }) => {
+    const response = await apiClient.post<ApiSuccessResponse<{ copied_count: number }>>(
+      `${BASE_PATH}/copy/`,
+      payload
+    );
+    return response.data.data;
+  },
 };

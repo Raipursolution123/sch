@@ -43,6 +43,10 @@ export function VehiclesPage() {
       vehicle_no: values.vehicle_no || null,
       driver_name: values.driver_name || null,
       driver_contact: values.driver_contact || null,
+      v_name: values.v_name || '',
+      v_color: values.v_color || '',
+      v_group: values.v_group || '',
+      v_api_url: values.v_api_url || '',
     };
     const options = { onSuccess: () => setFormOpen(false) };
     if (selected) updateMutation.mutate({ id: selected.id, payload }, options);

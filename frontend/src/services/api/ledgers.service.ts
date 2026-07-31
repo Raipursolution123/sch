@@ -13,7 +13,7 @@ export const ledgersService = {
   },
 
   getAllLedgers: async () => {
-    const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<Ledger>>>(BASE_PATH, {
+    const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<Ledger>>>(API_ENDPOINTS.finance.ledgers, {
       params: { page: 1, limit: 1000 },
     });
     return response.data.data.results || [];

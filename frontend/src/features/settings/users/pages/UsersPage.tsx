@@ -92,9 +92,9 @@ export function UsersPage() {
             title="Delete User Account"
             description={`Are you sure you want to delete the login account for ${deletingUser?.username}? This action cannot be undone and they will lose all access.`}
             confirmLabel="Delete Account"
-            confirmVariant="destructive"
+            destructive
             onConfirm={handleDelete}
-            isConfirming={deleteMutation.isPending}
+            isLoading={deleteMutation.isPending}
           />
         </>
       }

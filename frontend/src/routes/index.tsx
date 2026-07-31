@@ -11,7 +11,6 @@ import { NotFoundPage } from '@features/errors/pages/NotFoundPage';
 import { RouteErrorPage } from '@features/errors/pages/RouteErrorPage';
 import { ROUTES } from '@constants/routes';
 import { adminRoutes } from '@routes/admin-routes';
-import { Navigate } from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {

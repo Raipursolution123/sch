@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui
 import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
 import { Label } from '@components/ui/label';
-import type { Role } from '@/types/settings/roles';
+import type { RoleSummary as Role } from '@/types/settings/roles';
 
 interface RoleFormDialogProps {
   open: boolean;
@@ -26,7 +26,7 @@ export function RoleFormDialog({
   useEffect(() => {
     if (open) {
       setName(role ? role.name || '' : '');
-      setIsSystem(role ? role.is_system === 1 : false);
+      setIsSystem(role ? Boolean(role.is_system) : false);
     }
   }, [open, role]);
 

@@ -56,3 +56,23 @@ export const useDeleteLesson = () => {
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete lesson')),
   });
 };
+
+export const useCopyOldLessons = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: {
+      from_session_id: number;
+      from_subject_group_id: number;
+      from_subject_id: number;
+      to_session_id: number;
+      to_subject_group_id: number;
+      to_subject_id: number;
+    }) => lessonService.copyOldLessons(payload),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: LESSON_KEYS.lists() });
+      toast.success(`Successfully copied ${data.copied_count} lessons and topics!`);
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to copy lessons')),
+  });
+};

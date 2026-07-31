@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 export const usePrintHeaderFooterList = () => {
   return useQuery({
     queryKey: ['print-header-footers'],
-    queryFn: () => printHeaderFooterService.getTemplates(),
+    queryFn: () => printHeaderFooterService.list(),
   });
 };
 
@@ -18,9 +18,9 @@ export const useCreatePrintHeaderFooter = () => {
 
   return useMutation({
     mutationFn: (data: PrintHeaderFooterCreatePayload) =>
-      printHeaderFooterService.createTemplate(data),
-    onSuccess: (response) => {
-      toast.success(response.message || 'Print template created successfully');
+      printHeaderFooterService.create(data),
+    onSuccess: () => {
+      toast.success('Print template created successfully');
       queryClient.invalidateQueries({ queryKey: ['print-header-footers'] });
     },
     onError: (error: any) => {
@@ -34,9 +34,9 @@ export const useUpdatePrintHeaderFooter = () => {
 
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: PrintHeaderFooterUpdatePayload }) =>
-      printHeaderFooterService.updateTemplate(id, data),
-    onSuccess: (response) => {
-      toast.success(response.message || 'Print template updated successfully');
+      printHeaderFooterService.update(id, data),
+    onSuccess: () => {
+      toast.success('Print template updated successfully');
       queryClient.invalidateQueries({ queryKey: ['print-header-footers'] });
     },
     onError: (error: any) => {
@@ -49,9 +49,9 @@ export const useDeletePrintHeaderFooter = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => printHeaderFooterService.deleteTemplate(id),
-    onSuccess: (response) => {
-      toast.success(response.message || 'Print template deleted successfully');
+    mutationFn: (id: number) => printHeaderFooterService.delete(id),
+    onSuccess: () => {
+      toast.success('Print template deleted successfully');
       queryClient.invalidateQueries({ queryKey: ['print-header-footers'] });
     },
     onError: (error: any) => {

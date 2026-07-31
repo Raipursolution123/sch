@@ -19,6 +19,10 @@ from apps.front_office.api.views.phone_call_purpose import (
     VisitorsPurposeDetailView,
     VisitorsPurposeListCreateView,
 )
+from apps.front_office.api.views.complaint_type import (
+    ComplaintTypeDetailView,
+    ComplaintTypeListCreateView,
+)
 
 urlpatterns = [
     path("enquiries/", EnquiryListCreateView.as_view(), name="enquiries-list-create"),
@@ -47,6 +51,8 @@ urlpatterns = [
     ),
     path("complaints/", ComplaintListCreateView.as_view(), name="complaints-list-create"),
     path("complaints/<int:pk>/", ComplaintDetailView.as_view(), name="complaints-detail"),
+    path("complaint-types/", ComplaintTypeListCreateView.as_view(), name="complaint-types-list-create"),
+    path("complaint-types/<int:pk>/", ComplaintTypeDetailView.as_view(), name="complaint-types-detail"),
     path("postal/", DispatchReceiveListCreateView.as_view(), name="postal-list-create"),
     path("postal/<int:pk>/", DispatchReceiveDetailView.as_view(), name="postal-detail"),
 ]

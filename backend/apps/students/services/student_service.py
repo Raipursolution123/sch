@@ -244,13 +244,12 @@ class StudentService:
             raise StudentValidationError("Student is already disabled.")
 
         reason_id = payload.get("disable_reason_id")
-        if reason_id:
-            reason = selectors.get_disable_reason_by_id(int(reason_id))
-            if reason is None:
-                raise StudentValidationError("Selected disable reason is not valid.")
-            student.dis_reason = reason.id
-        else:
-            student.dis_reason = 0
+        if not reason_id:
+            raise StudentValidationError("Disable reason is required.")
+        reason = selectors.get_disable_reason_by_id(int(reason_id))
+        if reason is None:
+            raise StudentValidationError("Selected disable reason is not valid.")
+        student.dis_reason = reason.id
 
         dis_note = str(payload.get("dis_note", "")).strip()
 

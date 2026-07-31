@@ -146,14 +146,7 @@ export function PromoteWizard() {
     ];
   }, [subjectGroups, toClassId, targetClassSectionIds]);
 
-  const debugInfo = JSON.stringify({
-    toClassId,
-    toSectionId,
-    targetClassSectionIds,
-    subjectGroupsCount: subjectGroups.length,
-    subjectGroupClassSectionIds: subjectGroups.map(g => g.class_section_ids),
-    classSectionsCount: classSections.length,
-  });
+
 
   const sourceReady =
     fromSessionId !== undefined && fromClassId !== undefined && fromSectionId !== undefined;

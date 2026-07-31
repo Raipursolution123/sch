@@ -13,8 +13,8 @@ import {
 import {
   useMarksheetTemplates,
   useDeleteMarksheetTemplate,
-  type MarksheetTemplate,
 } from '@hooks/useExamTemplates';
+import type { MarksheetTemplate } from '@app-types/examinations/exam-templates';
 import { useStudents } from '@hooks/useStudents';
 import { PrintDocumentModal } from '@features/examinations/components/PrintDocumentModal';
 import { ModuleListPack } from '@workflow-packs';
@@ -26,8 +26,6 @@ export function MarksheetPage() {
   const deleteMutation = useDeleteMarksheetTemplate();
   const [deleteTarget, setDeleteTarget] = useState<MarksheetTemplate | null>(null);
   const [printTemplate, setPrintTemplate] = useState<MarksheetTemplate | null>(null);
-
-  const activeStudent = students.length > 0 ? students[0] : null;
 
   const displayTemplates =
     templates && templates.length > 0
@@ -53,6 +51,8 @@ export function MarksheetPage() {
             is_class: 1,
             is_teacher_remark: 1,
             is_section: 1,
+            exam_session: 28,
+            is_customfield: 0,
             content: 'Passed with Distinction',
             content_footer: 'Promoted to Next Higher Class.',
           },
@@ -76,6 +76,8 @@ export function MarksheetPage() {
             is_class: 1,
             is_teacher_remark: 1,
             is_section: 1,
+            exam_session: 28,
+            is_customfield: 0,
             content: 'Excellent Performance',
             content_footer: 'Keep up the good work!',
           },

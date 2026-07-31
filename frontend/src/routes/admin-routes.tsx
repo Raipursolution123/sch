@@ -320,9 +320,27 @@ const PromoteStudentsPage = lazy(() =>
   })),
 );
 
-const LessonPage = lazy(() =>
-  import('@features/academics/lessons/pages/LessonPage').then((m) => ({
-    default: m.LessonPage,
+const LessonsPage = lazy(() =>
+  import('@features/academics/lessons/pages/LessonsPage').then((m) => ({
+    default: m.LessonsPage,
+  })),
+);
+
+const TopicsPage = lazy(() =>
+  import('@features/academics/lessons/pages/TopicsPage').then((m) => ({
+    default: m.TopicsPage,
+  })),
+);
+
+const ManageLessonPlanPage = lazy(() =>
+  import('@features/academics/lessons/pages/ManageLessonPlanPage').then((m) => ({
+    default: m.ManageLessonPlanPage,
+  })),
+);
+
+const CopyOldLessonsPage = lazy(() =>
+  import('@features/academics/lessons/pages/CopyOldLessonsPage').then((m) => ({
+    default: m.CopyOldLessonsPage,
   })),
 );
 
@@ -596,6 +614,30 @@ const LibraryReportPage = lazy(() =>
   })),
 );
 
+const LessonPlanReportPage = lazy(() =>
+  import('@features/reports/lesson-plan/pages/LessonPlanReportPage').then((m) => ({
+    default: m.LessonPlanReportPage,
+  })),
+);
+
+const UserLogReportPage = lazy(() =>
+  import('@features/reports/user-log/pages/UserLogReportPage').then((m) => ({
+    default: m.UserLogReportPage,
+  })),
+);
+
+const AuditTrailReportPage = lazy(() =>
+  import('@features/reports/audit-trail/pages/AuditTrailReportPage').then((m) => ({
+    default: m.AuditTrailReportPage,
+  })),
+);
+
+const OnlineExamReportPage = lazy(() =>
+  import('@features/reports/online-exams/pages/OnlineExamReportPage').then((m) => ({
+    default: m.OnlineExamReportPage,
+  })),
+);
+
 const ApproveLeavePage = lazy(() =>
   import('@features/attendance/approve-leave/pages/ApproveLeavePage').then((m) => ({
     default: m.ApproveLeavePage,
@@ -674,9 +716,9 @@ const PhoneCallLogPage = lazy(() =>
   })),
 );
 
-const VisitorPurposePage = lazy(() =>
-  import('@features/front-office/visitor-purpose/pages/VisitorPurposePage').then((m) => ({
-    default: m.VisitorPurposePage,
+const SetupFrontOfficePage = lazy(() =>
+  import('@features/front-office/setup/pages/SetupFrontOfficePage').then((m) => ({
+    default: m.SetupFrontOfficePage,
   })),
 );
 
@@ -1100,7 +1142,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'complaints', element: <ComplaintsPage /> },
     { path: 'dispatch', element: <PostalDispatchPage /> },
     { path: 'receive', element: <PostalReceivePage /> },
-    { path: 'visitor-purpose', element: <VisitorPurposePage /> },
+    { path: 'setup', element: <SetupFrontOfficePage /> },
   ]),
   createModuleRoutes('/library', ROUTES.library.books, [
     { path: 'books', element: <LibraryBooksPage /> },
@@ -1152,9 +1194,30 @@ export const adminRoutes: RouteObject[] = [
     },
     {
       path: 'lessons',
-      element: <LessonPage />,
+      element: <LessonsPage />,
       handle: {
         page: { title: 'Lessons', description: 'Manage lessons' },
+      },
+    },
+    {
+      path: 'topics',
+      element: <TopicsPage />,
+      handle: {
+        page: { title: 'Topics', description: 'Manage topics' },
+      },
+    },
+    {
+      path: 'manage',
+      element: <ManageLessonPlanPage />,
+      handle: {
+        page: { title: 'Manage Lesson Plan', description: 'Manage lesson plan' },
+      },
+    },
+    {
+      path: 'copy-old-lessons',
+      element: <CopyOldLessonsPage />,
+      handle: {
+        page: { title: 'Copy Old Lessons', description: 'Copy old lessons' },
       },
     },
   ]),
@@ -1196,6 +1259,10 @@ export const adminRoutes: RouteObject[] = [
     { path: 'inventory', element: <InventoryReportPage /> },
     { path: 'homework', element: <HomeworkReportPage /> },
     { path: 'alumni', element: <AlumniReportPage /> },
+    { path: 'lesson-plan', element: <LessonPlanReportPage /> },
+    { path: 'user-log', element: <UserLogReportPage /> },
+    { path: 'audit-trail', element: <AuditTrailReportPage /> },
+    { path: 'online-exams', element: <OnlineExamReportPage /> },
   ]),
   createModuleRoutes('/certificates', ROUTES.certificates.templates, [
     { path: 'templates', element: <CertificateTemplatesPage /> },

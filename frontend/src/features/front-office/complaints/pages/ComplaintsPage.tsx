@@ -57,7 +57,7 @@ export function ComplaintsPage() {
 
   const addAction = (
     <PermissionButton
-      permission="staff.create"
+      permission="front_office.complaints.create"
       onClick={() => setDialogMode('create')}
       className="gap-1"
     >

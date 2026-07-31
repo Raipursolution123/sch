@@ -10,6 +10,9 @@ import type {
 } from '@app-types/staff/staff';
 import { formatStaffName, suggestEmployeeId } from '@utils/staff';
 import { type BackendPayload, extractCount, extractEntity, extractList } from '@utils/api-response';
+import { staffMastersService } from './staff-masters.service';
+import { staffAttendanceService } from './staff-attendance.service';
+import { staffPayrollService } from './staff-payroll.service';
 
 interface StaffRecord {
   id: number;
@@ -395,5 +398,48 @@ export const staffService = {
       { data: payload },
     );
     return response.data;
+  },
+
+  getAttendance: async (date?: string) => {
+    return staffAttendanceService.getRoster(date || '');
+  },
+
+  markAttendance: async (date: string, attendanceData: any[]) => {
+    return staffAttendanceService.saveMark({
+      date,
+      entries: attendanceData,
+    });
+  },
+
+  getPayroll: async (_month?: string, _year?: string) => {
+    return staffPayrollService.listPayslips();
+  },
+
+  generatePayslip: async (payload: any) => {
+    return staffPayrollService.createPayslip(payload);
+  },
+
+  createDepartment: async (name: string) => {
+    return staffMastersService.createDepartment({ department_name: name, is_active: 'yes' });
+  },
+
+  updateDepartment: async (id: number, name: string) => {
+    return staffMastersService.updateDepartment(id, { department_name: name, is_active: 'yes' });
+  },
+
+  deleteDepartment: async (id: number) => {
+    return staffMastersService.deleteDepartment(id);
+  },
+
+  createDesignation: async (name: string) => {
+    return staffMastersService.createDesignation({ designation: name, is_active: 'yes' });
+  },
+
+  updateDesignation: async (id: number, name: string) => {
+    return staffMastersService.updateDesignation(id, { designation: name, is_active: 'yes' });
+  },
+
+  deleteDesignation: async (id: number) => {
+    return staffMastersService.deleteDesignation(id);
   },
 };

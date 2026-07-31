@@ -3,10 +3,7 @@ import { z } from 'zod';
 export const vehicleFormSchema = z.object({
   registration_number: z.string().trim().min(1, 'Registration number is required'),
   chasis_number: z.string().trim().min(1, 'Chassis number is required'),
-  max_seating_capacity: z
-    .union([z.string(), z.number()])
-    .transform((val) => String(val).trim())
-    .refine((val) => val.length > 0, 'Seating capacity is required'),
+  max_seating_capacity: z.string().trim().min(1, 'Seating capacity is required'),
   vehicle_no: z.string().trim().nullish(),
   driver_name: z.string().trim().nullish(),
   driver_contact: z.string().trim().nullish(),

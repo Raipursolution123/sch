@@ -57,7 +57,7 @@ export function VisitorsTable({ visitors, onEdit, onDelete }: VisitorsTableProps
       actions={(row) => (
         <>
           <PermissionButton
-            permission="staff.edit"
+            permission="front_office.visitors.edit"
             variant="ghost"
             size="sm"
             onClick={() => onEdit(row)}
@@ -66,7 +66,7 @@ export function VisitorsTable({ visitors, onEdit, onDelete }: VisitorsTableProps
             <Pencil className="h-4 w-4" />
           </PermissionButton>
           <PermissionButton
-            permission="staff.delete"
+            permission="front_office.visitors.delete"
             variant="ghost"
             size="sm"
             onClick={() => onDelete(row)}

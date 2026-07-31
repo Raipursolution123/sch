@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Upload, FileSpreadsheet, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Upload, FileSpreadsheet, CheckCircle2 } from 'lucide-react';
 import { ModuleListPack } from '@workflow-packs';
 import { Button } from '@components/ui/button';
 import { FormField } from '@components/forms/FormField';
@@ -9,7 +9,6 @@ import { apiClient } from '@services/api/client';
 import { API_ENDPOINTS } from '@constants/api-endpoints';
 
 export function ImportStudentsPage() {
-  const [csvContent, setCsvContent] = useState('');
   const [parsedStudents, setParsedStudents] = useState<any[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -24,7 +23,6 @@ export function ImportStudentsPage() {
     onSuccess: (data) => {
       setSuccessMessage(data.message || `Successfully imported ${parsedStudents.length} students!`);
       setParsedStudents([]);
-      setCsvContent('');
     },
   });
 
@@ -35,7 +33,6 @@ export function ImportStudentsPage() {
     const reader = new FileReader();
     reader.onload = (evt) => {
       const text = evt.target?.result as string;
-      setCsvContent(text);
       parseCsv(text);
     };
     reader.readAsText(file);

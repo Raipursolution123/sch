@@ -94,7 +94,7 @@ export const ROUTES = {
     dispatch: '/front-office/dispatch',
     receive: '/front-office/receive',
     complaints: '/front-office/complaints',
-    visitorPurpose: '/front-office/visitor-purpose',
+    setup: '/front-office/setup',
   },
   library: {
     root: '/library',
@@ -145,8 +145,11 @@ export const ROUTES = {
   },
   lessonPlan: {
     root: '/lesson-plan',
+    manage: '/lesson-plan/manage',
     syllabusStatus: '/lesson-plan/syllabus-status',
     lessons: '/lesson-plan/lessons',
+    topics: '/lesson-plan/topics',
+    copy: '/lesson-plan/copy-old-lessons',
   },
   onlineExams: {
     root: '/online-examinations',
@@ -176,6 +179,10 @@ export const ROUTES = {
     transport: '/reports/transport',
     homework: '/reports/homework',
     alumni: '/reports/alumni',
+    lessonPlan: '/reports/lesson-plan',
+    userLog: '/reports/user-log',
+    auditTrail: '/reports/audit-trail',
+    onlineExams: '/reports/online-exams',
   },
   certificates: {
     root: '/certificates',

@@ -13,8 +13,8 @@ import {
 import {
   useAdmitCardTemplates,
   useDeleteAdmitCardTemplate,
-  type AdmitCardTemplate,
 } from '@hooks/useExamTemplates';
+import type { AdmitCardTemplate } from '@app-types/examinations/exam-templates';
 import { useStudents } from '@hooks/useStudents';
 import { PrintDocumentModal } from '@features/examinations/components/PrintDocumentModal';
 import { ModuleListPack } from '@workflow-packs';
@@ -26,8 +26,6 @@ export function AdmitCardPage() {
   const deleteMutation = useDeleteAdmitCardTemplate();
   const [deleteTarget, setDeleteTarget] = useState<AdmitCardTemplate | null>(null);
   const [printTemplate, setPrintTemplate] = useState<AdmitCardTemplate | null>(null);
-
-  const activeStudent = students.length > 0 ? students[0] : null;
 
   const displayTemplates =
     templates && templates.length > 0
@@ -51,6 +49,8 @@ export function AdmitCardPage() {
             is_photo: 1,
             is_class: 1,
             is_section: 1,
+            is_address: 1,
+            is_gender: 1,
             content_footer: 'Please carry valid School ID card along with Admit Card.',
           },
           {
@@ -71,6 +71,8 @@ export function AdmitCardPage() {
             is_photo: 1,
             is_class: 1,
             is_section: 1,
+            is_address: 1,
+            is_gender: 1,
             content_footer: 'Mobile phones are strictly prohibited in the exam hall.',
           },
         ];

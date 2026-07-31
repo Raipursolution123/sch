@@ -16,7 +16,7 @@ import {
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { Button } from '@components/ui/button';
 import {
-  useDailyAssignmentsList,
+  useDailyAssignments,
   useCreateDailyAssignment,
   useUpdateDailyAssignment,
   useDeleteDailyAssignment,
@@ -38,7 +38,7 @@ type FormValues = z.infer<typeof schema>;
 
 export function DailyAssignmentPage() {
   const user = useAuthStore((s) => s.user);
-  const { data, isLoading, isError, error, refetch } = useDailyAssignmentsList();
+  const { data, isLoading, isError, error, refetch } = useDailyAssignments();
   const { data: subjectsData } = useSubjects(1);
   const { data: staffData } = useStaff(1);
 
@@ -171,7 +171,7 @@ export function DailyAssignmentPage() {
       isError={isError}
       error={error}
       onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && (data?.length ?? 0) === 0}
+      isEmpty={!isLoading && !isError && (data?.results?.length ?? 0) === 0}
       emptyTitle="No daily assignments"
       emptyDescription="Create a daily assignment to get started."
       emptyAction={addAction}
@@ -218,7 +218,7 @@ export function DailyAssignmentPage() {
       }
     >
       <DataTable
-        data={data ?? []}
+        data={data?.results ?? []}
         columns={columns}
         getRowKey={(row) => row.id}
         actions={(row) => (

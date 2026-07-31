@@ -51,7 +51,7 @@ export function ComplaintsTable({ complaints, onEdit, onDelete }: ComplaintsTabl
       actions={(row) => (
         <>
           <PermissionButton
-            permission="staff.edit"
+            permission="front_office.complaints.edit"
             variant="ghost"
             size="sm"
             onClick={() => onEdit(row)}
@@ -60,7 +60,7 @@ export function ComplaintsTable({ complaints, onEdit, onDelete }: ComplaintsTabl
             <Pencil className="h-4 w-4" />
           </PermissionButton>
           <PermissionButton
-            permission="staff.delete"
+            permission="front_office.complaints.delete"
             variant="ghost"
             size="sm"
             onClick={() => onDelete(row)}

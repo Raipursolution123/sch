@@ -30,13 +30,13 @@ export interface UpdateFeeMasterPayload {
 
 export const feeMastersService = {
   list: async (): Promise<FeeMasterItem[]> => {
-    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.fees.feeMasters);
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.fees.assignments);
     return extractList<FeeMasterItem>(data);
   },
 
   create: async (payload: CreateFeeMasterPayload): Promise<FeeMasterItem> => {
     const { data } = await apiClient.post<ApiSuccessResponse<FeeMasterItem>>(
-      API_ENDPOINTS.fees.feeMasters,
+      API_ENDPOINTS.fees.assignments,
       payload,
     );
     return data.data;
@@ -44,13 +44,13 @@ export const feeMastersService = {
 
   update: async (id: number, payload: UpdateFeeMasterPayload): Promise<FeeMasterItem> => {
     const { data } = await apiClient.put<ApiSuccessResponse<FeeMasterItem>>(
-      API_ENDPOINTS.fees.feeMasterDetail(id),
+      API_ENDPOINTS.fees.assignmentDetail(id),
       payload,
     );
     return data.data;
   },
 
   delete: async (id: number): Promise<void> => {
-    await apiClient.delete(API_ENDPOINTS.fees.feeMasterDetail(id));
+    await apiClient.delete(API_ENDPOINTS.fees.assignmentDetail(id));
   },
 };

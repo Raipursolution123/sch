@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@components/ui/table';
 import { Button } from '@components/ui/button';
-import { PermissionButton } from '@components/rbac/PermissionButton';
+
 import {
   Dialog,
   DialogContent,

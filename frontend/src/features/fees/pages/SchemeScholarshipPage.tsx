@@ -51,6 +51,7 @@ export function SchemeScholarshipPage() {
     <ModuleMarkGridPack
       title="Scheme & Scholarship Master"
       description="Define scholarship schemes, fee concessions, and student benefits."
+      filters={null}
       actions={
         <button
           onClick={() => toast.info('Add Scheme drawer would open here')}

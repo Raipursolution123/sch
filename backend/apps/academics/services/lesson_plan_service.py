@@ -362,3 +362,80 @@ class LessonPlanService:
     def delete_forum_comment(self, comment_id: int) -> None:
         comment = self.get_forum_comment(comment_id)
         comment.delete()
+
+    def copy_lessons(
+        self,
+        from_session_id: int,
+        from_subject_group_id: int,
+        from_subject_id: int,
+        to_session_id: int,
+        to_subject_group_id: int,
+        to_subject_id: int,
+    ):
+        from apps.academics.models.subject_group_class_sections import (
+            SubjectGroupClassSections,
+        )
+        from apps.academics.models.subject_group_subjects import SubjectGroupSubjects
+
+        # Find the source SubjectGroupSubjects
+        src_sgs = SubjectGroupSubjects.objects.filter(
+            subject_group_id=from_subject_group_id, subject_id=from_subject_id
+        ).first()
+        if not src_sgs:
+            raise LessonPlanValidationError("Source subject group subject mapping not found.")
+
+        # Find the target SubjectGroupSubjects
+        tgt_sgs = SubjectGroupSubjects.objects.filter(
+            subject_group_id=to_subject_group_id, subject_id=to_subject_id
+        ).first()
+        if not tgt_sgs:
+            raise LessonPlanValidationError("Target subject group subject mapping not found.")
+
+        # Let's get all lessons matching the source sgs
+        lessons = Lesson.objects.filter(
+            session_id=from_session_id, subject_group_subject_id=src_sgs.id
+        )
+
+        # For target class sections, we need to map them
+        src_sgcs = list(SubjectGroupClassSections.objects.filter(subject_group_id=from_subject_group_id))
+        tgt_sgcs = list(SubjectGroupClassSections.objects.filter(subject_group_id=to_subject_group_id))
+
+        # Build a mapping from src class_section_id to tgt class_section_id
+        sgcs_map = {}
+        for s_sgcs in src_sgcs:
+            t_sgcs = next((t for t in tgt_sgcs if t.class_section_id == s_sgcs.class_section_id), None)
+            if t_sgcs:
+                sgcs_map[s_sgcs.id] = t_sgcs.id
+            elif tgt_sgcs:
+                sgcs_map[s_sgcs.id] = tgt_sgcs[0].id
+
+        copied_count = 0
+        for lesson in lessons:
+            target_sgcs_id = sgcs_map.get(lesson.subject_group_class_sections_id)
+            if not target_sgcs_id:
+                if tgt_sgcs:
+                    target_sgcs_id = tgt_sgcs[0].id
+                else:
+                    continue
+
+            new_lesson = Lesson.objects.create(
+                session_id=to_session_id,
+                subject_group_subject_id=tgt_sgs.id,
+                subject_group_class_sections_id=target_sgcs_id,
+                name=lesson.name,
+                created_at=timezone.now(),
+            )
+
+            # Copy topics
+            topics = Topic.objects.filter(session_id=from_session_id, lesson_id=lesson.id)
+            for topic in topics:
+                Topic.objects.create(
+                    session_id=to_session_id,
+                    lesson_id=new_lesson.id,
+                    name=topic.name,
+                    status=0,
+                    created_at=timezone.now(),
+                )
+            copied_count += 1
+
+        return {"copied_count": copied_count}

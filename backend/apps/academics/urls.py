@@ -31,6 +31,7 @@ from apps.academics.api.views.lesson_plan import (
     TopicListCreateView,
 )
 from apps.academics.api.views.promote import PromoteExecuteView, PromotePreviewView
+from apps.academics.api.views.copy_lessons import CopyLessonsView
 from apps.academics.api.views.section import SectionDetailView, SectionListCreateView
 from apps.academics.api.views.session import (
     SessionActivateView,
@@ -188,5 +189,10 @@ urlpatterns = [
         "submit-assignments/<int:pk>/",
         SubmitAssignmentDetailView.as_view(),
         name="submit_assignments_detail",
+    ),
+    path(
+        "lessons/copy/",
+        CopyLessonsView.as_view(),
+        name="copy_lessons",
     ),
 ]

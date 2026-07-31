@@ -11,7 +11,7 @@ import { Select } from '@components/ui/select';
 import { FormField } from '@components/forms/FormField';
 import { Printer, ShieldCheck } from 'lucide-react';
 import type { StudentListItem } from '@app-types/students/student';
-import type { MarksheetTemplate, AdmitCardTemplate } from '@hooks/useExamTemplates';
+import type { MarksheetTemplate, AdmitCardTemplate } from '@app-types/examinations/exam-templates';
 import type { ExamSchedule } from '@app-types/examinations/exam-schedule';
 import type { ExamGroup } from '@app-types/examinations/exam-group';
 
@@ -281,8 +281,8 @@ export function PrintDocumentModal({
                               {sch.subject_name || `Subject #${sch.subject_id}`}
                             </td>
                             <td className="p-1.5 text-gray-500">
-                              {sch.time_from
-                                ? `${sch.time_from} - ${sch.time_to || ''}`
+                              {sch.start_time
+                                ? `${sch.start_time} - ${sch.end_time || ''}`
                                 : '09:00 AM - 12:00 PM'}
                             </td>
                             <td className="p-1.5 text-gray-500">{sch.room_no || 'Hall A'}</td>

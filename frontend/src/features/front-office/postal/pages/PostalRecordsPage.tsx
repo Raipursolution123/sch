@@ -85,7 +85,7 @@ export function PostalRecordsPage({ type }: PostalRecordsPageProps) {
 
   const addAction = (
     <PermissionButton
-      permission="staff.create"
+      permission={type === 'dispatch' ? 'front_office.postal_dispatch.create' : 'front_office.postal_receive.create'}
       onClick={() => setDialogMode('create')}
       className="gap-1"
     >

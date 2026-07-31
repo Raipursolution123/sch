@@ -59,7 +59,7 @@ export function VisitorsPage() {
 
   const addAction = (
     <PermissionButton
-      permission="staff.create"
+      permission="front_office.visitors.create"
       onClick={() => setDialogMode('create')}
       className="gap-1"
     >

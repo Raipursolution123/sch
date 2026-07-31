@@ -182,7 +182,7 @@ export function CbseExamsPage() {
                 : ''
             }
             confirmLabel="Delete Exam"
-            isDestructive
+            destructive
             isLoading={deleteMutation.isPending}
             onConfirm={() => {
               if (deleteTarget) {
