@@ -135,7 +135,13 @@ export const ROUTES = {
     root: '/communicate',
     notices: '/communicate/notices',
     emailSms: '/communicate/email-sms',
+    sendEmail: '/communicate/send-email',
+    sendSms: '/communicate/send-sms',
+    emailSmsLog: '/communicate/email-sms-log',
+    scheduleLog: '/communicate/schedule-log',
     bulkEmail: '/communicate/bulk-email',
+    emailTemplate: '/communicate/email-template',
+    smsTemplate: '/communicate/sms-template',
   },
   downloadCenter: {
     root: '/download-center',
