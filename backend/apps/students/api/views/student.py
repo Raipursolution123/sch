@@ -111,8 +111,10 @@ class StudentDetailView(APIView):
             )
         except StudentError as exc:
             return _error_response(exc)
+
     def delete(self, request, pk):
         import json
+
         payload = request.data
         if not payload and request.body:
             try:
@@ -158,8 +160,9 @@ class StudentDisableReasonListView(APIView):
         )
 
     def post(self, request):
-        from apps.students.models.disable_reason import DisableReason
         from django.utils import timezone
+
+        from apps.students.models.disable_reason import DisableReason
 
         reason_text = str(request.data.get("reason") or "").strip()
         if not reason_text:

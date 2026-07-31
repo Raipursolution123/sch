@@ -3,9 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from apps.settings.domain.settings_exceptions import (
-    SettingsValidationError,
-)
+from apps.settings.domain.settings_exceptions import SettingsValidationError
 from apps.settings.models.filetypes import Filetypes
 
 logger = logging.getLogger(__name__)

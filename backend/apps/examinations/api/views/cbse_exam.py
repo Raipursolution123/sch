@@ -41,6 +41,7 @@ class CbseExamsListCreateView(APIView):
         except ExaminationError as exc:
             return examination_error_response(exc)
 
+
 class CbseExamDetailView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE

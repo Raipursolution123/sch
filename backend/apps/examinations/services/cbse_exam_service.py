@@ -1,13 +1,13 @@
 import logging
 from typing import Any
 
+from apps.academics.models.sessions import Sessions
 from apps.examinations.domain.examination_exceptions import (
     ExaminationNotFoundError,
     ExaminationValidationError,
 )
 from apps.examinations.models.cbse_exams import CbseExams
 from apps.examinations.selectors import examination_selectors as selectors
-from apps.academics.models.sessions import Sessions
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class CbseExamService:
             raise ExaminationNotFoundError("CBSE exam not found.")
 
         cleaned = self._validate_create(payload)
-        
+
         exam.name = cleaned["name"]
         exam.exam_code = cleaned.get("exam_code")
         exam.session_id = cleaned["session_id"]
@@ -63,13 +63,13 @@ class CbseExamService:
         exam.cbse_exam_grade_id = cleaned.get("cbse_exam_grade_id")
         exam.combined_ew = cleaned.get("combined_ew")
         exam.is_publish = cleaned.get("is_publish", 0)
-        
+
         if "is_active" in payload:
             exam.is_active = cleaned.get("is_active", 1)
-            
+
         exam.use_exam_roll_no = cleaned.get("use_exam_roll_no", 0)
         exam.promote_class = cleaned.get("promote_class")
-        
+
         exam.save()
         logger.info("Updated CBSE exam id=%s", exam.id)
         return self._to_dict(exam)
@@ -78,7 +78,7 @@ class CbseExamService:
         exam = CbseExams.objects.filter(id=exam_id).first()
         if exam is None:
             raise ExaminationNotFoundError("CBSE exam not found.")
-        
+
         # In a real app we might check if there are linked assessments
         # but for now we just delete it based on the user's request.
         exam.delete()
@@ -119,9 +119,11 @@ class CbseExamService:
             session_id = int(session_id)
         except (TypeError, ValueError) as exc:
             raise ExaminationValidationError("session_id must be an integer.") from exc
-            
+
         if not Sessions.objects.filter(id=session_id).exists():
-            raise ExaminationValidationError(f"Session with id {session_id} does not exist.")
+            raise ExaminationValidationError(
+                f"Session with id {session_id} does not exist."
+            )
 
         cleaned: dict[str, Any] = {
             "name": name,

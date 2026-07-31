@@ -2,9 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from apps.settings.domain.settings_exceptions import (
-    SettingsValidationError,
-)
+from apps.settings.domain.settings_exceptions import SettingsValidationError
 from apps.settings.services.backup_service import BackupService
 from apps.settings.services.captcha_service import CaptchaService
 from apps.settings.services.custom_fields_service import CustomFieldsService

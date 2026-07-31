@@ -93,10 +93,13 @@ def test_disable_student_not_found(service):
 
 def test_disable_student_requires_reason(service):
     student = MagicMock(id=1, is_active="yes")
-    with patch(
-        "apps.students.services.student_service.selectors.get_student_by_id",
-        return_value=student,
-    ), patch("django.db.transaction.atomic"):
+    with (
+        patch(
+            "apps.students.services.student_service.selectors.get_student_by_id",
+            return_value=student,
+        ),
+        patch("django.db.transaction.atomic"),
+    ):
         with pytest.raises(StudentValidationError, match="Disable reason"):
             service.disable_student(1, {})
 
