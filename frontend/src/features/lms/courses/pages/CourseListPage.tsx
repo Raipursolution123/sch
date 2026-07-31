@@ -28,31 +28,49 @@ export default function CourseListPage() {
     }
   };
 
-  const columns = useMemo<DataTableColumn<Course>[]>(() => [
-    {
-      id: 'title',
-      header: 'Title',
-      enableSorting: true,
-      sortValue: (c) => c.title,
-      cellClassName: 'font-medium',
-      cell: (c) => c.title,
-    },
-    {
-      id: 'price',
-      header: 'Price',
-      cell: (c) => (c.free_course === 1 ? <Badge variant="secondary">Free</Badge> : `₹${Number(c.price).toFixed(2)}`),
-    },
-    {
-      id: 'visibility',
-      header: 'Visibility',
-      cell: (c) => (c.front_side_visibility === 'yes' ? <Badge>Visible</Badge> : <Badge variant="outline">Hidden</Badge>),
-    },
-    {
-      id: 'status',
-      header: 'Status',
-      cell: (c) => (c.status === 1 ? <Badge className="bg-green-600 hover:bg-green-600">Active</Badge> : <Badge variant="secondary">Draft</Badge>),
-    },
-  ], []);
+  const columns = useMemo<DataTableColumn<Course>[]>(
+    () => [
+      {
+        id: 'title',
+        header: 'Title',
+        enableSorting: true,
+        sortValue: (c) => c.title,
+        cellClassName: 'font-medium',
+        cell: (c) => c.title,
+      },
+      {
+        id: 'price',
+        header: 'Price',
+        cell: (c) =>
+          c.free_course === 1 ? (
+            <Badge variant="secondary">Free</Badge>
+          ) : (
+            `₹${Number(c.price).toFixed(2)}`
+          ),
+      },
+      {
+        id: 'visibility',
+        header: 'Visibility',
+        cell: (c) =>
+          c.front_side_visibility === 'yes' ? (
+            <Badge>Visible</Badge>
+          ) : (
+            <Badge variant="outline">Hidden</Badge>
+          ),
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        cell: (c) =>
+          c.status === 1 ? (
+            <Badge className="bg-green-600 hover:bg-green-600">Active</Badge>
+          ) : (
+            <Badge variant="secondary">Draft</Badge>
+          ),
+      },
+    ],
+    [],
+  );
 
   const addAction = (
     <Button onClick={() => navigate(ROUTES.lms.courses.new)}>
@@ -101,10 +119,19 @@ export default function CourseListPage() {
         }}
         actions={(c) => (
           <>
-            <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.lms.courses.edit(c.id))}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate(ROUTES.lms.courses.edit(c.id))}
+            >
               <Edit2 className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => setCourseToDelete(c)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-red-500 hover:bg-red-50 hover:text-red-600"
+              onClick={() => setCourseToDelete(c)}
+            >
               <Trash2 className="h-4 w-4" />
             </Button>
           </>

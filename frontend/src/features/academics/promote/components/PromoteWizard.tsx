@@ -124,7 +124,9 @@ export function PromoteWizard() {
   const targetClassSectionIds = useMemo(() => {
     if (toClassId === undefined) return [];
     if (toSectionId !== undefined) {
-      const cs = classSections.find((cs) => cs.class_id === toClassId && cs.section_id === toSectionId);
+      const cs = classSections.find(
+        (cs) => cs.class_id === toClassId && cs.section_id === toSectionId,
+      );
       return cs ? [cs.id] : [];
     }
     return classSections.filter((cs) => cs.class_id === toClassId).map((cs) => cs.id);
@@ -140,13 +142,8 @@ export function PromoteWizard() {
       return g.class_section_ids.some((id) => targetClassSectionIds.includes(Number(id)));
     });
 
-    return [
-      defaultOption,
-      ...filtered.map((g) => ({ value: String(g.id), label: g.name })),
-    ];
+    return [defaultOption, ...filtered.map((g) => ({ value: String(g.id), label: g.name }))];
   }, [subjectGroups, toClassId, targetClassSectionIds]);
-
-
 
   const sourceReady =
     fromSessionId !== undefined && fromClassId !== undefined && fromSectionId !== undefined;
@@ -390,10 +387,13 @@ export function PromoteWizard() {
             </p>
             {toSubjectGroupId && (
               <p className="text-muted-foreground">
-                Assigned Subject Group: <strong>{subjectGroups.find(g => g.id === toSubjectGroupId)?.name || 'Unknown'}</strong>
+                Assigned Subject Group:{' '}
+                <strong>
+                  {subjectGroups.find((g) => g.id === toSubjectGroupId)?.name || 'Unknown'}
+                </strong>
               </p>
             )}
-            <label className="flex items-center gap-2 mt-4">
+            <label className="mt-4 flex items-center gap-2">
               <Checkbox
                 checked={deactivateSource}
                 onChange={(e) => setDeactivateSource(e.target.checked)}

@@ -97,9 +97,9 @@ def group_list_item_dict(group: SubjectGroups) -> dict[str, Any]:
     subject_count = SubjectGroupSubjects.objects.filter(
         subject_group_id=group.id
     ).count()
-    active_cs = list(SubjectGroupClassSections.objects.filter(
-        subject_group_id=group.id, is_active=1
-    ))
+    active_cs = list(
+        SubjectGroupClassSections.objects.filter(subject_group_id=group.id, is_active=1)
+    )
     class_section_ids = [cs.class_section_id for cs in active_cs if cs.class_section_id]
     return {
         "id": group.id,

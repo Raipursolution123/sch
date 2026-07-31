@@ -22,13 +22,43 @@ export function OnlineExamReportPage() {
   const [classFilter, setClassFilter] = useState('');
 
   const mockExamReports: OnlineExamReport[] = [
-    { examName: 'Mathematics Monthly Quiz 1', className: 'Class 10 (Section A)', totalStudents: 45, passedStudents: 42, passPercentage: 93, status: 'Published' },
-    { examName: 'Physics Term 1 Exam', className: 'Class 11 (Section B)', totalStudents: 38, passedStudents: 32, passPercentage: 84, status: 'Published' },
-    { examName: 'Chemistry Practical Quiz', className: 'Class 12 (Section A)', totalStudents: 40, passedStudents: 40, passPercentage: 100, status: 'Published' },
-    { examName: 'English Literature Test', className: 'Class 9 (Section C)', totalStudents: 35, passedStudents: 30, passPercentage: 85, status: 'Published' },
+    {
+      examName: 'Mathematics Monthly Quiz 1',
+      className: 'Class 10 (Section A)',
+      totalStudents: 45,
+      passedStudents: 42,
+      passPercentage: 93,
+      status: 'Published',
+    },
+    {
+      examName: 'Physics Term 1 Exam',
+      className: 'Class 11 (Section B)',
+      totalStudents: 38,
+      passedStudents: 32,
+      passPercentage: 84,
+      status: 'Published',
+    },
+    {
+      examName: 'Chemistry Practical Quiz',
+      className: 'Class 12 (Section A)',
+      totalStudents: 40,
+      passedStudents: 40,
+      passPercentage: 100,
+      status: 'Published',
+    },
+    {
+      examName: 'English Literature Test',
+      className: 'Class 9 (Section C)',
+      totalStudents: 35,
+      passedStudents: 30,
+      passPercentage: 85,
+      status: 'Published',
+    },
   ];
 
-  const filteredReports = mockExamReports.filter(report => !classFilter || report.className.includes(classFilter));
+  const filteredReports = mockExamReports.filter(
+    (report) => !classFilter || report.className.includes(classFilter),
+  );
 
   const handleExportCsv = () => {
     exportToCsv(
@@ -84,7 +114,6 @@ export function OnlineExamReportPage() {
         </FormField>
       }
     >
-
       <div className="overflow-x-auto rounded-lg border border-border bg-card">
         <table className="w-full text-left text-sm">
           <thead className="bg-muted text-xs uppercase text-muted-foreground">
@@ -99,19 +128,21 @@ export function OnlineExamReportPage() {
           </thead>
           <tbody className="divide-y divide-border">
             {filteredReports.map((row, idx) => (
-              <tr key={idx} className="hover:bg-muted/50 transition-colors">
-                <td className="px-6 py-4 font-medium text-foreground flex items-center gap-2">
+              <tr key={idx} className="transition-colors hover:bg-muted/50">
+                <td className="flex items-center gap-2 px-6 py-4 font-medium text-foreground">
                   <Award className="h-4 w-4 text-primary" />
                   {row.examName}
                 </td>
                 <td className="px-6 py-4 text-muted-foreground">{row.className}</td>
                 <td className="px-6 py-4 text-center text-muted-foreground">{row.totalStudents}</td>
-                <td className="px-6 py-4 text-center text-muted-foreground font-semibold text-green-600">{row.passedStudents}</td>
+                <td className="px-6 py-4 text-center font-semibold text-green-600 text-muted-foreground">
+                  {row.passedStudents}
+                </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-24 bg-muted h-2 rounded-full overflow-hidden">
+                    <div className="h-2 w-24 overflow-hidden rounded-full bg-muted">
                       <div
-                        className="bg-primary h-full"
+                        className="h-full bg-primary"
                         style={{ width: `${row.passPercentage}%` }}
                       />
                     </div>

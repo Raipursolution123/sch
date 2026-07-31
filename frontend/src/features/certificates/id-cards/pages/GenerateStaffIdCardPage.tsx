@@ -82,7 +82,7 @@ export function GenerateStaffIdCardPage() {
       loadingMessage="Loading staff and templates..."
       isEmpty={false}
     >
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 rounded-lg border border-border/80 bg-card p-4 shadow-sm print:hidden">
+      <div className="mb-6 grid gap-4 rounded-lg border border-border/80 bg-card p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-4 print:hidden">
         <FormField label="Template" htmlFor="staff-id-template">
           <Select
             id="staff-id-template"

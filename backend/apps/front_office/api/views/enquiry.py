@@ -58,9 +58,14 @@ class EnquiryListCreateView(APIView):
             )
         try:
             # Resolve staff ID from request.user (foreign key references staff.id, not users.id)
-            created_by = request.user.user_id if getattr(request.user, "role", None) == "staff" else None
+            created_by = (
+                request.user.user_id
+                if getattr(request.user, "role", None) == "staff"
+                else None
+            )
             if not created_by:
                 from apps.staff.models.staff import Staff
+
                 first_staff = Staff.objects.first()
                 created_by = first_staff.id if first_staff else 1
 
@@ -76,7 +81,6 @@ class EnquiryListCreateView(APIView):
             )
         except FrontOfficeError as exc:
             return front_office_error_response(exc)
-
 
 
 class EnquiryDetailView(APIView):

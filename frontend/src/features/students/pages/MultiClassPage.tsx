@@ -85,7 +85,9 @@ export function MultiClassPage() {
     }
 
     const selectedClassObj = classes.find((c) => String(c.id) === String(newClass));
-    const selectedSectionObj = classSections.find((s: any) => String(s.section_id) === String(newSection));
+    const selectedSectionObj = classSections.find(
+      (s: any) => String(s.section_id) === String(newSection),
+    );
 
     let sectionName = '';
     let sectionId = 0;
@@ -114,11 +116,14 @@ export function MultiClassPage() {
     // Check duplicate
     const currentExtras = extraEnrollments[studentId] || [];
     const isDuplicate = currentExtras.some(
-      (e) => String(e.classId) === String(newClass) && String(e.sectionId) === String(newSection)
+      (e) => String(e.classId) === String(newClass) && String(e.sectionId) === String(newSection),
     );
 
     const student = students.find((s) => s.id === studentId);
-    const isPrimaryDuplicate = student && String(student.class_id) === String(newClass) && String(student.section_id) === String(newSection);
+    const isPrimaryDuplicate =
+      student &&
+      String(student.class_id) === String(newClass) &&
+      String(student.section_id) === String(newSection);
 
     if (isDuplicate || isPrimaryDuplicate) {
       toast.error('This class and section is already assigned to this student.');
@@ -140,7 +145,7 @@ export function MultiClassPage() {
     setExtraEnrollments((prev) => ({
       ...prev,
       [studentId]: (prev[studentId] || []).filter(
-        (e) => !(e.classId === classId && e.sectionId === sectionId)
+        (e) => !(e.classId === classId && e.sectionId === sectionId),
       ),
     }));
     toast.success('Assigned class removed');
@@ -157,9 +162,9 @@ export function MultiClassPage() {
       onRetry={() => void refetch()}
     >
       {/* Criteria Filter */}
-      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3 rounded-lg border border-border bg-card p-4">
+      <div className="mb-6 grid grid-cols-1 gap-4 rounded-lg border border-border bg-card p-4 md:grid-cols-3">
         <div>
-          <label className="text-xs font-semibold text-muted-foreground uppercase">Class</label>
+          <label className="text-xs font-semibold uppercase text-muted-foreground">Class</label>
           <select
             value={selectedClass}
             onChange={(e) => {
@@ -168,7 +173,10 @@ export function MultiClassPage() {
               if (val === 'all') {
                 setSelectedSection('all');
               } else {
-                const options = sectionOptionsForClass(classSections as ClassSection[], Number(val));
+                const options = sectionOptionsForClass(
+                  classSections as ClassSection[],
+                  Number(val),
+                );
                 if (options.length === 0) {
                   setSelectedSection('all');
                 } else {
@@ -189,7 +197,7 @@ export function MultiClassPage() {
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-muted-foreground uppercase">Section</label>
+          <label className="text-xs font-semibold uppercase text-muted-foreground">Section</label>
           <select
             value={selectedSection}
             onChange={(e) => setSelectedSection(e.target.value)}
@@ -218,7 +226,7 @@ export function MultiClassPage() {
         <div className="flex items-end">
           <button
             onClick={handleSearch}
-            className="h-10 w-full rounded-md bg-primary text-primary-foreground font-medium text-sm transition-colors hover:bg-primary/95"
+            className="h-10 w-full rounded-md bg-primary text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/95"
           >
             Search
           </button>
@@ -227,29 +235,40 @@ export function MultiClassPage() {
 
       {/* Students List */}
       {!hasSearched ? (
-        <div className="text-center py-12 border border-dashed rounded-xl bg-card/50">
-          <p className="text-sm text-muted-foreground">Select Class and Section, then click Search to list students.</p>
+        <div className="rounded-xl border border-dashed bg-card/50 py-12 text-center">
+          <p className="text-sm text-muted-foreground">
+            Select Class and Section, then click Search to list students.
+          </p>
         </div>
       ) : filteredStudents.length === 0 ? (
-        <div className="text-center py-12 border border-dashed rounded-xl bg-card/50">
-          <p className="text-sm text-muted-foreground">No students found for the selected Class and Section criteria.</p>
+        <div className="rounded-xl border border-dashed bg-card/50 py-12 text-center">
+          <p className="text-sm text-muted-foreground">
+            No students found for the selected Class and Section criteria.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {filteredStudents.map((student) => {
             const extras = extraEnrollments[student.id] || [];
             return (
-              <div key={student.id} className="relative rounded-xl border border-border bg-card p-5 shadow-sm">
+              <div
+                key={student.id}
+                className="relative rounded-xl border border-border bg-card p-5 shadow-sm"
+              >
                 <div className="flex items-start justify-between">
                   <div>
                     <h4 className="font-semibold text-foreground">{student.full_name}</h4>
-                    <p className="text-xs text-muted-foreground">Admission No: {student.admission_no}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Admission No: {student.admission_no}
+                    </p>
                   </div>
                   <GraduationCap className="h-5 w-5 text-primary" />
                 </div>
 
                 <div className="mt-4 space-y-2">
-                  <span className="text-xs font-semibold text-muted-foreground uppercase block">Assigned Classes</span>
+                  <span className="block text-xs font-semibold uppercase text-muted-foreground">
+                    Assigned Classes
+                  </span>
                   <div className="flex flex-wrap gap-2">
                     <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
                       <Check className="h-3 w-3" />
@@ -262,8 +281,10 @@ export function MultiClassPage() {
                       >
                         {enroll.className} ({enroll.sectionName})
                         <button
-                          onClick={() => handleRemoveExtraClass(student.id, enroll.classId, enroll.sectionId)}
-                          className="hover:text-destructive text-muted-foreground"
+                          onClick={() =>
+                            handleRemoveExtraClass(student.id, enroll.classId, enroll.sectionId)
+                          }
+                          className="text-muted-foreground hover:text-destructive"
                         >
                           <X className="h-3 w-3" />
                         </button>
@@ -280,7 +301,10 @@ export function MultiClassPage() {
                         onChange={(e) => {
                           const val = e.target.value;
                           setNewClass(val);
-                          const options = sectionOptionsForClass(classSections as ClassSection[], Number(val));
+                          const options = sectionOptionsForClass(
+                            classSections as ClassSection[],
+                            Number(val),
+                          );
                           if (options.length === 0) {
                             setNewSection('all');
                           } else {
@@ -314,13 +338,13 @@ export function MultiClassPage() {
                     <div className="mt-3 flex justify-end gap-2">
                       <button
                         onClick={() => setAddingClassStudent(null)}
-                        className="h-8 rounded-md px-3 text-xs border hover:bg-accent"
+                        className="h-8 rounded-md border px-3 text-xs hover:bg-accent"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={() => handleAddClass(student.id)}
-                        className="h-8 rounded-md px-3 text-xs bg-primary text-white font-medium"
+                        className="h-8 rounded-md bg-primary px-3 text-xs font-medium text-white"
                       >
                         Save
                       </button>

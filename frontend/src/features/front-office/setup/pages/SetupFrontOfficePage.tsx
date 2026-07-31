@@ -102,7 +102,7 @@ function VisitorPurposeTab() {
             visitors_purpose: selected.visitors_purpose || selected.name,
             description: selected.description || '',
           }
-        : { visitors_purpose: '', description: '' }
+        : { visitors_purpose: '', description: '' },
     );
   }, [open, selected, reset]);
 
@@ -188,7 +188,7 @@ function VisitorPurposeTab() {
           if (selected) {
             updateMutation.mutate(
               { id: selected.id, payload },
-              { onSuccess: () => setOpen(false) }
+              { onSuccess: () => setOpen(false) },
             );
             return;
           }
@@ -247,7 +247,7 @@ function ComplaintTypeTab() {
             complaint_type: selected.complaint_type,
             description: selected.description || '',
           }
-        : { complaint_type: '', description: '' }
+        : { complaint_type: '', description: '' },
     );
   }, [open, selected, reset]);
 
@@ -333,7 +333,7 @@ function ComplaintTypeTab() {
           if (selected) {
             updateMutation.mutate(
               { id: selected.id, payload },
-              { onSuccess: () => setOpen(false) }
+              { onSuccess: () => setOpen(false) },
             );
             return;
           }
@@ -392,7 +392,7 @@ function SourceTab() {
             source: selected.source,
             description: selected.description || '',
           }
-        : { source: '', description: '' }
+        : { source: '', description: '' },
     );
   }, [open, selected, reset]);
 
@@ -478,7 +478,7 @@ function SourceTab() {
           if (selected) {
             updateMutation.mutate(
               { id: selected.id, payload },
-              { onSuccess: () => setOpen(false) }
+              { onSuccess: () => setOpen(false) },
             );
             return;
           }
@@ -537,7 +537,7 @@ function ReferenceTab() {
             reference: selected.reference,
             description: selected.description || '',
           }
-        : { reference: '', description: '' }
+        : { reference: '', description: '' },
     );
   }, [open, selected, reset]);
 
@@ -623,7 +623,7 @@ function ReferenceTab() {
           if (selected) {
             updateMutation.mutate(
               { id: selected.id, payload },
-              { onSuccess: () => setOpen(false) }
+              { onSuccess: () => setOpen(false) },
             );
             return;
           }

@@ -247,7 +247,12 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.attendance.root,
     icon: CalendarCheck,
     section: 'operations',
-    permissionKeys: ['attendance.mark', 'attendance.report', 'attendance.approve_leave', 'attendance.subject'],
+    permissionKeys: [
+      'attendance.mark',
+      'attendance.report',
+      'attendance.approve_leave',
+      'attendance.subject',
+    ],
     children: [
       {
         id: 'attendance-mark',
@@ -747,7 +752,13 @@ export const ADMIN_NAV: NavItem[] = [
     path: ROUTES.lessonPlan.root,
     icon: FileText,
     section: 'operations',
-    permissionKeys: ['manage_lesson_plan', 'manage_syllabus_status', 'lesson', 'topic', 'copy_old_lesson'],
+    permissionKeys: [
+      'manage_lesson_plan',
+      'manage_syllabus_status',
+      'lesson',
+      'topic',
+      'copy_old_lesson',
+    ],
     children: [
       {
         id: 'lesson-manage-lesson-plan',

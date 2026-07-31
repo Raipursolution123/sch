@@ -1,10 +1,12 @@
 from typing import Any
+
 from django.utils import timezone
-from apps.front_office.models.complaint_type import ComplaintType
+
 from apps.front_office.domain.front_office_exceptions import (
     FrontOfficeNotFoundError,
     FrontOfficeValidationError,
 )
+from apps.front_office.models.complaint_type import ComplaintType
 
 
 class ComplaintTypeService:

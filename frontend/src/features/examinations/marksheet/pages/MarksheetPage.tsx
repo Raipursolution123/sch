@@ -10,10 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@components/ui/table';
-import {
-  useMarksheetTemplates,
-  useDeleteMarksheetTemplate,
-} from '@hooks/useExamTemplates';
+import { useMarksheetTemplates, useDeleteMarksheetTemplate } from '@hooks/useExamTemplates';
 import type { MarksheetTemplate } from '@app-types/examinations/exam-templates';
 import { useStudents } from '@hooks/useStudents';
 import { PrintDocumentModal } from '@features/examinations/components/PrintDocumentModal';

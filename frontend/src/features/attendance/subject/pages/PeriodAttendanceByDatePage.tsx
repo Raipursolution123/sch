@@ -35,12 +35,12 @@ export function PeriodAttendanceByDatePage() {
 
   const activeClasses = useMemo(
     () => classes.filter((c) => c.is_active === 'yes').sort((a, b) => a.sort_order - b.sort_order),
-    [classes]
+    [classes],
   );
 
   const sectionOptions = useMemo(
     () => sectionOptionsForClass(classSections, classId),
-    [classSections, classId]
+    [classSections, classId],
   );
 
   const filtersReady = classId > 0 && sectionId > 0 && Boolean(date);
@@ -58,7 +58,11 @@ export function PeriodAttendanceByDatePage() {
   });
 
   // Fetch rosters for all periods on this date and aggregate
-  const { data: reportRecords = [], isLoading: reportLoading, refetch } = useQuery({
+  const {
+    data: reportRecords = [],
+    isLoading: reportLoading,
+    refetch,
+  } = useQuery({
     queryKey: ['attendance', 'subject', 'report-by-date', classId, sectionId, date, periods],
     queryFn: async () => {
       const rows: ReportRow[] = [];
@@ -101,7 +105,12 @@ export function PeriodAttendanceByDatePage() {
 
   const columns: DataTableColumn<ReportRow>[] = [
     { id: 'admission_no', header: 'Admission No', cell: (r) => r.admission_no },
-    { id: 'student_name', header: 'Student Name', cellClassName: 'font-medium', cell: (r) => r.student_name },
+    {
+      id: 'student_name',
+      header: 'Student Name',
+      cellClassName: 'font-medium',
+      cell: (r) => r.student_name,
+    },
     { id: 'subject_name', header: 'Subject', cell: (r) => r.subject_name },
     { id: 'time_from', header: 'Time', cell: (r) => r.time_from },
     { id: 'status', header: 'Status', cell: (r) => r.status },
@@ -125,7 +134,12 @@ export function PeriodAttendanceByDatePage() {
       filters={
         <>
           <FormField label="Date" htmlFor="period_date">
-            <Input id="period_date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <Input
+              id="period_date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
           </FormField>
           <FormField label="Class" htmlFor="period_class">
             <Select

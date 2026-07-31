@@ -10,7 +10,9 @@ class DispatchReceiveSerializer(serializers.Serializer):
     note = serializers.CharField(max_length=500, allow_blank=True, required=False)
     from_title = serializers.CharField(max_length=200, allow_blank=True, required=False)
     date = serializers.DateField(required=False, allow_null=True)
-    image = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
+    image = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
     created_at = serializers.DateTimeField(read_only=True)
 
 
@@ -18,11 +20,19 @@ class DispatchReceiveCreateSerializer(serializers.Serializer):
     reference_no = serializers.CharField(max_length=50)
     to_title = serializers.CharField(max_length=100)
     type = serializers.ChoiceField(choices=["dispatch", "receive"])
-    address = serializers.CharField(max_length=500, allow_blank=True, required=False, default="")
-    note = serializers.CharField(max_length=500, allow_blank=True, required=False, default="")
-    from_title = serializers.CharField(max_length=200, allow_blank=True, required=False, default="")
+    address = serializers.CharField(
+        max_length=500, allow_blank=True, required=False, default=""
+    )
+    note = serializers.CharField(
+        max_length=500, allow_blank=True, required=False, default=""
+    )
+    from_title = serializers.CharField(
+        max_length=200, allow_blank=True, required=False, default=""
+    )
     date = serializers.DateField(required=False, allow_null=True)
-    image = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
+    image = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
 
 
 class DispatchReceiveUpdateSerializer(serializers.Serializer):
@@ -33,4 +43,6 @@ class DispatchReceiveUpdateSerializer(serializers.Serializer):
     note = serializers.CharField(max_length=500, allow_blank=True, required=False)
     from_title = serializers.CharField(max_length=200, allow_blank=True, required=False)
     date = serializers.DateField(required=False, allow_null=True)
-    image = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
+    image = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )

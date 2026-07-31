@@ -10,7 +10,8 @@ export const lmsKeys = {
   all: ['lms'] as const,
   courses: {
     all: () => [...lmsKeys.all, 'courses'] as const,
-    list: (page: number, pageSize: number) => [...lmsKeys.courses.all(), { page, pageSize }] as const,
+    list: (page: number, pageSize: number) =>
+      [...lmsKeys.courses.all(), { page, pageSize }] as const,
     detail: (id: number) => [...lmsKeys.courses.all(), id] as const,
   },
 };

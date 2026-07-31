@@ -28,7 +28,8 @@ export const useComplaintTypes = () => {
 export const useCreateComplaintType = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: CreateComplaintTypePayload) => setupFrontOfficeService.createComplaintType(data),
+    mutationFn: (data: CreateComplaintTypePayload) =>
+      setupFrontOfficeService.createComplaintType(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: SETUP_FO_KEYS.complaintTypes });
       toast.success('Complaint type created successfully');

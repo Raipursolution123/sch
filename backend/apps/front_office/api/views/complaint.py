@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.front_office.api.serializers.complaint import (
-    ComplaintSerializer,
     ComplaintCreateSerializer,
+    ComplaintSerializer,
     ComplaintUpdateSerializer,
 )
 from apps.front_office.domain.front_office_exceptions import (
@@ -95,7 +95,9 @@ class ComplaintDetailView(APIView):
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
         try:
-            complaint = ComplaintService().update_complaint(pk, serializer.validated_data)
+            complaint = ComplaintService().update_complaint(
+                pk, serializer.validated_data
+            )
             response_serializer = ComplaintSerializer(complaint)
             return APIResponse.success(
                 data=response_serializer.data,

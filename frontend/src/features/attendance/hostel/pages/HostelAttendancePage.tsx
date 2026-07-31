@@ -26,7 +26,7 @@ export function HostelAttendancePage() {
 
   // Fetch real active students list
   const { data: students = [], isLoading, isError, error, refetch } = useStudents();
-  
+
   // Local state to keep track of hostel statuses during marking session
   const [markedStatuses, setMarkedStatuses] = useState<Record<number, string>>({});
 
@@ -35,7 +35,7 @@ export function HostelAttendancePage() {
   // Filter students based on hostel selection (e.g. gender filtering to simulate Boys/Girls hostels)
   const hostelStudents = useMemo(() => {
     if (!hasSearched) return [];
-    
+
     return students
       .filter((s) => {
         if (hostelId === '1') {
@@ -77,7 +77,12 @@ export function HostelAttendancePage() {
 
   const columns: DataTableColumn<HostelRecord>[] = [
     { id: 'admission_no', header: 'Admission No', cell: (r) => r.admission_no },
-    { id: 'student_name', header: 'Student Name', cellClassName: 'font-medium', cell: (r) => r.student_name },
+    {
+      id: 'student_name',
+      header: 'Student Name',
+      cellClassName: 'font-medium',
+      cell: (r) => r.student_name,
+    },
     { id: 'hostel_name', header: 'Hostel', cell: (r) => r.hostel_name },
     { id: 'room_no', header: 'Room No', cell: (r) => r.room_no },
     {
@@ -126,7 +131,12 @@ export function HostelAttendancePage() {
       filters={
         <>
           <FormField label="Date" htmlFor="hostel_date">
-            <Input id="hostel_date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <Input
+              id="hostel_date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
           </FormField>
           <FormField label="Hostel" htmlFor="hostel_select">
             <Select

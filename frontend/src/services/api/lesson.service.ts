@@ -38,7 +38,7 @@ export const lessonService = {
   }) => {
     const response = await apiClient.post<ApiSuccessResponse<{ copied_count: number }>>(
       `${BASE_PATH}/copy/`,
-      payload
+      payload,
     );
     return response.data.data;
   },

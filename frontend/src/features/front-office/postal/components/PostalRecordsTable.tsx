@@ -51,7 +51,11 @@ export function PostalRecordsTable({ records, onEdit, onDelete }: PostalRecordsT
       actions={(row) => (
         <>
           <PermissionButton
-            permission={row.type === 'dispatch' ? 'front_office.postal_dispatch.edit' : 'front_office.postal_receive.edit'}
+            permission={
+              row.type === 'dispatch'
+                ? 'front_office.postal_dispatch.edit'
+                : 'front_office.postal_receive.edit'
+            }
             variant="ghost"
             size="sm"
             onClick={() => onEdit(row)}
@@ -60,7 +64,11 @@ export function PostalRecordsTable({ records, onEdit, onDelete }: PostalRecordsT
             <Pencil className="h-4 w-4" />
           </PermissionButton>
           <PermissionButton
-            permission={row.type === 'dispatch' ? 'front_office.postal_dispatch.delete' : 'front_office.postal_receive.delete'}
+            permission={
+              row.type === 'dispatch'
+                ? 'front_office.postal_dispatch.delete'
+                : 'front_office.postal_receive.delete'
+            }
             variant="ghost"
             size="sm"
             onClick={() => onDelete(row)}

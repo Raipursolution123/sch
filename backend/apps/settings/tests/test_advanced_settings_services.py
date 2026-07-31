@@ -3,7 +3,6 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from apps.settings.domain.settings_exceptions import (
-    SettingsNotFoundError,
     SettingsValidationError,
 )
 from apps.settings.services.backup_service import BackupService
@@ -48,13 +47,25 @@ def test_captcha_requires_status():
 
 
 def test_filetypes_not_found():
-    with patch(
-        "apps.settings.services.filetypes_service.Filetypes.objects.order_by"
-    ) as order_mock, patch(
-        "apps.settings.services.filetypes_service.Filetypes.objects.create"
-    ) as create_mock:
+    with (
+        patch(
+            "apps.settings.services.filetypes_service.Filetypes.objects.order_by"
+        ) as order_mock,
+        patch(
+            "apps.settings.services.filetypes_service.Filetypes.objects.create"
+        ) as create_mock,
+    ):
         order_mock.return_value.first.return_value = None
-        create_mock.return_value = MagicMock(id=1, file_extension="pdf", file_mime="application/pdf", file_size=1024, image_extension="png", image_mime="image/png", image_size=1024, created_at=None)
+        create_mock.return_value = MagicMock(
+            id=1,
+            file_extension="pdf",
+            file_mime="application/pdf",
+            file_size=1024,
+            image_extension="png",
+            image_mime="image/png",
+            image_size=1024,
+            created_at=None,
+        )
         res = FileTypesService().get_settings()
         assert res["id"] == 1
         create_mock.assert_called_once()

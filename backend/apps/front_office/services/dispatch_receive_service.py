@@ -42,7 +42,9 @@ class DispatchReceiveService:
             created_at=timezone.now(),
         )
 
-    def update_dispatch(self, dispatch_id: int, payload: dict[str, Any]) -> DispatchReceive:
+    def update_dispatch(
+        self, dispatch_id: int, payload: dict[str, Any]
+    ) -> DispatchReceive:
         record = self.get_dispatch(dispatch_id)
 
         if "reference_no" in payload:
@@ -55,7 +57,9 @@ class DispatchReceiveService:
         if "type" in payload:
             type_ = str(payload["type"]).strip()
             if type_ not in ("dispatch", "receive"):
-                raise FrontOfficeValidationError("Type must be 'dispatch' or 'receive'.")
+                raise FrontOfficeValidationError(
+                    "Type must be 'dispatch' or 'receive'."
+                )
             record.type = type_
         if "address" in payload:
             record.address = str(payload["address"]).strip()

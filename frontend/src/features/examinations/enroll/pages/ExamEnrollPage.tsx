@@ -43,9 +43,7 @@ export function ExamEnrollPage() {
 
   const activeExams = useMemo(
     () =>
-      exams.filter(
-        (e) => e.is_active === 'yes' && (sessionId === 0 || e.session_id === sessionId),
-      ),
+      exams.filter((e) => e.is_active === 'yes' && (sessionId === 0 || e.session_id === sessionId)),
     [exams, sessionId],
   );
 

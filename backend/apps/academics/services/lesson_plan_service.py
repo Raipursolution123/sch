@@ -382,14 +382,18 @@ class LessonPlanService:
             subject_group_id=from_subject_group_id, subject_id=from_subject_id
         ).first()
         if not src_sgs:
-            raise LessonPlanValidationError("Source subject group subject mapping not found.")
+            raise LessonPlanValidationError(
+                "Source subject group subject mapping not found."
+            )
 
         # Find the target SubjectGroupSubjects
         tgt_sgs = SubjectGroupSubjects.objects.filter(
             subject_group_id=to_subject_group_id, subject_id=to_subject_id
         ).first()
         if not tgt_sgs:
-            raise LessonPlanValidationError("Target subject group subject mapping not found.")
+            raise LessonPlanValidationError(
+                "Target subject group subject mapping not found."
+            )
 
         # Let's get all lessons matching the source sgs
         lessons = Lesson.objects.filter(
@@ -397,13 +401,24 @@ class LessonPlanService:
         )
 
         # For target class sections, we need to map them
-        src_sgcs = list(SubjectGroupClassSections.objects.filter(subject_group_id=from_subject_group_id))
-        tgt_sgcs = list(SubjectGroupClassSections.objects.filter(subject_group_id=to_subject_group_id))
+        src_sgcs = list(
+            SubjectGroupClassSections.objects.filter(
+                subject_group_id=from_subject_group_id
+            )
+        )
+        tgt_sgcs = list(
+            SubjectGroupClassSections.objects.filter(
+                subject_group_id=to_subject_group_id
+            )
+        )
 
         # Build a mapping from src class_section_id to tgt class_section_id
         sgcs_map = {}
         for s_sgcs in src_sgcs:
-            t_sgcs = next((t for t in tgt_sgcs if t.class_section_id == s_sgcs.class_section_id), None)
+            t_sgcs = next(
+                (t for t in tgt_sgcs if t.class_section_id == s_sgcs.class_section_id),
+                None,
+            )
             if t_sgcs:
                 sgcs_map[s_sgcs.id] = t_sgcs.id
             elif tgt_sgcs:
@@ -427,7 +442,9 @@ class LessonPlanService:
             )
 
             # Copy topics
-            topics = Topic.objects.filter(session_id=from_session_id, lesson_id=lesson.id)
+            topics = Topic.objects.filter(
+                session_id=from_session_id, lesson_id=lesson.id
+            )
             for topic in topics:
                 Topic.objects.create(
                     session_id=to_session_id,

@@ -2,7 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { queryKeys } from '@constants/query-keys';
 import { cbseExamsService } from '@services/api';
-import type { CreateCbseExamPayload, UpdateCbseExamPayload } from '@app-types/examinations/cbse-exam';
+import type {
+  CreateCbseExamPayload,
+  UpdateCbseExamPayload,
+} from '@app-types/examinations/cbse-exam';
 import { getApiErrorMessage } from '@utils/session';
 
 export function useCbseExams() {

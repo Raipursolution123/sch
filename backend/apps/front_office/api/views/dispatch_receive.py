@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.front_office.api.serializers.dispatch_receive import (
-    DispatchReceiveSerializer,
     DispatchReceiveCreateSerializer,
+    DispatchReceiveSerializer,
     DispatchReceiveUpdateSerializer,
 )
 from apps.front_office.domain.front_office_exceptions import (
@@ -95,7 +95,9 @@ class DispatchReceiveDetailView(APIView):
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
         try:
-            record = DispatchReceiveService().update_dispatch(pk, serializer.validated_data)
+            record = DispatchReceiveService().update_dispatch(
+                pk, serializer.validated_data
+            )
             response_serializer = DispatchReceiveSerializer(record)
             return APIResponse.success(
                 data=response_serializer.data,

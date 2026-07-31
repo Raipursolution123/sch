@@ -34,10 +34,46 @@ export function LessonPlanReportPage() {
 
   // Mocked data that corresponds to the lesson plan syllabus status mapped to classes and sections
   const mockSyllabusData: SyllabusStatusRow[] = [
-    { subject: 'Mathematics (Math-Old)', teacher: 'John Doe', totalTopics: 12, completedTopics: 8, percentage: 66, lastUpdated: '2026-07-30', classId: 24, sectionId: 20 },
-    { subject: 'Science (Sci-10)', teacher: 'Sarah Smith', totalTopics: 15, completedTopics: 5, percentage: 33, lastUpdated: '2026-07-28', classId: 24, sectionId: 21 },
-    { subject: 'English (Eng-Lit)', teacher: 'Emma Watson', totalTopics: 10, completedTopics: 10, percentage: 100, lastUpdated: '2026-07-29', classId: 25, sectionId: 20 },
-    { subject: 'Social Studies (SSt-10)', teacher: 'Robert Downey', totalTopics: 8, completedTopics: 2, percentage: 25, lastUpdated: '2026-07-25', classId: 25, sectionId: 21 },
+    {
+      subject: 'Mathematics (Math-Old)',
+      teacher: 'John Doe',
+      totalTopics: 12,
+      completedTopics: 8,
+      percentage: 66,
+      lastUpdated: '2026-07-30',
+      classId: 24,
+      sectionId: 20,
+    },
+    {
+      subject: 'Science (Sci-10)',
+      teacher: 'Sarah Smith',
+      totalTopics: 15,
+      completedTopics: 5,
+      percentage: 33,
+      lastUpdated: '2026-07-28',
+      classId: 24,
+      sectionId: 21,
+    },
+    {
+      subject: 'English (Eng-Lit)',
+      teacher: 'Emma Watson',
+      totalTopics: 10,
+      completedTopics: 10,
+      percentage: 100,
+      lastUpdated: '2026-07-29',
+      classId: 25,
+      sectionId: 20,
+    },
+    {
+      subject: 'Social Studies (SSt-10)',
+      teacher: 'Robert Downey',
+      totalTopics: 8,
+      completedTopics: 2,
+      percentage: 25,
+      lastUpdated: '2026-07-25',
+      classId: 25,
+      sectionId: 21,
+    },
   ];
 
   const classOptions = [
@@ -96,8 +132,16 @@ export function LessonPlanReportPage() {
         <ReportSummaryGrid
           items={[
             { label: 'Total Subjects', value: filteredSyllabusData.length },
-            { label: 'Fully Completed', value: filteredSyllabusData.filter(s => s.percentage === 100).length },
-            { label: 'Avg. Progress', value: filteredSyllabusData.length ? `${Math.round(filteredSyllabusData.reduce((acc, row) => acc + row.percentage, 0) / filteredSyllabusData.length)}%` : '0%' },
+            {
+              label: 'Fully Completed',
+              value: filteredSyllabusData.filter((s) => s.percentage === 100).length,
+            },
+            {
+              label: 'Avg. Progress',
+              value: filteredSyllabusData.length
+                ? `${Math.round(filteredSyllabusData.reduce((acc, row) => acc + row.percentage, 0) / filteredSyllabusData.length)}%`
+                : '0%',
+            },
           ]}
         />
       }
@@ -124,7 +168,6 @@ export function LessonPlanReportPage() {
         </div>
       }
     >
-
       <div className="overflow-x-auto rounded-lg border border-border bg-card">
         <table className="w-full text-left text-sm">
           <thead className="bg-muted text-xs uppercase text-muted-foreground">
@@ -139,8 +182,8 @@ export function LessonPlanReportPage() {
           </thead>
           <tbody className="divide-y divide-border">
             {filteredSyllabusData.map((row, idx) => (
-              <tr key={idx} className="hover:bg-muted/50 transition-colors">
-                <td className="px-6 py-4 font-medium text-foreground flex items-center gap-2">
+              <tr key={idx} className="transition-colors hover:bg-muted/50">
+                <td className="flex items-center gap-2 px-6 py-4 font-medium text-foreground">
                   <BookOpen className="h-4 w-4 text-primary" />
                   {row.subject}
                 </td>
@@ -158,9 +201,9 @@ export function LessonPlanReportPage() {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-24 bg-muted h-2 rounded-full overflow-hidden">
+                    <div className="h-2 w-24 overflow-hidden rounded-full bg-muted">
                       <div
-                        className="bg-primary h-full transition-all duration-300"
+                        className="h-full bg-primary transition-all duration-300"
                         style={{ width: `${row.percentage}%` }}
                       />
                     </div>

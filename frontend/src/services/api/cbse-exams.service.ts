@@ -1,7 +1,11 @@
 import { apiClient } from '@services/api/client';
 import { API_ENDPOINTS } from '@constants/index';
 import type { ApiSuccessResponse } from '@app-types/api';
-import type { CbseExam, CreateCbseExamPayload, UpdateCbseExamPayload } from '@app-types/examinations/cbse-exam';
+import type {
+  CbseExam,
+  CreateCbseExamPayload,
+  UpdateCbseExamPayload,
+} from '@app-types/examinations/cbse-exam';
 import { type BackendPayload, extractList } from '@utils/api-response';
 
 export const cbseExamsService = {

@@ -83,9 +83,7 @@ export function BulkDeletePage() {
   }, [students, searchedClass, searchedSection, search, hasSearched]);
 
   const toggleSelect = (id: number) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
   const toggleSelectAll = () => {
@@ -190,9 +188,9 @@ export function BulkDeletePage() {
         onRetry={() => void refetch()}
       >
         {/* Criteria Filter */}
-        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3 rounded-lg border border-border bg-card p-4">
+        <div className="mb-6 grid grid-cols-1 gap-4 rounded-lg border border-border bg-card p-4 md:grid-cols-3">
           <div>
-            <label className="text-xs font-semibold text-muted-foreground uppercase">Class</label>
+            <label className="text-xs font-semibold uppercase text-muted-foreground">Class</label>
             <select
               value={selectedClass}
               onChange={(e) => {
@@ -201,7 +199,10 @@ export function BulkDeletePage() {
                 if (val === 'all') {
                   setSelectedSection('all');
                 } else {
-                  const options = sectionOptionsForClass(classSections as ClassSection[], Number(val));
+                  const options = sectionOptionsForClass(
+                    classSections as ClassSection[],
+                    Number(val),
+                  );
                   if (options.length === 0) {
                     setSelectedSection('all');
                   } else {
@@ -222,7 +223,7 @@ export function BulkDeletePage() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-muted-foreground uppercase">Section</label>
+            <label className="text-xs font-semibold uppercase text-muted-foreground">Section</label>
             <select
               value={selectedSection}
               onChange={(e) => setSelectedSection(e.target.value)}
@@ -251,7 +252,7 @@ export function BulkDeletePage() {
           <div className="flex items-end">
             <button
               onClick={handleSearch}
-              className="h-10 w-full rounded-md bg-primary text-primary-foreground font-medium text-sm transition-colors hover:bg-primary/95"
+              className="h-10 w-full rounded-md bg-primary text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/95"
             >
               Search
             </button>
@@ -261,14 +262,14 @@ export function BulkDeletePage() {
         {hasSearched ? (
           <>
             <div className="mb-6 flex items-center justify-between gap-4">
-              <div className="relative flex-1 max-w-sm">
+              <div className="relative max-w-sm flex-1">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder="Search by name, admission no..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
               </div>
 
@@ -296,8 +297,10 @@ export function BulkDeletePage() {
             <DataTable data={filteredStudents} columns={columns} getRowKey={(r) => r.id} />
           </>
         ) : (
-          <div className="text-center py-12 border border-dashed rounded-xl bg-card/50">
-            <p className="text-sm text-muted-foreground">Select Class and Section, then click Search to list students.</p>
+          <div className="rounded-xl border border-dashed bg-card/50 py-12 text-center">
+            <p className="text-sm text-muted-foreground">
+              Select Class and Section, then click Search to list students.
+            </p>
           </div>
         )}
       </ModuleListPack>
@@ -308,10 +311,16 @@ export function BulkDeletePage() {
         title="Confirm Bulk Deactivation"
         description={
           <div className="space-y-2">
-            <p>Are you sure you want to deactivate/disable the {selectedIds.length} selected student(s)?</p>
-            <div className="flex items-center gap-2 rounded-md bg-yellow-50 border border-yellow-200 p-3 text-xs text-yellow-800">
-              <AlertTriangle className="h-4 w-4 text-yellow-600 shrink-0" />
-              <span>Disabled students will be moved to the Disabled Students list. Their records will not be permanently deleted.</span>
+            <p>
+              Are you sure you want to deactivate/disable the {selectedIds.length} selected
+              student(s)?
+            </p>
+            <div className="flex items-center gap-2 rounded-md border border-yellow-200 bg-yellow-50 p-3 text-xs text-yellow-800">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-yellow-600" />
+              <span>
+                Disabled students will be moved to the Disabled Students list. Their records will
+                not be permanently deleted.
+              </span>
             </div>
           </div>
         }

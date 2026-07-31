@@ -1,7 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { syllabusService } from '@services/api';
-import type { CreateSubjectSyllabusPayload, UpdateSubjectSyllabusPayload } from '@app-types/academics/syllabus';
+import type {
+  CreateSubjectSyllabusPayload,
+  UpdateSubjectSyllabusPayload,
+} from '@app-types/academics/syllabus';
 import { getApiErrorMessage } from '@utils/session';
 
 export const SYLLABUS_KEYS = {

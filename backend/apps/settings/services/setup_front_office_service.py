@@ -1,10 +1,11 @@
 from typing import Any
-from apps.settings.models.source import Source
-from apps.settings.models.reference import Reference
+
 from apps.settings.domain.settings_exceptions import (
     SettingsNotFoundError,
     SettingsValidationError,
 )
+from apps.settings.models.reference import Reference
+from apps.settings.models.source import Source
 
 
 class SourceService:

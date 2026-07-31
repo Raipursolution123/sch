@@ -37,7 +37,13 @@ export function DisableReasonPage() {
   });
 
   // Fetch list
-  const { data = [], isLoading, isError, error, refetch } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['students', 'disable-reasons'],
     queryFn: async () => {
       const { data } = await apiClient.get('/students/disable-reasons/');
@@ -101,7 +107,7 @@ export function DisableReasonPage() {
   }, [open, selected, reset]);
 
   const filteredReasons = data.filter((item: DisableReason) =>
-    item.reason.toLowerCase().includes(search.toLowerCase())
+    item.reason.toLowerCase().includes(search.toLowerCase()),
   );
 
   const addAction = (

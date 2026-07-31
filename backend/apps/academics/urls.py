@@ -11,6 +11,7 @@ from apps.academics.api.views.class_teacher import (
     ClassTeacherDetailView,
     ClassTeacherListCreateView,
 )
+from apps.academics.api.views.copy_lessons import CopyLessonsView
 from apps.academics.api.views.homework import (
     DailyAssignmentDetailView,
     DailyAssignmentListCreateView,
@@ -31,7 +32,6 @@ from apps.academics.api.views.lesson_plan import (
     TopicListCreateView,
 )
 from apps.academics.api.views.promote import PromoteExecuteView, PromotePreviewView
-from apps.academics.api.views.copy_lessons import CopyLessonsView
 from apps.academics.api.views.section import SectionDetailView, SectionListCreateView
 from apps.academics.api.views.session import (
     SessionActivateView,

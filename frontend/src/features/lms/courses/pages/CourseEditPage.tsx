@@ -23,7 +23,9 @@ export default function CourseEditPage() {
   if (isError || !course) {
     return (
       <Alert variant="destructive">
-        <AlertDescription>Failed to load course details. It may have been deleted.</AlertDescription>
+        <AlertDescription>
+          Failed to load course details. It may have been deleted.
+        </AlertDescription>
       </Alert>
     );
   }

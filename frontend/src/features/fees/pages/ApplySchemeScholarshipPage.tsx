@@ -33,12 +33,12 @@ export function ApplySchemeScholarshipPage() {
 
   const activeClasses = useMemo(
     () => classes.filter((c) => c.is_active === 'yes').sort((a, b) => a.sort_order - b.sort_order),
-    [classes]
+    [classes],
   );
 
   const sectionOptions = useMemo(
     () => sectionOptionsForClass(classSections, classId),
-    [classSections, classId]
+    [classSections, classId],
   );
 
   const filteredRows = useMemo(() => {
@@ -55,7 +55,8 @@ export function ApplySchemeScholarshipPage() {
         admission_no: student.admission_no,
         student_name: student.full_name,
         class_section: `${student.class_name} (${student.section_name})`,
-        applied_scheme: appliedSchemes[student.id] || (idx % 4 === 0 ? 'Merit Scholarship' : 'None'),
+        applied_scheme:
+          appliedSchemes[student.id] || (idx % 4 === 0 ? 'Merit Scholarship' : 'None'),
       }));
   }, [students, classId, sectionId, hasSearched, appliedSchemes]);
 
@@ -80,7 +81,12 @@ export function ApplySchemeScholarshipPage() {
 
   const columns: DataTableColumn<StudentSchemeRow>[] = [
     { id: 'admission_no', header: 'Admission No', cell: (r) => r.admission_no },
-    { id: 'student_name', header: 'Student Name', cellClassName: 'font-medium', cell: (r) => r.student_name },
+    {
+      id: 'student_name',
+      header: 'Student Name',
+      cellClassName: 'font-medium',
+      cell: (r) => r.student_name,
+    },
     { id: 'class_section', header: 'Class (Section)', cell: (r) => r.class_section },
     {
       id: 'applied_scheme',

@@ -80,7 +80,12 @@ export function VehicleFormDialog({ open, onOpenChange, vehicle, onSubmit, isLoa
           label="Registration number"
           required
         />
-        <FormTextField control={control as any} name="chasis_number" label="Chassis number" required />
+        <FormTextField
+          control={control as any}
+          name="chasis_number"
+          label="Chassis number"
+          required
+        />
         <FormTextField
           control={control as any}
           name="max_seating_capacity"
@@ -90,11 +95,21 @@ export function VehicleFormDialog({ open, onOpenChange, vehicle, onSubmit, isLoa
         />
         <FormTextField control={control as any} name="vehicle_no" label="Vehicle number" optional />
         <FormTextField control={control as any} name="driver_name" label="Driver name" optional />
-        <FormTextField control={control as any} name="driver_contact" label="Driver contact" optional />
+        <FormTextField
+          control={control as any}
+          name="driver_contact"
+          label="Driver contact"
+          optional
+        />
         <FormTextField control={control as any} name="v_name" label="Tracking name" optional />
         <FormTextField control={control as any} name="v_color" label="Vehicle color" optional />
         <FormTextField control={control as any} name="v_group" label="Vehicle group" optional />
-        <FormTextField control={control as any} name="v_api_url" label="Tracking API URL" optional />
+        <FormTextField
+          control={control as any}
+          name="v_api_url"
+          label="Tracking API URL"
+          optional
+        />
       </div>
     </EntityFormDialog>
   );

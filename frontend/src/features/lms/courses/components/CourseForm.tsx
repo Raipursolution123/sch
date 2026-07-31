@@ -3,14 +3,27 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 import { Button } from '@components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import { Textarea } from '@components/ui/textarea';
 import { Switch } from '@components/ui/switch';
 import type { CreateCoursePayload } from '@app-types/lms';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@constants/index';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@components/ui/select';
 
 const courseSchema = z.object({
   title: z.string().min(3, 'Title is required (min 3 characters)'),
@@ -59,7 +72,9 @@ export function CourseForm({ initialValues, onSubmit, isSubmitting }: CourseForm
   return (
     <div className="max-w-3xl rounded-xl border bg-card text-card-foreground shadow">
       <div className="flex flex-col space-y-1.5 p-6">
-        <h3 className="font-semibold leading-none tracking-tight">{initialValues ? 'Edit Course' : 'Create New Course'}</h3>
+        <h3 className="font-semibold leading-none tracking-tight">
+          {initialValues ? 'Edit Course' : 'Create New Course'}
+        </h3>
       </div>
       <div className="p-6 pt-0">
         <Form {...form}>
@@ -92,7 +107,7 @@ export function CourseForm({ initialValues, onSubmit, isSubmitting }: CourseForm
               )}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="price"
@@ -100,7 +115,12 @@ export function CourseForm({ initialValues, onSubmit, isSubmitting }: CourseForm
                   <FormItem>
                     <FormLabel>Price (₹)</FormLabel>
                     <FormControl>
-                      <Input type="number" step="0.01" {...field} disabled={form.watch('free_course')} />
+                      <Input
+                        type="number"
+                        step="0.01"
+                        {...field}
+                        disabled={form.watch('free_course')}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -122,7 +142,7 @@ export function CourseForm({ initialValues, onSubmit, isSubmitting }: CourseForm
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="free_course"
@@ -160,7 +180,10 @@ export function CourseForm({ initialValues, onSubmit, isSubmitting }: CourseForm
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <Select onValueChange={(val) => field.onChange(Number(val))} defaultValue={field.value.toString()}>
+                  <Select
+                    onValueChange={(val) => field.onChange(Number(val))}
+                    defaultValue={field.value.toString()}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a status" />
@@ -178,7 +201,7 @@ export function CourseForm({ initialValues, onSubmit, isSubmitting }: CourseForm
           </form>
         </Form>
       </div>
-      <div className="flex items-center p-6 pt-0 justify-between">
+      <div className="flex items-center justify-between p-6 pt-0">
         <Button variant="outline" onClick={() => navigate(ROUTES.lms.courses.root)}>
           Cancel
         </Button>

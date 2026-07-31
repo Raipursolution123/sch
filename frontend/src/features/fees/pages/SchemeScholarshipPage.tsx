@@ -15,13 +15,34 @@ interface Scheme {
 
 export function SchemeScholarshipPage() {
   const [schemes, setSchemes] = useState<Scheme[]>([
-    { id: 1, name: 'Merit Scholarship', code: 'MERIT50', type: 'Percentage', value: 50, description: '50% tuition fee waiver for academic excellence' },
-    { id: 2, name: 'Sports Quota Discount', code: 'SPORTS_DISC', type: 'Fixed Amount', value: 5000, description: '₹5000 waiver for state/national level athletes' },
-    { id: 3, name: 'EWS Scheme', code: 'EWS_FULL', type: 'Percentage', value: 100, description: '100% waiver for Economically Weaker Section' },
+    {
+      id: 1,
+      name: 'Merit Scholarship',
+      code: 'MERIT50',
+      type: 'Percentage',
+      value: 50,
+      description: '50% tuition fee waiver for academic excellence',
+    },
+    {
+      id: 2,
+      name: 'Sports Quota Discount',
+      code: 'SPORTS_DISC',
+      type: 'Fixed Amount',
+      value: 5000,
+      description: '₹5000 waiver for state/national level athletes',
+    },
+    {
+      id: 3,
+      name: 'EWS Scheme',
+      code: 'EWS_FULL',
+      type: 'Percentage',
+      value: 100,
+      description: '100% waiver for Economically Weaker Section',
+    },
   ]);
 
   const handleDelete = (id: number) => {
-    setSchemes(prev => prev.filter(s => s.id !== id));
+    setSchemes((prev) => prev.filter((s) => s.id !== id));
     toast.success('Scholarship scheme deleted successfully');
   };
 
@@ -29,17 +50,25 @@ export function SchemeScholarshipPage() {
     { id: 'name', header: 'Scheme Name', cellClassName: 'font-medium', cell: (r) => r.name },
     { id: 'code', header: 'Code', cell: (r) => r.code },
     { id: 'type', header: 'Type', cell: (r) => r.type },
-    { id: 'value', header: 'Value', cellClassName: 'tabular-nums font-semibold', cell: (r) => r.type === 'Percentage' ? `${r.value}%` : `₹${r.value}` },
+    {
+      id: 'value',
+      header: 'Value',
+      cellClassName: 'tabular-nums font-semibold',
+      cell: (r) => (r.type === 'Percentage' ? `${r.value}%` : `₹${r.value}`),
+    },
     { id: 'description', header: 'Description', cell: (r) => r.description },
     {
       id: 'actions',
       header: 'Actions',
       cell: (r) => (
         <div className="flex items-center gap-2">
-          <button className="p-1 text-muted-foreground hover:text-primary transition-colors">
+          <button className="p-1 text-muted-foreground transition-colors hover:text-primary">
             <Edit2 className="h-4 w-4" />
           </button>
-          <button onClick={() => handleDelete(r.id)} className="p-1 text-muted-foreground hover:text-destructive transition-colors">
+          <button
+            onClick={() => handleDelete(r.id)}
+            className="p-1 text-muted-foreground transition-colors hover:text-destructive"
+          >
             <Trash2 className="h-4 w-4" />
           </button>
         </div>

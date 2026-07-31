@@ -32,16 +32,18 @@ export function PositiveFeeAdjustmentPage() {
   const [hasSearched, setHasSearched] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const [adjustments, setAdjustments] = useState<Record<number, { amount: number; reason: string }>>({});
+  const [adjustments, setAdjustments] = useState<
+    Record<number, { amount: number; reason: string }>
+  >({});
 
   const activeClasses = useMemo(
     () => classes.filter((c) => c.is_active === 'yes').sort((a, b) => a.sort_order - b.sort_order),
-    [classes]
+    [classes],
   );
 
   const sectionOptions = useMemo(
     () => sectionOptionsForClass(classSections, classId),
-    [classSections, classId]
+    [classSections, classId],
   );
 
   const filteredRows = useMemo(() => {
@@ -97,7 +99,12 @@ export function PositiveFeeAdjustmentPage() {
 
   const columns: DataTableColumn<FeeAdjustmentRow>[] = [
     { id: 'admission_no', header: 'Admission No', cell: (r) => r.admission_no },
-    { id: 'student_name', header: 'Student Name', cellClassName: 'font-medium', cell: (r) => r.student_name },
+    {
+      id: 'student_name',
+      header: 'Student Name',
+      cellClassName: 'font-medium',
+      cell: (r) => r.student_name,
+    },
     { id: 'class_section', header: 'Class (Section)', cell: (r) => r.class_section },
     {
       id: 'fine_amount',

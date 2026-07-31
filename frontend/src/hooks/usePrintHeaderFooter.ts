@@ -17,8 +17,7 @@ export const useCreatePrintHeaderFooter = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: PrintHeaderFooterCreatePayload) =>
-      printHeaderFooterService.create(data),
+    mutationFn: (data: PrintHeaderFooterCreatePayload) => printHeaderFooterService.create(data),
     onSuccess: () => {
       toast.success('Print template created successfully');
       queryClient.invalidateQueries({ queryKey: ['print-header-footers'] });

@@ -24,22 +24,26 @@ export function CopyOldLessonsPage() {
   const [toSubjectId, setToSubjectId] = useState<number | null>(null);
 
   // Fetch subject groups for source and target
-  const { data: fromGroupsData, isLoading: isLoadingFromGroups } = useSubjectGroups(fromSessionId || undefined);
+  const { data: fromGroupsData, isLoading: isLoadingFromGroups } = useSubjectGroups(
+    fromSessionId || undefined,
+  );
   const fromGroups = fromGroupsData?.results || [];
 
-  const { data: toGroupsData, isLoading: isLoadingToGroups } = useSubjectGroups(toSessionId || undefined);
+  const { data: toGroupsData, isLoading: isLoadingToGroups } = useSubjectGroups(
+    toSessionId || undefined,
+  );
   const toGroups = toGroupsData?.results || [];
 
   // Fetch subjects for source and target
   const { data: fromGroupDetail, isLoading: isLoadingFromDetail } = useSubjectGroup(
     fromSubjectGroupId,
-    !!fromSubjectGroupId
+    !!fromSubjectGroupId,
   );
   const fromSubjects = fromGroupDetail?.subjects || [];
 
   const { data: toGroupDetail, isLoading: isLoadingToDetail } = useSubjectGroup(
     toSubjectGroupId,
-    !!toSubjectGroupId
+    !!toSubjectGroupId,
   );
   const toSubjects = toGroupDetail?.subjects || [];
 
@@ -69,20 +73,21 @@ export function CopyOldLessonsPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl mx-auto">
+    <div className="mx-auto flex max-w-4xl flex-col gap-6">
       <div>
         <h1 className="text-2xl font-semibold text-foreground">Copy Old Lessons</h1>
         <p className="text-sm text-muted-foreground">
-          Copy lesson plan syllabus structures and topics from a prior academic session to the current session.
+          Copy lesson plan syllabus structures and topics from a prior academic session to the
+          current session.
         </p>
       </div>
 
-      <form onSubmit={handleCopy} className="bg-card border rounded-lg p-6 space-y-8 shadow-sm">
+      <form onSubmit={handleCopy} className="space-y-8 rounded-lg border bg-card p-6 shadow-sm">
         {/* Source and Target Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Source Section */}
           <div className="space-y-4">
-            <h2 className="text-lg font-medium border-b pb-2 text-foreground">Source (From)</h2>
+            <h2 className="border-b pb-2 text-lg font-medium text-foreground">Source (From)</h2>
 
             <div className="space-y-2">
               <Label>Session *</Label>
@@ -135,7 +140,7 @@ export function CopyOldLessonsPage() {
 
           {/* Target Section */}
           <div className="space-y-4">
-            <h2 className="text-lg font-medium border-b pb-2 text-foreground">Target (To)</h2>
+            <h2 className="border-b pb-2 text-lg font-medium text-foreground">Target (To)</h2>
 
             <div className="space-y-2">
               <Label>Session *</Label>

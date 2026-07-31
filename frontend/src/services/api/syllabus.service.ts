@@ -12,7 +12,7 @@ export const syllabusService = {
   getSyllabusList: async (params?: Record<string, unknown>) => {
     const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<SubjectSyllabus>>>(
       `${BASE_PATH}/`,
-      { params }
+      { params },
     );
     return response.data.data;
   },
@@ -20,7 +20,7 @@ export const syllabusService = {
   createSyllabus: async (data: CreateSubjectSyllabusPayload) => {
     const response = await apiClient.post<ApiSuccessResponse<SubjectSyllabus>>(
       `${BASE_PATH}/`,
-      data
+      data,
     );
     return response.data.data;
   },
@@ -28,15 +28,13 @@ export const syllabusService = {
   updateSyllabus: async (id: number, data: UpdateSubjectSyllabusPayload) => {
     const response = await apiClient.put<ApiSuccessResponse<SubjectSyllabus>>(
       `${BASE_PATH}/${id}/`,
-      data
+      data,
     );
     return response.data.data;
   },
 
   deleteSyllabus: async (id: number) => {
-    const response = await apiClient.delete<ApiSuccessResponse<null>>(
-      `${BASE_PATH}/${id}/`
-    );
+    const response = await apiClient.delete<ApiSuccessResponse<null>>(`${BASE_PATH}/${id}/`);
     return response.data;
   },
 };

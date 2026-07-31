@@ -3,16 +3,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.settings.api.serializers.setup_front_office import (
-    SourceSerializer,
     ReferenceSerializer,
+    SourceSerializer,
 )
 from apps.settings.domain.settings_exceptions import (
     SettingsError,
     SettingsNotFoundError,
 )
 from apps.settings.services.setup_front_office_service import (
-    SourceService,
     ReferenceService,
+    SourceService,
 )
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse

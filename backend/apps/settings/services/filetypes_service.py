@@ -4,7 +4,6 @@ import logging
 from typing import Any
 
 from apps.settings.domain.settings_exceptions import (
-    SettingsNotFoundError,
     SettingsValidationError,
 )
 from apps.settings.models.filetypes import Filetypes
@@ -32,6 +31,7 @@ class FileTypesService:
         row = Filetypes.objects.order_by("id").first()
         if row is None:
             from django.utils import timezone
+
             row = Filetypes.objects.create(
                 file_extension="pdf,doc,docx,xls,xlsx,csv,txt",
                 file_mime="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain",
@@ -39,7 +39,7 @@ class FileTypesService:
                 image_extension="jpg,jpeg,png,gif,svg",
                 image_mime="image/jpeg,image/png,image/gif,image/svg+xml",
                 image_size=10485760,
-                created_at=timezone.now()
+                created_at=timezone.now(),
             )
         return row
 

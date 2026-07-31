@@ -5,10 +5,14 @@ class VisitorsBookSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     staff_id = serializers.IntegerField(required=False, allow_null=True)
     student_session_id = serializers.IntegerField(required=False, allow_null=True)
-    source = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
+    source = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
     purpose = serializers.CharField(max_length=255)
     name = serializers.CharField(max_length=100)
-    email = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
+    email = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
     contact = serializers.CharField(max_length=12)
     id_proof = serializers.CharField(max_length=50, allow_blank=True, required=False)
     no_of_people = serializers.IntegerField(required=False, default=1)
@@ -16,36 +20,58 @@ class VisitorsBookSerializer(serializers.Serializer):
     in_time = serializers.CharField(max_length=20, allow_blank=True, required=False)
     out_time = serializers.CharField(max_length=20, allow_blank=True, required=False)
     note = serializers.CharField(allow_blank=True, required=False)
-    image = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
-    meeting_with = serializers.CharField(max_length=20, allow_blank=True, required=False)
+    image = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
+    meeting_with = serializers.CharField(
+        max_length=20, allow_blank=True, required=False
+    )
     created_at = serializers.DateTimeField(read_only=True)
 
 
 class VisitorsBookCreateSerializer(serializers.Serializer):
     staff_id = serializers.IntegerField(required=False, allow_null=True)
     student_session_id = serializers.IntegerField(required=False, allow_null=True)
-    source = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
+    source = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
     purpose = serializers.CharField(max_length=255)
     name = serializers.CharField(max_length=100)
-    email = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
+    email = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
     contact = serializers.CharField(max_length=12)
-    id_proof = serializers.CharField(max_length=50, allow_blank=True, required=False, default="")
+    id_proof = serializers.CharField(
+        max_length=50, allow_blank=True, required=False, default=""
+    )
     no_of_people = serializers.IntegerField(required=False, default=1)
     date = serializers.DateField()
-    in_time = serializers.CharField(max_length=20, allow_blank=True, required=False, default="")
-    out_time = serializers.CharField(max_length=20, allow_blank=True, required=False, default="")
+    in_time = serializers.CharField(
+        max_length=20, allow_blank=True, required=False, default=""
+    )
+    out_time = serializers.CharField(
+        max_length=20, allow_blank=True, required=False, default=""
+    )
     note = serializers.CharField(allow_blank=True, required=False, default="")
-    image = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
-    meeting_with = serializers.CharField(max_length=20, allow_blank=True, required=False, default="")
+    image = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
+    meeting_with = serializers.CharField(
+        max_length=20, allow_blank=True, required=False, default=""
+    )
 
 
 class VisitorsBookUpdateSerializer(serializers.Serializer):
     staff_id = serializers.IntegerField(required=False, allow_null=True)
     student_session_id = serializers.IntegerField(required=False, allow_null=True)
-    source = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
+    source = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
     purpose = serializers.CharField(max_length=255, required=False)
     name = serializers.CharField(max_length=100, required=False)
-    email = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
+    email = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
     contact = serializers.CharField(max_length=12, required=False)
     id_proof = serializers.CharField(max_length=50, allow_blank=True, required=False)
     no_of_people = serializers.IntegerField(required=False)
@@ -53,5 +79,9 @@ class VisitorsBookUpdateSerializer(serializers.Serializer):
     in_time = serializers.CharField(max_length=20, allow_blank=True, required=False)
     out_time = serializers.CharField(max_length=20, allow_blank=True, required=False)
     note = serializers.CharField(allow_blank=True, required=False)
-    image = serializers.CharField(max_length=100, allow_blank=True, required=False, allow_null=True)
-    meeting_with = serializers.CharField(max_length=20, allow_blank=True, required=False)
+    image = serializers.CharField(
+        max_length=100, allow_blank=True, required=False, allow_null=True
+    )
+    meeting_with = serializers.CharField(
+        max_length=20, allow_blank=True, required=False
+    )

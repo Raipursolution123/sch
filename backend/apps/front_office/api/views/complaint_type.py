@@ -53,7 +53,9 @@ class ComplaintTypeListCreateView(APIView):
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
         try:
-            item = ComplaintTypeService().create_complaint_type(serializer.validated_data)
+            item = ComplaintTypeService().create_complaint_type(
+                serializer.validated_data
+            )
             response_serializer = ComplaintTypeSerializer(item)
             return APIResponse.success(
                 data=response_serializer.data,
@@ -92,7 +94,9 @@ class ComplaintTypeDetailView(APIView):
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
         try:
-            item = ComplaintTypeService().update_complaint_type(pk, serializer.validated_data)
+            item = ComplaintTypeService().update_complaint_type(
+                pk, serializer.validated_data
+            )
             response_serializer = ComplaintTypeSerializer(item)
             return APIResponse.success(
                 data=response_serializer.data,

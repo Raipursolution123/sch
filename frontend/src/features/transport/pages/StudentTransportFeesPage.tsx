@@ -36,7 +36,7 @@ export function StudentTransportFeesPage() {
 
   const activeClasses = useMemo(
     () => classes.filter((c) => c.is_active === 'yes').sort((a, b) => a.sort_order - b.sort_order),
-    [classes]
+    [classes],
   );
 
   const classOptions = useMemo(() => {
@@ -53,10 +53,7 @@ export function StudentTransportFeesPage() {
     if (classId > 0 && opts.length === 0) {
       return [{ value: 'all', label: 'No Sections (Auto-Selected)' }];
     }
-    return [
-      { value: 'all', label: 'All Sections' },
-      ...opts
-    ];
+    return [{ value: 'all', label: 'All Sections' }, ...opts];
   }, [classSections, classIdStr]);
 
   // Filter students by selected class and section
@@ -102,11 +99,21 @@ export function StudentTransportFeesPage() {
 
   const columns: DataTableColumn<StudentTransportRow>[] = [
     { id: 'admission_no', header: 'Admission No', cell: (r) => r.admission_no },
-    { id: 'student_name', header: 'Student Name', cellClassName: 'font-medium', cell: (r) => r.student_name },
+    {
+      id: 'student_name',
+      header: 'Student Name',
+      cellClassName: 'font-medium',
+      cell: (r) => r.student_name,
+    },
     { id: 'class_section', header: 'Class (Section)', cell: (r) => r.class_section },
     { id: 'route_title', header: 'Route', cell: (r) => r.route_title },
     { id: 'pickup_point', header: 'Pickup Point', cell: (r) => r.pickup_point },
-    { id: 'monthly_fees', header: 'Monthly Fees (₹)', cellClassName: 'tabular-nums', cell: (r) => `₹${r.monthly_fees}` },
+    {
+      id: 'monthly_fees',
+      header: 'Monthly Fees (₹)',
+      cellClassName: 'tabular-nums',
+      cell: (r) => `₹${r.monthly_fees}`,
+    },
     {
       id: 'status',
       header: 'Status',

@@ -5,11 +5,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
-import { FormSelectField, FormNumberField, FormTextField, FormTextareaField } from '@components/forms/fields';
+import {
+  FormSelectField,
+  FormNumberField,
+  FormTextField,
+  FormTextareaField,
+} from '@components/forms/fields';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { ConfirmDialog } from '@components/index';
-import { useCbseExams, useCreateCbseExam, useUpdateCbseExam, useDeleteCbseExam } from '@hooks/useCbseExams';
+import {
+  useCbseExams,
+  useCreateCbseExam,
+  useUpdateCbseExam,
+  useDeleteCbseExam,
+} from '@hooks/useCbseExams';
 import { useSessions } from '@hooks/useSessions';
 import type { CbseExam } from '@app-types/examinations/cbse-exam';
 import { ModuleListPack } from '@workflow-packs';
@@ -51,15 +61,16 @@ export function CbseExamsPage() {
   const createMutation = useCreateCbseExam();
   const updateMutation = useUpdateCbseExam();
   const deleteMutation = useDeleteCbseExam();
-  
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedExam, setSelectedExam] = useState<CbseExam | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<CbseExam | null>(null);
 
-  const sessionOptions = sessionsData?.results?.map(s => ({
-    label: s.session,
-    value: String(s.id),
-  })) || [];
+  const sessionOptions =
+    sessionsData?.results?.map((s) => ({
+      label: s.session,
+      value: String(s.id),
+    })) || [];
 
   const {
     control,
@@ -111,7 +122,7 @@ export function CbseExamsPage() {
       is_active: selectedExam ? selectedExam.is_active : 1,
       is_publish: selectedExam ? selectedExam.is_publish : 0,
     };
-    
+
     if (selectedExam) {
       updateMutation.mutate(
         { id: selectedExam.id, payload },
@@ -148,17 +159,17 @@ export function CbseExamsPage() {
           <EntityFormDialog
             open={dialogOpen}
             onOpenChange={setDialogOpen}
-            title={selectedExam ? "Edit CBSE exam" : "Add CBSE exam"}
+            title={selectedExam ? 'Edit CBSE exam' : 'Add CBSE exam'}
             onSubmit={handleSubmit(onSubmit)}
             isLoading={selectedExam ? updateMutation.isPending : createMutation.isPending}
-            submitLabel={selectedExam ? "Save Changes" : "Create"}
+            submitLabel={selectedExam ? 'Save Changes' : 'Create'}
           >
             <FormErrorSummary errors={errors} />
             <FormTextField control={control} name="name" label="Name" />
-            <FormSelectField 
-              control={control} 
-              name="session_id" 
-              label="Session" 
+            <FormSelectField
+              control={control}
+              name="session_id"
+              label="Session"
               options={sessionOptions}
               placeholder="Select a session"
               required
@@ -195,10 +206,10 @@ export function CbseExamsPage() {
         </>
       }
     >
-      <DataTable 
-        data={data ?? []} 
-        columns={columns} 
-        getRowKey={(row) => row.id} 
+      <DataTable
+        data={data ?? []}
+        columns={columns}
+        getRowKey={(row) => row.id}
         actions={(exam) => (
           <>
             <PermissionButton

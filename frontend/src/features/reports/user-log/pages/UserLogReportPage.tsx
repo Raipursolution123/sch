@@ -21,26 +21,50 @@ export function UserLogReportPage() {
   const [roleFilter, setRoleFilter] = useState('');
 
   const mockLogs: UserLog[] = [
-    { user: 'admin@demo.com', role: 'Staff (Admin)', ipAddress: '192.168.1.5', loginTime: '2026-07-31 12:44:12', device: 'Windows / Chrome' },
-    { user: 'std4271', role: 'Student', ipAddress: '192.168.1.12', loginTime: '2026-07-31 11:30:05', device: 'Android / Chrome Mobile' },
-    { user: 'parent4271', role: 'Parent', ipAddress: '192.168.1.25', loginTime: '2026-07-31 10:15:45', device: 'iOS / Safari' },
-    { user: 'admin2@example.com', role: 'Staff (Accountant)', ipAddress: '10.0.0.4', loginTime: '2026-07-30 16:50:22', device: 'macOS / Safari' },
-    { user: 'teacher1@demo.com', role: 'Staff (Teacher)', ipAddress: '192.168.1.7', loginTime: '2026-07-30 09:00:00', device: 'Windows / Edge' },
+    {
+      user: 'admin@demo.com',
+      role: 'Staff (Admin)',
+      ipAddress: '192.168.1.5',
+      loginTime: '2026-07-31 12:44:12',
+      device: 'Windows / Chrome',
+    },
+    {
+      user: 'std4271',
+      role: 'Student',
+      ipAddress: '192.168.1.12',
+      loginTime: '2026-07-31 11:30:05',
+      device: 'Android / Chrome Mobile',
+    },
+    {
+      user: 'parent4271',
+      role: 'Parent',
+      ipAddress: '192.168.1.25',
+      loginTime: '2026-07-31 10:15:45',
+      device: 'iOS / Safari',
+    },
+    {
+      user: 'admin2@example.com',
+      role: 'Staff (Accountant)',
+      ipAddress: '10.0.0.4',
+      loginTime: '2026-07-30 16:50:22',
+      device: 'macOS / Safari',
+    },
+    {
+      user: 'teacher1@demo.com',
+      role: 'Staff (Teacher)',
+      ipAddress: '192.168.1.7',
+      loginTime: '2026-07-30 09:00:00',
+      device: 'Windows / Edge',
+    },
   ];
 
-  const filteredLogs = mockLogs.filter(log => !roleFilter || log.role.includes(roleFilter));
+  const filteredLogs = mockLogs.filter((log) => !roleFilter || log.role.includes(roleFilter));
 
   const handleExportCsv = () => {
     exportToCsv(
       'user-login-log-report',
       ['User', 'Role', 'IP Address', 'Login Time', 'Device / Browser'],
-      filteredLogs.map((row) => [
-        row.user,
-        row.role,
-        row.ipAddress,
-        row.loginTime,
-        row.device,
-      ]),
+      filteredLogs.map((row) => [row.user, row.role, row.ipAddress, row.loginTime, row.device]),
     );
   };
 
@@ -62,7 +86,7 @@ export function UserLogReportPage() {
         <ReportSummaryGrid
           items={[
             { label: 'Total Logins', value: filteredLogs.length },
-            { label: 'Unique Users', value: new Set(filteredLogs.map(l => l.user)).size },
+            { label: 'Unique Users', value: new Set(filteredLogs.map((l) => l.user)).size },
             { label: 'Active Today', value: 3 },
           ]}
         />
@@ -82,7 +106,6 @@ export function UserLogReportPage() {
         </FormField>
       }
     >
-
       <div className="overflow-x-auto rounded-lg border border-border bg-card">
         <table className="w-full text-left text-sm">
           <thead className="bg-muted text-xs uppercase text-muted-foreground">
@@ -96,15 +119,17 @@ export function UserLogReportPage() {
           </thead>
           <tbody className="divide-y divide-border">
             {filteredLogs.map((row, idx) => (
-              <tr key={idx} className="hover:bg-muted/50 transition-colors">
-                <td className="px-6 py-4 font-medium text-foreground flex items-center gap-2">
+              <tr key={idx} className="transition-colors hover:bg-muted/50">
+                <td className="flex items-center gap-2 px-6 py-4 font-medium text-foreground">
                   <User className="h-4 w-4 text-primary" />
                   {row.user}
                 </td>
                 <td className="px-6 py-4 text-muted-foreground">{row.role}</td>
-                <td className="px-6 py-4 text-center text-muted-foreground font-mono">{row.ipAddress}</td>
+                <td className="px-6 py-4 text-center font-mono text-muted-foreground">
+                  {row.ipAddress}
+                </td>
                 <td className="px-6 py-4 text-center text-muted-foreground">{row.loginTime}</td>
-                <td className="px-6 py-4 text-muted-foreground flex items-center gap-2">
+                <td className="flex items-center gap-2 px-6 py-4 text-muted-foreground">
                   <Laptop className="h-4 w-4 opacity-70" />
                   {row.device}
                 </td>

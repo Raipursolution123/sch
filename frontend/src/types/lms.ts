@@ -22,4 +22,4 @@ export interface CreateCoursePayload {
   status?: number;
 }
 
-export interface UpdateCoursePayload extends Partial<CreateCoursePayload> {}
+export type UpdateCoursePayload = Partial<CreateCoursePayload>;

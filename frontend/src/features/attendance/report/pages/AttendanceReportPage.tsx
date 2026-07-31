@@ -64,25 +64,23 @@ export function AttendanceReportPage() {
       .map((c) => ({ value: String(c.id), label: c.class_name })),
   ];
   const sectionOptions = useMemo(() => {
-    const list = classId > 0
-      ? sectionOptionsForClass(classSections, classId)
-      : sections
-          .filter((s) => s.is_active === 'yes')
-          .map((s) => ({ value: String(s.id), label: s.section_name }));
-    
+    const list =
+      classId > 0
+        ? sectionOptionsForClass(classSections, classId)
+        : sections
+            .filter((s) => s.is_active === 'yes')
+            .map((s) => ({ value: String(s.id), label: s.section_name }));
+
     const sorted = [...list].sort((a, b) => a.label.localeCompare(b.label));
-    
+
     if (classId > 0 && sorted.length === 0) {
       return [
         { value: '', label: 'All sections' },
-        { value: '0', label: 'No Sections (Auto-Selected)' }
+        { value: '0', label: 'No Sections (Auto-Selected)' },
       ];
     }
-    
-    return [
-      { value: '', label: 'All sections' },
-      ...sorted
-    ];
+
+    return [{ value: '', label: 'All sections' }, ...sorted];
   }, [classSections, classId, sections]);
 
   const printSubtitle = `${formatDate(fromDate)} – ${formatDate(toDate)}${

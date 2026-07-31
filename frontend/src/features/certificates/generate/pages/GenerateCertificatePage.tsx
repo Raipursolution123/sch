@@ -57,7 +57,7 @@ export function GenerateCertificatePage() {
       loadingMessage="Loading students and templates..."
       isEmpty={false}
     >
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 rounded-lg border border-border/80 bg-card p-4 shadow-sm print:hidden">
+      <div className="mb-6 grid gap-4 rounded-lg border border-border/80 bg-card p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-4 print:hidden">
         <FormField label="Template" htmlFor="cert-template">
           <Select
             id="cert-template"
@@ -127,28 +127,28 @@ export function GenerateCertificatePage() {
             className="mx-auto rounded-lg border bg-card p-6 text-white print:border-0"
             style={{ maxWidth: preview.content_width || 800 }}
           >
-          <div
-            className="grid grid-cols-3 gap-2 text-sm"
-            style={{ minHeight: preview.header_height || undefined }}
-          >
-            <div>{preview.left_header}</div>
-            <div className="text-center font-semibold">{preview.center_header}</div>
-            <div className="text-right">{preview.right_header}</div>
+            <div
+              className="grid grid-cols-3 gap-2 text-sm"
+              style={{ minHeight: preview.header_height || undefined }}
+            >
+              <div>{preview.left_header}</div>
+              <div className="text-center font-semibold">{preview.center_header}</div>
+              <div className="text-right">{preview.right_header}</div>
+            </div>
+            <div
+              className="prose prose-sm max-w-none py-6"
+              style={{ minHeight: preview.content_height || undefined }}
+              dangerouslySetInnerHTML={{ __html: preview.certificate_text }}
+            />
+            <div
+              className="grid grid-cols-3 gap-2 text-sm text-muted-foreground"
+              style={{ minHeight: preview.footer_height || undefined }}
+            >
+              <div>{preview.left_footer}</div>
+              <div className="text-center">{preview.center_footer}</div>
+              <div className="text-right">{preview.right_footer}</div>
+            </div>
           </div>
-          <div
-            className="prose prose-sm max-w-none py-6"
-            style={{ minHeight: preview.content_height || undefined }}
-            dangerouslySetInnerHTML={{ __html: preview.certificate_text }}
-          />
-          <div
-            className="grid grid-cols-3 gap-2 text-sm text-muted-foreground"
-            style={{ minHeight: preview.footer_height || undefined }}
-          >
-            <div>{preview.left_footer}</div>
-            <div className="text-center">{preview.center_footer}</div>
-            <div className="text-right">{preview.right_footer}</div>
-          </div>
-        </div>
         </>
       ) : (
         <p className="text-sm text-muted-foreground">

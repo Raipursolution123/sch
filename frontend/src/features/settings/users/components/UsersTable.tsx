@@ -54,7 +54,14 @@ const columns: DataTableColumn<StaffUserAccount>[] = [
   },
 ];
 
-export function UsersTable({ users, totalCount, page, onPageChange, onEdit, onDelete }: UsersTableProps) {
+export function UsersTable({
+  users,
+  totalCount,
+  page,
+  onPageChange,
+  onEdit,
+  onDelete,
+}: UsersTableProps) {
   return (
     <div className="space-y-4">
       <DataTable

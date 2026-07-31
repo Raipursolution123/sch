@@ -10,7 +10,12 @@ import { FormTextField, FormTextareaField, FormSelectField } from '@components/f
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { ModuleListPack } from '@workflow-packs';
-import { useSyllabusList, useCreateSyllabus, useUpdateSyllabus, useDeleteSyllabus } from '@hooks/useSyllabus';
+import {
+  useSyllabusList,
+  useCreateSyllabus,
+  useUpdateSyllabus,
+  useDeleteSyllabus,
+} from '@hooks/useSyllabus';
 import { useTopicList } from '@hooks/useTopics';
 import type { SubjectSyllabus } from '@app-types/academics/syllabus';
 
@@ -223,7 +228,7 @@ export function ManageLessonPlanPage() {
           if (selected) {
             updateMutation.mutate(
               { id: selected.id, data: payload },
-              { onSuccess: () => setOpen(false) }
+              { onSuccess: () => setOpen(false) },
             );
             return;
           }
@@ -241,15 +246,29 @@ export function ManageLessonPlanPage() {
         />
         <FormTextField control={control} name="date" label="Date" type="date" required />
         <div className="grid grid-cols-2 gap-4">
-          <FormTextField control={control} name="time_from" label="Time From (e.g. 10:00 AM)" required />
-          <FormTextField control={control} name="time_to" label="Time To (e.g. 11:00 AM)" required />
+          <FormTextField
+            control={control}
+            name="time_from"
+            label="Time From (e.g. 10:00 AM)"
+            required
+          />
+          <FormTextField
+            control={control}
+            name="time_to"
+            label="Time To (e.g. 11:00 AM)"
+            required
+          />
         </div>
         <FormTextField control={control} name="sub_topic" label="Sub Topic" />
         <FormTextareaField control={control} name="presentation" label="Presentation" />
         <FormTextareaField control={control} name="teaching_method" label="Teaching Method" />
         <FormTextareaField control={control} name="general_objectives" label="General Objectives" />
         <FormTextareaField control={control} name="previous_knowledge" label="Previous Knowledge" />
-        <FormTextareaField control={control} name="comprehensive_questions" label="Comprehensive Questions" />
+        <FormTextareaField
+          control={control}
+          name="comprehensive_questions"
+          label="Comprehensive Questions"
+        />
         <div className="grid grid-cols-2 gap-4">
           <FormTextField control={control} name="lacture_youtube_url" label="YouTube URL" />
           <FormTextField control={control} name="lacture_video" label="Video File Name / Path" />

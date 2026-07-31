@@ -20,12 +20,6 @@ from apps.settings.api.views.advanced_settings import (
     SidebarSubMenusListView,
     SystemFieldsView,
 )
-from apps.settings.api.views.setup_front_office import (
-    SourceDetailView,
-    SourceListCreateView,
-    ReferenceDetailView,
-    ReferenceListCreateView,
-)
 from apps.settings.api.views.currencies import (
     CurrenciesActivateView,
     CurrenciesDetailView,
@@ -40,6 +34,12 @@ from apps.settings.api.views.roles import (
     RoleDetailView,
     RolePermissionsUpdateView,
     RolesListView,
+)
+from apps.settings.api.views.setup_front_office import (
+    ReferenceDetailView,
+    ReferenceListCreateView,
+    SourceDetailView,
+    SourceListCreateView,
 )
 from apps.settings.api.views.system_config import (
     EmailConfigActivateView,
@@ -206,6 +206,10 @@ urlpatterns = [
     path("users/<int:pk>/", UserDetailView.as_view(), name="users_detail"),
     path("sources/", SourceListCreateView.as_view(), name="sources_list_create"),
     path("sources/<int:pk>/", SourceDetailView.as_view(), name="sources_detail"),
-    path("references/", ReferenceListCreateView.as_view(), name="references_list_create"),
-    path("references/<int:pk>/", ReferenceDetailView.as_view(), name="references_detail"),
+    path(
+        "references/", ReferenceListCreateView.as_view(), name="references_list_create"
+    ),
+    path(
+        "references/<int:pk>/", ReferenceDetailView.as_view(), name="references_detail"
+    ),
 ]

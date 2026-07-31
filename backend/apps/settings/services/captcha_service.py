@@ -29,6 +29,7 @@ class CaptchaService:
         qs = Captcha.objects.all().order_by("name", "id")
         if not qs.exists():
             from django.utils import timezone
+
             now = timezone.now()
             default_captchas = [
                 "userlogin",
