@@ -21,7 +21,10 @@ function invalidateLeads(qc: ReturnType<typeof useQueryClient>) {
 
 export function useLeads(query = '', campaignId?: number, isManaged?: boolean) {
   return useQuery({
-    queryKey: [...queryKeys.leads.list(query, campaignId ? String(campaignId) : ''), isManaged !== undefined ? String(isManaged) : ''],
+    queryKey: [
+      ...queryKeys.leads.list(query, campaignId ? String(campaignId) : ''),
+      isManaged !== undefined ? String(isManaged) : '',
+    ],
     queryFn: () => leadsService.list(query || undefined, campaignId, isManaged),
   });
 }

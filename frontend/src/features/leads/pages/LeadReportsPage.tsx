@@ -28,8 +28,22 @@ export function LeadReportsPage() {
 
   // Mock data for specific sub-reports
   const commissionData = [
-    { id: 1, name: 'Rahul Sharma', campaign: 'Online Admissions 2026', leads: 15, admitted: 5, commission: 5000 },
-    { id: 2, name: 'Nidhi Gupta', campaign: 'Newspaper Ad Campaign', leads: 10, admitted: 2, commission: 2000 },
+    {
+      id: 1,
+      name: 'Rahul Sharma',
+      campaign: 'Online Admissions 2026',
+      leads: 15,
+      admitted: 5,
+      commission: 5000,
+    },
+    {
+      id: 2,
+      name: 'Nidhi Gupta',
+      campaign: 'Newspaper Ad Campaign',
+      leads: 10,
+      admitted: 2,
+      commission: 2000,
+    },
   ];
 
   const briefData = [
@@ -44,8 +58,20 @@ export function LeadReportsPage() {
   ];
 
   const travelData = [
-    { id: 1, promoter: 'Rahul Sharma', area: 'Sector 15, Dwarka', date: '2026-08-01', allowance: 450 },
-    { id: 2, promoter: 'Nidhi Gupta', area: 'Civil Lines, Jaipur', date: '2026-08-01', allowance: 600 },
+    {
+      id: 1,
+      promoter: 'Rahul Sharma',
+      area: 'Sector 15, Dwarka',
+      date: '2026-08-01',
+      allowance: 450,
+    },
+    {
+      id: 2,
+      promoter: 'Nidhi Gupta',
+      area: 'Civil Lines, Jaipur',
+      date: '2026-08-01',
+      allowance: 600,
+    },
   ];
 
   // Table Columns
@@ -113,13 +139,41 @@ export function LeadReportsPage() {
 
   const handleExportCsv = () => {
     if (reportType === 'commission') {
-      exportToCsv('commission-report', ['Promoter', 'Campaign', 'Leads', 'Admitted', 'Commission'], commissionData.map(r => [r.name, r.campaign, String(r.leads), String(r.admitted), String(r.commission)]));
+      exportToCsv(
+        'commission-report',
+        ['Promoter', 'Campaign', 'Leads', 'Admitted', 'Commission'],
+        commissionData.map((r) => [
+          r.name,
+          r.campaign,
+          String(r.leads),
+          String(r.admitted),
+          String(r.commission),
+        ]),
+      );
     } else if (reportType === 'brief') {
-      exportToCsv('brief-performance-report', ['Metric', 'Target', 'Achieved', 'Conversion'], briefData.map(r => [r.metric, String(r.target), String(r.achieved), r.conversion]));
+      exportToCsv(
+        'brief-performance-report',
+        ['Metric', 'Target', 'Achieved', 'Conversion'],
+        briefData.map((r) => [r.metric, String(r.target), String(r.achieved), r.conversion]),
+      );
     } else if (reportType === 'call') {
-      exportToCsv('call-logs-report', ['Counsellor', 'Total', 'Connected', 'No Answer', 'Scheduled'], callData.map(r => [r.caller, String(r.total), String(r.connected), String(r.noAnswer), String(r.scheduled)]));
+      exportToCsv(
+        'call-logs-report',
+        ['Counsellor', 'Total', 'Connected', 'No Answer', 'Scheduled'],
+        callData.map((r) => [
+          r.caller,
+          String(r.total),
+          String(r.connected),
+          String(r.noAnswer),
+          String(r.scheduled),
+        ]),
+      );
     } else if (reportType === 'travel') {
-      exportToCsv('travel-allowance-report', ['Promoter', 'Area', 'Date', 'Allowance'], travelData.map(r => [r.promoter, r.area, r.date, String(r.allowance)]));
+      exportToCsv(
+        'travel-allowance-report',
+        ['Promoter', 'Area', 'Date', 'Allowance'],
+        travelData.map((r) => [r.promoter, r.area, r.date, String(r.allowance)]),
+      );
     } else if (data) {
       exportToCsv(
         'leads-report',
@@ -139,7 +193,9 @@ export function LeadReportsPage() {
 
   const renderContent = () => {
     if (reportType === 'commission') {
-      return <DataTable data={commissionData} columns={commissionColumns} getRowKey={(r) => r.id} />;
+      return (
+        <DataTable data={commissionData} columns={commissionColumns} getRowKey={(r) => r.id} />
+      );
     }
     if (reportType === 'brief') {
       return <DataTable data={briefData} columns={briefColumns} getRowKey={(r) => r.id} />;
@@ -157,7 +213,11 @@ export function LeadReportsPage() {
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               By campaign
             </h2>
-            <DataTable data={byCampaign} columns={defaultCampaignColumns} getRowKey={(r) => r.c_id} />
+            <DataTable
+              data={byCampaign}
+              columns={defaultCampaignColumns}
+              getRowKey={(r) => r.c_id}
+            />
           </section>
         )}
         {byStatus.length > 0 && (
