@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
@@ -48,7 +49,14 @@ const columns: DataTableColumn<Lead>[] = [
 ];
 
 export function LeadsPage() {
-  const { data = [], isLoading, isError, error, refetch } = useLeads();
+  const location = useLocation();
+  const isManaged = useMemo(() => {
+    if (location.pathname.endsWith('/managed')) return true;
+    if (location.pathname.endsWith('/unmanaged')) return false;
+    return undefined;
+  }, [location.pathname]);
+
+  const { data = [], isLoading, isError, error, refetch } = useLeads('', undefined, isManaged);
   const { data: campaigns = [] } = useLeadCampaigns();
   const createMutation = useCreateLead();
   const updateMutation = useUpdateLead();
@@ -122,10 +130,22 @@ export function LeadsPage() {
     </PermissionButton>
   );
 
+  const pageTitle = useMemo(() => {
+    if (isManaged === true) return 'Managed Leads';
+    if (isManaged === false) return 'Unmanaged Leads';
+    return 'All Leads';
+  }, [isManaged]);
+
+  const pageDescription = useMemo(() => {
+    if (isManaged === true) return 'Track admission leads assigned to promoters/counsellors.';
+    if (isManaged === false) return 'Track new/unassigned admission leads.';
+    return 'Track admission leads linked to campaigns.';
+  }, [isManaged]);
+
   return (
     <ModuleListPack
-      title="All Leads"
-      description="Track admission leads linked to campaigns."
+      title={pageTitle}
+      description={pageDescription}
       actions={addAction}
       isLoading={isLoading}
       loadingMessage="Loading leads..."

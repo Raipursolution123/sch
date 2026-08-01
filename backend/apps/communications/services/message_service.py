@@ -9,9 +9,14 @@ from apps.communications.domain.notification_exceptions import (
     NotificationNotFoundError,
     NotificationValidationError,
 )
+from apps.communications.models.email_template import EmailTemplate
 from apps.communications.models.messages import Messages
+from apps.communications.models.sms_template import SmsTemplate
 from apps.students.models.student_session import StudentSession
 from apps.students.models.students import Students
+
+CommunicationNotFoundError = NotificationNotFoundError
+CommunicationValidationError = NotificationValidationError
 
 logger = logging.getLogger(__name__)
 
@@ -23,13 +28,17 @@ def _yes_no(flag: bool) -> str:
 class MessageService:
     """Compose and list Email/SMS messages persisted to legacy `messages`."""
 
-    def list_messages(self, *, channel: str | None = None) -> list[dict[str, Any]]:
+    def list_messages(
+        self, *, channel: str | None = None, is_schedule: int | None = None
+    ) -> list[dict[str, Any]]:
         qs = Messages.objects.all().order_by("-id")
         channel = (channel or "").strip().lower()
         if channel == "email":
             qs = qs.filter(send_mail="1")
         elif channel == "sms":
             qs = qs.filter(send_sms="1")
+        if is_schedule is not None:
+            qs = qs.filter(is_schedule=is_schedule)
         return [self._to_dict(row) for row in qs[:200]]
 
     def get_message(self, pk: int) -> dict[str, Any]:
@@ -80,6 +89,12 @@ class MessageService:
             if not class_id:
                 raise NotificationValidationError("class_id is required.")
 
+        is_schedule_flag = payload.get("is_schedule")
+        is_schedule_val = 1 if is_schedule_flag in (True, 1, "1", "true") else 0
+        schedule_dt = payload.get("schedule_date_time") if is_schedule_val else None
+        if schedule_dt is not None:
+            schedule_dt = str(schedule_dt).strip() or None
+
         now = timezone.now()
         row = Messages.objects.create(
             title=title[:200],
@@ -93,9 +108,9 @@ class MessageService:
             is_group=_yes_no(audience == "group"),
             is_individual=_yes_no(audience == "individual"),
             is_class=1 if audience == "class" else 0,
-            is_schedule=0,
+            is_schedule=is_schedule_val,
             sent=0,  # Queued — live SMTP/SMS delivery is not configured in MVP.
-            schedule_date_time=None,
+            schedule_date_time=schedule_dt,
             group_list=group_list,
             user_list=user_list,
             schedule_class=int(class_id) if audience == "class" and class_id else None,
@@ -211,3 +226,97 @@ class MessageService:
             "created_at": row.created_at.isoformat() if row.created_at else None,
             "updated_at": row.updated_at.isoformat() if row.updated_at else None,
         }
+
+    # Email Templates
+    def list_email_templates(self):
+        return EmailTemplate.objects.all().order_by("-id")
+
+    def get_email_template(self, pk: int) -> EmailTemplate:
+        item = EmailTemplate.objects.filter(id=pk).first()
+        if item is None:
+            raise NotificationNotFoundError("Email template not found.")
+        return item
+
+    def create_email_template(self, data: dict) -> EmailTemplate:
+        title = data.get("title", "").strip()
+        message = data.get("message", "").strip()
+        if not title:
+            raise NotificationValidationError("Title is required.")
+        if not message:
+            raise NotificationValidationError("Message body is required.")
+
+        return EmailTemplate.objects.create(
+            title=title,
+            message=message,
+            created_at=timezone.now().date(),
+        )
+
+    def update_email_template(self, pk: int, data: dict) -> EmailTemplate:
+        item = self.get_email_template(pk)
+        if "title" in data:
+            val = data["title"].strip()
+            if not val:
+                raise NotificationValidationError("Title cannot be empty.")
+            item.title = val
+        if "message" in data:
+            val = data["message"].strip()
+            if not val:
+                raise NotificationValidationError("Message body cannot be empty.")
+            item.message = val
+
+        item.save()
+        return item
+
+    def delete_email_template(self, pk: int) -> None:
+        item = self.get_email_template(pk)
+        item.delete()
+
+    # SMS Templates
+    def list_sms_templates(self):
+        return SmsTemplate.objects.all().order_by("-id")
+
+    def get_sms_template(self, pk: int) -> SmsTemplate:
+        item = SmsTemplate.objects.filter(id=pk).first()
+        if item is None:
+            raise NotificationNotFoundError("SMS template not found.")
+        return item
+
+    def create_sms_template(self, data: dict) -> SmsTemplate:
+        title = data.get("title", "").strip()
+        message = data.get("message", "").strip()
+        if not title:
+            raise NotificationValidationError("Title is required.")
+        if not message:
+            raise NotificationValidationError("Message body is required.")
+
+        return SmsTemplate.objects.create(
+            title=title,
+            message=message,
+            created_at=timezone.now().date(),
+        )
+
+    def update_sms_template(self, pk: int, data: dict) -> SmsTemplate:
+        item = self.get_sms_template(pk)
+        if "title" in data:
+            val = data["title"].strip()
+            if not val:
+                raise NotificationValidationError("Title cannot be empty.")
+            item.title = val
+        if "message" in data:
+            val = data["message"].strip()
+            if not val:
+                raise NotificationValidationError("Message body cannot be empty.")
+            item.message = val
+
+        item.save()
+        return item
+
+    def delete_sms_template(self, pk: int) -> None:
+        item = self.get_sms_template(pk)
+        item.delete()
+
+    def delete_message(self, pk: int) -> None:
+        row = Messages.objects.filter(id=pk).first()
+        if row is None:
+            raise NotificationNotFoundError("Message not found.")
+        row.delete()

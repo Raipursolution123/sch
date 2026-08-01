@@ -28,9 +28,12 @@ const listParams = (query?: string, extra?: Record<string, string | number>) => 
 });
 
 export const leadsService = {
-  list: async (query?: string, campaignId?: number) => {
+  list: async (query?: string, campaignId?: number, isManaged?: boolean) => {
     const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.leads.list, {
-      params: listParams(query, campaignId ? { c_id: campaignId } : undefined),
+      params: listParams(query, {
+        ...(campaignId ? { c_id: campaignId } : {}),
+        ...(isManaged !== undefined ? { is_managed: String(isManaged) } : {}),
+      }),
     });
     return extractList<Lead>(data);
   },

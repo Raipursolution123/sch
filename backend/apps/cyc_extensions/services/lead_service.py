@@ -54,10 +54,21 @@ def _as_int(value: Any, default: int | None = None) -> int | None:
 
 
 class LeadService:
-    def list(self, *, query: str | None = None, campaign_id: int | None = None):
+    def list(
+        self,
+        *,
+        query: str | None = None,
+        campaign_id: int | None = None,
+        is_managed: bool | None = None,
+    ):
         qs = CycLeads.objects.all().order_by("-l_id")
         if campaign_id:
             qs = qs.filter(c_id=campaign_id)
+        if is_managed is not None:
+            if is_managed:
+                qs = qs.filter(l_taken_status=1)
+            else:
+                qs = qs.filter(l_taken_status=0)
         term = (query or "").strip()
         if term:
             qs = qs.filter(

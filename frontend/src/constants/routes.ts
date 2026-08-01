@@ -218,12 +218,18 @@ export const ROUTES = {
   leads: {
     root: '/leads',
     all: '/leads/all',
+    managed: '/leads/managed',
+    unmanaged: '/leads/unmanaged',
     campaigns: '/leads/campaigns',
     campaignTypes: '/leads/campaign-types',
     promoters: '/leads/promoters',
     followUpStatus: '/leads/follow-up-status',
     followUps: '/leads/follow-ups',
     reports: '/leads/reports',
+    promoterCommissionReport: '/leads/promoter-commission-report',
+    briefReports: '/leads/brief-reports',
+    callReports: '/leads/call-reports',
+    travelReports: '/leads/travel-reports',
   },
   finance: {
     root: '/finance',

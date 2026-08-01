@@ -938,6 +938,42 @@ const BulkEmailPage = lazy(() =>
   })),
 );
 
+const SendEmailPage = lazy(() =>
+  import('@features/communications/email-sms/pages/SendEmailPage').then((m) => ({
+    default: m.SendEmailPage,
+  })),
+);
+
+const SendSmsPage = lazy(() =>
+  import('@features/communications/email-sms/pages/SendSmsPage').then((m) => ({
+    default: m.SendSmsPage,
+  })),
+);
+
+const EmailSmsLogPage = lazy(() =>
+  import('@features/communications/email-sms/pages/EmailSmsLogPage').then((m) => ({
+    default: m.EmailSmsLogPage,
+  })),
+);
+
+const ScheduleLogPage = lazy(() =>
+  import('@features/communications/email-sms/pages/ScheduleLogPage').then((m) => ({
+    default: m.ScheduleLogPage,
+  })),
+);
+
+const EmailTemplatesPage = lazy(() =>
+  import('@features/communications/email-templates/pages/EmailTemplatesPage').then((m) => ({
+    default: m.EmailTemplatesPage,
+  })),
+);
+
+const SmsTemplatesPage = lazy(() =>
+  import('@features/communications/sms-templates/pages/SmsTemplatesPage').then((m) => ({
+    default: m.SmsTemplatesPage,
+  })),
+);
+
 const HomeworkPage = lazy(() =>
   import('@features/homework/assignments/pages/HomeworkPage').then((m) => ({
     default: m.HomeworkPage,
@@ -1176,8 +1212,14 @@ export const adminRoutes: RouteObject[] = [
   ]),
   createModuleRoutes('/communicate', ROUTES.communicate.notices, [
     { path: 'notices', element: <NoticesPage /> },
+    { path: 'send-email', element: <SendEmailPage /> },
+    { path: 'send-sms', element: <SendSmsPage /> },
     { path: 'email-sms', element: <EmailSmsPage /> },
+    { path: 'email-sms-log', element: <EmailSmsLogPage /> },
+    { path: 'schedule-log', element: <ScheduleLogPage /> },
     { path: 'bulk-email', element: <BulkEmailPage /> },
+    { path: 'email-template', element: <EmailTemplatesPage /> },
+    { path: 'sms-template', element: <SmsTemplatesPage /> },
   ]),
   createModuleRoutes('/download-center', ROUTES.downloadCenter.contentTypes, [
     { path: 'content-types', element: <ContentTypesPage /> },
@@ -1278,12 +1320,18 @@ export const adminRoutes: RouteObject[] = [
   ]),
   createModuleRoutes('/leads', ROUTES.leads.all, [
     { path: 'all', element: <LeadsPage /> },
+    { path: 'managed', element: <LeadsPage /> },
+    { path: 'unmanaged', element: <LeadsPage /> },
     { path: 'campaigns', element: <CampaignsPage /> },
     { path: 'campaign-types', element: <CampaignTypesPage /> },
     { path: 'promoters', element: <PromotersPage /> },
     { path: 'follow-up-status', element: <FollowupStatusPage /> },
     { path: 'follow-ups', element: <FollowupsPage /> },
     { path: 'reports', element: <LeadReportsPage /> },
+    { path: 'promoter-commission-report', element: <LeadReportsPage /> },
+    { path: 'brief-reports', element: <LeadReportsPage /> },
+    { path: 'call-reports', element: <LeadReportsPage /> },
+    { path: 'travel-reports', element: <LeadReportsPage /> },
   ]),
   createModuleRoutes('/cms', ROUTES.cms.events, [
     { path: 'events', element: <CmsEventsPage /> },

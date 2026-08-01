@@ -119,16 +119,35 @@ class NotificationService:
             text = str(value).strip().lower()
             return "yes" if text in ("yes", "1", "true") else "no"
 
+        def clean_date(val):
+            if val is None:
+                return None
+            val_str = str(val).strip()
+            if not val_str:
+                return None
+            return val_str
+
+        def clean_int(val):
+            if val is None:
+                return None
+            val_str = str(val).strip()
+            if not val_str:
+                return None
+            try:
+                return int(val_str)
+            except ValueError:
+                return None
+
         return {
             "title": title,
             "message": payload.get("message"),
-            "publish_date": payload.get("publish_date"),
-            "date": payload.get("date"),
+            "publish_date": clean_date(payload.get("publish_date")),
+            "date": clean_date(payload.get("date")),
             "attachment": payload.get("attachment"),
             "visible_student": yes_no(payload.get("visible_student")),
             "visible_staff": yes_no(payload.get("visible_staff")),
             "visible_parent": yes_no(payload.get("visible_parent")),
             "is_active": yes_no(payload.get("is_active")),
             "created_by": payload.get("created_by"),
-            "created_id": payload.get("created_id"),
+            "created_id": clean_int(payload.get("created_id")),
         }

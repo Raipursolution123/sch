@@ -19,10 +19,10 @@ function invalidateLeads(qc: ReturnType<typeof useQueryClient>) {
   void qc.invalidateQueries({ queryKey: queryKeys.leads.all });
 }
 
-export function useLeads(query = '', campaignId?: number) {
+export function useLeads(query = '', campaignId?: number, isManaged?: boolean) {
   return useQuery({
-    queryKey: queryKeys.leads.list(query, campaignId ? String(campaignId) : ''),
-    queryFn: () => leadsService.list(query || undefined, campaignId),
+    queryKey: [...queryKeys.leads.list(query, campaignId ? String(campaignId) : ''), isManaged !== undefined ? String(isManaged) : ''],
+    queryFn: () => leadsService.list(query || undefined, campaignId, isManaged),
   });
 }
 

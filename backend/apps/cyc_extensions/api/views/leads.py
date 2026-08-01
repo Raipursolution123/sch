@@ -40,13 +40,29 @@ def _paginated(request, view, qs, to_dict, message: str):
 class LeadListCreateView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE
-    legacy_permission_category = "all_leads"
+
+    @property
+    def legacy_permission_category(self):
+        is_managed = self.request.query_params.get("is_managed")
+        if is_managed == "true":
+            return "managed_leads"
+        elif is_managed == "false":
+            return "unmanaged_leads"
+        return "all_leads"
 
     def get(self, request):
         service = LeadService()
+        is_managed_str = request.query_params.get("is_managed")
+        is_managed = None
+        if is_managed_str == "true":
+            is_managed = True
+        elif is_managed_str == "false":
+            is_managed = False
+            
         qs = service.list(
             query=request.query_params.get("q"),
             campaign_id=request.query_params.get("c_id") or None,
+            is_managed=is_managed,
         )
         return _paginated(request, self, qs, service.to_dict, "Leads retrieved.")
 

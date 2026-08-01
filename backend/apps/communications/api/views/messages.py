@@ -53,8 +53,14 @@ class MessagesListView(APIView):
     legacy_permission_category = "email_sms_log"
 
     def get(self, request):
+        is_schedule = request.query_params.get("is_schedule", None)
+        if is_schedule is not None:
+            try:
+                is_schedule = int(is_schedule)
+            except ValueError:
+                is_schedule = None
         rows = MessageService().list_messages(
-            channel=request.query_params.get("channel")
+            channel=request.query_params.get("channel"), is_schedule=is_schedule
         )
         return _paginated(request, self, rows, "Messages retrieved successfully.")
 
@@ -117,6 +123,23 @@ class BulkEmailView(APIView):
                     "Delivery will run when SMTP is configured."
                 ),
                 status_code=status.HTTP_201_CREATED,
+            )
+        except NotificationError as exc:
+            return message_error_response(exc)
+
+
+class MessagesDetailView(APIView):
+    """Delete messages log/schedule."""
+
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "email_sms_log"
+
+    def delete(self, request, pk):
+        try:
+            MessageService().delete_message(pk)
+            return APIResponse.success(
+                message="Message log/schedule deleted successfully."
             )
         except NotificationError as exc:
             return message_error_response(exc)
