@@ -31,10 +31,12 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export default function ContentShareList() {
-  const { data: shares = [], isLoading, isError, error, refetch } = useShareContents();
-  const { data: uploads = [] } = useUploadContents();
+  const { data: sharesData, isLoading, isError, error, refetch } = useShareContents();
+  const shares = useMemo(() => sharesData || [], [sharesData]);
+  const { data: uploadsData } = useUploadContents();
+  const uploads = useMemo(() => uploadsData || [], [uploadsData]);
   const { data: classSectionsData } = useClassSections();
-  const classSections = classSectionsData?.results || [];
+  const classSections = useMemo(() => classSectionsData?.results || [], [classSectionsData]);
 
   const createMutation = useCreateShareContent();
   const deleteMutation = useDeleteShareContent();
