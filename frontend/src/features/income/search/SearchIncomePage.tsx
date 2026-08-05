@@ -11,7 +11,6 @@ import { exportToCsv } from '@utils/export-csv';
 import { printReport } from '@utils/print-report';
 import { ModuleReportPack } from '@workflow-packs';
 
-
 function todayIsoDate(): string {
   return new Date().toISOString().slice(0, 10);
 }
@@ -19,7 +18,7 @@ function todayIsoDate(): string {
 function getDateRange(type: string): { from: string; to: string } {
   const today = new Date();
   const format = (d: Date) => d.toISOString().slice(0, 10);
-  
+
   if (type === 'today') {
     return { from: format(today), to: format(today) };
   }
@@ -72,7 +71,13 @@ export function SearchIncomePage() {
     }
   }, [searchType]);
 
-  const { data: rawIncome = [], isLoading, isError, error, refetch } = useIncomeList(submitted ? searchQuery : '');
+  const {
+    data: rawIncome = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useIncomeList(submitted ? searchQuery : '');
   const { data: heads = [] } = useIncomeHeads();
 
   const headNameMap = useMemo(() => {
@@ -111,10 +116,20 @@ export function SearchIncomePage() {
 
   const columns: DataTableColumn<IncomeRecord>[] = [
     { id: 'name', header: 'Name', cellClassName: 'font-semibold', cell: (r) => r.name || '—' },
-    { id: 'head', header: 'Income Head', cell: (r) => (r.income_head_id ? headNameMap.get(r.income_head_id) || `#${r.income_head_id}` : '—') },
+    {
+      id: 'head',
+      header: 'Income Head',
+      cell: (r) =>
+        r.income_head_id ? headNameMap.get(r.income_head_id) || `#${r.income_head_id}` : '—',
+    },
     { id: 'invoice', header: 'Invoice No', cell: (r) => r.invoice_no || '—' },
     { id: 'date', header: 'Date', cell: (r) => (r.date ? formatDate(r.date) : '—') },
-    { id: 'amount', header: 'Amount', cellClassName: 'text-right font-medium', cell: (r) => formatAmount(r.amount) },
+    {
+      id: 'amount',
+      header: 'Amount',
+      cellClassName: 'text-right font-medium',
+      cell: (r) => formatAmount(r.amount),
+    },
     { id: 'note', header: 'Note', cell: (r) => r.note || '—' },
   ];
 

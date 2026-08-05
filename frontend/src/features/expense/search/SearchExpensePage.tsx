@@ -18,7 +18,7 @@ function todayIsoDate(): string {
 function getDateRange(type: string): { from: string; to: string } {
   const today = new Date();
   const format = (d: Date) => d.toISOString().slice(0, 10);
-  
+
   if (type === 'today') {
     return { from: format(today), to: format(today) };
   }
@@ -71,7 +71,13 @@ export function SearchExpensePage() {
     }
   }, [searchType]);
 
-  const { data: rawExpense = [], isLoading, isError, error, refetch } = useExpenseList(submitted ? searchQuery : '');
+  const {
+    data: rawExpense = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useExpenseList(submitted ? searchQuery : '');
   const { data: heads = [] } = useExpenseHeads();
 
   const headNameMap = useMemo(() => {
@@ -110,10 +116,19 @@ export function SearchExpensePage() {
 
   const columns: DataTableColumn<ExpenseRecord>[] = [
     { id: 'name', header: 'Name', cellClassName: 'font-semibold', cell: (r) => r.name || '—' },
-    { id: 'head', header: 'Expense Head', cell: (r) => (r.exp_head_id ? headNameMap.get(r.exp_head_id) || `#${r.exp_head_id}` : '—') },
+    {
+      id: 'head',
+      header: 'Expense Head',
+      cell: (r) => (r.exp_head_id ? headNameMap.get(r.exp_head_id) || `#${r.exp_head_id}` : '—'),
+    },
     { id: 'invoice', header: 'Invoice No', cell: (r) => r.invoice_no || '—' },
     { id: 'date', header: 'Date', cell: (r) => (r.date ? formatDate(r.date) : '—') },
-    { id: 'amount', header: 'Amount', cellClassName: 'text-right font-medium', cell: (r) => formatAmount(r.amount) },
+    {
+      id: 'amount',
+      header: 'Amount',
+      cellClassName: 'text-right font-medium',
+      cell: (r) => formatAmount(r.amount),
+    },
     { id: 'note', header: 'Note', cell: (r) => r.note || '—' },
   ];
 
@@ -142,7 +157,11 @@ export function SearchExpensePage() {
           <ReportSummaryGrid
             items={[
               { label: 'Total Records', value: filteredData.length },
-              { label: 'Total Expense Amount', value: formatAmount(totalAmount), tone: 'destructive' },
+              {
+                label: 'Total Expense Amount',
+                value: formatAmount(totalAmount),
+                tone: 'destructive',
+              },
             ]}
           />
         ) : undefined

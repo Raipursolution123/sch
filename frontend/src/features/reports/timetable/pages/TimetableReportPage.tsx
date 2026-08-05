@@ -9,7 +9,11 @@ import { useTimetable } from '@hooks/useTimetable';
 import { exportToCsv } from '@utils/export-csv';
 import { printReport } from '@utils/print-report';
 import { ModuleReportPack } from '@workflow-packs';
-import { TIMETABLE_DAYS, type TimetableDay, type TimetablePeriod } from '@app-types/academics/timetable';
+import {
+  TIMETABLE_DAYS,
+  type TimetableDay,
+  type TimetablePeriod,
+} from '@app-types/academics/timetable';
 import { cn } from '@utils/cn';
 
 function formatTimeRange(period: TimetablePeriod): string {
@@ -115,7 +119,12 @@ export function TimetableReportPage() {
       onExportCsv={handleExportCsv}
       exportDisabled={periods.length === 0}
       onApply={() => setSubmitted(true)}
-      applyDisabled={sessionFilter === undefined || classFilter === undefined || sectionFilter === undefined || (submitted && isLoading)}
+      applyDisabled={
+        sessionFilter === undefined ||
+        classFilter === undefined ||
+        sectionFilter === undefined ||
+        (submitted && isLoading)
+      }
       submitted={submitted}
       hasData={periods.length > 0}
       isLoading={submitted && isLoading}
@@ -183,27 +192,29 @@ export function TimetableReportPage() {
             const dayPeriods = periodsForDay(periods, day);
             return (
               <div key={day} className="flex min-h-[10rem] flex-col rounded-lg border bg-card">
-                <div className="border-b px-3 py-2 bg-muted/20">
+                <div className="border-b bg-muted/20 px-3 py-2">
                   <h3 className="text-sm font-semibold">{day}</h3>
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-2">
                   {dayPeriods.length === 0 ? (
-                    <p className="text-xs text-muted-foreground italic">No periods</p>
+                    <p className="text-xs italic text-muted-foreground">No periods</p>
                   ) : (
                     dayPeriods.map((period) => (
                       <div
                         key={period.id}
-                        className={cn(
-                          'rounded-md border bg-muted/10 p-2 text-xs shadow-sm',
-                        )}
+                        className={cn('rounded-md border bg-muted/10 p-2 text-xs shadow-sm')}
                       >
-                        <div className="font-semibold text-ink">{period.subject_name ?? 'Subject'}</div>
-                        <div className="text-muted-foreground font-medium mt-0.5">{formatTimeRange(period)}</div>
-                        <div className="truncate text-muted-foreground mt-0.5">
+                        <div className="font-semibold text-ink">
+                          {period.subject_name ?? 'Subject'}
+                        </div>
+                        <div className="mt-0.5 font-medium text-muted-foreground">
+                          {formatTimeRange(period)}
+                        </div>
+                        <div className="mt-0.5 truncate text-muted-foreground">
                           {period.staff_name ?? 'Teacher'}
                         </div>
                         {period.room_no ? (
-                          <div className="text-muted-foreground mt-0.5">Room {period.room_no}</div>
+                          <div className="mt-0.5 text-muted-foreground">Room {period.room_no}</div>
                         ) : null}
                       </div>
                     ))

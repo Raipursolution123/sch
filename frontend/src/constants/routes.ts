@@ -149,7 +149,6 @@ export const ROUTES = {
     content: '/download-center/content',
     videos: '/download-center/videos',
     shareContent: '/download-center/share-content',
-
   },
   lessonPlan: {
     root: '/lesson-plan',

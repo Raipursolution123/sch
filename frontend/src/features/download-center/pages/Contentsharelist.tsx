@@ -207,7 +207,12 @@ export default function ContentShareList() {
       >
         <FormErrorSummary errors={formState.errors} />
         <div className="space-y-4">
-          <FormTextField control={control} name="title" label="Title *" placeholder="e.g. Syllabus Guide" />
+          <FormTextField
+            control={control}
+            name="title"
+            label="Title *"
+            placeholder="e.g. Syllabus Guide"
+          />
           <FormTextareaField
             control={control}
             name="description"
@@ -246,7 +251,7 @@ export default function ContentShareList() {
           {sendToValue === 'class' && (
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">Select Class Sections *</label>
-              <div className="max-h-40 overflow-y-auto rounded-md border p-3 space-y-2 bg-background">
+              <div className="max-h-40 space-y-2 overflow-y-auto rounded-md border bg-background p-3">
                 {activeClassSections.map((cs) => (
                   <div key={cs.id} className="flex items-center gap-2">
                     <Checkbox
@@ -261,7 +266,10 @@ export default function ContentShareList() {
                         }
                       }}
                     />
-                    <label htmlFor={`class-sec-${cs.id}`} className="text-sm cursor-pointer select-none">
+                    <label
+                      htmlFor={`class-sec-${cs.id}`}
+                      className="cursor-pointer select-none text-sm"
+                    >
                       {cs.class_name} - {cs.section_name}
                     </label>
                   </div>
@@ -272,9 +280,11 @@ export default function ContentShareList() {
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">Select Files to Share</label>
-            <div className="max-h-40 overflow-y-auto rounded-md border p-3 space-y-2 bg-background">
+            <div className="max-h-40 space-y-2 overflow-y-auto rounded-md border bg-background p-3">
               {uploads.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No files available to select. Please upload files in Upload Content first.</p>
+                <p className="text-sm text-muted-foreground">
+                  No files available to select. Please upload files in Upload Content first.
+                </p>
               ) : (
                 uploads.map((u) => (
                   <div key={u.id} className="flex items-center gap-2">
@@ -290,7 +300,10 @@ export default function ContentShareList() {
                         }
                       }}
                     />
-                    <label htmlFor={`upload-${u.id}`} className="text-sm cursor-pointer select-none">
+                    <label
+                      htmlFor={`upload-${u.id}`}
+                      className="cursor-pointer select-none text-sm"
+                    >
                       {u.real_name} ({u.file_type})
                     </label>
                   </div>
