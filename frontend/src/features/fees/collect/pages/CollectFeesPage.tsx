@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FormField } from '@components/forms/FormField';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
+import { Input } from '@components/ui/input';
+import { ReportSummaryGrid } from '@components/reports';
 import { CollectFeesStudentDrawer } from '@features/fees/collect/components/CollectFeesStudentDrawer';
 import { CollectFeesTable } from '@features/fees/collect/components/CollectFeesTable';
 import {
@@ -11,6 +13,7 @@ import { useCollectFeesRoster } from '@hooks/useCollectFees';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
 import type { FeeCollectRosterStudent } from '@app-types/fees/fee-collect';
+import { formatAmount } from '@utils/format';
 import { ModuleMarkGridPack } from '@workflow-packs';
 
 export function CollectFeesPage() {
@@ -52,10 +55,28 @@ export function CollectFeesPage() {
         setSectionId(initialSectionId);
       }
     }
-  }, [activeClasses, classSections, classId]);
+  }, [activeClasses, classId]);
+
+  useEffect(() => {
+    if (classId <= 0) {
+      setSectionId(0);
+      return;
+    }
+    const next = firstSectionIdForClass(classSections, classId);
+    setSectionId(next ?? 0);
+  }, [classId, classSections]);
 
   const canCollect =
     activeClasses.length > 0 && classSections.some((row) => row.is_active === 'yes');
+
+  const students = roster?.students ?? [];
+  const sectionTotals = useMemo(() => {
+    const due = students.reduce((sum, s) => sum + (s.total_due || 0), 0);
+    const paid = students.reduce((sum, s) => sum + (s.total_paid || 0), 0);
+    const balance = students.reduce((sum, s) => sum + (s.total_balance || 0), 0);
+    const overdueCount = students.filter((s) => s.total_balance > 0).length;
+    return { due, paid, balance, overdueCount };
+  }, [students]);
 
   const handleCollect = (student: FeeCollectRosterStudent) => {
     setSelectedStudent(student);
@@ -78,44 +99,37 @@ export function CollectFeesPage() {
         filters={
           <>
             <FormField label="Class" htmlFor="collect_fees_class">
-              <Select
+              <Combobox
                 id="collect_fees_class"
                 placeholder="Select class"
+                searchPlaceholder="Search class…"
                 options={activeClasses.map((c) => ({
                   value: String(c.id),
                   label: c.class_name,
                 }))}
                 value={classId ? String(classId) : ''}
-                onChange={(e) => {
-                  const nextClassId = Number(e.target.value);
-                  setClassId(nextClassId);
-                  const nextSectionId = firstSectionIdForClass(classSections, nextClassId);
-                  setSectionId(nextSectionId ?? 0);
-                }}
-                disabled={!canCollect}
+                onValueChange={(v) => setClassId(Number(v) || 0)}
+                disabled={!canCollect && activeClasses.length === 0}
               />
             </FormField>
             <FormField label="Section" htmlFor="collect_fees_section">
-              <Select
+              <Combobox
                 id="collect_fees_section"
-                placeholder="Select section"
+                placeholder={sectionOptions.length ? 'Select section' : 'No sections for class'}
+                searchPlaceholder="Search section…"
                 options={sectionOptions}
                 value={sectionId ? String(sectionId) : ''}
-                onChange={(e) => setSectionId(Number(e.target.value))}
-                disabled={!canCollect || sectionOptions.length === 0}
+                onValueChange={(v) => setSectionId(Number(v) || 0)}
+                disabled={sectionOptions.length === 0}
+                emptyMessage="No sections mapped to this class"
               />
             </FormField>
             <FormField label="Session" htmlFor="collect_fees_session">
-              <Select
+              <Input
                 id="collect_fees_session"
-                placeholder="Current session"
-                options={
-                  roster?.session_name
-                    ? [{ value: roster.session_name, label: roster.session_name }]
-                    : []
-                }
-                value={roster?.session_name ?? ''}
+                value={roster?.session_name ?? 'Current session'}
                 disabled
+                readOnly
               />
             </FormField>
           </>
@@ -126,11 +140,32 @@ export function CollectFeesPage() {
         isError={isError}
         error={error}
         onRetry={() => void refetch()}
-        isEmpty={!isLoading && !isError && (roster?.students.length ?? 0) === 0}
+        isEmpty={!isLoading && !isError && students.length === 0}
         emptyTitle="No students in this class section"
-        emptyDescription="Enroll students in the selected class and section, then assign fees."
+        emptyDescription="Enroll students, assign a Fees Master structure, then return to collect."
+        gridToolbar={
+          <ReportSummaryGrid
+            className="lg:grid-cols-4"
+            items={[
+              { label: 'Students', value: students.length },
+              { label: 'With balance', value: sectionTotals.overdueCount, tone: 'warning' },
+              { label: 'Total due', value: formatAmount(sectionTotals.due) },
+              {
+                label: 'Outstanding',
+                value: formatAmount(sectionTotals.balance),
+                tone: sectionTotals.balance > 0 ? 'destructive' : 'success',
+              },
+            ]}
+          />
+        }
+        stickyActions={
+          <p className="text-sm text-muted-foreground">
+            Open a student row to record payment. Amounts use{' '}
+            <span className="tabular-nums">₹</span> with audit trail on save.
+          </p>
+        }
       >
-        {roster && <CollectFeesTable students={roster.students} onCollect={handleCollect} />}
+        <CollectFeesTable students={students} onCollect={handleCollect} />
       </ModuleMarkGridPack>
 
       <CollectFeesStudentDrawer

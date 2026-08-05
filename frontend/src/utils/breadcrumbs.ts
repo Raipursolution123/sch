@@ -36,15 +36,21 @@ const DETAIL_BREADCRUMBS: {
 ];
 
 export function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
-  const crumbs: BreadcrumbItem[] = [{ label: 'Dashboard', href: ROUTES.dashboard }];
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Admin', href: ROUTES.dashboard },
+    { label: 'Dashboard', href: ROUTES.dashboard },
+  ];
 
   if (pathname === ROUTES.dashboard || pathname === '/') {
     return crumbs;
   }
 
+  // Replace trailing Dashboard with the matched module trail.
+  const trail: BreadcrumbItem[] = [{ label: 'Admin', href: ROUTES.dashboard }];
+
   for (const detail of DETAIL_BREADCRUMBS) {
     if (detail.pattern.test(pathname)) {
-      return [...crumbs, ...detail.parents, { label: detail.current }];
+      return [...trail, ...detail.parents, { label: detail.current }];
     }
   }
 
@@ -54,16 +60,16 @@ export function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
   );
 
   if (!match) {
-    return crumbs;
+    return trail;
   }
 
   if (match.group) {
     const parent = routes.find((route) => route.label === match.group && !route.group);
     if (parent) {
-      crumbs.push({ label: parent.label, href: parent.path });
+      trail.push({ label: parent.label, href: parent.path });
     }
   }
 
-  crumbs.push({ label: match.label, href: match.path });
-  return crumbs;
+  trail.push({ label: match.label, href: match.path });
+  return trail;
 }

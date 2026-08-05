@@ -4,7 +4,7 @@ import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { FormField } from '@components/forms/FormField';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { Checkbox } from '@components/ui/checkbox';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import {
   firstSectionIdForClass,
   sectionOptionsForClass,
@@ -81,10 +81,13 @@ export function FeeCarryForwardPage() {
   }, [activeClasses, classId]);
 
   useEffect(() => {
-    if (classId <= 0) return;
+    if (classId <= 0) {
+      setSectionId(0);
+      return;
+    }
     const next = firstSectionIdForClass(classSections, classId);
-    if (next && sectionId !== next) setSectionId(next);
-  }, [classId, classSections, sectionId]);
+    setSectionId(next ?? 0);
+  }, [classId, classSections]);
 
   useEffect(() => {
     setFeeSessionGroupId(0);
@@ -110,6 +113,9 @@ export function FeeCarryForwardPage() {
   const students = preview?.students ?? [];
   const selectable = students.filter((s) => s.has_target_enrollment);
   const allSelected = selectable.length > 0 && selectable.every((s) => selected.has(s.student_id));
+  const selectedBalance = students
+    .filter((s) => selected.has(s.student_id))
+    .reduce((sum, s) => sum + (s.previous_balance || 0), 0);
 
   const columns: DataTableColumn<FeeCarryForwardRow>[] = [
     {
@@ -172,90 +178,102 @@ export function FeeCarryForwardPage() {
     },
   ];
 
+  const carryButton = (
+    <PermissionButton
+      permission="fees.carry_forward"
+      onClick={() => {
+        if (!filtersReady || feeSessionGroupId <= 0 || selected.size === 0) return;
+        carryMutation.mutate({
+          from_session_id: fromSessionId,
+          to_session_id: toSessionId,
+          class_id: classId,
+          section_id: sectionId,
+          fee_session_group_id: feeSessionGroupId,
+          student_ids: [...selected],
+        });
+      }}
+      className="min-h-11 gap-1"
+      disabled={
+        !filtersReady || feeSessionGroupId <= 0 || selected.size === 0 || students.length === 0
+      }
+      isLoading={carryMutation.isPending}
+    >
+      <ArrowRightLeft className="h-4 w-4" aria-hidden="true" />
+      Carry forward selected
+    </PermissionButton>
+  );
+
+  const sessionOptions = sessions.map((s) => ({ value: String(s.id), label: s.session }));
+
   return (
     <ModuleMarkGridPack
       title="Carry Forward"
       description="Move unpaid prior-session balances into the target session using a Fees Master structure."
-      actions={
-        <PermissionButton
-          permission="fees.carry_forward"
-          onClick={() => {
-            if (!filtersReady || feeSessionGroupId <= 0 || selected.size === 0) return;
-            carryMutation.mutate({
-              from_session_id: fromSessionId,
-              to_session_id: toSessionId,
-              class_id: classId,
-              section_id: sectionId,
-              fee_session_group_id: feeSessionGroupId,
-              student_ids: [...selected],
-            });
-          }}
-          className="gap-1"
-          disabled={
-            !filtersReady || feeSessionGroupId <= 0 || selected.size === 0 || students.length === 0
-          }
-          isLoading={carryMutation.isPending}
-        >
-          <ArrowRightLeft className="h-4 w-4" aria-hidden="true" />
-          Carry forward selected
-        </PermissionButton>
-      }
+      actions={carryButton}
+      filterColumns={5}
       filters={
         <>
           <FormField label="From session" htmlFor="cf_from">
-            <Select
+            <Combobox
               id="cf_from"
-              options={sessions.map((s) => ({ value: String(s.id), label: s.session }))}
+              options={sessionOptions}
               value={fromSessionId ? String(fromSessionId) : ''}
-              onChange={(e) => setFromSessionId(Number(e.target.value))}
+              onValueChange={(v) => setFromSessionId(Number(v) || 0)}
               placeholder="Previous session"
+              searchPlaceholder="Search session…"
             />
           </FormField>
           <FormField label="To session" htmlFor="cf_to">
-            <Select
+            <Combobox
               id="cf_to"
-              options={sessions.map((s) => ({ value: String(s.id), label: s.session }))}
+              options={sessionOptions}
               value={toSessionId ? String(toSessionId) : ''}
-              onChange={(e) => setToSessionId(Number(e.target.value))}
+              onValueChange={(v) => setToSessionId(Number(v) || 0)}
               placeholder="Target session"
+              searchPlaceholder="Search session…"
             />
           </FormField>
           <FormField label="Class" htmlFor="cf_class">
-            <Select
+            <Combobox
               id="cf_class"
               options={activeClasses.map((c) => ({
                 value: String(c.id),
                 label: c.class_name,
               }))}
               value={classId ? String(classId) : ''}
-              onChange={(e) => setClassId(Number(e.target.value))}
+              onValueChange={(v) => setClassId(Number(v) || 0)}
               placeholder="Select class"
+              searchPlaceholder="Search class…"
             />
           </FormField>
           <FormField label="Section" htmlFor="cf_section">
-            <Select
+            <Combobox
               id="cf_section"
               options={sectionOptions}
               value={sectionId ? String(sectionId) : ''}
-              onChange={(e) => setSectionId(Number(e.target.value))}
-              placeholder="Select section"
+              onValueChange={(v) => setSectionId(Number(v) || 0)}
+              placeholder={sectionOptions.length ? 'Select section' : 'No sections'}
+              searchPlaceholder="Search section…"
+              disabled={sectionOptions.length === 0}
             />
           </FormField>
           <FormField label="Target fee structure" htmlFor="cf_fsg">
-            <Select
+            <Combobox
               id="cf_fsg"
               options={targetAssignments.map((a) => ({
                 value: String(a.id),
                 label: `${a.fee_group_name} · ${formatAmount(a.total_amount)}`,
               }))}
               value={feeSessionGroupId ? String(feeSessionGroupId) : ''}
-              onChange={(e) => setFeeSessionGroupId(Number(e.target.value))}
+              onValueChange={(v) => setFeeSessionGroupId(Number(v) || 0)}
               placeholder={
                 targetAssignments.length
                   ? 'Select fee structure'
-                  : 'No Fees Master structure for target session/class'
+                  : 'No Fees Master for target session/class'
               }
+              searchPlaceholder="Search structure…"
               disabled={!filtersReady || targetAssignments.length === 0}
+              emptyMessage="Create a Fees Master structure for the target session and class"
             />
           </FormField>
         </>
@@ -269,6 +287,19 @@ export function FeeCarryForwardPage() {
       isEmpty={!isLoading && !isError && students.length === 0}
       emptyTitle="No balances to carry"
       emptyDescription="No students with unpaid prior-session balances were found for these filters."
+      stickyActions={
+        <>
+          <p className="text-sm text-muted-foreground">
+            <span className="font-medium tabular-nums text-foreground">{selected.size}</span>{' '}
+            selected ·{' '}
+            <span className="font-medium tabular-nums text-foreground">
+              {formatAmount(selectedBalance)}
+            </span>{' '}
+            to carry
+          </p>
+          {carryButton}
+        </>
+      }
     >
       <DataTable data={students} columns={columns} getRowKey={(r) => r.student_id} />
     </ModuleMarkGridPack>

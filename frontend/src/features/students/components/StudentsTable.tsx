@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, Trash2 } from 'lucide-react';
+import { Download, Eye, Trash2 } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
+import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import { DisableStudentDialog } from '@features/students/components/DisableStudentDialog';
 import type { DisableStudentFormValues } from '@features/students/schemas/disable-student.schema';
@@ -14,8 +15,10 @@ import { useDisableStudent } from '@hooks/useStudents';
 
 interface StudentsTableProps {
   students: StudentListItem[];
-  searchValue: string;
-  onSearchChange: (value: string) => void;
+  pagination?: DataTablePaginationConfig;
+  isLoading?: boolean;
+  /** Enable checkbox column + bulk actions bar. @default true */
+  enableBulkSelection?: boolean;
 }
 
 const columns: DataTableColumn<StudentListItem>[] = [
@@ -25,7 +28,9 @@ const columns: DataTableColumn<StudentListItem>[] = [
     enableSorting: true,
     sortValue: (row) => row.admission_no,
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.admission_no}</code>
+      <code className="rounded-sm bg-muted px-1.5 py-0.5 font-mono text-xs">
+        {row.admission_no}
+      </code>
     ),
   },
   {
@@ -70,10 +75,47 @@ const columns: DataTableColumn<StudentListItem>[] = [
   },
 ];
 
-export function StudentsTable({ students, searchValue, onSearchChange }: StudentsTableProps) {
+function exportStudentsCsv(rows: StudentListItem[]) {
+  const header = ['Admission No.', 'Name', 'Class', 'Roll', 'Gender', 'Mobile', 'Status'];
+  const lines = rows.map((row) =>
+    [
+      row.admission_no,
+      row.full_name,
+      formatClassSection(row.class_name, row.section_name),
+      row.roll_no ?? '',
+      formatGender(row.gender),
+      row.mobileno ?? '',
+      row.is_active === 'yes' ? 'Active' : 'Inactive',
+    ]
+      .map((value) => `"${String(value).replace(/"/g, '""')}"`)
+      .join(','),
+  );
+  const blob = new Blob([[header.join(','), ...lines].join('\n')], {
+    type: 'text/csv;charset=utf-8',
+  });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = `students-export-${new Date().toISOString().slice(0, 10)}.csv`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+export function StudentsTable({
+  students,
+  pagination,
+  isLoading,
+  enableBulkSelection = true,
+}: StudentsTableProps) {
   const navigate = useNavigate();
+  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [studentToDisable, setStudentToDisable] = useState<StudentListItem | null>(null);
   const disableMutation = useDisableStudent();
+
+  const selectedStudents = useMemo(
+    () => students.filter((student) => rowSelection[String(student.id)]),
+    [students, rowSelection],
+  );
 
   const handleDisable = (values: DisableStudentFormValues) => {
     if (!studentToDisable) return;
@@ -85,9 +127,44 @@ export function StudentsTable({ students, searchValue, onSearchChange }: Student
           dis_note: values.dis_note,
         },
       },
-      { onSuccess: () => setStudentToDisable(null) },
+      {
+        onSuccess: () => {
+          setStudentToDisable(null);
+          setRowSelection({});
+        },
+      },
     );
   };
+
+  const bulkActions = enableBulkSelection ? (
+    <>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="h-8 gap-1.5"
+        disabled={selectedStudents.length === 0}
+        onClick={() => exportStudentsCsv(selectedStudents)}
+      >
+        <Download className="h-3.5 w-3.5" aria-hidden="true" />
+        Export selected
+      </Button>
+      <PermissionButton
+        permission="students.delete"
+        variant="outline"
+        size="sm"
+        className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
+        disabled={selectedStudents.length === 0}
+        onClick={() => {
+          const first = selectedStudents[0];
+          if (first) setStudentToDisable(first);
+        }}
+      >
+        <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+        Disable selected
+      </PermissionButton>
+    </>
+  ) : undefined;
 
   return (
     <>
@@ -97,10 +174,13 @@ export function StudentsTable({ students, searchValue, onSearchChange }: Student
         getRowKey={(student) => student.id}
         enableSorting
         showDensityToggle
-        searchValue={searchValue}
-        onSearchChange={onSearchChange}
-        searchPlaceholder="Search by name, admission no., class…"
-        emptyMessage="No students match your search."
+        isLoading={isLoading}
+        emptyMessage="No students match your filters."
+        pagination={pagination}
+        enableRowSelection={enableBulkSelection}
+        rowSelection={rowSelection}
+        onRowSelectionChange={setRowSelection}
+        bulkActions={bulkActions}
         actions={(student) => (
           <>
             <Button
@@ -123,13 +203,19 @@ export function StudentsTable({ students, searchValue, onSearchChange }: Student
             </PermissionButton>
           </>
         )}
-        actionsHeader="Actions"
+        actionsHeader={<span className="sr-only">Actions</span>}
       />
 
       <DisableStudentDialog
         open={studentToDisable !== null}
         onOpenChange={(open) => !open && setStudentToDisable(null)}
-        studentName={studentToDisable?.full_name ?? ''}
+        studentName={
+          studentToDisable
+            ? selectedStudents.length > 1 && selectedStudents[0]?.id === studentToDisable.id
+              ? `${studentToDisable.full_name} (1 of ${selectedStudents.length} selected)`
+              : studentToDisable.full_name
+            : ''
+        }
         onSubmit={handleDisable}
         isLoading={disableMutation.isPending}
       />

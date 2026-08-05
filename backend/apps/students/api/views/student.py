@@ -54,7 +54,10 @@ class StudentListCreateView(APIView):
                 message="Invalid status filter. Use active, disabled, or all.",
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
-        students_qs = service.list_students(status=status_filter)
+        students_qs = service.list_students(
+            status=status_filter,
+            search=request.query_params.get("search"),
+        )
 
         paginator = StandardResultsSetPagination()
         page = paginator.paginate_queryset(students_qs, request, view=self)

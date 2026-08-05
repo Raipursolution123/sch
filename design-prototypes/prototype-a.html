@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Concept A — Instrument Rail · School ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            paper: '#f6f7f9',
+            canvas: '#f0f2f5',
+            ink: '#1c2128',
+            muted: '#6b7280',
+            rule: '#e2e5ea',
+            cobalt: '#2563eb',
+            graphite: '#1a1f26',
+          },
+          borderRadius: { panel: '10px', ctrl: '6px' },
+        },
+      },
+    };
+  </script>
+  <style>
+    html { font-feature-settings: "tnum" 1; }
+    .nav-active { box-shadow: inset 3px 0 0 #2563eb; background: #fff; }
+    .focus-ring:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+  </style>
+</head>
+<body class="min-h-dvh bg-canvas font-sans text-ink antialiased">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-ctrl focus:bg-white focus:px-4 focus:py-2 focus-ring">Skip to main content</a>
+
+  <div class="flex min-h-dvh">
+    <!-- Sidebar · Instrument Rail -->
+    <aside class="hidden w-64 shrink-0 flex-col border-r border-rule bg-paper lg:flex" aria-label="Application sidebar">
+      <div class="border-b border-rule px-5 py-5">
+        <div class="flex items-center gap-3">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-ctrl bg-cobalt font-display text-sm font-medium text-white" aria-hidden="true">G</span>
+          <div class="min-w-0">
+            <p class="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">Admin</p>
+            <p class="truncate font-display text-base font-medium tracking-tight">Greenwood School</p>
+          </div>
+        </div>
+      </div>
+
+      <nav class="flex-1 overflow-y-auto px-2 py-4" aria-label="Modules">
+        <p class="px-3 py-2 font-mono text-[10px] font-medium uppercase tracking-widest text-muted">People</p>
+        <a href="#" class="nav-active focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm font-medium text-ink" aria-current="page">
+          <span class="h-1.5 w-1.5 rounded-full bg-cobalt" aria-hidden="true"></span>
+          Dashboard
+        </a>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Students</a>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Staff</a>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Admissions</a>
+
+        <p class="mt-4 px-3 py-2 font-mono text-[10px] font-medium uppercase tracking-widest text-muted">Academics</p>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Classes</a>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Attendance</a>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Examinations</a>
+
+        <p class="mt-4 px-3 py-2 font-mono text-[10px] font-medium uppercase tracking-widest text-muted">Money</p>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Fees</a>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Finance</a>
+
+        <p class="mt-4 px-3 py-2 font-mono text-[10px] font-medium uppercase tracking-widest text-muted">System</p>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Reports</a>
+        <a href="#" class="focus-ring mb-0.5 flex items-center gap-3 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink">Settings</a>
+      </nav>
+
+      <div class="border-t border-rule p-2">
+        <button type="button" class="focus-ring flex w-full items-center gap-2 rounded-ctrl px-3 py-2 text-sm text-muted hover:bg-white hover:text-ink" aria-label="Collapse sidebar">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg>
+          Collapse
+        </button>
+      </div>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <!-- Topbar -->
+      <header class="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-rule bg-white px-4 lg:px-6">
+        <div class="flex min-w-0 flex-1 items-center gap-3">
+          <button type="button" class="focus-ring rounded-ctrl p-2 text-muted lg:hidden" aria-label="Open navigation menu">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <nav class="hidden min-w-0 text-sm lg:block" aria-label="Breadcrumb">
+            <ol class="flex items-center gap-1.5 text-muted">
+              <li><span class="text-ink">Dashboard</span></li>
+            </ol>
+          </nav>
+        </div>
+        <div class="flex shrink-0 items-center gap-2">
+          <button type="button" class="focus-ring hidden items-center gap-2 rounded-ctrl border border-rule bg-paper px-3 py-1.5 text-sm text-muted sm:flex" aria-keyshortcuts="Control+K Meta+K">
+            <span>Search</span>
+            <kbd class="font-mono text-[10px]">⌘K</kbd>
+          </button>
+          <span class="hidden rounded-ctrl border border-rule bg-paper px-2.5 py-1 font-mono text-xs text-muted sm:inline">2025–26</span>
+          <button type="button" class="focus-ring relative rounded-ctrl p-2 text-muted hover:bg-paper" aria-label="Notifications, 4 unread">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 00-9.33-5M9 19a3 3 0 006 0"/></svg>
+            <span class="absolute right-1 top-1 h-2 w-2 rounded-full bg-cobalt" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="focus-ring flex items-center gap-2 rounded-ctrl border border-rule px-2 py-1.5 text-sm">
+            <span class="flex h-7 w-7 items-center justify-center rounded-ctrl bg-paper font-medium text-xs">PK</span>
+            <span class="hidden sm:inline">Priya K.</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard · Stat-Led instrument -->
+      <main id="main" class="flex-1 overflow-auto p-4 lg:p-8" tabindex="-1">
+        <div class="mx-auto max-w-5xl">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-muted">Tuesday · 25 Jul · 09:40</p>
+          <h1 class="mt-1 font-display text-lg font-medium tracking-tight">Good morning, Priya</h1>
+
+          <!-- Lead metric — operational, not marketing hero -->
+          <section class="mt-8 border-b border-rule pb-8" aria-labelledby="lead-metric">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p id="lead-metric" class="font-display text-5xl font-medium tabular-nums tracking-tight sm:text-6xl">1,284</p>
+                <p class="mt-2 max-w-md text-base text-muted">
+                  students present of <span class="tabular-nums text-ink">1,410</span> enrolled · marked as of 09:40
+                </p>
+              </div>
+              <a href="#" class="focus-ring mt-4 inline-flex items-center gap-1 text-sm font-medium text-cobalt sm:mt-0">Open attendance report →</a>
+            </div>
+          </section>
+
+          <!-- Supporting metrics -->
+          <section class="mt-8 grid gap-4 sm:grid-cols-3" aria-label="Supporting metrics">
+            <div class="rounded-panel border border-rule bg-white p-5">
+              <p class="font-mono text-[10px] uppercase tracking-widest text-muted">Fees due today</p>
+              <p class="mt-2 font-display text-2xl font-medium tabular-nums">₹2,41,800</p>
+              <p class="mt-1 text-sm text-muted">38 students · 12 overdue</p>
+            </div>
+            <div class="rounded-panel border border-rule bg-white p-5">
+              <p class="font-mono text-[10px] uppercase tracking-widest text-muted">Leave requests</p>
+              <p class="mt-2 font-display text-2xl font-medium tabular-nums">7</p>
+              <p class="mt-1 text-sm text-muted">3 staff · 4 pending approval</p>
+            </div>
+            <div class="rounded-panel border border-rule bg-white p-5">
+              <p class="font-mono text-[10px] uppercase tracking-widest text-muted">Admissions</p>
+              <p class="mt-2 font-display text-2xl font-medium tabular-nums">12</p>
+              <p class="mt-1 text-sm text-muted">applications awaiting verification</p>
+            </div>
+          </section>
+
+          <!-- Action queue -->
+          <section class="mt-8" aria-labelledby="actions-heading">
+            <h2 id="actions-heading" class="font-display text-base font-medium tracking-tight">Needs attention</h2>
+            <ul class="mt-4 divide-y divide-rule rounded-panel border border-rule bg-white">
+              <li>
+                <a href="#" class="focus-ring flex items-center justify-between gap-4 px-5 py-4 hover:bg-paper">
+                  <span class="text-sm">Mark attendance · Class 9B · not submitted</span>
+                  <span class="shrink-0 font-mono text-xs text-cobalt">Due now</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="focus-ring flex items-center justify-between gap-4 px-5 py-4 hover:bg-paper">
+                  <span class="text-sm">Approve leave · R. Sharma · 26–28 Jul</span>
+                  <span class="shrink-0 font-mono text-xs text-muted">Waiting</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="focus-ring flex items-center justify-between gap-4 px-5 py-4 hover:bg-paper">
+                  <span class="text-sm">Verify documents · Admission #ADM-088</span>
+                  <span class="shrink-0 font-mono text-xs text-muted">2 files</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="focus-ring flex items-center justify-between gap-4 px-5 py-4 hover:bg-paper">
+                  <span class="text-sm">Fee payment failed · Receipt #4021 · retry</span>
+                  <span class="shrink-0 font-mono text-xs text-muted">₹18,500</span>
+                </a>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

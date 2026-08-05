@@ -3,14 +3,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Plus } from 'lucide-react';
-import { PageHeader } from '@components/layout/PageHeader';
-import { ErrorState } from '@components/feedback/ErrorState';
-import { LoadingState } from '@components/feedback/LoadingState';
 import { SettingsCard } from '@components/forms/SettingsCard';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
 import { FormSwitchField, FormTextField, FormTextareaField } from '@components/forms/fields';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
+import { EmptyState } from '@components/feedback/EmptyState';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { Switch } from '@components/ui/switch';
 import { usePermissions } from '@hooks/usePermissions';
@@ -22,8 +20,8 @@ import {
   useUpdateOnlineAdmissionSettings,
 } from '@hooks/useAdvancedSettings';
 import type { OnlineAdmissionField } from '@app-types/settings/advanced-settings';
-import { getApiErrorMessage } from '@utils/error-message';
 import { formatDate } from '@utils/format';
+import { ModuleSettingsPack } from '@workflow-packs';
 
 const settingsSchema = z.object({
   online_admission: z.boolean(),
@@ -53,6 +51,7 @@ export function OnlineAdmissionSettingsPage() {
   const createFieldMutation = useCreateOnlineAdmissionField();
   const updateFieldMutation = useUpdateOnlineAdmissionField();
   const [addFieldOpen, setAddFieldOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('form');
   const { can } = usePermissions();
   const canManage = can('settings.manage');
 
@@ -143,129 +142,151 @@ export function OnlineAdmissionSettingsPage() {
     },
   ];
 
-  if (isLoading) {
-    return <LoadingState message="Loading online admission settings..." />;
-  }
-
-  if (isError || !settings) {
-    return (
-      <ErrorState
-        message={getApiErrorMessage(error, 'Could not load online admission settings')}
-        onRetry={() => void refetch()}
-      />
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Online Admission Settings"
-        description="Configure the public online admission form, application fee, and visible form fields."
-      />
-
-      <form onSubmit={handleSubmit(onSaveSettings)} noValidate>
-        <SettingsCard
-          title="Admission Form"
-          description="Enable public applications and configure the fee and instructions shown to applicants."
-          footer={
-            <PermissionButton
-              type="submit"
-              permission="settings.manage"
-              isLoading={updateSettingsMutation.isPending}
-              disabled={!isDirty && !updateSettingsMutation.isPending}
+    <ModuleSettingsPack
+      title="Online Admission"
+      description="Configure the public online admission form, application fee, and visible form fields."
+      isLoading={isLoading}
+      loadingMessage="Loading online admission settings..."
+      isError={isError || !settings}
+      error={error}
+      onRetry={() => void refetch()}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      tabs={[
+        {
+          id: 'form',
+          label: 'Admission form',
+          content: (
+            <form onSubmit={handleSubmit(onSaveSettings)} noValidate>
+              <SettingsCard
+                title="Admission form"
+                description="Enable public applications and configure fee and instructions."
+                footer={
+                  <PermissionButton
+                    type="submit"
+                    permission="settings.manage"
+                    className="min-h-11"
+                    isLoading={updateSettingsMutation.isPending}
+                    disabled={!isDirty && !updateSettingsMutation.isPending}
+                  >
+                    Save changes
+                  </PermissionButton>
+                }
+              >
+                <FormErrorSummary errors={errors} />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <FormSwitchField
+                    control={control}
+                    name="online_admission"
+                    label="Enable online admission"
+                  />
+                  <FormSwitchField
+                    control={control}
+                    name="online_admission_payment"
+                    label="Require application fee payment"
+                  />
+                </div>
+                <FormTextField
+                  control={control}
+                  name="online_admission_amount"
+                  label="Application fee amount"
+                  placeholder="500"
+                  optional
+                />
+                <FormTextareaField
+                  control={control}
+                  name="online_admission_instruction"
+                  label="Instructions"
+                  rows={3}
+                  hint="Shown to applicants above the online admission form."
+                />
+                <FormTextareaField
+                  control={control}
+                  name="online_admission_conditions"
+                  label="Terms & conditions"
+                  rows={3}
+                />
+                <FormTextareaField
+                  control={control}
+                  name="online_admission_application_form"
+                  label="Application form note"
+                  rows={2}
+                  hint="Optional note or link shown alongside the downloadable application form."
+                />
+              </SettingsCard>
+            </form>
+          ),
+        },
+        {
+          id: 'fields',
+          label: 'Application fields',
+          content: (
+            <SettingsCard
+              title="Application fields"
+              description="Control which fields appear on the public online admission form."
+              action={
+                <PermissionButton
+                  permission="settings.manage"
+                  size="sm"
+                  className="gap-1"
+                  onClick={() => setAddFieldOpen(true)}
+                >
+                  <Plus className="h-4 w-4" aria-hidden="true" />
+                  Add field
+                </PermissionButton>
+              }
             >
-              Save changes
-            </PermissionButton>
-          }
-        >
-          <FormErrorSummary errors={errors} />
-          <div className="grid gap-3 sm:grid-cols-2">
-            <FormSwitchField
-              control={control}
-              name="online_admission"
-              label="Enable online admission"
-            />
-            <FormSwitchField
-              control={control}
-              name="online_admission_payment"
-              label="Require application fee payment"
-            />
-          </div>
-          <FormTextField
-            control={control}
-            name="online_admission_amount"
-            label="Application fee amount"
-            placeholder="500"
-            optional
-          />
-          <FormTextareaField
-            control={control}
-            name="online_admission_instruction"
-            label="Instructions"
-            rows={3}
-            hint="Shown to applicants above the online admission form."
-          />
-          <FormTextareaField
-            control={control}
-            name="online_admission_conditions"
-            label="Terms & conditions"
-            rows={3}
-          />
-          <FormTextareaField
-            control={control}
-            name="online_admission_application_form"
-            label="Application form note"
-            rows={2}
-            hint="Optional note or link shown alongside the downloadable application form."
-          />
-        </SettingsCard>
-      </form>
-
-      <SettingsCard
-        title="Application Fields"
-        description="Control which fields appear on the public online admission form."
-        action={
-          <PermissionButton
-            permission="settings.manage"
-            size="sm"
-            className="gap-1"
-            onClick={() => setAddFieldOpen(true)}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Field
-          </PermissionButton>
-        }
-      >
-        <DataTable
-          data={fields}
-          columns={fieldColumns}
-          getRowKey={(row) => row.id}
-          isLoading={fieldsLoading}
-          pagination={{
-            page: fieldsPage,
-            totalCount: fieldsCount,
-            pageSize: 20,
-            onPageChange: setFieldsPage,
+              {!fieldsLoading && fields.length === 0 ? (
+                <EmptyState
+                  title="No application fields"
+                  description="Add fields that applicants must fill on the public form."
+                  action={
+                    <PermissionButton
+                      permission="settings.manage"
+                      className="gap-1"
+                      onClick={() => setAddFieldOpen(true)}
+                    >
+                      <Plus className="h-4 w-4" aria-hidden="true" />
+                      Add field
+                    </PermissionButton>
+                  }
+                />
+              ) : (
+                <DataTable
+                  data={fields}
+                  columns={fieldColumns}
+                  getRowKey={(row) => row.id}
+                  isLoading={fieldsLoading}
+                  pagination={{
+                    page: fieldsPage,
+                    totalCount: fieldsCount,
+                    pageSize: 20,
+                    onPageChange: setFieldsPage,
+                  }}
+                />
+              )}
+            </SettingsCard>
+          ),
+        },
+      ]}
+      footer={
+        <EntityFormDialog
+          open={addFieldOpen}
+          onOpenChange={(open) => {
+            setAddFieldOpen(open);
+            if (!open) resetFieldForm({ name: '' });
           }}
-          emptyMessage="No application fields configured yet."
-        />
-      </SettingsCard>
-
-      <EntityFormDialog
-        open={addFieldOpen}
-        onOpenChange={(open) => {
-          setAddFieldOpen(open);
-          if (!open) resetFieldForm({ name: '' });
-        }}
-        title="Add Application Field"
-        description="Add a new field to the public online admission form."
-        submitLabel="Add field"
-        isLoading={createFieldMutation.isPending}
-        onSubmit={handleFieldSubmit(onAddField)}
-      >
-        <FormErrorSummary errors={fieldErrors} />
-        <FormTextField control={fieldControl} name="name" label="Field name" required />
-      </EntityFormDialog>
-    </div>
+          title="Add Application Field"
+          description="Add a new field to the public online admission form."
+          submitLabel="Add field"
+          isLoading={createFieldMutation.isPending}
+          onSubmit={handleFieldSubmit(onAddField)}
+        >
+          <FormErrorSummary errors={fieldErrors} />
+          <FormTextField control={fieldControl} name="name" label="Field name" required />
+        </EntityFormDialog>
+      }
+    />
   );
 }

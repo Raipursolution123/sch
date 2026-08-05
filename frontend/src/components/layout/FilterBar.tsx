@@ -1,7 +1,11 @@
 import type { ReactNode } from 'react';
 import { Search } from 'lucide-react';
 import { Input } from '@components/ui/input';
+import { packPanelClassName } from '@components/pack/PackPanel';
 import { cn } from '@utils/cn';
+
+/** @deprecated Use packPanelClassName from @components/pack */
+export const filterPanelClassName = cn(packPanelClassName, 'p-4 shadow-sm');
 
 interface SearchBarProps {
   value?: string;
@@ -48,7 +52,17 @@ interface FilterBarProps {
   searchPlaceholder?: string;
   actions?: ReactNode;
   className?: string;
+  /** Lay filter fields in a responsive grid (mark / report style). */
+  layout?: 'row' | 'grid';
+  columns?: 2 | 3 | 4 | 5;
 }
+
+const gridCols = {
+  2: 'sm:grid-cols-2',
+  3: 'sm:grid-cols-3',
+  4: 'sm:grid-cols-2 lg:grid-cols-4',
+  5: 'sm:grid-cols-2 lg:grid-cols-5',
+} as const;
 
 /** Horizontal filter toolbar — search + custom filters + actions. */
 export function FilterBar({
@@ -58,26 +72,43 @@ export function FilterBar({
   searchPlaceholder,
   actions,
   className,
+  layout = 'row',
+  columns = 3,
 }: FilterBarProps) {
   return (
-    <div
-      className={cn(
-        'flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center',
-        className,
-      )}
-    >
-      {onSearchChange != null && (
-        <SearchBar
-          value={searchValue}
-          onChange={onSearchChange}
-          placeholder={searchPlaceholder}
-          className="sm:max-w-xs"
-        />
-      )}
-      {children && <div className="flex flex-1 flex-wrap items-center gap-2">{children}</div>}
-      {actions && (
-        <div className="flex shrink-0 flex-wrap items-center gap-2 sm:ml-auto">{actions}</div>
-      )}
+    <div className={cn(filterPanelClassName, className)}>
+      <div
+        className={cn(
+          layout === 'row' && 'flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center',
+          layout === 'grid' && 'space-y-4',
+        )}
+      >
+        {onSearchChange != null && (
+          <SearchBar
+            value={searchValue}
+            onChange={onSearchChange}
+            placeholder={searchPlaceholder}
+            className="sm:max-w-xs"
+          />
+        )}
+        {children && layout === 'row' && (
+          <div className="flex flex-1 flex-wrap items-center gap-2">{children}</div>
+        )}
+        {children && layout === 'grid' && (
+          <div className={cn('grid gap-4', gridCols[columns])}>{children}</div>
+        )}
+        {actions && (
+          <div
+            className={cn(
+              'flex shrink-0 flex-wrap items-center gap-2',
+              layout === 'row' && 'sm:ml-auto',
+              layout === 'grid' && 'justify-end border-t border-border pt-4',
+            )}
+          >
+            {actions}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

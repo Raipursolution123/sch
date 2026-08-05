@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { PageContainer } from '@components/layout/PageContainer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
@@ -27,6 +28,7 @@ interface ModuleProfilePackProps {
   error?: unknown;
   onRetry?: () => void;
   footer?: ReactNode;
+  bare?: boolean;
 }
 
 /** Entity profile shell: back nav + tabbed sections + action slot. */
@@ -44,27 +46,30 @@ export function ModuleProfilePack({
   error,
   onRetry,
   footer,
+  bare = false,
 }: ModuleProfilePackProps) {
   if (isLoading) {
-    return <LoadingState message={loadingMessage} />;
+    const loading = <LoadingState message={loadingMessage} />;
+    return bare ? loading : <PageContainer>{loading}</PageContainer>;
   }
 
   if (isError) {
-    return (
+    const err = (
       <ErrorState
         title={errorTitle}
         message={getApiErrorMessage(error, 'Could not load profile')}
         onRetry={onRetry}
       />
     );
+    return bare ? err : <PageContainer>{err}</PageContainer>;
   }
 
-  return (
-    <div className="space-y-6">
+  const body = (
+    <>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           to={backTo}
-          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className="inline-flex items-center gap-1 rounded-sm px-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           {backLabel}
@@ -90,6 +95,12 @@ export function ModuleProfilePack({
       </Tabs>
 
       {footer}
-    </div>
+    </>
   );
+
+  if (bare) {
+    return <div className="space-y-6">{body}</div>;
+  }
+
+  return <PageContainer>{body}</PageContainer>;
 }

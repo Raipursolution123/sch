@@ -25,7 +25,10 @@ from apps.settings.api.views.currencies import (
     CurrenciesDetailView,
     CurrenciesListCreateView,
 )
-from apps.settings.api.views.general_settings import GeneralSettingsView
+from apps.settings.api.views.general_settings import (
+    GeneralSettingsView,
+    PublicBrandingView,
+)
 from apps.settings.api.views.languages import (
     LanguagesDetailView,
     LanguagesListCreateView,
@@ -63,6 +66,7 @@ from apps.settings.api.views.users import (
 )
 
 urlpatterns = [
+    path("branding/", PublicBrandingView.as_view(), name="public_branding"),
     path("general/", GeneralSettingsView.as_view(), name="general_settings"),
     path("languages/", LanguagesListCreateView.as_view(), name="languages_list_create"),
     path("languages/<int:pk>/", LanguagesDetailView.as_view(), name="languages_detail"),

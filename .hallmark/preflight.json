@@ -1,0 +1,9 @@
+{
+  "scanned_at": "2026-07-25",
+  "font_stack": "Space Grotesk (display) + Inter (body) + JetBrains Mono (labels)",
+  "palette": "Unified Cobalt OKLCH in src/assets/styles/tokens.css — dashboard uses global tokens",
+  "motion": "CSS IntersectionObserver reveals on dashboard; --motion-ease tokenized",
+  "spacing": "4pt named --space-* scale",
+  "framework": "React 19 + Vite 6 + Tailwind 3 (oklch channel colors)",
+  "design_contract": "frontend/DESIGN.md"
+}

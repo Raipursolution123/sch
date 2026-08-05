@@ -26,9 +26,11 @@ interface StudentFeesTabProps {
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border bg-card p-4">
-      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
-      <p className="mt-1 text-xl font-semibold tabular-nums text-foreground">{value}</p>
+    <div className="rounded-panel border border-border bg-card p-4">
+      <p className="text-label text-muted-foreground">{label}</p>
+      <p className="mt-1 font-display text-xl font-medium tabular-nums tracking-display text-foreground">
+        {value}
+      </p>
     </div>
   );
 }
@@ -211,13 +213,18 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
 
       <SettingsCard title="Fee breakdown">
         {!hasLines ? (
-          <p className="text-sm text-muted-foreground">
-            No fee assignments for this student&apos;s class in the current session.{' '}
-            <Link to={ROUTES.fees.assign} className="font-medium text-primary hover:underline">
-              Assign fees
-            </Link>{' '}
-            to get started.
-          </p>
+          <div className="py-2" role="status">
+            <p className="font-display text-base font-medium tracking-display text-foreground">
+              No fees assigned to this class
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Assign fee types for {formatClassSection(fees.class_name, fees.section_name)} so
+              collection can start.{' '}
+              <Link to={ROUTES.fees.assign} className="font-medium text-primary hover:underline">
+                Assign fees
+              </Link>
+            </p>
+          </div>
         ) : (
           <DataTable data={fees.lines} columns={lineColumns} getRowKey={(line) => line.id} />
         )}

@@ -89,8 +89,8 @@ export function StaffDepartmentsPage() {
         error={error}
         onRetry={() => void refetch()}
         isEmpty={!isLoading && !isError && data.length === 0}
-        emptyTitle="No departments"
-        emptyDescription="Create departments such as Teaching, Administration, or Accounts."
+        emptyTitle="No departments yet"
+        emptyDescription="Create departments (Teaching, Accounts…) so staff profiles and filters have a place to land."
         emptyAction={addAction}
       >
         <DataTable

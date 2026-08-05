@@ -3,6 +3,7 @@ import {
   ADMIN_NAV,
   filterNavigationTree,
   annotateNavImplementationStatus,
+  pruneUnimplementedNav,
 } from '@constants/navigation';
 import type { NavItem } from '@app-types/navigation';
 import { ROLE_PERMISSIONS } from '@constants/permissions';
@@ -16,6 +17,7 @@ import { normalizeRole } from '@utils/normalize-role';
 
 /**
  * Returns permission-filtered navigation using backend legacy_permissions when available.
+ * Unimplemented (Coming Soon) destinations are pruned from the shell.
  */
 export function useFilteredNav(): NavItem[] {
   const user = useAuthStore((s) => s.user);
@@ -23,22 +25,26 @@ export function useFilteredNav(): NavItem[] {
   const legacyPermissions = user?.legacy_permissions;
 
   return useMemo(() => {
-    if (user?.is_superadmin) {
-      return annotateNavImplementationStatus(
-        filterNavigationTree(ADMIN_NAV, createPermissiveChecker()),
-      );
-    }
+    const annotated = (() => {
+      if (user?.is_superadmin) {
+        return annotateNavImplementationStatus(
+          filterNavigationTree(ADMIN_NAV, createPermissiveChecker()),
+        );
+      }
 
-    const legacyKeys =
-      legacyPermissions && Object.keys(legacyPermissions).length > 0
-        ? legacyViewableCategories(legacyPermissions)
-        : (user?.permissions ?? []);
+      const legacyKeys =
+        legacyPermissions && Object.keys(legacyPermissions).length > 0
+          ? legacyViewableCategories(legacyPermissions)
+          : (user?.permissions ?? []);
 
-    const checker = createNavigationPermissionChecker({
-      legacyKeys: new Set(legacyKeys),
-      uiKeys: new Set(ROLE_PERMISSIONS[role]),
-    });
+      const checker = createNavigationPermissionChecker({
+        legacyKeys: new Set(legacyKeys),
+        uiKeys: new Set(ROLE_PERMISSIONS[role]),
+      });
 
-    return annotateNavImplementationStatus(filterNavigationTree(ADMIN_NAV, checker));
+      return annotateNavImplementationStatus(filterNavigationTree(ADMIN_NAV, checker));
+    })();
+
+    return pruneUnimplementedNav(annotated);
   }, [user?.is_superadmin, user?.permissions, legacyPermissions, role]);
 }

@@ -73,8 +73,8 @@ ADMISSION_FIELDS = frozenset(
 
 
 class StudentService:
-    def list_students(self, *, status: str = "active"):
-        return selectors.list_students_qs(status=status)
+    def list_students(self, *, status: str = "active", search: str | None = None):
+        return selectors.list_students_qs(status=status, search=search)
 
     def get_student(self, student_id: int) -> dict[str, Any]:
         student = selectors.get_student_by_id(student_id)

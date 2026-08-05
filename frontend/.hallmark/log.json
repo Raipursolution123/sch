@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "runs": [
+    {
+      "at": "2026-07-25",
+      "scope": "page",
+      "target": "src/features/dashboard/pages/DashboardPage.tsx",
+      "genre": "modern-minimal",
+      "theme": "cobalt",
+      "macrostructure": "Stat-Led",
+      "tone": "utilitarian",
+      "enrichment": "none",
+      "notes": "Admin dashboard redesign; AppShell nav preserved; Wise tokens outside .hm-dashboard"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 from typing import Any
 
+from django.db.models import Q
 from django.utils import timezone
 
 from apps.academics.models import Classes, ClassSections, Sections, Sessions
@@ -41,12 +42,30 @@ def get_active_session() -> Sessions | None:
     return get_current_session()
 
 
-def list_students_qs(*, status: str = "active"):
+def list_students_qs(*, status: str = "active", search: str | None = None):
     qs = Students.objects.all()
     if status == "active":
         qs = qs.filter(is_active="yes")
     elif status == "disabled":
         qs = qs.exclude(is_active="yes")
+
+    term = (search or "").strip()
+    if term:
+        filters = (
+            Q(admission_no__icontains=term)
+            | Q(firstname__icontains=term)
+            | Q(middlename__icontains=term)
+            | Q(lastname__icontains=term)
+            | Q(mobileno__icontains=term)
+            | Q(email__icontains=term)
+            | Q(father_name__icontains=term)
+            | Q(mother_name__icontains=term)
+            | Q(guardian_name__icontains=term)
+        )
+        if term.isdigit():
+            filters = filters | Q(roll_no=int(term))
+        qs = qs.filter(filters)
+
     return qs.order_by("-id")
 
 

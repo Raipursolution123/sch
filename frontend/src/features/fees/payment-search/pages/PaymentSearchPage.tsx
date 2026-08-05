@@ -1,13 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import { FormField } from '@components/forms/FormField';
 import { ReportSummaryGrid } from '@components/reports';
 import { PaymentSearchTable } from '@features/fees/payment-search/components/PaymentSearchTable';
-import {
-  firstSectionIdForClass,
-  sectionOptionsForClass,
-} from '@features/students/utils/class-section-options';
+import { sectionOptionsForClass } from '@features/students/utils/class-section-options';
 import { useFeePaymentSearch } from '@hooks/useFeeSearch';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
@@ -24,7 +21,6 @@ function daysAgoIso(days: number): string {
 }
 
 const PAYMENT_MODE_OPTIONS = [
-  { value: '', label: 'All modes' },
   { value: 'cash', label: 'Cash' },
   { value: 'cheque', label: 'Cheque' },
   { value: 'bank transfer', label: 'Bank Transfer' },
@@ -60,22 +56,18 @@ export function PaymentSearchPage() {
 
   const { data, isLoading, isError, error, refetch } = useFeePaymentSearch(filters, submitted);
 
-  const classOptions = [
-    { value: '', label: 'All classes' },
-    ...classes
-      .filter((c) => c.is_active === 'yes')
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map((c) => ({ value: String(c.id), label: c.class_name })),
-  ];
+  const classOptions = useMemo(
+    () =>
+      classes
+        .filter((c) => c.is_active === 'yes')
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map((c) => ({ value: String(c.id), label: c.class_name })),
+    [classes],
+  );
 
   const sectionOptions = useMemo(() => {
-    if (classId <= 0) {
-      return [{ value: '', label: 'All sections' }];
-    }
-    return [
-      { value: '', label: 'All sections' },
-      ...sectionOptionsForClass(classSections, classId),
-    ];
+    if (classId <= 0) return [];
+    return sectionOptionsForClass(classSections, classId);
   }, [classId, classSections]);
 
   const handleExportCsv = () => {
@@ -133,30 +125,35 @@ export function PaymentSearchPage() {
             />
           </FormField>
           <FormField label="Class" htmlFor="payment_search_class">
-            <Select
+            <Combobox
               id="payment_search_class"
               options={classOptions}
               value={classId ? String(classId) : ''}
-              onChange={(e) => {
-                const nextClassId = Number(e.target.value) || 0;
-                setClassId(nextClassId);
-                setSectionId(
-                  nextClassId > 0 ? (firstSectionIdForClass(classSections, nextClassId) ?? 0) : 0,
-                );
+              onValueChange={(v) => {
+                setClassId(v ? Number(v) : 0);
+                setSectionId(0);
                 setSubmitted(false);
               }}
+              allowEmpty
+              emptyLabel="All classes"
+              placeholder="All classes"
+              searchPlaceholder="Search class…"
             />
           </FormField>
           <FormField label="Section" htmlFor="payment_search_section">
-            <Select
+            <Combobox
               id="payment_search_section"
               options={sectionOptions}
               value={sectionId ? String(sectionId) : ''}
-              onChange={(e) => {
-                setSectionId(Number(e.target.value) || 0);
+              onValueChange={(v) => {
+                setSectionId(v ? Number(v) : 0);
                 setSubmitted(false);
               }}
-              disabled={classId > 0 && sectionOptions.length <= 1}
+              allowEmpty
+              emptyLabel="All sections"
+              placeholder="All sections"
+              searchPlaceholder="Search section…"
+              disabled={classId > 0 && sectionOptions.length === 0}
             />
           </FormField>
           <FormField label="Student" htmlFor="payment_search_query">
@@ -171,14 +168,18 @@ export function PaymentSearchPage() {
             />
           </FormField>
           <FormField label="Payment mode" htmlFor="payment_search_mode">
-            <Select
+            <Combobox
               id="payment_search_mode"
               options={PAYMENT_MODE_OPTIONS}
               value={paymentMode}
-              onChange={(e) => {
-                setPaymentMode(e.target.value);
+              onValueChange={(v) => {
+                setPaymentMode(v);
                 setSubmitted(false);
               }}
+              allowEmpty
+              emptyLabel="All modes"
+              placeholder="All modes"
+              searchPlaceholder="Search mode…"
             />
           </FormField>
         </>
@@ -187,8 +188,12 @@ export function PaymentSearchPage() {
         data ? (
           <ReportSummaryGrid
             items={[
-              { label: 'Payments', value: String(data.total_payments) },
-              { label: 'Total collected', value: formatAmount(data.total_amount) },
+              { label: 'Payments', value: data.total_payments },
+              {
+                label: 'Total collected',
+                value: formatAmount(data.total_amount),
+                tone: 'success',
+              },
             ]}
           />
         ) : undefined
@@ -200,7 +205,7 @@ export function PaymentSearchPage() {
       onRetry={() => void refetch()}
       isEmpty={submitted && !isLoading && !isError && (data?.payments.length ?? 0) === 0}
       emptyTitle="No payments found"
-      emptyDescription="Adjust the date range or filters and search again."
+      emptyDescription="Widen the date range or clear class/mode filters, then apply again."
     >
       {data && data.payments.length > 0 && <PaymentSearchTable payments={data.payments} />}
     </ModuleReportPack>

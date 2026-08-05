@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { StaffTable } from '@features/staff/components/StaffTable';
@@ -8,43 +7,39 @@ import type { StaffFormValues } from '@features/staff/schemas/staff-form.schema'
 import { toStaffPayload } from '@features/staff/utils/staff-payload';
 import {
   useCreateStaff,
-  useStaff,
   useStaffDepartments,
   useStaffDesignations,
+  useStaffList,
   useSuggestedEmployeeId,
 } from '@hooks/useStaff';
-import { matchesSearch } from '@utils/search';
-import { formatDepartmentDesignation } from '@utils/staff';
+import { useDebouncedValue } from '@hooks/useDebouncedValue';
 import { ModuleListPack } from '@workflow-packs';
 
-export function StaffPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get('page')) || 1;
+const PAGE_SIZE = 20;
 
-  const { data: staffData, isLoading, isError, error, refetch } = useStaff(page);
-  const staff = staffData?.results;
-  const count = staffData?.count || 0;
+export function StaffPage() {
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebouncedValue(search, 300);
+  const [formOpen, setFormOpen] = useState(false);
+
+  const { data, isLoading, isError, error, refetch, isFetching } = useStaffList({
+    page,
+    pageSize: PAGE_SIZE,
+    search: debouncedSearch,
+  });
+  const staff = data?.results ?? [];
+  const totalCount = data?.count ?? 0;
+
   const { data: departments = [] } = useStaffDepartments();
   const { data: designations = [] } = useStaffDesignations();
   const createMutation = useCreateStaff();
-
-  const [formOpen, setFormOpen] = useState(false);
-  const [search, setSearch] = useState('');
   const { data: suggestedEmployeeId } = useSuggestedEmployeeId(formOpen);
 
-  const filteredStaff = useMemo(() => {
-    if (!staff) return [];
-    return staff.filter((member) =>
-      matchesSearch(
-        search,
-        member.full_name,
-        member.employee_id,
-        member.email,
-        member.contact_no,
-        formatDepartmentDesignation(member.department_name, member.designation_name),
-      ),
-    );
-  }, [staff, search]);
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
 
   const handleSubmit = (values: StaffFormValues) => {
     createMutation.mutate(toStaffPayload(values), {
@@ -59,19 +54,21 @@ export function StaffPage() {
     </PermissionButton>
   );
 
+  const isEmptyList = !isLoading && !isError && totalCount === 0 && !debouncedSearch.trim();
+
   return (
     <ModuleListPack
       title="Staff"
-      description="Browse staff members and open profiles for details."
+      description="Employee roster — open a profile for employment, payroll, leave, and documents."
       actions={addStaffAction}
       isLoading={isLoading}
       loadingMessage="Loading staff..."
       isError={isError}
       error={error}
       onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && staff?.length === 0}
-      emptyTitle="No staff found"
-      emptyDescription="Add your first staff member to start building employee records."
+      isEmpty={isEmptyList}
+      emptyTitle="No staff on the roster yet"
+      emptyDescription="Add your first employee to build attendance, payroll, and leave records."
       emptyAction={addStaffAction}
       footer={
         <StaffFormDialog
@@ -86,14 +83,15 @@ export function StaffPage() {
       }
     >
       <StaffTable
-        staff={filteredStaff}
+        staff={staff}
         searchValue={search}
-        onSearchChange={setSearch}
+        onSearchChange={handleSearchChange}
+        isLoading={isFetching && !isLoading}
         pagination={{
           page,
-          pageSize: 10,
-          totalCount: count,
-          onPageChange: (p) => setSearchParams({ page: p.toString() }),
+          pageSize: PAGE_SIZE,
+          totalCount,
+          onPageChange: setPage,
         }}
       />
     </ModuleListPack>

@@ -12,7 +12,7 @@ import {
   FormTimeField,
 } from '@components/forms/fields';
 import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import type { Exam } from '@app-types/examinations/exam';
 import type { ExamSchedule } from '@app-types/examinations/exam-schedule';
 import type { Subject } from '@app-types/academics/subject';
@@ -29,6 +29,8 @@ interface ExamScheduleFormDialogProps {
   subjects: Subject[];
   sessions: AcademicSession[];
   schedule?: ExamSchedule | null;
+  /** Prefill exam when opening create from ?exam_id= */
+  defaultExamId?: number;
   onSubmit: (values: ExamScheduleFormValues) => void;
   isLoading?: boolean;
 }
@@ -62,6 +64,7 @@ export function ExamScheduleFormDialog({
   subjects,
   sessions,
   schedule,
+  defaultExamId,
   onSubmit,
   isLoading,
 }: ExamScheduleFormDialogProps) {
@@ -120,7 +123,10 @@ export function ExamScheduleFormDialog({
       return;
     }
     reset({
-      exam_id: activeExams[0]?.id ?? 0,
+      exam_id:
+        defaultExamId && activeExams.some((e) => e.id === defaultExamId)
+          ? defaultExamId
+          : (activeExams[0]?.id ?? 0),
       subject_id: activeSubjects[0]?.id ?? 0,
       session_id: defaultSessionId,
       date_of_exam: '',
@@ -132,7 +138,7 @@ export function ExamScheduleFormDialog({
       note: '',
       is_active: true,
     });
-  }, [open, isEdit, schedule, activeExams, activeSubjects, defaultSessionId, reset]);
+  }, [open, isEdit, schedule, activeExams, activeSubjects, defaultSessionId, defaultExamId, reset]);
 
   return (
     <EntityFormDialog
@@ -162,12 +168,13 @@ export function ExamScheduleFormDialog({
             name="exam_id"
             control={control}
             render={({ field }) => (
-              <Select
+              <Combobox
                 id="exam_id"
                 placeholder="Select exam"
+                searchPlaceholder="Search exam…"
                 options={examOptions}
                 value={field.value ? String(field.value) : ''}
-                onChange={(e) => field.onChange(Number(e.target.value))}
+                onValueChange={(v) => field.onChange(Number(v) || 0)}
                 disabled={!hasOptions}
               />
             )}
@@ -178,12 +185,13 @@ export function ExamScheduleFormDialog({
             name="subject_id"
             control={control}
             render={({ field }) => (
-              <Select
+              <Combobox
                 id="subject_id"
                 placeholder="Select subject"
+                searchPlaceholder="Search subject…"
                 options={subjectOptions}
                 value={field.value ? String(field.value) : ''}
-                onChange={(e) => field.onChange(Number(e.target.value))}
+                onValueChange={(v) => field.onChange(Number(v) || 0)}
                 disabled={!hasOptions}
               />
             )}
@@ -194,12 +202,13 @@ export function ExamScheduleFormDialog({
             name="session_id"
             control={control}
             render={({ field }) => (
-              <Select
+              <Combobox
                 id="session_id"
                 placeholder="Select session"
+                searchPlaceholder="Search session…"
                 options={sessionOptions}
                 value={field.value ? String(field.value) : ''}
-                onChange={(e) => field.onChange(Number(e.target.value))}
+                onValueChange={(v) => field.onChange(Number(v) || 0)}
                 disabled={!hasOptions}
               />
             )}

@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FormField } from '@components/forms/FormField';
 import { PermissionButton } from '@components/rbac/PermissionButton';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
+import { Input } from '@components/ui/input';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { AssignDiscountsTable } from '@features/fees/discounts/components/AssignDiscountsTable';
 import {
@@ -83,7 +84,16 @@ export function AssignDiscountsPage() {
         setSectionId(initialSectionId);
       }
     }
-  }, [activeClasses, classSections, classId]);
+  }, [activeClasses, classId]);
+
+  useEffect(() => {
+    if (classId <= 0) {
+      setSectionId(0);
+      return;
+    }
+    const next = firstSectionIdForClass(classSections, classId);
+    setSectionId(next ?? 0);
+  }, [classId, classSections]);
 
   useEffect(() => {
     setSelectedIds([]);
@@ -122,6 +132,18 @@ export function AssignDiscountsPage() {
     );
   };
 
+  const assignButton = (
+    <PermissionButton
+      permission="fees.manage"
+      className="min-h-11"
+      disabled={selectedIds.length === 0 || assignMutation.isPending}
+      isLoading={assignMutation.isPending}
+      onClick={handleAssign}
+    >
+      Assign selected ({selectedIds.length})
+    </PermissionButton>
+  );
+
   return (
     <>
       <ModuleMarkGridPack
@@ -137,16 +159,17 @@ export function AssignDiscountsPage() {
         filters={
           <>
             <FormField label="Discount" htmlFor="assign_discount">
-              <Select
+              <Combobox
                 id="assign_discount"
                 placeholder="Select discount"
+                searchPlaceholder="Search discount…"
                 options={activeDiscounts.map((d) => ({
                   value: String(d.id),
                   label: `${d.name} (${d.code})`,
                 }))}
                 value={discountId ? String(discountId) : ''}
-                onChange={(e) => {
-                  const nextId = Number(e.target.value);
+                onValueChange={(v) => {
+                  const nextId = Number(v) || 0;
                   setDiscountId(nextId);
                   const params = new URLSearchParams(searchParams);
                   if (nextId > 0) params.set('discount_id', String(nextId));
@@ -157,67 +180,61 @@ export function AssignDiscountsPage() {
               />
             </FormField>
             <FormField label="Class" htmlFor="assign_discount_class">
-              <Select
+              <Combobox
                 id="assign_discount_class"
                 placeholder="Select class"
+                searchPlaceholder="Search class…"
                 options={activeClasses.map((c) => ({
                   value: String(c.id),
                   label: c.class_name,
                 }))}
                 value={classId ? String(classId) : ''}
-                onChange={(e) => {
-                  const nextClassId = Number(e.target.value);
-                  setClassId(nextClassId);
-                  const nextSectionId = firstSectionIdForClass(classSections, nextClassId);
-                  setSectionId(nextSectionId ?? 0);
-                }}
+                onValueChange={(v) => setClassId(Number(v) || 0)}
                 disabled={!canAssign}
               />
             </FormField>
             <FormField label="Section" htmlFor="assign_discount_section">
-              <Select
+              <Combobox
                 id="assign_discount_section"
-                placeholder="Select section"
+                placeholder={sectionOptions.length ? 'Select section' : 'No sections for class'}
+                searchPlaceholder="Search section…"
                 options={sectionOptions}
                 value={sectionId ? String(sectionId) : ''}
-                onChange={(e) => setSectionId(Number(e.target.value))}
+                onValueChange={(v) => setSectionId(Number(v) || 0)}
                 disabled={!canAssign || sectionOptions.length === 0}
               />
             </FormField>
             <FormField label="Session" htmlFor="assign_discount_session">
-              <Select
+              <Input
                 id="assign_discount_session"
-                placeholder="Current session"
-                options={
-                  roster?.session_name
-                    ? [{ value: roster.session_name, label: roster.session_name }]
-                    : []
-                }
-                value={roster?.session_name ?? ''}
+                value={roster?.session_name ?? 'Current session'}
                 disabled
+                readOnly
               />
             </FormField>
           </>
         }
-        actions={
-          <PermissionButton
-            permission="fees.manage"
-            disabled={selectedIds.length === 0 || assignMutation.isPending}
-            onClick={handleAssign}
-          >
-            Assign selected ({selectedIds.length})
-          </PermissionButton>
-        }
-        isLoading={filtersReady && isLoading}
+        actions={assignButton}
+        filtersReady={filtersReady}
+        isLoading={isLoading}
         loadingMessage="Loading students..."
-        isError={filtersReady && isError}
+        isError={isError}
         error={error}
         onRetry={() => void refetch()}
-        isEmpty={filtersReady && !isLoading && !isError && (roster?.students.length ?? 0) === 0}
+        isEmpty={!isLoading && !isError && (roster?.students.length ?? 0) === 0}
         emptyTitle="No students in this class section"
         emptyDescription="Choose another class or section with enrolled students."
+        stickyActions={
+          <>
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium tabular-nums text-foreground">{selectedIds.length}</span>{' '}
+              students selected for assignment
+            </p>
+            {assignButton}
+          </>
+        }
       >
-        {filtersReady && roster && (
+        {roster && (
           <AssignDiscountsTable
             students={roster.students}
             selectedIds={selectedIds}

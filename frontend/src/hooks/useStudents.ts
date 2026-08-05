@@ -3,21 +3,43 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { queryKeys } from '@constants/query-keys';
 import { ROUTES } from '@constants/index';
-import { studentsService } from '@services/api';
+import { studentsService, type StudentListStatus } from '@services/api/students.service';
 import type { CreateStudentPayload, UpdateStudentPayload } from '@app-types/students/student';
 import type { DisableStudentPayload } from '@app-types/students/disable-reason';
 import { getApiErrorMessage } from '@utils/session';
 
+export interface StudentsListParams {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  status?: StudentListStatus;
+}
+
+/** Paginated, searchable student list for module list screens. */
+export function useStudentsList(params: StudentsListParams = {}) {
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? 20;
+  const search = params.search ?? '';
+  const status = params.status ?? 'active';
+
+  return useQuery({
+    queryKey: queryKeys.students.list(status, { page, pageSize, search }),
+    queryFn: () => studentsService.listPaginated(page, pageSize, status, search),
+    placeholderData: (previous) => previous,
+  });
+}
+
+/** Lightweight active list for pickers / reports (max page size). */
 export function useStudents() {
   return useQuery({
-    queryKey: queryKeys.students.list('active'),
+    queryKey: queryKeys.students.list('active', { page: 1, pageSize: 100, search: '' }),
     queryFn: () => studentsService.list('active'),
   });
 }
 
 export function useDisabledStudents() {
   return useQuery({
-    queryKey: queryKeys.students.list('disabled'),
+    queryKey: queryKeys.students.list('disabled', { page: 1, pageSize: 100, search: '' }),
     queryFn: () => studentsService.list('disabled'),
   });
 }

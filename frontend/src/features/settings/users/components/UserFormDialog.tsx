@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
-import { FormSelectField, FormSwitchField } from '@components/forms/fields';
+import { FormField } from '@components/forms/FormField';
+import { FormSwitchField } from '@components/forms/fields';
+import { Combobox } from '@components/ui/combobox';
 import { useUserRoleOptions } from '@hooks/useRoles';
 import type { StaffUserAccount } from '@app-types/settings/roles';
 
@@ -78,13 +80,22 @@ export function UserFormDialog({
       size="sm"
     >
       <FormErrorSummary errors={errors} />
-      <FormSelectField
-        control={control}
-        name="role_id"
-        label="Role"
-        options={roleOptions}
-        placeholder="Select role"
-      />
+      <FormField label="Role" htmlFor="user_role" required error={errors.role_id?.message}>
+        <Controller
+          name="role_id"
+          control={control}
+          render={({ field }) => (
+            <Combobox
+              id="user_role"
+              options={roleOptions}
+              value={field.value}
+              onValueChange={field.onChange}
+              placeholder="Select role"
+              searchPlaceholder="Search role…"
+            />
+          )}
+        />
+      </FormField>
       <FormSwitchField control={control} name="is_active" label="Account active" />
     </EntityFormDialog>
   );

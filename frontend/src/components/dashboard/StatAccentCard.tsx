@@ -1,49 +1,41 @@
 import { cn } from '@utils/cn';
-import type { SoftTone } from '@utils/tone';
-import { softToneAccentBar } from '@utils/tone';
-import { MetricTrend } from '@components/dashboard/MetricTrend';
 
 interface StatAccentCardProps {
   label: string;
   value: string;
   changePercent?: number;
   changeLabel?: string;
-  accentTone?: SoftTone;
+  /** Kept for API compatibility; Cobalt uses a single accent. */
+  accentTone?: string;
   className?: string;
 }
 
-/** KPI card with left accent bar — primary dashboard metric widget. */
+/** Supporting KPI cell in the hairline strip. */
 export function StatAccentCard({
   label,
   value,
   changePercent,
   changeLabel,
-  accentTone = 'primary',
   className,
 }: StatAccentCardProps) {
+  const isEmpty = value === '—' || value.trim() === '';
+  const trend =
+    changePercent != null && changeLabel != null
+      ? {
+          up: changePercent >= 0,
+          text: `${changePercent >= 0 ? '+' : ''}${changePercent}% ${changeLabel}`,
+        }
+      : null;
+
   return (
-    <article
-      className={cn(
-        'relative overflow-hidden rounded-xl border border-border/60 bg-card p-5 sm:p-6',
-        className,
+    <article className={cn('hm-kpi-cell', className)}>
+      <p className="hm-label">{label}</p>
+      <p className={cn('hm-kpi-cell__value hm-tnum', isEmpty && 'is-empty')}>{value}</p>
+      {trend ? (
+        <p className={cn('hm-kpi-cell__trend', trend.up ? 'is-up' : 'is-down')}>{trend.text}</p>
+      ) : (
+        <p className="hm-kpi-cell__hint">{isEmpty ? 'Not configured' : 'Active session'}</p>
       )}
-    >
-      <div
-        className={cn(
-          'absolute bottom-3 left-0 top-3 w-1.5 rounded-full',
-          softToneAccentBar[accentTone],
-        )}
-        aria-hidden="true"
-      />
-      <div className="pl-2">
-        <p className="text-sm font-medium text-muted-foreground">{label}</p>
-        <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground">{value}</p>
-        {changeLabel != null && changePercent != null && (
-          <div className="mt-2">
-            <MetricTrend value={changePercent} label={changeLabel} />
-          </div>
-        )}
-      </div>
     </article>
   );
 }

@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { EmptyState } from '@components/feedback/EmptyState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { cn } from '@utils/cn';
@@ -17,7 +16,7 @@ interface ChartPanelProps {
   className?: string;
 }
 
-/** Chart wrapper with loading, error, and empty states for dashboard widgets. */
+/** Chart wrapper — empty states stay typographic (no nested dashed cards). */
 export function ChartPanel({
   children,
   isLoading,
@@ -48,8 +47,9 @@ export function ChartPanel({
 
   if (isEmpty) {
     return (
-      <div className={cn('min-h-[10rem] py-4', className)}>
-        <EmptyState title={emptyTitle} description={emptyDescription} />
+      <div className={cn('hm-empty hm-empty--rich', className)} role="status">
+        <p className="hm-empty__title">{emptyTitle}</p>
+        {emptyDescription ? <p className="hm-empty__desc">{emptyDescription}</p> : null}
       </div>
     );
   }
@@ -63,7 +63,5 @@ interface ChartPanelInlineEmptyProps {
 }
 
 export function ChartPanelInlineEmpty({ message, className }: ChartPanelInlineEmptyProps) {
-  return (
-    <p className={cn('py-10 text-center text-sm text-muted-foreground', className)}>{message}</p>
-  );
+  return <p className={cn('hm-empty', className)}>{message}</p>;
 }

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Greenwood School · Workflow Packs v1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            paper: 'oklch(98.5% 0.004 250)',
+            canvas: 'oklch(95.5% 0.01 252)',
+            inset: 'oklch(94% 0.006 254)',
+            ink: 'oklch(24% 0.02 258)',
+            body: 'oklch(34% 0.018 257)',
+            mute: 'oklch(56% 0.013 255)',
+            rule: 'oklch(91% 0.008 255)',
+            rule2: 'oklch(83% 0.011 255)',
+            cobalt: 'oklch(58% 0.2 256)',
+            cobaltHover: 'oklch(53% 0.21 256)',
+            cobaltDim: 'oklch(58% 0.2 256 / 0.1)',
+            graphite: 'oklch(22% 0.016 260)',
+            success: 'oklch(52% 0.12 155)',
+            successDim: 'oklch(52% 0.12 155 / 0.12)',
+            warn: 'oklch(62% 0.15 55)',
+            danger: 'oklch(55% 0.18 25)',
+            dangerDim: 'oklch(55% 0.18 25 / 0.1)',
+          },
+          borderRadius: {
+            ctrl: '6px',
+            panel: '10px',
+          },
+          boxShadow: {
+            whisper: '0 1px 2px oklch(22% 0.016 260 / 0.06)',
+          },
+          letterSpacing: {
+            display: '-0.03em',
+            label: '0.06em',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    html {
+      font-feature-settings: 'kern' 1, 'liga' 1, 'tnum' 1;
+      -webkit-font-smoothing: antialiased;
+    }
+    body { text-rendering: optimizeLegibility; }
+    .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8125rem;
+      line-height: 1.25rem;
+      color: oklch(56% 0.013 255);
+      transition: background-color 120ms ease, color 120ms ease;
+    }
+    .nav-item:hover { background: #fff; color: oklch(24% 0.02 258); }
+    .nav-item[aria-current='page'] {
+      background: #fff;
+      color: oklch(24% 0.02 258);
+      font-weight: 500;
+      box-shadow: inset 3px 0 0 oklch(58% 0.2 256);
+    }
+    .focusable:focus-visible {
+      outline: 2px solid oklch(58% 0.2 256);
+      outline-offset: 2px;
+    }
+    .panel {
+      border: 1px solid oklch(91% 0.008 255);
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 1px 2px oklch(22% 0.016 260 / 0.06);
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      border-radius: 6px;
+      border: 1px solid oklch(91% 0.008 255);
+      background: oklch(98.5% 0.004 250);
+      padding: 0.25rem 0.625rem;
+      font-size: 0.75rem;
+      color: oklch(34% 0.018 257);
+    }
+    .chip.is-active {
+      border-color: oklch(58% 0.2 256);
+      background: oklch(58% 0.2 256 / 0.1);
+      color: oklch(58% 0.2 256);
+      font-weight: 500;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.75rem;
+      min-width: 5rem;
+      border-radius: 6px;
+      border: 1px solid oklch(91% 0.008 255);
+      padding: 0 0.75rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: oklch(56% 0.013 255);
+      background: #fff;
+    }
+    .status-pill.is-present {
+      border-color: oklch(52% 0.12 155);
+      background: oklch(52% 0.12 155 / 0.12);
+      color: oklch(35% 0.1 155);
+    }
+    .status-pill.is-absent {
+      border-color: oklch(55% 0.18 25);
+      background: oklch(55% 0.18 25 / 0.1);
+      color: oklch(40% 0.14 25);
+    }
+    .proto-view { display: none; }
+    .proto-view.is-active { display: block; }
+    .proto-tab.is-active {
+      background: oklch(58% 0.2 256);
+      color: #fff;
+      border-color: oklch(58% 0.2 256);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nav-item { transition: none; }
+    }
+  </style>
+</head>
+<body class="min-h-dvh bg-canvas font-sans text-ink">
+
+  <div class="flex min-h-dvh">
+    <!-- Sidebar (Instrument Rail — abbreviated) -->
+    <aside class="sticky top-0 hidden h-dvh w-[15.5rem] shrink-0 flex-col border-r border-rule bg-paper lg:flex" aria-label="Application">
+      <div class="shrink-0 border-b border-rule px-4 py-4">
+        <a href="shell-v1.html" class="focusable flex items-center gap-3 rounded-ctrl">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-ctrl bg-cobalt font-display text-sm font-medium text-white">G</span>
+          <span class="min-w-0">
+            <span class="label block text-mute">Admin</span>
+            <span class="mt-0.5 block truncate font-display text-[0.9375rem] font-medium tracking-display">Greenwood School</span>
+          </span>
+        </a>
+      </div>
+      <nav class="flex-1 overflow-y-auto px-2 py-3" aria-label="Modules">
+        <div class="mb-1 px-3 pb-1 pt-2"><p class="label text-mute">Overview</p></div>
+        <a href="shell-v1.html" class="nav-item">Dashboard</a>
+        <div class="mb-1 mt-4 px-3 pb-1 pt-1"><p class="label text-mute">People</p></div>
+        <a href="#" class="nav-item" id="nav-students" aria-current="page">Students</a>
+        <a href="#" class="nav-item">Staff</a>
+        <div class="mb-1 mt-4 px-3 pb-1 pt-1"><p class="label text-mute">Academics</p></div>
+        <a href="#" class="nav-item" id="nav-attendance">Attendance</a>
+      </nav>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <!-- Topbar -->
+      <header class="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-rule bg-white px-3 sm:px-4 lg:px-6">
+        <nav aria-label="Breadcrumb" class="min-w-0">
+          <ol class="flex items-center gap-1.5 text-[0.8125rem]" id="breadcrumb">
+            <li class="hidden text-mute sm:inline">Admin</li>
+            <li class="hidden text-rule2 sm:inline" aria-hidden="true">/</li>
+            <li class="truncate font-medium text-ink" id="breadcrumb-current">Students</li>
+          </ol>
+        </nav>
+        <div class="flex shrink-0 items-center gap-2">
+          <span class="chip hidden md:inline-flex"><span class="label text-mute">Role</span> Registrar</span>
+          <span class="chip hidden md:inline-flex font-mono tabular-nums">2025–26</span>
+          <button type="button" class="focusable flex items-center gap-2 rounded-ctrl border border-rule py-1 pl-1 pr-2.5 text-[0.8125rem]">
+            <span class="flex h-7 w-7 items-center justify-center rounded-ctrl bg-inset text-xs font-medium">PK</span>
+            <span class="hidden font-medium sm:inline">Priya K.</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Prototype switcher -->
+      <div class="border-b border-rule bg-paper px-4 py-2 sm:px-6 lg:px-8">
+        <div class="mx-auto flex max-w-[72rem] flex-wrap items-center gap-2">
+          <span class="label text-mute mr-1">Prototype</span>
+          <button type="button" class="proto-tab focusable rounded-ctrl border border-rule px-3 py-1.5 text-xs font-medium is-active" data-view="students">ModuleListPack · Students</button>
+          <button type="button" class="proto-tab focusable rounded-ctrl border border-rule px-3 py-1.5 text-xs font-medium" data-view="attendance">ModuleMarkGridPack · Mark Attendance</button>
+        </div>
+      </div>
+
+      <main id="main" class="flex-1 overflow-auto px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+
+        <!-- ═══════════════════════════════════════════
+             VIEW 1 — ModuleListPack · Students
+             ═══════════════════════════════════════════ -->
+        <div class="proto-view is-active mx-auto max-w-[72rem] space-y-6" id="view-students">
+          <!-- Page header -->
+          <div class="flex flex-col gap-4 border-b border-rule pb-5 sm:flex-row sm:items-start sm:justify-between">
+            <div class="min-w-0">
+              <h1 class="font-display text-2xl font-medium tracking-display text-ink">Students</h1>
+              <p class="mt-1 max-w-2xl text-sm text-mute">Enrollment roster for the active session.</p>
+            </div>
+            <button type="button" class="focusable inline-flex h-9 shrink-0 items-center gap-1.5 rounded-ctrl bg-cobalt px-4 text-sm font-medium text-white hover:bg-cobaltHover">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>
+              Add Student
+            </button>
+          </div>
+
+          <!-- Stat strip (optional context) -->
+          <div class="flex flex-wrap items-center gap-4 text-sm text-mute">
+            <span><span class="font-medium tabular-nums text-ink">1,410</span> enrolled</span>
+            <span aria-hidden="true">·</span>
+            <span>Session <span class="font-mono tabular-nums text-body">2025–26</span></span>
+            <span aria-hidden="true">·</span>
+            <span class="text-success">1,284 active</span>
+          </div>
+
+          <!-- Filter bar -->
+          <div class="panel p-4">
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <div class="relative w-full sm:max-w-xs">
+                <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mute" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z"/></svg>
+                <input type="search" placeholder="Search name, admission no…" class="focusable h-9 w-full rounded-ctrl border border-rule bg-paper pl-9 pr-3 text-sm text-ink placeholder:text-mute" />
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" class="chip is-active">All classes</button>
+                <button type="button" class="chip">Class 9</button>
+                <button type="button" class="chip">Class 10</button>
+              </div>
+              <button type="button" class="focusable ml-auto text-xs font-medium text-cobalt hover:underline">Export</button>
+            </div>
+          </div>
+
+          <!-- Data table panel -->
+          <div class="panel overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[48rem] text-left text-sm">
+                <thead>
+                  <tr class="border-b border-rule bg-canvas/60">
+                    <th class="label px-4 py-3 font-medium text-mute">Admission No.</th>
+                    <th class="label px-4 py-3 font-medium text-mute">Student</th>
+                    <th class="label px-4 py-3 font-medium text-mute">Class</th>
+                    <th class="label px-4 py-3 font-medium text-mute">Roll</th>
+                    <th class="label px-4 py-3 font-medium text-mute">Gender</th>
+                    <th class="label px-4 py-3 font-medium text-mute">Mobile</th>
+                    <th class="label px-4 py-3 font-medium text-mute">Status</th>
+                    <th class="label px-4 py-3 font-medium text-mute"><span class="sr-only">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-rule">
+                  <tr class="hover:bg-canvas/40">
+                    <td class="px-4 py-3"><code class="rounded-ctrl bg-inset px-1.5 py-0.5 font-mono text-xs">ADM-1042</code></td>
+                    <td class="px-4 py-3 font-medium">Aarav Mehta</td>
+                    <td class="px-4 py-3 text-body">9 · B</td>
+                    <td class="px-4 py-3 tabular-nums text-mute">14</td>
+                    <td class="px-4 py-3 text-mute">Male</td>
+                    <td class="px-4 py-3 text-mute">98765 43210</td>
+                    <td class="px-4 py-3"><span class="rounded-ctrl bg-successDim px-2 py-0.5 text-xs font-medium text-success">Active</span></td>
+                    <td class="px-4 py-3 text-right"><button type="button" class="focusable text-xs font-medium text-cobalt">View</button></td>
+                  </tr>
+                  <tr class="hover:bg-canvas/40">
+                    <td class="px-4 py-3"><code class="rounded-ctrl bg-inset px-1.5 py-0.5 font-mono text-xs">ADM-1038</code></td>
+                    <td class="px-4 py-3 font-medium">Isha Kapoor</td>
+                    <td class="px-4 py-3 text-body">9 · B</td>
+                    <td class="px-4 py-3 tabular-nums text-mute">22</td>
+                    <td class="px-4 py-3 text-mute">Female</td>
+                    <td class="px-4 py-3 text-mute">98123 45678</td>
+                    <td class="px-4 py-3"><span class="rounded-ctrl bg-successDim px-2 py-0.5 text-xs font-medium text-success">Active</span></td>
+                    <td class="px-4 py-3 text-right"><button type="button" class="focusable text-xs font-medium text-cobalt">View</button></td>
+                  </tr>
+                  <tr class="hover:bg-canvas/40">
+                    <td class="px-4 py-3"><code class="rounded-ctrl bg-inset px-1.5 py-0.5 font-mono text-xs">ADM-0991</code></td>
+                    <td class="px-4 py-3 font-medium">Rohan Sharma</td>
+                    <td class="px-4 py-3 text-body">10 · A</td>
+                    <td class="px-4 py-3 tabular-nums text-mute">07</td>
+                    <td class="px-4 py-3 text-mute">Male</td>
+                    <td class="px-4 py-3 text-mute">—</td>
+                    <td class="px-4 py-3"><span class="rounded-ctrl bg-successDim px-2 py-0.5 text-xs font-medium text-success">Active</span></td>
+                    <td class="px-4 py-3 text-right"><button type="button" class="focusable text-xs font-medium text-cobalt">View</button></td>
+                  </tr>
+                  <tr class="hover:bg-canvas/40">
+                    <td class="px-4 py-3"><code class="rounded-ctrl bg-inset px-1.5 py-0.5 font-mono text-xs">ADM-0888</code></td>
+                    <td class="px-4 py-3 font-medium">Sneha Patel</td>
+                    <td class="px-4 py-3 text-body">10 · A</td>
+                    <td class="px-4 py-3 tabular-nums text-mute">18</td>
+                    <td class="px-4 py-3 text-mute">Female</td>
+                    <td class="px-4 py-3 text-mute">99887 76655</td>
+                    <td class="px-4 py-3"><span class="rounded-ctrl bg-inset px-2 py-0.5 text-xs font-medium text-mute">Inactive</span></td>
+                    <td class="px-4 py-3 text-right"><button type="button" class="focusable text-xs font-medium text-cobalt">View</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Pagination -->
+            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-rule px-4 py-3 text-sm text-mute">
+              <p>Showing <span class="tabular-nums text-body">1–20</span> of <span class="tabular-nums text-body">1,410</span></p>
+              <div class="flex items-center gap-1">
+                <button type="button" class="focusable rounded-ctrl border border-rule px-3 py-1.5 text-xs disabled:opacity-40" disabled>Previous</button>
+                <button type="button" class="focusable rounded-ctrl border border-cobalt bg-cobaltDim px-3 py-1.5 text-xs font-medium text-cobalt">1</button>
+                <button type="button" class="focusable rounded-ctrl border border-rule px-3 py-1.5 text-xs">2</button>
+                <button type="button" class="focusable rounded-ctrl border border-rule px-3 py-1.5 text-xs">Next</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             VIEW 2 — ModuleMarkGridPack · Mark Attendance
+             ═══════════════════════════════════════════ -->
+        <div class="proto-view mx-auto max-w-[72rem] space-y-6" id="view-attendance">
+          <!-- Page header -->
+          <div class="flex flex-col gap-4 border-b border-rule pb-5 sm:flex-row sm:items-start sm:justify-between">
+            <div class="min-w-0">
+              <h1 class="font-display text-2xl font-medium tracking-display text-ink">Mark Attendance</h1>
+              <p class="mt-1 max-w-2xl text-sm text-mute">Record daily attendance by class and section. Built for tablet marking.</p>
+            </div>
+            <button type="button" class="focusable inline-flex h-11 shrink-0 items-center gap-1.5 rounded-ctrl bg-cobalt px-4 text-sm font-medium text-white hover:bg-cobaltHover">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Save attendance
+            </button>
+          </div>
+
+          <!-- Filter bar (grid layout) -->
+          <div class="panel p-4">
+            <div class="grid gap-4 sm:grid-cols-3">
+              <div>
+                <label class="label mb-1.5 block text-mute" for="filter-date">Date</label>
+                <input id="filter-date" type="date" value="2026-07-25" class="focusable h-9 w-full rounded-ctrl border border-rule bg-paper px-3 text-sm tabular-nums" />
+              </div>
+              <div>
+                <label class="label mb-1.5 block text-mute" for="filter-class">Class</label>
+                <select id="filter-class" class="focusable h-9 w-full rounded-ctrl border border-rule bg-paper px-3 text-sm">
+                  <option>Class 9</option>
+                  <option>Class 10</option>
+                </select>
+              </div>
+              <div>
+                <label class="label mb-1.5 block text-mute" for="filter-section">Section</label>
+                <select id="filter-section" class="focusable h-9 w-full rounded-ctrl border border-rule bg-paper px-3 text-sm">
+                  <option>Section B</option>
+                  <option>Section A</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grid toolbar -->
+          <div class="panel flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+            <p class="text-sm text-mute">
+              <span class="font-medium tabular-nums text-ink">42</span> students
+              · <span class="tabular-nums text-success">38</span> present
+              · <span class="tabular-nums text-danger">3</span> absent
+              · <span class="tabular-nums text-warn">1</span> late
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" class="focusable inline-flex h-11 items-center rounded-ctrl border border-rule bg-white px-4 text-sm font-medium hover:border-rule2">Mark all present</button>
+              <button type="button" class="focusable inline-flex h-11 items-center rounded-ctrl border border-rule bg-white px-4 text-sm font-medium hover:border-rule2">Mark all absent</button>
+            </div>
+          </div>
+
+          <!-- Mark grid table -->
+          <div class="panel overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[40rem] text-left text-sm">
+                <thead>
+                  <tr class="border-b border-rule bg-canvas/60">
+                    <th class="label w-16 px-4 py-3 font-medium text-mute">Roll</th>
+                    <th class="label px-4 py-3 font-medium text-mute">Student</th>
+                    <th class="label min-w-[16rem] px-4 py-3 font-medium text-mute">Status</th>
+                    <th class="label min-w-[10rem] px-4 py-3 font-medium text-mute">Remark</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-rule">
+                  <tr class="hover:bg-canvas/40">
+                    <td class="px-4 py-3 tabular-nums text-mute align-middle">14</td>
+                    <td class="px-4 py-3 align-middle">
+                      <span class="font-medium">Aarav Mehta</span>
+                      <p class="text-xs text-mute">ADM-1042</p>
+                    </td>
+                    <td class="px-4 py-3 align-middle">
+                      <div class="flex flex-wrap gap-1.5">
+                        <button type="button" class="status-pill is-present focusable">Present</button>
+                        <button type="button" class="status-pill focusable">Absent</button>
+                        <button type="button" class="status-pill focusable">Late</button>
+                        <button type="button" class="status-pill focusable">Half day</button>
+                      </div>
+                    </td>
+                    <td class="px-4 py-3 align-middle">
+                      <input type="text" placeholder="Optional" class="focusable h-11 w-full min-w-[8rem] rounded-ctrl border border-rule px-3 text-sm" />
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-canvas/40">
+                    <td class="px-4 py-3 tabular-nums text-mute align-middle">22</td>
+                    <td class="px-4 py-3 align-middle">
+                      <span class="font-medium">Isha Kapoor</span>
+                      <p class="text-xs text-mute">ADM-1038</p>
+                    </td>
+                    <td class="px-4 py-3 align-middle">
+                      <div class="flex flex-wrap gap-1.5">
+                        <button type="button" class="status-pill is-present focusable">Present</button>
+                        <button type="button" class="status-pill focusable">Absent</button>
+                        <button type="button" class="status-pill focusable">Late</button>
+                        <button type="button" class="status-pill focusable">Half day</button>
+                      </div>
+                    </td>
+                    <td class="px-4 py-3 align-middle">
+                      <input type="text" placeholder="Optional" class="focusable h-11 w-full min-w-[8rem] rounded-ctrl border border-rule px-3 text-sm" />
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-canvas/40">
+                    <td class="px-4 py-3 tabular-nums text-mute align-middle">31</td>
+                    <td class="px-4 py-3 align-middle">
+                      <span class="font-medium">Kabir Singh</span>
+                      <p class="text-xs text-mute">ADM-1021</p>
+                    </td>
+                    <td class="px-4 py-3 align-middle">
+                      <div class="flex flex-wrap gap-1.5">
+                        <button type="button" class="status-pill focusable">Present</button>
+                        <button type="button" class="status-pill is-absent focusable">Absent</button>
+                        <button type="button" class="status-pill focusable">Late</button>
+                        <button type="button" class="status-pill focusable">Half day</button>
+                      </div>
+                    </td>
+                    <td class="px-4 py-3 align-middle">
+                      <input type="text" value="Medical leave" class="focusable h-11 w-full min-w-[8rem] rounded-ctrl border border-rule px-3 text-sm" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Sticky save bar -->
+          <div class="panel sticky bottom-4 flex flex-wrap items-center justify-between gap-3 border-cobalt/20 bg-white px-4 py-3 shadow-whisper">
+            <p class="text-sm text-mute">Changes are not saved until you confirm.</p>
+            <button type="button" class="focusable inline-flex h-11 items-center gap-1.5 rounded-ctrl bg-cobalt px-4 text-sm font-medium text-white hover:bg-cobaltHover">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Save attendance
+            </button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tabs = document.querySelectorAll('.proto-tab');
+      const views = {
+        students: document.getElementById('view-students'),
+        attendance: document.getElementById('view-attendance'),
+      };
+      const breadcrumb = document.getElementById('breadcrumb-current');
+      const navStudents = document.getElementById('nav-students');
+      const navAttendance = document.getElementById('nav-attendance');
+
+      function showView(name) {
+        Object.entries(views).forEach(([key, el]) => {
+          el.classList.toggle('is-active', key === name);
+        });
+        tabs.forEach((tab) => {
+          tab.classList.toggle('is-active', tab.dataset.view === name);
+        });
+        if (name === 'students') {
+          breadcrumb.textContent = 'Students';
+          navStudents?.setAttribute('aria-current', 'page');
+          navAttendance?.removeAttribute('aria-current');
+        } else {
+          breadcrumb.textContent = 'Mark Attendance';
+          navAttendance?.setAttribute('aria-current', 'page');
+          navStudents?.removeAttribute('aria-current');
+        }
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => showView(tab.dataset.view));
+      });
+    })();
+  </script>
+</body>
+</html>

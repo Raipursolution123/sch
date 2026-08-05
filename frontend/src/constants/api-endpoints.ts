@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
     sessionDetail: (id: number) => `/academics/sessions/${id}/`,
     sessionActivate: (id: number) => `/academics/sessions/${id}/activate/`,
     general: '/settings/general/',
+    branding: '/settings/branding/',
     languages: '/settings/languages/',
     languageDetail: (id: number) => `/settings/languages/${id}/`,
     currencies: '/settings/currencies/',

@@ -1,44 +1,56 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { DisabledStudentsTable } from '@features/students/components/DisabledStudentsTable';
-import { useDisabledStudents } from '@hooks/useStudents';
-import { matchesSearch } from '@utils/search';
-import { formatClassSection } from '@utils/student';
+import { useStudentsList } from '@hooks/useStudents';
+import { useDebouncedValue } from '@hooks/useDebouncedValue';
 import { ModuleListPack } from '@workflow-packs';
 
-export function DisabledStudentsPage() {
-  const { data: students, isLoading, isError, error, refetch } = useDisabledStudents();
-  const [search, setSearch] = useState('');
+const PAGE_SIZE = 20;
 
-  const filteredStudents = useMemo(() => {
-    if (!students) return [];
-    return students.filter((student) =>
-      matchesSearch(
-        search,
-        student.full_name,
-        student.admission_no,
-        student.disable_reason_name,
-        student.disable_note,
-        formatClassSection(student.class_name, student.section_name),
-      ),
-    );
-  }, [students, search]);
+export function DisabledStudentsPage() {
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebouncedValue(search, 300);
+
+  const { data, isLoading, isError, error, refetch, isFetching } = useStudentsList({
+    page,
+    pageSize: PAGE_SIZE,
+    search: debouncedSearch,
+    status: 'disabled',
+  });
+
+  const students = data?.results ?? [];
+  const totalCount = data?.count ?? 0;
+  const isEmptyList = !isLoading && !isError && totalCount === 0 && !debouncedSearch.trim();
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
 
   return (
     <ModuleListPack
       title="Disabled Students"
+      description="Students removed from active enrollment, with reason and date."
       isLoading={isLoading}
       loadingMessage="Loading disabled students..."
       isError={isError}
       error={error}
       onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && students?.length === 0}
+      isEmpty={isEmptyList}
       emptyTitle="No disabled students"
-      emptyDescription="Students you disable will appear here with their reason and disable date."
+      emptyDescription="When you disable a student, they appear here with the reason — ready to re-enable later."
     >
       <DisabledStudentsTable
-        students={filteredStudents}
+        students={students}
         searchValue={search}
-        onSearchChange={setSearch}
+        onSearchChange={handleSearchChange}
+        isLoading={isFetching && !isLoading}
+        pagination={{
+          page,
+          pageSize: PAGE_SIZE,
+          totalCount,
+          onPageChange: setPage,
+        }}
       />
     </ModuleListPack>
   );

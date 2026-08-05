@@ -1,8 +1,9 @@
+import { useMemo, useState } from 'react';
 import type { AttendanceRosterEntry, AttendanceType } from '@app-types/attendance/attendance';
+import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
-import { AttendanceStatusBadge } from '@features/attendance/components/AttendanceStatusBadge';
+import { AttendanceStatusChips } from '@features/attendance/components/AttendanceStatusChips';
 
 export type MarkAttendanceRow = AttendanceRosterEntry;
 
@@ -11,6 +12,9 @@ interface MarkAttendanceTableProps {
   types: AttendanceType[];
   onStatusChange: (studentId: number, attendenceTypeId: number) => void;
   onRemarkChange: (studentId: number, remark: string) => void;
+  onBulkStatusChange?: (studentIds: number[], attendenceTypeId: number) => void;
+  /** Enable checkbox column + bulk mark actions. @default true */
+  enableBulkSelection?: boolean;
 }
 
 export function MarkAttendanceTable({
@@ -18,22 +22,39 @@ export function MarkAttendanceTable({
   types,
   onStatusChange,
   onRemarkChange,
+  onBulkStatusChange,
+  enableBulkSelection = true,
 }: MarkAttendanceTableProps) {
-  const typeOptions = types
-    .filter((t) => t.is_active === 'yes')
-    .map((t) => ({ value: String(t.id), label: t.label }));
+  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+
+  const presentTypeId = useMemo(
+    () => types.find((t) => t.is_active === 'yes' && t.key === 'present')?.id,
+    [types],
+  );
+  const absentTypeId = useMemo(
+    () => types.find((t) => t.is_active === 'yes' && t.key === 'absent')?.id,
+    [types],
+  );
+
+  const selectedIds = useMemo(
+    () =>
+      entries
+        .filter((entry) => rowSelection[String(entry.student_id)])
+        .map((entry) => entry.student_id),
+    [entries, rowSelection],
+  );
 
   const columns: DataTableColumn<MarkAttendanceRow>[] = [
     {
       id: 'roll_no',
       header: 'Roll',
-      cellClassName: 'tabular-nums text-muted-foreground w-16',
+      cellClassName: 'tabular-nums text-muted-foreground w-16 align-middle',
       cell: (row) => (row.roll_no != null ? row.roll_no : '—'),
     },
     {
       id: 'student',
       header: 'Student',
-      cellClassName: 'font-medium',
+      cellClassName: 'font-medium align-middle',
       cell: (row) => (
         <div>
           <span>{row.full_name}</span>
@@ -44,33 +65,69 @@ export function MarkAttendanceTable({
     {
       id: 'status',
       header: 'Status',
+      cellClassName: 'align-middle min-w-[16rem]',
       cell: (row) => (
-        <Select
-          aria-label={`Status for ${row.full_name}`}
-          options={typeOptions}
-          value={String(row.attendence_type_id)}
-          onChange={(e) => onStatusChange(row.student_id, Number(e.target.value))}
+        <AttendanceStatusChips
+          types={types}
+          value={row.attendence_type_id}
+          onChange={(typeId) => onStatusChange(row.student_id, typeId)}
+          ariaLabel={`Status for ${row.full_name}`}
         />
       ),
     },
     {
-      id: 'preview',
-      header: 'Mark',
-      cell: (row) => <AttendanceStatusBadge label={row.status_label} statusKey={row.status_key} />,
-    },
-    {
       id: 'remark',
       header: 'Remark',
+      cellClassName: 'align-middle min-w-[10rem]',
       cell: (row) => (
         <Input
           aria-label={`Remark for ${row.full_name}`}
           value={row.remark}
           placeholder="Optional"
+          className="min-h-11"
           onChange={(e) => onRemarkChange(row.student_id, e.target.value)}
         />
       ),
     },
   ];
 
-  return <DataTable data={entries} columns={columns} getRowKey={(row) => row.student_id} />;
+  const bulkActions =
+    enableBulkSelection && onBulkStatusChange ? (
+      <>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-8"
+          disabled={selectedIds.length === 0 || !presentTypeId}
+          onClick={() => presentTypeId && onBulkStatusChange(selectedIds, presentTypeId)}
+        >
+          Mark selected present
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-8"
+          disabled={selectedIds.length === 0 || !absentTypeId}
+          onClick={() => absentTypeId && onBulkStatusChange(selectedIds, absentTypeId)}
+        >
+          Mark selected absent
+        </Button>
+      </>
+    ) : undefined;
+
+  return (
+    <DataTable
+      data={entries}
+      columns={columns}
+      getRowKey={(row) => row.student_id}
+      enableRowSelection={enableBulkSelection}
+      rowSelection={rowSelection}
+      onRowSelectionChange={setRowSelection}
+      bulkActions={bulkActions}
+      stickyHeader
+      density="comfortable"
+    />
+  );
 }

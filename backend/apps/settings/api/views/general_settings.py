@@ -3,7 +3,7 @@ import logging
 from django.db import transaction
 
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -17,6 +17,10 @@ from apps.settings.domain.general_settings_exceptions import (
     GeneralSettingsValidationError,
     SchSettingsNotFoundError,
 )
+from apps.settings.selectors.general_settings_selectors import (
+    branding_to_dict,
+    get_sch_settings,
+)
 from apps.settings.services.general_settings_service import GeneralSettingsService
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
@@ -24,6 +28,25 @@ from core.permissions.legacy_privilege import HasLegacyPrivilege
 logger = logging.getLogger(__name__)
 
 SETTINGS_CATEGORY = "general_setting"
+
+
+class PublicBrandingView(APIView):
+    """Unauthenticated school name + logo for public/auth chrome."""
+
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        settings = get_sch_settings()
+        if settings is None:
+            return APIResponse.success(
+                data={"name": "", "logo_url": None, "small_logo_url": None},
+                message="Branding retrieved successfully.",
+            )
+        return APIResponse.success(
+            data=branding_to_dict(settings),
+            message="Branding retrieved successfully.",
+        )
 
 
 class GeneralSettingsView(APIView):

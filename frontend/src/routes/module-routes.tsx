@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Navigate, type RouteObject } from 'react-router-dom';
 import { ComingSoonPage } from '@features/foundation/pages/ComingSoonPage';
 import { ADMIN_NAV, flattenNavigation } from '@constants/navigation';
@@ -36,10 +37,11 @@ export function createModuleRoutes(
   moduleRoot: string,
   defaultPath: string,
   implementedRoutes: RouteObject[] = [],
+  layout: ReactNode = <ModuleLayout />,
 ): RouteObject {
   return {
     path: modulePathToSegment(moduleRoot),
-    element: <ModuleLayout />,
+    element: layout,
     children: [
       { index: true, element: <Navigate to={defaultPath} replace /> },
       ...implementedRoutes,

@@ -4,5 +4,6 @@ export {
   filterNavigationTree,
   flattenNavigation,
   annotateNavImplementationStatus,
+  pruneUnimplementedNav,
 } from './utils';
 export type { FlatNavRoute } from './utils';

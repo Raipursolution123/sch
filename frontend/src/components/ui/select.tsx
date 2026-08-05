@@ -43,8 +43,8 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           error && 'border-destructive focus-visible:ring-destructive',
           className,
         )}
-        aria-invalid={error ? true : props['aria-invalid']}
         {...props}
+        aria-invalid={error ? true : props['aria-invalid']}
       >
         {placeholder && (
           <option value="" disabled>

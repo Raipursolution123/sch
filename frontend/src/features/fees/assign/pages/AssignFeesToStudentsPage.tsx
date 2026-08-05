@@ -4,7 +4,7 @@ import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { FormField } from '@components/forms/FormField';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { Checkbox } from '@components/ui/checkbox';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import {
   useFeeStudentAssignRoster,
   useSaveFeeStudentAssignments,
@@ -62,20 +62,14 @@ export function AssignFeesToStudentsPage() {
         fromRoster.set(row.section_id, row.section_name || `Section ${row.section_id}`);
     }
     if (fromRoster.size > 0) {
-      return [
-        { value: '0', label: 'All sections' },
-        ...[...fromRoster.entries()].map(([id, name]) => ({
-          value: String(id),
-          label: name,
-        })),
-      ];
+      return [...fromRoster.entries()].map(([id, name]) => ({
+        value: String(id),
+        label: name,
+      }));
     }
-    return [
-      { value: '0', label: 'All sections' },
-      ...sections
-        .filter((s) => s.is_active === 'yes')
-        .map((s) => ({ value: String(s.id), label: s.section_name })),
-    ];
+    return sections
+      .filter((s) => s.is_active === 'yes')
+      .map((s) => ({ value: String(s.id), label: s.section_name }));
   }, [roster?.students, sections]);
 
   const students = roster?.students ?? [];
@@ -138,29 +132,31 @@ export function AssignFeesToStudentsPage() {
     },
   ];
 
+  const saveButton = (
+    <PermissionButton
+      permission="fees.student_assign"
+      onClick={() => {
+        if (!filtersReady) return;
+        saveMutation.mutate({
+          fee_session_group_id: feeSessionGroupId,
+          section_id: sectionId > 0 ? sectionId : null,
+          student_session_ids: [...selected],
+        });
+      }}
+      className="min-h-11 gap-1"
+      disabled={!filtersReady || students.length === 0}
+      isLoading={saveMutation.isPending}
+    >
+      <Save className="h-4 w-4" aria-hidden="true" />
+      Save assignments
+    </PermissionButton>
+  );
+
   return (
     <ModuleMarkGridPack
       title="Assign Fees"
       description="Map a Fees Master structure to enrolled students so balances appear in Collect Fees."
-      actions={
-        <PermissionButton
-          permission="fees.student_assign"
-          onClick={() => {
-            if (!filtersReady) return;
-            saveMutation.mutate({
-              fee_session_group_id: feeSessionGroupId,
-              section_id: sectionId > 0 ? sectionId : null,
-              student_session_ids: [...selected],
-            });
-          }}
-          className="gap-1"
-          disabled={!filtersReady || students.length === 0}
-          isLoading={saveMutation.isPending}
-        >
-          <Save className="h-4 w-4" aria-hidden="true" />
-          Save assignments
-        </PermissionButton>
-      }
+      actions={saveButton}
       prerequisiteHint={
         !loadingAssignments && activeAssignments.length === 0 ? (
           <p className="text-sm text-muted-foreground">
@@ -169,33 +165,40 @@ export function AssignFeesToStudentsPage() {
         ) : roster ? (
           <p className="text-sm text-muted-foreground">
             {roster.class_name} · {roster.assignment.fee_group_name} · Total{' '}
-            {formatAmount(roster.total_amount)}
+            <span className="font-medium tabular-nums text-foreground">
+              {formatAmount(roster.total_amount)}
+            </span>
           </p>
         ) : undefined
       }
       filters={
         <>
           <FormField label="Fee structure" htmlFor="assign_fee_structure">
-            <Select
+            <Combobox
               id="assign_fee_structure"
               options={activeAssignments.map((a) => ({
                 value: String(a.id),
                 label: `${a.class_name} · ${a.fee_group_name} · ${a.session_name}`,
               }))}
               value={feeSessionGroupId ? String(feeSessionGroupId) : ''}
-              onChange={(e) => {
-                setFeeSessionGroupId(Number(e.target.value));
+              onValueChange={(v) => {
+                setFeeSessionGroupId(Number(v) || 0);
                 setSectionId(0);
               }}
               placeholder="Select fee structure"
+              searchPlaceholder="Search structure…"
             />
           </FormField>
           <FormField label="Section filter" htmlFor="assign_fee_section">
-            <Select
+            <Combobox
               id="assign_fee_section"
               options={sectionOptions}
-              value={String(sectionId)}
-              onChange={(e) => setSectionId(Number(e.target.value))}
+              value={sectionId > 0 ? String(sectionId) : ''}
+              onValueChange={(v) => setSectionId(Number(v) || 0)}
+              allowEmpty
+              emptyLabel="All sections"
+              placeholder="All sections"
+              searchPlaceholder="Search section…"
               disabled={!filtersReady}
             />
           </FormField>
@@ -210,6 +213,15 @@ export function AssignFeesToStudentsPage() {
       isEmpty={!isLoading && !isError && students.length === 0}
       emptyTitle="No students enrolled"
       emptyDescription="No active students found for this fee structure’s class and session."
+      stickyActions={
+        <>
+          <p className="text-sm text-muted-foreground">
+            <span className="font-medium tabular-nums text-foreground">{selected.size}</span> of{' '}
+            <span className="tabular-nums">{students.length}</span> selected
+          </p>
+          {saveButton}
+        </>
+      }
     >
       <DataTable data={students} columns={columns} getRowKey={(r) => r.student_session_id} />
     </ModuleMarkGridPack>

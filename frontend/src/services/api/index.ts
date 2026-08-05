@@ -2,6 +2,7 @@ export { apiClient } from './client';
 export { authService } from './auth.service';
 export { sessionsService } from './sessions.service';
 export { generalSettingsService } from './general-settings.service';
+export { brandingService } from './branding.service';
 export { languagesService } from './languages.service';
 export { currenciesService } from './currencies.service';
 export { classesService } from './classes.service';

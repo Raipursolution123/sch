@@ -44,16 +44,19 @@ export function FormField({
         {optional && !required && <span className="text-xs text-muted-foreground">(optional)</span>}
       </div>
       {children}
-      {hint && !error && (
-        <p id={ids.hintId} className="text-xs text-muted-foreground">
-          {hint}
-        </p>
-      )}
-      {error && (
-        <p id={ids.errorId} className="text-xs text-destructive" role="alert">
-          {error}
-        </p>
-      )}
+      {/* Stable helper slot — avoids layout jump when errors appear */}
+      <div className="min-h-[1.25rem]">
+        {hint && !error && (
+          <p id={ids.hintId} className="text-xs text-muted-foreground">
+            {hint}
+          </p>
+        )}
+        {error && (
+          <p id={ids.errorId} className="text-xs text-destructive" role="alert">
+            {error}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

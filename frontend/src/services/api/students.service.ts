@@ -22,14 +22,24 @@ export const studentsService = {
     page = 1,
     pageSize = 20,
     status: StudentListStatus = 'active',
+    search = '',
   ): Promise<{ results: StudentListItem[]; count: number }> => {
+    const params = new URLSearchParams({
+      page: String(page),
+      page_size: String(pageSize),
+      status,
+    });
+    const term = search.trim();
+    if (term) params.set('search', term);
+
     const { data } = await apiClient.get<BackendPayload>(
-      `${API_ENDPOINTS.students.list}?page=${page}&page_size=${pageSize}&status=${status}`,
+      `${API_ENDPOINTS.students.list}?${params.toString()}`,
     );
     const results = extractList<StudentListItem>(data);
     return { results, count: extractCount(data, results.length) };
   },
 
+  /** Convenience fetch for pickers — capped at API max page size. */
   list: async (status: StudentListStatus = 'active'): Promise<StudentListItem[]> => {
     const { results } = await studentsService.listPaginated(1, 100, status);
     return results;

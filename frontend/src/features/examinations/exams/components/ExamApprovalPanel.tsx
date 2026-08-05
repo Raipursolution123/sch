@@ -85,13 +85,22 @@ export function ExamApprovalPanel({ exam }: ExamApprovalPanelProps) {
           isLoading={transition.isPending || updateExam.isPending}
         />
         <p className="text-xs text-muted-foreground">
-          Teachers submit exams for review. Principals approve before schedules go live.{' '}
+          Teachers submit exams for review. Principals approve before schedules go live. After
+          publish,{' '}
           <Link
-            to={ROUTES.examinations.exams}
+            to={`${ROUTES.examinations.schedule}?exam_id=${exam.id}`}
             className="text-ink underline-offset-2 hover:underline"
           >
-            View all exams
+            add subject schedule
+          </Link>{' '}
+          then{' '}
+          <Link
+            to={`${ROUTES.examinations.enroll}?exam_id=${exam.id}`}
+            className="text-ink underline-offset-2 hover:underline"
+          >
+            enroll students
           </Link>
+          .
         </p>
       </div>
 

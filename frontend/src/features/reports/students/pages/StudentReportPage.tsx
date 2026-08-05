@@ -1,12 +1,9 @@
 import { useMemo, useState } from 'react';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import { FormField } from '@components/forms/FormField';
 import { ReportSummaryGrid } from '@components/reports';
 import { StudentReportTable } from '@features/reports/students/components/StudentReportTable';
-import {
-  firstSectionIdForClass,
-  sectionOptionsForClass,
-} from '@features/students/utils/class-section-options';
+import { sectionOptionsForClass } from '@features/students/utils/class-section-options';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
 import { useActiveSession } from '@hooks/useSessions';
@@ -36,20 +33,18 @@ export function StudentReportPage() {
     });
   }, [students, classId, sectionId]);
 
-  const classOptions = [
-    { value: '', label: 'All classes' },
-    ...classes
-      .filter((c) => c.is_active === 'yes')
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map((c) => ({ value: String(c.id), label: c.class_name })),
-  ];
+  const classOptions = useMemo(
+    () =>
+      classes
+        .filter((c) => c.is_active === 'yes')
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map((c) => ({ value: String(c.id), label: c.class_name })),
+    [classes],
+  );
 
   const sectionOptions = useMemo(() => {
-    if (classId <= 0) return [{ value: '', label: 'All sections' }];
-    return [
-      { value: '', label: 'All sections' },
-      ...sectionOptionsForClass(classSections, classId),
-    ];
+    if (classId <= 0) return [];
+    return sectionOptionsForClass(classSections, classId);
   }, [classId, classSections]);
 
   const handleExportCsv = () => {
@@ -105,26 +100,31 @@ export function StudentReportPage() {
       filters={
         <>
           <FormField label="Class" htmlFor="student_report_class">
-            <Select
+            <Combobox
               id="student_report_class"
               options={classOptions}
               value={classId ? String(classId) : ''}
-              onChange={(e) => {
-                const nextClassId = Number(e.target.value) || 0;
-                setClassId(nextClassId);
-                setSectionId(
-                  nextClassId > 0 ? (firstSectionIdForClass(classSections, nextClassId) ?? 0) : 0,
-                );
+              onValueChange={(v) => {
+                setClassId(v ? Number(v) : 0);
+                setSectionId(0);
               }}
+              allowEmpty
+              emptyLabel="All classes"
+              placeholder="All classes"
+              searchPlaceholder="Search class…"
             />
           </FormField>
           <FormField label="Section" htmlFor="student_report_section">
-            <Select
+            <Combobox
               id="student_report_section"
               options={sectionOptions}
               value={sectionId ? String(sectionId) : ''}
-              onChange={(e) => setSectionId(Number(e.target.value) || 0)}
-              disabled={classId <= 0}
+              onValueChange={(v) => setSectionId(v ? Number(v) : 0)}
+              allowEmpty
+              emptyLabel="All sections"
+              placeholder="All sections"
+              searchPlaceholder="Search section…"
+              disabled={classId > 0 && sectionOptions.length === 0}
             />
           </FormField>
         </>

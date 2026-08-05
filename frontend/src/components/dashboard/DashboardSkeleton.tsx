@@ -1,25 +1,17 @@
-import { Skeleton } from '@components/ui/skeleton';
-
 export function DashboardSkeleton() {
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pb-2 lg:space-y-8">
-      <Skeleton className="h-20 w-full rounded-xl" />
-
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <Skeleton key={index} className="h-32 rounded-xl" />
-        ))}
+    <div className="dashboard flex flex-col gap-8" aria-busy="true" aria-label="Loading dashboard">
+      <div className="hm-skeleton" style={{ height: '4.5rem' }} />
+      <div className="hm-skeleton" style={{ height: '9rem' }} />
+      <div className="hm-skeleton" style={{ height: '8.5rem' }} />
+      <div className="hm-workboard grid grid-cols-1 gap-4 lg:grid-cols-5">
+        <div className="hm-skeleton lg:col-span-3" style={{ height: '18rem' }} />
+        <div className="hm-workboard__side flex flex-col gap-4 lg:col-span-2">
+          <div className="hm-skeleton" style={{ height: '12rem' }} />
+          <div className="hm-skeleton" style={{ height: '10rem' }} />
+        </div>
       </div>
-
-      <div className="grid gap-6 lg:grid-cols-5">
-        <Skeleton className="h-72 rounded-xl lg:col-span-3" />
-        <Skeleton className="h-72 rounded-xl lg:col-span-2" />
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Skeleton className="h-56 rounded-xl" />
-        <Skeleton className="h-56 rounded-xl" />
-      </div>
+      <div className="hm-skeleton" style={{ height: '5.5rem' }} />
     </div>
   );
 }

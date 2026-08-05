@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
+import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { StatusBadge } from '@components/feedback/StatusBadge';
 import type { StaffListItem } from '@app-types/staff/staff';
-import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { ROUTES } from '@constants/index';
 import { formatDepartmentDesignation } from '@utils/staff';
 import { formatGender } from '@utils/student';
@@ -15,6 +15,7 @@ interface StaffTableProps {
   searchValue: string;
   onSearchChange: (value: string) => void;
   pagination: DataTablePaginationConfig;
+  isLoading?: boolean;
 }
 
 const columns: DataTableColumn<StaffListItem>[] = [
@@ -24,7 +25,7 @@ const columns: DataTableColumn<StaffListItem>[] = [
     enableSorting: true,
     sortValue: (row) => row.employee_id,
     cell: (row) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{row.employee_id}</code>
+      <code className="rounded-sm bg-muted px-1.5 py-0.5 font-mono text-xs">{row.employee_id}</code>
     ),
   },
   {
@@ -69,7 +70,13 @@ const columns: DataTableColumn<StaffListItem>[] = [
   },
 ];
 
-export function StaffTable({ staff, searchValue, onSearchChange, pagination }: StaffTableProps) {
+export function StaffTable({
+  staff,
+  searchValue,
+  onSearchChange,
+  pagination,
+  isLoading,
+}: StaffTableProps) {
   const navigate = useNavigate();
 
   return (
@@ -79,9 +86,10 @@ export function StaffTable({ staff, searchValue, onSearchChange, pagination }: S
       getRowKey={(member) => member.id}
       enableSorting
       showDensityToggle
+      isLoading={isLoading}
       searchValue={searchValue}
       onSearchChange={onSearchChange}
-      searchPlaceholder="Search by name, employee ID, department…"
+      searchPlaceholder="Search by name, employee ID, contact…"
       pagination={pagination}
       emptyMessage="No staff match your search."
       actions={(member) => (

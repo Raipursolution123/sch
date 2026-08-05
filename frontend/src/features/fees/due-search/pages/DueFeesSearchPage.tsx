@@ -1,13 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import { FormField } from '@components/forms/FormField';
 import { ReportSummaryGrid } from '@components/reports';
 import { DueFeesSearchTable } from '@features/fees/due-search/components/DueFeesSearchTable';
-import {
-  firstSectionIdForClass,
-  sectionOptionsForClass,
-} from '@features/students/utils/class-section-options';
+import { sectionOptionsForClass } from '@features/students/utils/class-section-options';
 import { useFeeDueSearch } from '@hooks/useFeeSearch';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
@@ -38,22 +35,18 @@ export function DueFeesSearchPage() {
 
   const { data, isLoading, isError, error, refetch } = useFeeDueSearch(filters, submitted);
 
-  const classOptions = [
-    { value: '', label: 'All classes' },
-    ...classes
-      .filter((c) => c.is_active === 'yes')
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map((c) => ({ value: String(c.id), label: c.class_name })),
-  ];
+  const classOptions = useMemo(
+    () =>
+      classes
+        .filter((c) => c.is_active === 'yes')
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map((c) => ({ value: String(c.id), label: c.class_name })),
+    [classes],
+  );
 
   const sectionOptions = useMemo(() => {
-    if (classId <= 0) {
-      return [{ value: '', label: 'All sections' }];
-    }
-    return [
-      { value: '', label: 'All sections' },
-      ...sectionOptionsForClass(classSections, classId),
-    ];
+    if (classId <= 0) return [];
+    return sectionOptionsForClass(classSections, classId);
   }, [classId, classSections]);
 
   return (
@@ -67,30 +60,35 @@ export function DueFeesSearchPage() {
       filters={
         <>
           <FormField label="Class" htmlFor="due_search_class">
-            <Select
+            <Combobox
               id="due_search_class"
               options={classOptions}
               value={classId ? String(classId) : ''}
-              onChange={(e) => {
-                const nextClassId = Number(e.target.value) || 0;
-                setClassId(nextClassId);
-                setSectionId(
-                  nextClassId > 0 ? (firstSectionIdForClass(classSections, nextClassId) ?? 0) : 0,
-                );
+              onValueChange={(v) => {
+                setClassId(v ? Number(v) : 0);
+                setSectionId(0);
                 setSubmitted(false);
               }}
+              allowEmpty
+              emptyLabel="All classes"
+              placeholder="All classes"
+              searchPlaceholder="Search class…"
             />
           </FormField>
           <FormField label="Section" htmlFor="due_search_section">
-            <Select
+            <Combobox
               id="due_search_section"
               options={sectionOptions}
               value={sectionId ? String(sectionId) : ''}
-              onChange={(e) => {
-                setSectionId(Number(e.target.value) || 0);
+              onValueChange={(v) => {
+                setSectionId(v ? Number(v) : 0);
                 setSubmitted(false);
               }}
-              disabled={classId > 0 && sectionOptions.length <= 1}
+              allowEmpty
+              emptyLabel="All sections"
+              placeholder="All sections"
+              searchPlaceholder="Search section…"
+              disabled={classId > 0 && sectionOptions.length === 0}
             />
           </FormField>
           <FormField label="Student" htmlFor="due_search_query">
@@ -110,8 +108,12 @@ export function DueFeesSearchPage() {
         data ? (
           <ReportSummaryGrid
             items={[
-              { label: 'Students with balance', value: String(data.total_students) },
-              { label: 'Total outstanding', value: formatAmount(data.total_balance) },
+              { label: 'Students with balance', value: data.total_students },
+              {
+                label: 'Total outstanding',
+                value: formatAmount(data.total_balance),
+                tone: data.total_balance > 0 ? 'destructive' : 'success',
+              },
             ]}
           />
         ) : undefined
@@ -122,8 +124,8 @@ export function DueFeesSearchPage() {
       error={error}
       onRetry={() => void refetch()}
       isEmpty={submitted && !isLoading && !isError && (data?.students.length ?? 0) === 0}
-      emptyTitle="No outstanding fees found"
-      emptyDescription="Try widening class/section filters or clearing the student search."
+      emptyTitle="No outstanding fees"
+      emptyDescription="No balances match these filters. Widen class/section or clear the student search."
     >
       {data && data.students.length > 0 && <DueFeesSearchTable students={data.students} />}
     </ModuleReportPack>

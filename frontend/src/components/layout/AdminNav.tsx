@@ -5,7 +5,6 @@ import { NAV_SECTION_LABELS, ROUTES } from '@constants/index';
 import type { NavItem, NavSection } from '@app-types/navigation';
 import { useFilteredNav } from '@hooks/useFilteredNav';
 import { useSidebar } from '@components/layout/SidebarContext';
-import { Badge } from '@components/ui/badge';
 import { cn } from '@utils/cn';
 
 function NavLinkItem({
@@ -19,29 +18,10 @@ function NavLinkItem({
   collapsed?: boolean;
   onNavigate?: () => void;
 }) {
-  const location = useLocation();
   const Icon = item.icon;
 
   if (item.disabled || !item.path) {
-    return (
-      <span
-        className={cn(
-          'flex cursor-not-allowed items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-muted-foreground/60',
-          depth > 0 && !collapsed && 'pl-9',
-          collapsed && 'justify-center px-2',
-        )}
-        aria-disabled="true"
-        title={collapsed ? item.label : undefined}
-      >
-        {Icon && depth === 0 && <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />}
-        {!collapsed && (
-          <>
-            {item.label}
-            <span className="ml-auto text-xs">Soon</span>
-          </>
-        )}
-      </span>
-    );
+    return null;
   }
 
   return (
@@ -49,29 +29,20 @@ function NavLinkItem({
       to={item.path}
       onClick={onNavigate}
       title={collapsed ? item.label : undefined}
+      end={item.path === ROUTES.dashboard}
       className={({ isActive }) =>
         cn(
-          'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-fast',
+          'relative flex items-center gap-2.5 rounded-sm px-3 py-2 text-[0.8125rem] transition-colors duration-fast',
           depth > 0 && !collapsed && 'pl-9',
           collapsed && 'justify-center px-2',
-          isActive || location.pathname.startsWith(item.path!)
-            ? 'bg-primary-pale font-semibold text-ink'
-            : 'text-sidebar-foreground hover:bg-sidebar-accent/70',
+          isActive
+            ? 'bg-card font-medium text-foreground before:absolute before:inset-y-1.5 before:left-0 before:w-[3px] before:rounded-full before:bg-primary'
+            : 'font-medium text-muted-foreground hover:bg-card hover:text-foreground',
         )
       }
-      end={item.path === ROUTES.dashboard}
     >
-      {Icon && depth === 0 && <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />}
-      {!collapsed && (
-        <>
-          <span className="truncate">{item.label}</span>
-          {item.comingSoon ? (
-            <Badge variant="muted" className="ml-auto shrink-0 text-[10px]">
-              Soon
-            </Badge>
-          ) : null}
-        </>
-      )}
+      {Icon && depth === 0 && <Icon className="h-4 w-4 shrink-0 opacity-70" aria-hidden="true" />}
+      {!collapsed && <span className="truncate">{item.label}</span>}
     </NavLink>
   );
 }
@@ -88,7 +59,11 @@ function NavGroup({
   const location = useLocation();
   const { expand } = useSidebar();
   const hasChildren = Boolean(item.children?.length);
-  const isGroupActive = item.path ? location.pathname.startsWith(item.path) : false;
+  const isGroupActive = item.path
+    ? location.pathname === item.path || location.pathname.startsWith(`${item.path}/`)
+    : Boolean(
+        item.children?.some((child) => child.path && location.pathname.startsWith(child.path)),
+      );
   const [open, setOpen] = useState(isGroupActive);
   const Icon = item.icon;
 
@@ -106,14 +81,14 @@ function NavGroup({
           setOpen(true);
         }}
         className={cn(
-          'flex w-full items-center justify-center rounded-lg px-2 py-2 transition-colors duration-fast',
+          'relative flex w-full items-center justify-center rounded-sm px-2 py-2 transition-colors duration-fast',
           isGroupActive
-            ? 'bg-primary-pale text-ink'
-            : 'text-sidebar-foreground hover:bg-sidebar-accent/70',
+            ? 'bg-card text-foreground before:absolute before:inset-y-1.5 before:left-0 before:w-[3px] before:rounded-full before:bg-primary'
+            : 'text-muted-foreground hover:bg-card hover:text-foreground',
         )}
         aria-label={`${item.label} — expand sidebar to view submenu`}
       >
-        {Icon && <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />}
+        {Icon && <Icon className="h-4 w-4 shrink-0 opacity-70" aria-hidden="true" />}
       </button>
     );
   }
@@ -124,14 +99,14 @@ function NavGroup({
         type="button"
         onClick={() => setOpen((value) => !value)}
         className={cn(
-          'flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-fast',
+          'relative flex w-full items-center gap-2.5 rounded-sm px-3 py-2 text-[0.8125rem] font-medium transition-colors duration-fast',
           isGroupActive
-            ? 'bg-primary-pale font-semibold text-ink'
-            : 'text-sidebar-foreground hover:bg-sidebar-accent/70',
+            ? 'bg-card text-foreground before:absolute before:inset-y-1.5 before:left-0 before:w-[3px] before:rounded-full before:bg-primary'
+            : 'text-muted-foreground hover:bg-card hover:text-foreground',
         )}
         aria-expanded={open}
       >
-        {Icon && <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />}
+        {Icon && <Icon className="h-4 w-4 shrink-0 opacity-70" aria-hidden="true" />}
         <span className="flex-1 text-left">{item.label}</span>
         {open ? (
           <ChevronDown className="h-4 w-4 shrink-0 opacity-60" aria-hidden="true" />
@@ -168,7 +143,7 @@ function NavSectionLabel({
   }
 
   return (
-    <p className="mb-2 mt-5 px-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground first:mt-0">
+    <p className="text-label mb-1.5 mt-4 px-3 text-muted-foreground first:mt-0">
       {NAV_SECTION_LABELS[section]}
     </p>
   );

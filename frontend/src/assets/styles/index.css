@@ -1,5 +1,6 @@
 @import './tokens.css';
 @import './print.css';
+@import './dashboard.css';
 
 @tailwind base;
 @tailwind components;
@@ -10,11 +11,35 @@
     @apply border-border;
   }
 
+  html {
+    overflow-x: clip;
+  }
+
   body {
     @apply min-h-screen bg-background font-sans text-foreground antialiased;
+    font-family: var(--font-body);
   }
 
   :focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-display);
+  }
+
+  .text-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }

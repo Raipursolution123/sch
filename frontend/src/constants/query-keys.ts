@@ -13,6 +13,7 @@ export const queryKeys = {
       all: ['settings', 'general'] as const,
       detail: () => [...queryKeys.settings.general.all, 'detail'] as const,
     },
+    branding: () => ['settings', 'branding'] as const,
     languages: {
       all: ['settings', 'languages'] as const,
       list: (page: number) => [...queryKeys.settings.languages.all, 'list', page] as const,
@@ -199,8 +200,18 @@ export const queryKeys = {
   },
   students: {
     all: ['students'] as const,
-    list: (status: 'active' | 'disabled' | 'all' = 'active') =>
-      [...queryKeys.students.all, 'list', status] as const,
+    list: (
+      status: 'active' | 'disabled' | 'all' = 'active',
+      params?: { page?: number; pageSize?: number; search?: string },
+    ) =>
+      [
+        ...queryKeys.students.all,
+        'list',
+        status,
+        params?.page ?? 1,
+        params?.pageSize ?? 20,
+        params?.search ?? '',
+      ] as const,
     detail: (id: number) => [...queryKeys.students.all, 'detail', id] as const,
     fees: (id: number) => [...queryKeys.students.all, 'fees', id] as const,
     transport: (id: number) => [...queryKeys.students.all, 'transport', id] as const,
@@ -218,7 +229,14 @@ export const queryKeys = {
   },
   staff: {
     all: ['staff'] as const,
-    list: (page?: number) => [...queryKeys.staff.all, 'list', ...(page ? [page] : [])] as const,
+    list: (params?: { page?: number; pageSize?: number; search?: string }) =>
+      [
+        ...queryKeys.staff.all,
+        'list',
+        params?.page ?? 1,
+        params?.pageSize ?? 20,
+        params?.search ?? '',
+      ] as const,
     detail: (id: number) => [...queryKeys.staff.all, 'detail', id] as const,
     departments: () => [...queryKeys.staff.all, 'departments'] as const,
     designations: () => [...queryKeys.staff.all, 'designations'] as const,

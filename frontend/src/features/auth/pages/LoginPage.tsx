@@ -1,8 +1,10 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useId, useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
+import { FormField } from '@components/forms/FormField';
+import { useSchoolBrand } from '@hooks/usePublicBranding';
 import { ROUTES } from '@constants/index';
 import { authService } from '@services/api';
 import { useAuthStore } from '@store/index';
@@ -10,9 +12,13 @@ import { useAuthStore } from '@store/index';
 export function LoginPage() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
+  const { name } = useSchoolBrand();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const formErrorId = useId();
+  const usernameId = useId();
+  const passwordId = useId();
 
   const loginMutation = useMutation({
     mutationFn: authService.login,
@@ -41,30 +47,55 @@ export function LoginPage() {
   };
 
   return (
-    <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
-      <h1 className="text-2xl font-bold text-foreground">Sign in</h1>
-      <p className="mt-1 text-sm text-muted-foreground">Access your School ERP account</p>
+    <div className="rounded-panel border border-border bg-card p-8">
+      <p className="text-label text-muted-foreground">{name}</p>
+      <h1 className="mt-1 font-display text-2xl font-medium tracking-display text-foreground">
+        Sign in
+      </h1>
+      <p className="mt-1 text-sm text-muted-foreground">Access your school admin account</p>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        <Input
-          label="Username"
-          type="text"
-          name="username"
-          value={username}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-          required
-          autoComplete="username"
-        />
-        <Input
-          label="Password"
-          type="password"
-          name="password"
-          value={password}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-          required
-          autoComplete="current-password"
-        />
-        {error && <p className="text-sm text-destructive">{error}</p>}
+      <form
+        onSubmit={handleSubmit}
+        className="mt-6 space-y-4"
+        aria-describedby={error ? formErrorId : undefined}
+        noValidate
+      >
+        <FormField label="Username" htmlFor={usernameId} required>
+          <Input
+            id={usernameId}
+            type="text"
+            name="username"
+            value={username}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+            required
+            autoComplete="username"
+            aria-invalid={Boolean(error) || undefined}
+            aria-describedby={error ? formErrorId : undefined}
+          />
+        </FormField>
+        <FormField label="Password" htmlFor={passwordId} required>
+          <Input
+            id={passwordId}
+            type="password"
+            name="password"
+            value={password}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+            aria-invalid={Boolean(error) || undefined}
+            aria-describedby={error ? formErrorId : undefined}
+          />
+        </FormField>
+        {error && (
+          <p
+            id={formErrorId}
+            className="text-sm text-destructive"
+            role="alert"
+            aria-live="assertive"
+          >
+            {error}
+          </p>
+        )}
         <Button type="submit" isLoading={loginMutation.isPending} className="w-full">
           Sign in
         </Button>

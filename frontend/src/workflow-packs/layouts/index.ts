@@ -1,5 +1,5 @@
 export { ModuleListPack } from './ModuleListPack';
-export { ModuleMarkGridPack } from './ModuleMarkGridPack';
+export { ModuleMarkGridPack, PackGridToolbar, PackStickyBar } from './ModuleMarkGridPack';
 export { ModuleProfilePack } from './ModuleProfilePack';
 export type { ProfileTab } from './ModuleProfilePack';
 export { ModuleReportPack } from './ModuleReportPack';

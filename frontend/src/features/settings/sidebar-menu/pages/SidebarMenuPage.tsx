@@ -3,9 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ListTree, Pencil } from 'lucide-react';
-import { PageHeader } from '@components/layout/PageHeader';
-import { ErrorState } from '@components/feedback/ErrorState';
-import { LoadingState } from '@components/feedback/LoadingState';
+import { EmptyState } from '@components/feedback/EmptyState';
 import { SettingsCard } from '@components/forms/SettingsCard';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
@@ -21,7 +19,7 @@ import {
   useUpdateSidebarSubmenu,
 } from '@hooks/useAdvancedSettings';
 import type { SidebarMenu, SidebarSubMenu } from '@app-types/settings/advanced-settings';
-import { getApiErrorMessage } from '@utils/error-message';
+import { ModuleSettingsPack } from '@workflow-packs';
 
 const levelSchema = z.object({
   level: z.number({ error: 'Level is required' }).int(),
@@ -144,71 +142,107 @@ export function SidebarMenuPage() {
   ];
 
   if (isLoading) {
-    return <LoadingState message="Loading sidebar menus..." />;
+    return (
+      <ModuleSettingsPack
+        title="Sidebar Menu"
+        description="Control which menus and submenus appear in the admin sidebar."
+        isLoading
+        loadingMessage="Loading sidebar menus..."
+      >
+        {null}
+      </ModuleSettingsPack>
+    );
   }
 
   if (isError) {
     return (
-      <ErrorState
-        message={getApiErrorMessage(error, 'Could not load sidebar menus')}
+      <ModuleSettingsPack
+        title="Sidebar Menu"
+        description="Control which menus and submenus appear in the admin sidebar."
+        isError
+        error={error}
         onRetry={() => void refetch()}
-      />
+      >
+        {null}
+      </ModuleSettingsPack>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Sidebar Menu"
-        description="Control which menus and submenus appear in the admin sidebar, their order, and visibility."
-      />
-
-      <SettingsCard title="Menus" description="Top-level navigation menus.">
-        <DataTable
-          data={menus}
-          columns={menuColumns}
-          getRowKey={(row) => row.id}
-          pagination={{
-            page: menuPage,
-            totalCount: menuCount,
-            pageSize: 20,
-            onPageChange: setMenuPage,
+    <ModuleSettingsPack
+      title="Sidebar Menu"
+      description="Control which menus and submenus appear in the admin sidebar, their order, and visibility."
+      footer={
+        <EntityFormDialog
+          open={Boolean(levelTarget)}
+          onOpenChange={(open) => {
+            if (!open) setLevelTarget(null);
           }}
-          actions={(row) => (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() =>
-                  setLevelTarget({
-                    kind: 'menu',
-                    id: row.id,
-                    label: row.menu || row.icon,
-                    level: row.level ?? 0,
-                  })
-                }
-                aria-label={`Edit level for ${row.menu}`}
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setSelectedMenu(row);
-                  setSubmenuPage(1);
-                }}
-                aria-label={`View submenus for ${row.menu}`}
-              >
-                <ListTree className="h-4 w-4" />
-              </Button>
-            </>
-          )}
-        />
+          title={`Edit level — ${levelTarget?.label ?? ''}`}
+          description="Controls the display order within the sidebar."
+          submitLabel="Save changes"
+          isLoading={updateMenuMutation.isPending || updateSubmenuMutation.isPending}
+          onSubmit={handleSubmit(onSaveLevel)}
+          size="sm"
+        >
+          <FormErrorSummary errors={errors} />
+          <FormNumberField control={control} name="level" label="Level" required />
+        </EntityFormDialog>
+      }
+    >
+      <SettingsCard title="Menus" description="Top-level navigation menus.">
+        {menus.length === 0 ? (
+          <EmptyState
+            title="No sidebar menus"
+            description="Menus are seeded by the system. Contact an admin if none appear."
+          />
+        ) : (
+          <DataTable
+            data={menus}
+            columns={menuColumns}
+            getRowKey={(row) => row.id}
+            pagination={{
+              page: menuPage,
+              totalCount: menuCount,
+              pageSize: 20,
+              onPageChange: setMenuPage,
+            }}
+            actions={(row) => (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    setLevelTarget({
+                      kind: 'menu',
+                      id: row.id,
+                      label: row.menu || row.icon,
+                      level: row.level ?? 0,
+                    })
+                  }
+                  aria-label={`Edit level for ${row.menu}`}
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedMenu(row);
+                    setSubmenuPage(1);
+                  }}
+                  aria-label={`View submenus for ${row.menu}`}
+                >
+                  <ListTree className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+          />
+        )}
       </SettingsCard>
 
       <SettingsCard
-        title={selectedMenu ? `Submenus — ${selectedMenu.menu}` : 'Submenus — All Menus'}
+        title={selectedMenu ? `Submenus — ${selectedMenu.menu}` : 'Submenus — All menus'}
         description="Submenus for the selected menu. Select a menu above to filter this list."
         action={
           selectedMenu ? (
@@ -218,53 +252,43 @@ export function SidebarMenuPage() {
           ) : undefined
         }
       >
-        <DataTable
-          data={submenus}
-          columns={submenuColumns}
-          getRowKey={(row) => row.id}
-          isLoading={submenusLoading}
-          pagination={{
-            page: submenuPage,
-            totalCount: submenuCount,
-            pageSize: 20,
-            onPageChange: setSubmenuPage,
-          }}
-          emptyMessage="No submenus found."
-          actions={(row) => (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() =>
-                setLevelTarget({
-                  kind: 'submenu',
-                  id: row.id,
-                  label: row.menu,
-                  level: row.level ?? 0,
-                })
-              }
-              aria-label={`Edit level for ${row.menu}`}
-            >
-              <Pencil className="h-4 w-4" />
-            </Button>
-          )}
-        />
+        {!submenusLoading && submenus.length === 0 ? (
+          <EmptyState
+            title="No submenus"
+            description="Select a top-level menu or wait for system submenu seeds."
+          />
+        ) : (
+          <DataTable
+            data={submenus}
+            columns={submenuColumns}
+            getRowKey={(row) => row.id}
+            isLoading={submenusLoading}
+            pagination={{
+              page: submenuPage,
+              totalCount: submenuCount,
+              pageSize: 20,
+              onPageChange: setSubmenuPage,
+            }}
+            actions={(row) => (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() =>
+                  setLevelTarget({
+                    kind: 'submenu',
+                    id: row.id,
+                    label: row.menu,
+                    level: row.level ?? 0,
+                  })
+                }
+                aria-label={`Edit level for ${row.menu}`}
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+            )}
+          />
+        )}
       </SettingsCard>
-
-      <EntityFormDialog
-        open={Boolean(levelTarget)}
-        onOpenChange={(open) => {
-          if (!open) setLevelTarget(null);
-        }}
-        title={`Edit level — ${levelTarget?.label ?? ''}`}
-        description="Controls the display order within the sidebar."
-        submitLabel="Save changes"
-        isLoading={updateMenuMutation.isPending || updateSubmenuMutation.isPending}
-        onSubmit={handleSubmit(onSaveLevel)}
-        size="sm"
-      >
-        <FormErrorSummary errors={errors} />
-        <FormNumberField control={control} name="level" label="Level" required />
-      </EntityFormDialog>
-    </div>
+    </ModuleSettingsPack>
   );
 }

@@ -7,10 +7,30 @@ import { staffService } from '@services/api';
 import type { CreateStaffPayload, UpdateStaffPayload } from '@app-types/staff/staff';
 import { getApiErrorMessage } from '@utils/session';
 
+export interface StaffListParams {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+}
+
+/** Paginated, searchable staff list for the module roster. */
+export function useStaffList(params: StaffListParams = {}) {
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? 20;
+  const search = params.search ?? '';
+
+  return useQuery({
+    queryKey: queryKeys.staff.list({ page, pageSize, search }),
+    queryFn: () => staffService.list(page, pageSize, search),
+    placeholderData: (previous) => previous,
+  });
+}
+
+/** First-page fetch for pickers / reports (larger page size). */
 export function useStaff(page: number = 1) {
   return useQuery({
-    queryKey: queryKeys.staff.list(page),
-    queryFn: () => staffService.list(page),
+    queryKey: queryKeys.staff.list({ page, pageSize: 100, search: '' }),
+    queryFn: () => staffService.list(page, 100),
   });
 }
 

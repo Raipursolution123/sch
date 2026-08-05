@@ -18,7 +18,7 @@ interface StudentGuardiansTabProps {
 function DetailItem({ label, value }: { label: string; value: string | null | undefined }) {
   return (
     <div>
-      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</dt>
+      <dt className="text-label text-muted-foreground">{label}</dt>
       <dd className="mt-1 text-sm text-foreground">{value?.trim() ? value : '—'}</dd>
     </div>
   );
@@ -37,12 +37,12 @@ export function StudentGuardiansTab({ student }: StudentGuardiansTabProps) {
   return (
     <>
       <SettingsCard
-        title="Parents Details"
-        description="Parent and guardian contact information."
+        title="Parents & guardian"
+        description="Contacts used for fee notices, transport updates, and emergencies."
         footer={
           <Button variant="outline" className="gap-1" onClick={() => setEditOpen(true)}>
             <Pencil className="h-4 w-4" aria-hidden="true" />
-            Edit
+            Edit contacts
           </Button>
         }
       >
@@ -51,6 +51,10 @@ export function StudentGuardiansTab({ student }: StudentGuardiansTabProps) {
           <DetailItem label="Mother" value={student.mother_name} />
           <DetailItem label="Guardian" value={student.guardian_name} />
           <DetailItem label="Guardian phone" value={student.guardian_phone} />
+          <DetailItem label="Guardian relation" value={student.guardian_relation} />
+          <DetailItem label="Guardian email" value={student.guardian_email} />
+          <DetailItem label="Guardian occupation" value={student.guardian_occupation} />
+          <DetailItem label="Guardian address" value={student.guardian_address} />
         </dl>
       </SettingsCard>
 

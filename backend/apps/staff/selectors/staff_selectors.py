@@ -1,6 +1,8 @@
 import json
 from typing import Any
 
+from django.db.models import Q
+
 from apps.staff.models.department import Department
 from apps.staff.models.staff import Staff
 from apps.staff.models.staff_designation import StaffDesignation
@@ -116,14 +118,27 @@ def staff_detail(staff: Staff) -> dict[str, Any]:
     return item
 
 
-def list_staff_qs():
+def list_staff_qs(*, search: str | None = None):
     from apps.accounts.models.user import User
 
     # Hide Admins from the staff directory so only actual staff members show up
     admin_user_ids = User.objects.filter(role__in=["ADMIN", "superadmin"]).values_list(
         "id", flat=True
     )
-    return Staff.objects.exclude(user_id__in=admin_user_ids).order_by("name", "surname")
+    qs = Staff.objects.exclude(user_id__in=admin_user_ids)
+    term = (search or "").strip()
+    if term:
+        qs = qs.filter(
+            Q(employee_id__icontains=term)
+            | Q(name__icontains=term)
+            | Q(surname__icontains=term)
+            | Q(email__icontains=term)
+            | Q(contact_no__icontains=term)
+            | Q(father_name__icontains=term)
+            | Q(mother_name__icontains=term)
+            | Q(qualification__icontains=term)
+        )
+    return qs.order_by("name", "surname")
 
 
 def get_staff_by_id(staff_id: int) -> Staff | None:

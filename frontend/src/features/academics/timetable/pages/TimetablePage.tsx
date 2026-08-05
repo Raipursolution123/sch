@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import { TimetableGrid } from '@features/academics/timetable/components/TimetableGrid';
 import { TimetablePeriodDialog } from '@features/academics/timetable/components/TimetablePeriodDialog';
 import type { TimetablePeriodFormValues } from '@features/academics/timetable/schemas/timetable.schema';
 import { useActiveSession, useSessions } from '@features/academics/sessions/hooks/useSessions';
+import {
+  firstSectionIdForClass,
+  sectionOptionsForClass,
+} from '@features/students/utils/class-section-options';
 import { useClasses } from '@hooks/useClasses';
-import { useSections } from '@hooks/useSections';
+import { useClassSections } from '@hooks/useClassSections';
 import { useStaff } from '@hooks/useStaff';
 import {
   useCreateTimetablePeriod,
@@ -48,14 +52,8 @@ export function TimetablePage() {
     [classesData],
   );
 
-  const { data: sectionsData } = useSections();
-  const sections = useMemo(
-    () =>
-      [...(sectionsData?.results ?? [])]
-        .filter((s) => s.is_active === 'yes')
-        .sort((a, b) => a.section_name.localeCompare(b.section_name)),
-    [sectionsData],
-  );
+  const { data: classSectionsData } = useClassSections();
+  const classSections = classSectionsData?.results ?? [];
 
   useEffect(() => {
     if (classFilter === undefined && classes.length > 0) {
@@ -64,10 +62,18 @@ export function TimetablePage() {
   }, [classFilter, classes]);
 
   useEffect(() => {
-    if (sectionFilter === undefined && sections.length > 0) {
-      setSectionFilter(sections[0].id);
+    if (classFilter === undefined) {
+      setSectionFilter(undefined);
+      return;
     }
-  }, [sectionFilter, sections]);
+    const next = firstSectionIdForClass(classSections, classFilter);
+    setSectionFilter(next);
+  }, [classFilter, classSections]);
+
+  const sectionOptions = useMemo(
+    () => (classFilter ? sectionOptionsForClass(classSections, classFilter) : []),
+    [classFilter, classSections],
+  );
 
   const gridReady =
     sessionId !== undefined && classFilter !== undefined && sectionFilter !== undefined;
@@ -107,10 +113,6 @@ export function TimetablePage() {
     () => classes.map((c) => ({ value: String(c.id), label: c.class_name })),
     [classes],
   );
-  const sectionOptions = useMemo(
-    () => sections.map((s) => ({ value: String(s.id), label: s.section_name })),
-    [sections],
-  );
 
   const closeDialog = () => {
     setDialogMode(null);
@@ -144,42 +146,46 @@ export function TimetablePage() {
 
   const filters = (
     <div className="flex flex-wrap items-end gap-3">
-      <div>
+      <div className="w-44">
         <label htmlFor="tt-session" className="mb-1 block text-xs text-muted-foreground">
           Session
         </label>
-        <Select
+        <Combobox
           id="tt-session"
-          className="w-40"
           options={sessionOptions}
           value={sessionId ? String(sessionId) : ''}
-          onChange={(e) => setSessionFilter(Number(e.target.value))}
+          onValueChange={(v) => setSessionFilter(Number(v) || undefined)}
+          placeholder="Select session"
+          searchPlaceholder="Search session…"
         />
       </div>
-      <div>
+      <div className="w-40">
         <label htmlFor="tt-class" className="mb-1 block text-xs text-muted-foreground">
           Class
         </label>
-        <Select
+        <Combobox
           id="tt-class"
-          className="w-36"
           options={classOptions}
           value={classFilter ? String(classFilter) : ''}
-          onChange={(e) => setClassFilter(Number(e.target.value))}
+          onValueChange={(v) => setClassFilter(Number(v) || undefined)}
           disabled={classOptions.length === 0}
+          placeholder="Select class"
+          searchPlaceholder="Search class…"
         />
       </div>
-      <div>
+      <div className="w-36">
         <label htmlFor="tt-section" className="mb-1 block text-xs text-muted-foreground">
           Section
         </label>
-        <Select
+        <Combobox
           id="tt-section"
-          className="w-28"
           options={sectionOptions}
           value={sectionFilter ? String(sectionFilter) : ''}
-          onChange={(e) => setSectionFilter(Number(e.target.value))}
+          onValueChange={(v) => setSectionFilter(Number(v) || undefined)}
           disabled={sectionOptions.length === 0}
+          placeholder={sectionOptions.length ? 'Select section' : 'No sections'}
+          searchPlaceholder="Search section…"
+          emptyMessage="No sections mapped to this class"
         />
       </div>
     </div>
@@ -206,7 +212,7 @@ export function TimetablePage() {
           </p>
         ) : (periods?.length ?? 0) === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Use the + button on a day column to add the first period.
+            Use the + button on a day column to add the first period for this class section.
           </p>
         ) : undefined
       }

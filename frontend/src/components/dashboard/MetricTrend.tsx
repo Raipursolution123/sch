@@ -7,7 +7,7 @@ interface MetricTrendProps {
   className?: string;
 }
 
-/** Inline trend line for KPI cards — matches reference dashboard style. */
+/** Inline trend for KPI cells — mono readout, cobalt on lift. */
 export const MetricTrend = memo(function MetricTrend({
   value,
   label,
@@ -18,8 +18,8 @@ export const MetricTrend = memo(function MetricTrend({
   return (
     <p
       className={cn(
-        'text-sm font-medium',
-        isPositive ? 'text-success' : 'text-destructive',
+        'font-mono text-xs font-medium tracking-label',
+        isPositive ? 'text-primary' : 'text-destructive',
         className,
       )}
       aria-label={`${isPositive ? 'Up' : 'Down'} ${Math.abs(value)} percent ${label}`}

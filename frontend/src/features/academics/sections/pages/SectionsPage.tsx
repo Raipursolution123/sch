@@ -77,7 +77,7 @@ export function SectionsPage() {
       onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && sections?.length === 0}
       emptyTitle="No sections configured"
-      emptyDescription="Add your first section to enable class-section assignments."
+      emptyDescription="Add sections (A, B, C, …) then link them to classes under Class sections."
       emptyAction={addSectionAction}
       footer={
         <>

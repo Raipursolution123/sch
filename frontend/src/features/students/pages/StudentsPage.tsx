@@ -1,45 +1,48 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { PermissionButton } from '@components/rbac/PermissionButton';
+import { SearchBar } from '@components/layout/FilterBar';
+import { PackFilterPanel, PackStatItem, PackStatStrip } from '@components/pack';
 import { StudentsTable } from '@features/students/components/StudentsTable';
 import { StudentAdmissionDialog } from '@features/students/components/StudentAdmissionDialog';
 import type { StudentAdmissionFormValues } from '@features/students/schemas/student-admission.schema';
 import { toStudentPayload } from '@features/students/utils/student-payload';
-import { useCreateStudent, useStudents, useSuggestedAdmissionNo } from '@hooks/useStudents';
+import { useCreateStudent, useStudentsList, useSuggestedAdmissionNo } from '@hooks/useStudents';
+import { useDebouncedValue } from '@hooks/useDebouncedValue';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
-import { matchesSearch } from '@utils/search';
-import { formatClassSection } from '@utils/student';
+import { useActiveSession } from '@hooks/useSessions';
 import { ModuleListPack } from '@workflow-packs';
 
+const PAGE_SIZE = 20;
+
 export function StudentsPage() {
-  const { data: students, isLoading, isError, error, refetch } = useStudents();
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebouncedValue(search, 300);
+  const [admissionOpen, setAdmissionOpen] = useState(false);
+
+  const { data: activeSession } = useActiveSession();
+  const { data, isLoading, isError, error, refetch, isFetching } = useStudentsList({
+    page,
+    pageSize: PAGE_SIZE,
+    search: debouncedSearch,
+    status: 'active',
+  });
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-
   const { data: classSectionsData } = useClassSections();
   const createMutation = useCreateStudent();
-
-  const [admissionOpen, setAdmissionOpen] = useState(false);
-  const [search, setSearch] = useState('');
   const { data: suggestedAdmissionNo } = useSuggestedAdmissionNo(admissionOpen);
 
-  const filteredStudents = useMemo(() => {
-    if (!students) return [];
-    return students.filter((student) =>
-      matchesSearch(
-        search,
-        student.full_name,
-        student.admission_no,
-        student.mobileno,
-        student.email,
-        formatClassSection(student.class_name, student.section_name),
-        student.roll_no,
-      ),
-    );
-  }, [students, search]);
-
+  const students = data?.results ?? [];
+  const totalCount = data?.count ?? 0;
   const canAdmit = (classSectionsData?.results ?? []).some((m) => m.is_active === 'yes');
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
 
   const handleSubmit = (values: StudentAdmissionFormValues) => {
     createMutation.mutate(toStudentPayload(values), {
@@ -60,10 +63,41 @@ export function StudentsPage() {
     </PermissionButton>
   );
 
+  const isEmptyList = !isLoading && !isError && totalCount === 0 && !debouncedSearch.trim();
+
   return (
     <ModuleListPack
       title="Students"
+      description="Enrollment roster for the active session."
       actions={addStudentAction}
+      stats={
+        !isLoading && !isError && totalCount > 0 ? (
+          <PackStatStrip>
+            <PackStatItem label="enrolled" value={totalCount.toLocaleString()} />
+            {activeSession?.session ? (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>
+                  Session{' '}
+                  <span className="font-mono tabular-nums text-foreground">
+                    {activeSession.session}
+                  </span>
+                </span>
+              </>
+            ) : null}
+          </PackStatStrip>
+        ) : undefined
+      }
+      filters={
+        <PackFilterPanel>
+          <SearchBar
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Search name, admission no., mobile…"
+            id="students-search"
+          />
+        </PackFilterPanel>
+      }
       prerequisiteHint={
         !canAdmit && !isLoading ? (
           <p className="text-sm text-muted-foreground">
@@ -76,9 +110,9 @@ export function StudentsPage() {
       isError={isError}
       error={error}
       onRetry={() => void refetch()}
-      isEmpty={!isLoading && !isError && students?.length === 0}
-      emptyTitle="No students found"
-      emptyDescription="Admit your first student to start building enrollment records."
+      isEmpty={isEmptyList}
+      emptyTitle="No students enrolled yet"
+      emptyDescription="Admit your first student to build class rolls, attendance, and fee records."
       emptyAction={canAdmit ? addStudentAction : undefined}
       footer={
         <StudentAdmissionDialog
@@ -91,7 +125,16 @@ export function StudentsPage() {
         />
       }
     >
-      <StudentsTable students={filteredStudents} searchValue={search} onSearchChange={setSearch} />
+      <StudentsTable
+        students={students}
+        isLoading={isFetching && !isLoading}
+        pagination={{
+          page,
+          pageSize: PAGE_SIZE,
+          totalCount,
+          onPageChange: setPage,
+        }}
+      />
     </ModuleListPack>
   );
 }

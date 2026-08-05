@@ -24,6 +24,8 @@ interface EntityFormDialogProps {
   submitDisabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
+  /** Extra controls before Cancel (e.g. wizard Back). */
+  leadingActions?: ReactNode;
   /**
    * Keep header/footer fixed and scroll the body when content exceeds the viewport.
    * Defaults to true so dialogs never clip at the top/bottom of the screen.
@@ -52,6 +54,7 @@ export function EntityFormDialog({
   submitDisabled,
   size = 'md',
   className,
+  leadingActions,
   scrollable = true,
 }: EntityFormDialogProps) {
   const resolvedSubmit = submitLabel ?? (isEdit ? 'Save changes' : 'Create');
@@ -87,6 +90,7 @@ export function EntityFormDialog({
           </div>
 
           <DialogFooter className={scrollable ? 'shrink-0' : undefined}>
+            {leadingActions}
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               {cancelLabel}
             </Button>

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Button } from '@components/ui/button';
+import { filterPanelClassName } from '@components/layout/FilterBar';
 import { cn } from '@utils/cn';
 
 interface ReportFilterBarProps {
@@ -11,7 +12,7 @@ interface ReportFilterBarProps {
   className?: string;
 }
 
-/** Shared filter chrome for operational reports. */
+/** Shared filter chrome for operational reports — same panel language as FilterBar. */
 export function ReportFilterBar({
   children,
   sessionLabel,
@@ -21,17 +22,18 @@ export function ReportFilterBar({
   className,
 }: ReportFilterBarProps) {
   return (
-    <div
-      className={cn('no-print rounded-lg border border-border/80 bg-card p-4 shadow-sm', className)}
-    >
+    <div className={cn('no-print', filterPanelClassName, className)}>
       {sessionLabel && (
-        <p className="mb-3 text-xs font-medium text-muted-foreground">
-          Session: <span className="text-foreground">{sessionLabel}</span>
+        <p className="text-label mb-3 text-muted-foreground">
+          Session{' '}
+          <span className="font-mono normal-case tracking-normal text-foreground">
+            {sessionLabel}
+          </span>
         </p>
       )}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{children}</div>
       {onApply && (
-        <div className="mt-4 flex justify-end border-t border-border/60 pt-4">
+        <div className="mt-4 flex justify-end border-t border-border pt-4">
           <Button type="button" onClick={onApply} disabled={applyDisabled}>
             {applyLabel}
           </Button>

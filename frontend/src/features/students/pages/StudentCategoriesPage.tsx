@@ -81,8 +81,8 @@ export function StudentCategoriesPage() {
         error={error}
         onRetry={() => void refetch()}
         isEmpty={!isLoading && !isError && data.length === 0}
-        emptyTitle="No categories"
-        emptyDescription="Create categories used during student admission."
+        emptyTitle="No categories yet"
+        emptyDescription="Create categories (General, OBC, SC…) so admission and fee rules can reference them."
         emptyAction={addAction}
       >
         <DataTable

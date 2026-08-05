@@ -67,6 +67,7 @@ export function CollectFeesTable({ students, onCollect }: CollectFeesTableProps)
           permission="fees.manage"
           variant="outline"
           size="sm"
+          className="min-h-11"
           disabled={row.total_balance <= 0}
           onClick={() => onCollect(row)}
         >

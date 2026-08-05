@@ -52,6 +52,7 @@ export function CaptchaPage() {
       onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && rows.length === 0}
       emptyTitle="No captcha settings found"
+      emptyDescription="Captcha methods are seeded by the system. Contact an admin if none appear."
     >
       <DataTable
         data={rows}

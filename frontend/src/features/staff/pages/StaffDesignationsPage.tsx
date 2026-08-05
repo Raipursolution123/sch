@@ -89,8 +89,8 @@ export function StaffDesignationsPage() {
         error={error}
         onRetry={() => void refetch()}
         isEmpty={!isLoading && !isError && data.length === 0}
-        emptyTitle="No designations"
-        emptyDescription="Create designations such as Principal, Teacher, or Accountant."
+        emptyTitle="No designations yet"
+        emptyDescription="Create job titles (Principal, Teacher…) before assigning roles on the staff roster."
         emptyAction={addAction}
       >
         <DataTable

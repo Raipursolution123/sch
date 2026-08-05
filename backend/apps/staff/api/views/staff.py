@@ -19,7 +19,7 @@ class StaffListCreateView(APIView):
 
     def get(self, request):
         service = StaffService()
-        staff_qs = service.list_staff()
+        staff_qs = service.list_staff(search=request.query_params.get("search"))
         paginator = StandardResultsSetPagination()
         page = paginator.paginate_queryset(staff_qs, request, view=self)
         rows = page if page is not None else staff_qs

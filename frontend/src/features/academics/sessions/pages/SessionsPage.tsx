@@ -72,7 +72,7 @@ export function SessionsPage() {
       onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && sessions?.length === 0}
       emptyTitle="No academic sessions"
-      emptyDescription="Create your first academic session to get started."
+      emptyDescription="Create a session (for example 2025–26) before enrolling students or marking attendance."
       emptyAction={addSessionAction}
       footer={
         <>

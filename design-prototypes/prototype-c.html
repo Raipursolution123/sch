@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Concept C — School Day · School ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Source Serif 4"', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            paper: '#faf9f7',
+            canvas: '#f3f1ed',
+            ink: '#2c2825',
+            muted: '#78716c',
+            rule: '#e7e5e4',
+            sage: '#4d7c6f',
+            sageLight: '#e8f0ed',
+            amber: '#b45309',
+            amberLight: '#fef3c7',
+          },
+          borderRadius: { soft: '8px' },
+        },
+      },
+    };
+  </script>
+  <style>
+    html { font-feature-settings: "tnum" 1; }
+    .focus-ring:focus-visible { outline: 2px solid #4d7c6f; outline-offset: 2px; }
+  </style>
+</head>
+<body class="min-h-dvh bg-canvas font-sans text-ink antialiased">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-soft focus:bg-white focus:px-4 focus:py-2 focus-ring">Skip to main content</a>
+
+  <div class="flex min-h-dvh">
+    <!-- Sidebar · Notion-like workspace -->
+    <aside class="hidden w-60 shrink-0 flex-col border-r border-rule bg-paper lg:flex" aria-label="Workspace">
+      <div class="px-4 py-4">
+        <button type="button" class="focus-ring flex w-full items-center gap-2 rounded-soft px-2 py-2 text-left hover:bg-canvas">
+          <span class="flex h-7 w-7 items-center justify-center rounded-soft bg-sage text-xs font-medium text-white">G</span>
+          <span class="truncate text-sm font-medium">Greenwood School</span>
+        </button>
+      </div>
+
+      <div class="px-3 pb-2">
+        <input type="search" placeholder="Search workspace…" class="focus-ring w-full rounded-soft border border-rule bg-white px-3 py-2 text-sm" aria-label="Search workspace" />
+      </div>
+
+      <nav class="flex-1 overflow-y-auto px-2 pb-4 text-sm" aria-label="Workspace pages">
+        <p class="px-3 py-2 text-xs font-medium text-muted">Favorites</p>
+        <a href="#" class="focus-ring flex items-center gap-2 rounded-soft bg-sageLight px-3 py-1.5 font-medium text-sage" aria-current="page">
+          <span aria-hidden="true">◆</span> Today
+        </a>
+        <a href="#" class="focus-ring flex items-center gap-2 rounded-soft px-3 py-1.5 text-muted hover:bg-canvas hover:text-ink">
+          <span aria-hidden="true">☐</span> My classes
+        </a>
+        <a href="#" class="focus-ring flex items-center gap-2 rounded-soft px-3 py-1.5 text-muted hover:bg-canvas hover:text-ink">
+          <span aria-hidden="true">☐</span> Fee counter
+        </a>
+
+        <p class="mt-4 px-3 py-2 text-xs font-medium text-muted">Workspace</p>
+        <a href="#" class="focus-ring block rounded-soft px-3 py-1.5 pl-6 text-muted hover:bg-canvas hover:text-ink">Students</a>
+        <a href="#" class="focus-ring block rounded-soft px-3 py-1.5 pl-6 text-muted hover:bg-canvas hover:text-ink">Staff</a>
+        <a href="#" class="focus-ring block rounded-soft px-3 py-1.5 pl-6 text-muted hover:bg-canvas hover:text-ink">Attendance</a>
+        <a href="#" class="focus-ring block rounded-soft px-3 py-1.5 pl-6 text-muted hover:bg-canvas hover:text-ink">Fees &amp; finance</a>
+        <a href="#" class="focus-ring block rounded-soft px-3 py-1.5 pl-6 text-muted hover:bg-canvas hover:text-ink">Examinations</a>
+        <a href="#" class="focus-ring block rounded-soft px-3 py-1.5 pl-6 text-muted hover:bg-canvas hover:text-ink">Reports</a>
+        <a href="#" class="focus-ring block rounded-soft px-3 py-1.5 pl-6 text-muted hover:bg-canvas hover:text-ink">Settings</a>
+      </nav>
+
+      <div class="border-t border-rule p-3">
+        <p class="px-2 font-mono text-[10px] text-muted">Session 2025–26</p>
+      </div>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <!-- Topbar · minimal -->
+      <header class="flex h-12 shrink-0 items-center justify-between border-b border-rule bg-paper px-4">
+        <div class="flex items-center gap-2">
+          <button type="button" class="focus-ring rounded-soft p-2 lg:hidden" aria-label="Open workspace">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <span class="font-display text-base font-medium">Today</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm">
+          <span class="hidden rounded-soft bg-sageLight px-2 py-1 font-mono text-xs text-sage sm:inline">Period 3 · 10:20–11:00</span>
+          <button type="button" class="focus-ring rounded-soft px-2 py-1 text-muted hover:bg-canvas" aria-label="Notifications">🔔</button>
+          <button type="button" class="focus-ring flex h-8 w-8 items-center justify-center rounded-full bg-sage text-xs text-white" aria-label="Priya K.">PK</button>
+        </div>
+      </header>
+
+      <!-- Dashboard · Day board -->
+      <main id="main" class="flex-1 overflow-auto p-4 lg:p-6" tabindex="-1">
+        <div class="mx-auto max-w-5xl">
+          <header class="mb-6">
+            <p class="font-mono text-xs text-muted">Tuesday, 25 July 2026</p>
+            <h1 class="mt-1 font-display text-2xl font-medium tracking-tight">What needs doing before the bell</h1>
+          </header>
+
+          <!-- Period strip -->
+          <div class="mb-6 flex flex-wrap gap-2" role="list" aria-label="School periods">
+            <span class="rounded-soft bg-sage px-3 py-1 font-mono text-xs text-white" role="listitem">P3 · Now</span>
+            <span class="rounded-soft border border-rule bg-white px-3 py-1 font-mono text-xs text-muted" role="listitem">P4 · 11:00</span>
+            <span class="rounded-soft border border-rule bg-white px-3 py-1 font-mono text-xs text-muted" role="listitem">P5 · 11:45</span>
+            <span class="rounded-soft border border-rule bg-white px-3 py-1 font-mono text-xs text-muted" role="listitem">Lunch · 12:30</span>
+          </div>
+
+          <!-- Day columns -->
+          <section class="grid gap-4 md:grid-cols-4" aria-label="Day schedule">
+            <div class="rounded-soft border border-rule bg-white p-4">
+              <h2 class="font-mono text-[10px] uppercase tracking-wider text-muted">Morning</h2>
+              <ul class="mt-3 space-y-2 text-sm">
+                <li>Assembly · 08:00</li>
+                <li>P1–P3 · Classes in session</li>
+                <li class="text-muted">Attendance due · 09:30</li>
+              </ul>
+            </div>
+            <div class="rounded-soft border border-rule bg-white p-4">
+              <h2 class="font-mono text-[10px] uppercase tracking-wider text-muted">Midday</h2>
+              <ul class="mt-3 space-y-2 text-sm">
+                <li>Midday meal · 12:30</li>
+                <li>Fee counter open · 12:00–14:00</li>
+              </ul>
+            </div>
+            <div class="rounded-soft border border-rule bg-white p-4">
+              <h2 class="font-mono text-[10px] uppercase tracking-wider text-muted">Afternoon</h2>
+              <ul class="mt-3 space-y-2 text-sm">
+                <li>P6–P8 · Labs &amp; sports</li>
+                <li>Staff meeting · 15:30</li>
+              </ul>
+            </div>
+            <div class="rounded-soft border-2 border-amber/30 bg-amberLight p-4">
+              <h2 class="font-mono text-[10px] uppercase tracking-wider text-amber">Exceptions</h2>
+              <ul class="mt-3 space-y-2 text-sm">
+                <li>2 substitute teachers</li>
+                <li>Route 3 bus delay</li>
+                <li>Class 9B attendance missing</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- My tasks today -->
+          <section class="mt-8" aria-labelledby="tasks-heading">
+            <h2 id="tasks-heading" class="font-display text-lg font-medium">Your tasks</h2>
+            <ul class="mt-4 space-y-2">
+              <li>
+                <a href="#" class="focus-ring flex items-start gap-3 rounded-soft border border-rule bg-white p-4 hover:border-sage">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-rule text-xs" aria-hidden="true"></span>
+                  <div>
+                    <p class="font-medium">Mark attendance · Class 8A · Homeroom</p>
+                    <p class="mt-1 text-sm text-muted">Due by 09:30 · 32 students</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="focus-ring flex items-start gap-3 rounded-soft border border-rule bg-white p-4 hover:border-sage">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-rule text-xs" aria-hidden="true"></span>
+                  <div>
+                    <p class="font-medium">Collect transport fee · 4 pending</p>
+                    <p class="mt-1 text-sm text-muted">Fee counter · ₹14,200 total</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="focus-ring flex items-start gap-3 rounded-soft border border-rule bg-white p-4 hover:border-sage">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-rule text-xs" aria-hidden="true"></span>
+                  <div>
+                    <p class="font-medium">Review homework submissions · Class 9C Maths</p>
+                    <p class="mt-1 text-sm text-muted">18 of 24 submitted</p>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <!-- Quick stats row — quiet, not hero -->
+          <section class="mt-8 grid gap-3 sm:grid-cols-3" aria-label="Today at a glance">
+            <div class="rounded-soft border border-rule bg-white px-4 py-3">
+              <p class="font-mono text-[10px] uppercase text-muted">Present</p>
+              <p class="mt-1 text-xl font-medium tabular-nums">91%</p>
+            </div>
+            <div class="rounded-soft border border-rule bg-white px-4 py-3">
+              <p class="font-mono text-[10px] uppercase text-muted">Fees collected</p>
+              <p class="mt-1 text-xl font-medium tabular-nums">₹48k</p>
+            </div>
+            <div class="rounded-soft border border-rule bg-white px-4 py-3">
+              <p class="font-mono text-[10px] uppercase text-muted">Open enquiries</p>
+              <p class="mt-1 text-xl font-medium tabular-nums">3</p>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -20,13 +20,15 @@ export function DataTableBulkBar({
   return (
     <div
       className={cn(
-        'flex flex-wrap items-center gap-3 border-b border-primary/20 bg-primary-pale/50 px-4 py-2.5',
+        'flex flex-wrap items-center gap-3 border-b border-primary/20 bg-primary-pale/60 px-4 py-2.5',
         className,
       )}
       role="status"
       aria-live="polite"
     >
-      <span className="text-sm font-medium text-ink">{selectedCount} selected</span>
+      <span className="text-sm font-medium text-foreground">
+        <span className="tabular-nums">{selectedCount}</span> selected
+      </span>
       <div className="flex flex-wrap items-center gap-2">{children}</div>
       <Button
         type="button"

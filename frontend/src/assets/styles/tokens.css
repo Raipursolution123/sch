@@ -1,137 +1,258 @@
 /**
- * School ERP design tokens — Wise-inspired, enterprise-first.
- * Components consume semantic Tailwind/shadcn aliases mapped from these variables.
+ * School ERP design tokens — unified Cobalt (modern-minimal).
+ * Channels are OKLCH components (L C H) for Tailwind alpha modifiers:
+ *   color: oklch(var(--primary) / <alpha-value>)
+ * Hallmark dashboard aliases (--hm-*) bridge to this single source of truth.
  */
 
 @layer base {
   :root {
-    /* Brand — Wise-inspired */
-    --canvas: 0 0% 100%;
-    --canvas-soft: 90 11% 91%;
-    --ink: 72 11% 5%;
-    --ink-deep: 140 88% 12%;
-    --body: 120 2% 27%;
-    --mute: 60 1% 52%;
+    /* ── Surfaces (cool engineered paper) ── */
+    --paper: 98.5% 0.004 250;
+    /* Page canvas — matches shell-v1 bg-canvas (cool blue-gray) */
+    --paper-2: 95.5% 0.01 252;
+    --paper-3: 94% 0.006 254;
+    --rule: 91% 0.008 255;
+    --rule-2: 83% 0.011 255;
 
-    --primary: 93 72% 67%;
-    --primary-foreground: 72 11% 5%;
-    --primary-hover: 93 100% 84%;
-    --primary-neutral: 100 58% 80%;
-    --primary-pale: 100 58% 91%;
+    /* ── Ink ── */
+    --ink: 24% 0.02 258;
+    --ink-2: 34% 0.018 257;
+    --mute: 56% 0.013 255;
 
-    /* Semantic */
-    --success: 137 58% 43%;
-    --success-foreground: 0 0% 100%;
-    --success-deep: 152 88% 16%;
-    --success-pale: 100 58% 91%;
+    /* ── Brand accent — electric cobalt (signal only) ── */
+    --primary: 58% 0.2 256;
+    --primary-foreground: 99% 0.004 256;
+    --primary-hover: 52% 0.19 256;
+    --primary-neutral: 88% 0.04 256;
+    --primary-pale: 95% 0.03 256;
 
-    --warning: 48 100% 55%;
-    --warning-foreground: 38 42% 20%;
-    --warning-deep: 32 100% 36%;
+    /* ── Semantic ── */
+    --success: 55% 0.14 155;
+    --success-foreground: 99% 0.01 155;
+    --success-deep: 35% 0.1 155;
+    --success-pale: 95% 0.03 155;
 
-    --destructive: 357 64% 51%;
-    --destructive-foreground: 0 0% 100%;
-    --destructive-deep: 355 100% 33%;
+    --warning: 72% 0.14 85;
+    --warning-foreground: 30% 0.06 85;
+    --warning-deep: 48% 0.12 55;
 
-    --info: 199 89% 48%;
-    --info-foreground: 0 0% 100%;
+    --destructive: 55% 0.18 25;
+    --destructive-foreground: 99% 0.01 25;
+    --destructive-deep: 40% 0.14 25;
 
-    /* shadcn semantic aliases */
-    --background: 90 11% 91%;
-    --foreground: 72 11% 5%;
-    --card: 0 0% 100%;
-    --card-foreground: 72 11% 5%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 72 11% 5%;
+    --info: 58% 0.16 230;
+    --info-foreground: 99% 0.01 230;
 
-    --secondary: 90 8% 94%;
-    --secondary-foreground: 72 11% 5%;
+    /* ── Graphite (one dark band) ── */
+    --graphite: 24% 0.018 260;
+    --graphite-2: 28% 0.016 260;
+    --on-graphite: 92% 0.01 255;
+    --on-graphite-muted: 68% 0.012 255;
 
-    --muted: 90 8% 94%;
-    --muted-foreground: 120 2% 27%;
+    /* ── Brand aliases (legacy Wise names → Cobalt) ──
+     * canvas = page surface (cool gray); paper = card/chrome white
+     * Matches shell-v1: body bg-canvas, cards bg-white/paper
+     */
+    --canvas: var(--paper-2);
+    --canvas-soft: var(--paper-2);
+    --ink-deep: var(--primary);
+    --body: var(--ink-2);
 
-    --accent: 100 58% 91%;
-    --accent-foreground: 72 11% 5%;
+    /* ── shadcn semantic aliases ── */
+    --background: var(--paper-2);
+    --foreground: var(--ink);
+    --card: var(--paper);
+    --card-foreground: var(--ink);
+    --popover: var(--paper);
+    --popover-foreground: var(--ink);
 
-    --border: 90 6% 85%;
-    --input: 90 6% 85%;
-    --ring: 72 11% 5%;
+    --secondary: var(--paper-3);
+    --secondary-foreground: var(--ink);
 
-    /* Sidebar */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 72 11% 5%;
-    --sidebar-border: 90 6% 88%;
-    --sidebar-accent: 100 58% 91%;
+    --muted: var(--paper-3);
+    --muted-foreground: var(--ink-2);
 
-    /* Radius */
-    --radius-sm: 0.5rem;
-    --radius-md: 0.75rem;
-    --radius-lg: 1rem;
-    --radius-xl: 1.5rem;
-    --radius: 0.75rem;
+    --accent: var(--primary-pale);
+    --accent-foreground: var(--ink);
 
-    /* Elevation */
-    --shadow-sm: 0 1px 2px 0 rgb(14 15 12 / 0.05);
-    --shadow-md: 0 4px 12px 0 rgb(14 15 12 / 0.08);
-    --shadow-lg: 0 8px 24px 0 rgb(14 15 12 / 0.1);
+    --border: var(--rule);
+    --input: var(--rule);
+    --ring: var(--primary);
 
-    /* Motion */
+    /* ── Sidebar ── */
+    --sidebar-background: var(--paper);
+    --sidebar-foreground: var(--ink);
+    --sidebar-border: var(--rule);
+    --sidebar-accent: var(--primary-pale);
+
+    /* ── Charts ── */
+    --chart-1: var(--primary);
+    --chart-2: var(--success);
+    --chart-3: var(--info);
+    --chart-4: var(--warning);
+    --chart-5: var(--destructive);
+    --chart-muted: var(--rule);
+
+    /* ── Radius (tight technical — Cobalt) ── */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.625rem;
+    --radius-xl: 0.75rem;
+    --radius: 0.5rem;
+    --radius-panel: 0.625rem;
+
+    /* ── Elevation (hairlines do the work; whisper shadow only) ── */
+    --shadow-sm: 0 1px 2px oklch(22% 0.016 260 / 0.06);
+    --shadow-md: 0 2px 8px oklch(24% 0.02 258 / 0.06);
+    --shadow-lg: 0 8px 24px oklch(24% 0.02 258 / 0.08);
+
+    /* ── Motion ── */
     --motion-fast: 150ms;
-    --motion-base: 200ms;
-    --motion-slow: 250ms;
-    --motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --motion-base: 220ms;
+    --motion-slow: 500ms;
+    --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
-    /* Density (used in later phases) */
+    /* ── Density ── */
     --control-height-sm: 2rem;
     --control-height-md: 2.25rem;
     --control-height-lg: 2.75rem;
 
-    /* Charts */
-    --chart-1: 93 72% 67%;
-    --chart-2: 137 58% 43%;
-    --chart-3: 199 89% 48%;
-    --chart-4: 48 100% 55%;
-    --chart-5: 357 64% 51%;
-    --chart-muted: 90 6% 85%;
+    /* ── Typography roles ── */
+    --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    --text-display: clamp(3.25rem, 8vw + 1rem, 6.5rem);
+    --text-display-s: clamp(1.75rem, 3vw + 0.5rem, 2.75rem);
+    --tracking-display: -0.03em;
+    --tracking-label: 0.06em;
+
+    /* ── Spacing scale (4pt) ── */
+    --space-3xs: 0.25rem;
+    --space-2xs: 0.5rem;
+    --space-xs: 0.75rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-2xl: 4.5rem;
+
+    /* ── Hallmark dashboard bridge (deprecated names → unified) ── */
+    --hm-color-paper: oklch(var(--paper));
+    --hm-color-paper-2: oklch(var(--paper-2));
+    --hm-color-paper-3: oklch(var(--paper-3));
+    --hm-color-rule: oklch(var(--rule));
+    --hm-color-rule-2: oklch(var(--rule-2));
+    --hm-color-muted: oklch(var(--mute));
+    --hm-color-ink-2: oklch(var(--ink-2));
+    --hm-color-ink: oklch(var(--ink));
+    --hm-color-accent: oklch(var(--primary));
+    --hm-color-accent-ink: oklch(var(--primary-foreground));
+    --hm-color-accent-dim: oklch(var(--primary) / 0.12);
+    --hm-color-focus: oklch(var(--primary));
+    --hm-color-graphite: oklch(var(--graphite));
+    --hm-color-graphite-2: oklch(var(--graphite-2));
+    --hm-color-on-graphite: oklch(var(--on-graphite));
+    --hm-color-on-graphite-muted: oklch(var(--on-graphite-muted));
+    --hm-color-success: oklch(var(--success));
+    --hm-color-warning: oklch(var(--warning));
+    --hm-color-danger: oklch(var(--destructive));
+
+    --hm-font-display: var(--font-display);
+    --hm-font-body: var(--font-body);
+    --hm-font-mono: var(--font-mono);
+
+    --hm-space-3xs: var(--space-3xs);
+    --hm-space-2xs: var(--space-2xs);
+    --hm-space-xs: var(--space-xs);
+    --hm-space-sm: var(--space-sm);
+    --hm-space-md: var(--space-md);
+    --hm-space-lg: var(--space-lg);
+    --hm-space-xl: var(--space-xl);
+    --hm-space-2xl: var(--space-2xl);
+
+    --hm-text-display: var(--text-display);
+    --hm-text-display-s: var(--text-display-s);
+    --hm-tracking-display: var(--tracking-display);
+    --hm-tracking-label: var(--tracking-label);
+
+    --hm-radius: var(--radius-sm);
+    --hm-radius-panel: var(--radius-panel);
+
+    --hm-ease-out: var(--motion-ease);
+    --hm-dur-short: var(--motion-base);
+    --hm-dur-med: var(--motion-slow);
   }
 
   .dark {
-    --canvas: 72 11% 8%;
-    --canvas-soft: 72 11% 6%;
-    --ink: 90 11% 95%;
-    --ink-deep: 100 58% 91%;
-    --body: 90 8% 78%;
-    --mute: 90 4% 55%;
+    --paper: 14% 0.018 258;
+    --paper-2: 11% 0.016 258;
+    --paper-3: 18% 0.016 258;
+    --rule: 26% 0.014 258;
+    --rule-2: 34% 0.014 258;
 
-    --primary: 93 72% 67%;
-    --primary-foreground: 72 11% 5%;
-    --primary-hover: 93 100% 84%;
-    --primary-neutral: 100 58% 80%;
-    --primary-pale: 140 88% 12%;
+    --ink: 96% 0.01 255;
+    --ink-2: 82% 0.012 255;
+    --mute: 62% 0.012 255;
 
-    --background: 72 11% 6%;
-    --foreground: 90 11% 95%;
-    --card: 72 11% 9%;
-    --card-foreground: 90 11% 95%;
-    --popover: 72 11% 9%;
-    --popover-foreground: 90 11% 95%;
+    --primary: 68% 0.17 256;
+    --primary-foreground: 14% 0.02 258;
+    --primary-hover: 74% 0.16 256;
+    --primary-neutral: 40% 0.06 256;
+    --primary-pale: 22% 0.04 256;
 
-    --secondary: 72 11% 14%;
-    --secondary-foreground: 90 11% 95%;
+    --success: 65% 0.14 155;
+    --success-foreground: 14% 0.02 155;
+    --success-deep: 75% 0.12 155;
+    --success-pale: 22% 0.04 155;
 
-    --muted: 72 11% 14%;
-    --muted-foreground: 90 8% 72%;
+    --warning: 78% 0.13 85;
+    --warning-foreground: 20% 0.04 85;
+    --warning-deep: 70% 0.12 55;
 
-    --accent: 140 88% 12%;
-    --accent-foreground: 100 58% 91%;
+    --destructive: 65% 0.17 25;
+    --destructive-foreground: 99% 0.01 25;
+    --destructive-deep: 72% 0.14 25;
 
-    --border: 72 11% 18%;
-    --input: 72 11% 18%;
-    --ring: 93 72% 67%;
+    --info: 70% 0.14 230;
+    --info-foreground: 14% 0.02 230;
 
-    --sidebar-background: 72 11% 9%;
-    --sidebar-foreground: 90 11% 95%;
-    --sidebar-border: 72 11% 16%;
-    --sidebar-accent: 140 88% 12%;
+    --graphite: 18% 0.016 260;
+    --graphite-2: 22% 0.014 260;
+    --on-graphite: 92% 0.01 255;
+    --on-graphite-muted: 68% 0.012 255;
+
+    --canvas: var(--paper-2);
+    --canvas-soft: var(--paper-2);
+
+    --background: var(--paper-2);
+    --foreground: var(--ink);
+    --card: var(--paper);
+    --card-foreground: var(--ink);
+    --popover: var(--paper);
+    --popover-foreground: var(--ink);
+
+    --secondary: var(--paper-3);
+    --secondary-foreground: var(--ink);
+
+    --muted: var(--paper-3);
+    --muted-foreground: var(--ink-2);
+
+    --accent: var(--primary-pale);
+    --accent-foreground: var(--ink);
+
+    --border: var(--rule);
+    --input: var(--rule);
+    --ring: var(--primary);
+
+    --sidebar-background: var(--paper);
+    --sidebar-foreground: var(--ink);
+    --sidebar-border: var(--rule);
+    --sidebar-accent: var(--primary-pale);
+
+    --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.35);
+    --shadow-md: 0 2px 8px oklch(0% 0 0 / 0.4);
+    --shadow-lg: 0 8px 24px oklch(0% 0 0 / 0.45);
   }
 }

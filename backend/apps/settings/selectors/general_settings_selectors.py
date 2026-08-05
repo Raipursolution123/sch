@@ -1,4 +1,5 @@
 from typing import Any
+from urllib.parse import urljoin
 
 from apps.academics.models import Sessions
 from apps.settings.models.sch_settings import SchSettings
@@ -14,6 +15,51 @@ def resolve_session_label(session_id: int | None) -> str | None:
         return None
     session = Sessions.objects.filter(pk=session_id).first()
     return session.session if session else None
+
+
+def resolve_asset_url(value: str | None, base_url: str | None) -> str | None:
+    """Turn a legacy logo/path field into an absolute URL when possible."""
+    if not value:
+        return None
+    raw = value.strip()
+    if not raw:
+        return None
+    if raw.startswith(("http://", "https://")):
+        return raw
+    if raw.startswith("//"):
+        return f"https:{raw}"
+
+    base = (base_url or "").strip()
+    if base and not base.endswith("/"):
+        base = f"{base}/"
+    if raw.startswith("/"):
+        return urljoin(base, raw.lstrip("/")) if base else raw
+    if base:
+        return urljoin(base, raw)
+    return f"/media/{raw.lstrip('/')}"
+
+
+def branding_to_dict(settings: SchSettings) -> dict[str, Any]:
+    """Public-safe subset used on login/home chrome (no secrets)."""
+    base_url = settings.base_url
+    candidates = (
+        settings.admin_logo,
+        settings.app_logo,
+        settings.image,
+        settings.admin_small_logo,
+    )
+    logo_url = None
+    for candidate in candidates:
+        logo_url = resolve_asset_url(candidate, base_url)
+        if logo_url:
+            break
+
+    return {
+        "name": (settings.name or "").strip(),
+        "logo_url": logo_url,
+        "small_logo_url": resolve_asset_url(settings.admin_small_logo, base_url)
+        or logo_url,
+    }
 
 
 def settings_to_dict(settings: SchSettings) -> dict[str, Any]:

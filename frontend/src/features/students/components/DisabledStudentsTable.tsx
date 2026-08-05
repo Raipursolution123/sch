@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Eye, UserCheck } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
+import type { DataTablePaginationConfig } from '@components/data/data-table-types';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import type { StudentListItem } from '@app-types/students/student';
@@ -15,12 +16,16 @@ interface DisabledStudentsTableProps {
   students: StudentListItem[];
   searchValue: string;
   onSearchChange: (value: string) => void;
+  pagination?: DataTablePaginationConfig;
+  isLoading?: boolean;
 }
 
 export function DisabledStudentsTable({
   students,
   searchValue,
   onSearchChange,
+  pagination,
+  isLoading,
 }: DisabledStudentsTableProps) {
   const navigate = useNavigate();
   const [studentToEnable, setStudentToEnable] = useState<StudentListItem | null>(null);
@@ -34,7 +39,7 @@ export function DisabledStudentsTable({
         enableSorting: true,
         sortValue: (row) => row.admission_no,
         cell: (row) => (
-          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+          <code className="rounded-sm bg-muted px-1.5 py-0.5 font-mono text-xs">
             {row.admission_no}
           </code>
         ),
@@ -90,10 +95,12 @@ export function DisabledStudentsTable({
         getRowKey={(student) => student.id}
         enableSorting
         showDensityToggle
+        isLoading={isLoading}
         searchValue={searchValue}
         onSearchChange={onSearchChange}
-        searchPlaceholder="Search by name, admission no., reason…"
+        searchPlaceholder="Search by name, admission no., guardian…"
         emptyMessage="No disabled students match your search."
+        pagination={pagination}
         actions={(student) => (
           <>
             <Button

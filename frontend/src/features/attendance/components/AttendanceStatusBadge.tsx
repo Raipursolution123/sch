@@ -3,11 +3,11 @@ import type { AttendanceStatusKey } from '@app-types/attendance/attendance';
 
 const STATUS_VARIANT: Record<
   AttendanceStatusKey,
-  'success' | 'destructive' | 'secondary' | 'outline' | 'muted'
+  'success' | 'destructive' | 'secondary' | 'warning' | 'muted'
 > = {
   present: 'success',
   absent: 'destructive',
-  late: 'outline',
+  late: 'warning',
   half_day: 'secondary',
   holiday: 'muted',
 };

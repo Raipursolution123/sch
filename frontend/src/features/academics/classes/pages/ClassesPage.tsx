@@ -82,7 +82,7 @@ export function ClassesPage() {
       onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && classes?.length === 0}
       emptyTitle="No classes configured"
-      emptyDescription="Add your first class to build the academic structure."
+      emptyDescription="Add classes (Nursery, Class 1, …) so you can map sections and enroll students."
       emptyAction={addClassAction}
       footer={
         <>

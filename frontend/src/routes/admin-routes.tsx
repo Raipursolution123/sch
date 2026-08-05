@@ -1,7 +1,16 @@
 import { lazy } from 'react';
 import { Navigate, type RouteObject } from 'react-router-dom';
 import { ROUTES, LEGACY_SETTINGS_SESSIONS } from '@constants/routes';
-import { ModuleLayout } from '@layouts/ModuleLayout';
+import { StudentsModuleLayout } from '@layouts/StudentsModuleLayout';
+import { StaffModuleLayout } from '@layouts/StaffModuleLayout';
+import { SettingsModuleLayout } from '@layouts/SettingsModuleLayout';
+import { FeesModuleLayout } from '@layouts/FeesModuleLayout';
+import { FinanceModuleLayout } from '@layouts/FinanceModuleLayout';
+import { AttendanceModuleLayout } from '@layouts/AttendanceModuleLayout';
+import { AcademicsModuleLayout } from '@layouts/AcademicsModuleLayout';
+import { ExaminationsModuleLayout } from '@layouts/ExaminationsModuleLayout';
+import { ReportsModuleLayout } from '@layouts/ReportsModuleLayout';
+import { CommunicationsModuleLayout } from '@layouts/CommunicationsModuleLayout';
 import { buildPlaceholderChildren, createModuleRoutes } from '@routes/module-routes';
 
 const DashboardPage = lazy(() =>
@@ -584,6 +593,12 @@ const FeesReportPage = lazy(() =>
   })),
 );
 
+const ReportsHubPage = lazy(() =>
+  import('@features/reports/hub/pages/ReportsHubPage').then((m) => ({
+    default: m.ReportsHubPage,
+  })),
+);
+
 const ExamReportPage = lazy(() =>
   import('@features/reports/examinations/pages/ExamReportPage').then((m) => ({
     default: m.ExamReportPage,
@@ -1079,18 +1094,23 @@ export const adminRoutes: RouteObject[] = [
     element: <Navigate to={ROUTES.academics.sessions} replace />,
   },
 
-  createModuleRoutes('/academics', ROUTES.academics.sessions, [
-    { path: 'sessions', element: <SessionsPage /> },
-    { path: 'classes', element: <ClassesPage /> },
-    { path: 'sections', element: <SectionsPage /> },
-    { path: 'class-sections', element: <ClassSectionsPage /> },
-    { path: 'subjects', element: <SubjectsPage /> },
-    { path: 'subject-groups', element: <SubjectGroupsPage /> },
-    { path: 'timetable', element: <TimetablePage /> },
-    { path: 'teacher-timetable', element: <TeacherTimetablePage /> },
-    { path: 'class-teacher', element: <ClassTeacherPage /> },
-    { path: 'promote', element: <PromoteStudentsPage /> },
-  ]),
+  createModuleRoutes(
+    '/academics',
+    ROUTES.academics.sessions,
+    [
+      { path: 'sessions', element: <SessionsPage /> },
+      { path: 'classes', element: <ClassesPage /> },
+      { path: 'sections', element: <SectionsPage /> },
+      { path: 'class-sections', element: <ClassSectionsPage /> },
+      { path: 'subjects', element: <SubjectsPage /> },
+      { path: 'subject-groups', element: <SubjectGroupsPage /> },
+      { path: 'timetable', element: <TimetablePage /> },
+      { path: 'teacher-timetable', element: <TeacherTimetablePage /> },
+      { path: 'class-teacher', element: <ClassTeacherPage /> },
+      { path: 'promote', element: <PromoteStudentsPage /> },
+    ],
+    <AcademicsModuleLayout />,
+  ),
 
   createModuleRoutes('/lms', ROUTES.lms.courses.root, [
     { path: 'courses', element: <LmsCourseListPage /> },
@@ -1100,100 +1120,128 @@ export const adminRoutes: RouteObject[] = [
 
   {
     path: 'students',
-    element: <ModuleLayout />,
     children: [
-      { index: true, element: <StudentsPage /> },
-      { path: 'categories', element: <StudentCategoriesPage /> },
-      { path: 'houses', element: <StudentHousesPage /> },
-      { path: 'disabled', element: <DisabledStudentsPage /> },
-      { path: 'import', element: <ImportStudentsPage /> },
-      { path: 'online-admission', element: <OnlineAdmissionsPage /> },
-      { path: 'bulk-delete', element: <BulkDeletePage /> },
-      { path: 'disable-reason', element: <DisableReasonPage /> },
-      { path: 'multi-class', element: <MultiClassPage /> },
+      {
+        element: <StudentsModuleLayout />,
+        children: [
+          { index: true, element: <StudentsPage /> },
+          { path: 'categories', element: <StudentCategoriesPage /> },
+          { path: 'houses', element: <StudentHousesPage /> },
+          { path: 'disabled', element: <DisabledStudentsPage /> },
+          { path: 'import', element: <ImportStudentsPage /> },
+          { path: 'online-admission', element: <OnlineAdmissionsPage /> },
+          { path: 'bulk-delete', element: <BulkDeletePage /> },
+          { path: 'disable-reason', element: <DisableReasonPage /> },
+          { path: 'multi-class', element: <MultiClassPage /> },
+          ...buildPlaceholderChildren('/students'),
+        ],
+      },
       { path: ':studentId', element: <StudentProfilePage /> },
-      ...buildPlaceholderChildren('/students'),
     ],
   },
 
   {
     path: 'staff',
-    element: <ModuleLayout />,
     children: [
-      { index: true, element: <StaffPage /> },
-      { path: 'attendance', element: <StaffAttendancePage /> },
-      { path: 'payroll', element: <StaffPayrollPage /> },
-      { path: 'leave-types', element: <LeaveTypesPage /> },
-      { path: 'leave', element: <StaffLeaveRequestsPage /> },
-      { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
-      { path: 'departments', element: <StaffDepartmentsPage /> },
-      { path: 'designations', element: <StaffDesignationsPage /> },
+      {
+        element: <StaffModuleLayout />,
+        children: [
+          { index: true, element: <StaffPage /> },
+          { path: 'attendance', element: <StaffAttendancePage /> },
+          { path: 'payroll', element: <StaffPayrollPage /> },
+          { path: 'leave-types', element: <LeaveTypesPage /> },
+          { path: 'leave', element: <StaffLeaveRequestsPage /> },
+          { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
+          { path: 'departments', element: <StaffDepartmentsPage /> },
+          { path: 'designations', element: <StaffDesignationsPage /> },
+          ...buildPlaceholderChildren('/staff'),
+        ],
+      },
       { path: ':staffId', element: <StaffProfilePage /> },
-      ...buildPlaceholderChildren('/staff'),
     ],
   },
 
-  createModuleRoutes('/attendance', ROUTES.attendance.mark, [
-    { path: 'mark', element: <MarkAttendancePage /> },
-    { path: 'report', element: <AttendanceReportPage /> },
-    { path: 'approve-leave', element: <ApproveLeavePage /> },
-    { path: 'subject', element: <SubjectAttendancePage /> },
-    { path: 'period-attendance-by-date', element: <PeriodAttendanceByDatePage /> },
-    { path: 'hostel', element: <HostelAttendancePage /> },
-  ]),
+  createModuleRoutes(
+    '/attendance',
+    ROUTES.attendance.mark,
+    [
+      { path: 'mark', element: <MarkAttendancePage /> },
+      { path: 'report', element: <AttendanceReportPage /> },
+      { path: 'approve-leave', element: <ApproveLeavePage /> },
+      { path: 'subject', element: <SubjectAttendancePage /> },
+      { path: 'period-attendance-by-date', element: <PeriodAttendanceByDatePage /> },
+      { path: 'hostel', element: <HostelAttendancePage /> },
+    ],
+    <AttendanceModuleLayout />,
+  ),
 
-  createModuleRoutes('/fees', ROUTES.fees.feeTypes, [
-    { path: 'collect', element: <CollectFeesPage /> },
-    { path: 'due-search', element: <DueFeesSearchPage /> },
-    { path: 'payment-search', element: <PaymentSearchPage /> },
-    { path: 'master', element: <FeeAssignPage /> },
-    { path: 'fee-types', element: <FeeTypesPage /> },
-    { path: 'fee-groups', element: <FeeGroupsPage /> },
-    { path: 'discounts', element: <FeeDiscountsPage /> },
-    { path: 'discounts/assign', element: <AssignDiscountsPage /> },
-    { path: 'assign', element: <AssignFeesToStudentsPage /> },
-    { path: 'carry-forward', element: <FeeCarryForwardPage /> },
-    { path: 'reminders', element: <FeeRemindersPage /> },
-    { path: 'payment-gateways', element: <PaymentGatewaysPage /> },
-    { path: 'offline-payments', element: <OfflineBankPaymentsPage /> },
-    { path: 'scheme-scholarship', element: <SchemeScholarshipPage /> },
-    { path: 'apply-scheme-scholarship', element: <ApplySchemeScholarshipPage /> },
-    { path: 'positive-fee-adjustment', element: <PositiveFeeAdjustmentPage /> },
-  ]),
+  createModuleRoutes(
+    '/fees',
+    ROUTES.fees.collect,
+    [
+      { path: 'collect', element: <CollectFeesPage /> },
+      { path: 'due-search', element: <DueFeesSearchPage /> },
+      { path: 'payment-search', element: <PaymentSearchPage /> },
+      { path: 'master', element: <FeeAssignPage /> },
+      { path: 'fee-types', element: <FeeTypesPage /> },
+      { path: 'fee-groups', element: <FeeGroupsPage /> },
+      { path: 'discounts', element: <FeeDiscountsPage /> },
+      { path: 'discounts/assign', element: <AssignDiscountsPage /> },
+      { path: 'assign', element: <AssignFeesToStudentsPage /> },
+      { path: 'carry-forward', element: <FeeCarryForwardPage /> },
+      { path: 'reminders', element: <FeeRemindersPage /> },
+      { path: 'payment-gateways', element: <PaymentGatewaysPage /> },
+      { path: 'offline-payments', element: <OfflineBankPaymentsPage /> },
+      { path: 'scheme-scholarship', element: <SchemeScholarshipPage /> },
+      { path: 'apply-scheme-scholarship', element: <ApplySchemeScholarshipPage /> },
+      { path: 'positive-fee-adjustment', element: <PositiveFeeAdjustmentPage /> },
+    ],
+    <FeesModuleLayout />,
+  ),
 
-  createModuleRoutes('/examinations', ROUTES.examinations.groups, [
-    { path: 'groups', element: <ExamGroupsPage /> },
-    { path: 'exams', element: <ExamsPage /> },
-    { path: 'enroll', element: <ExamEnrollPage /> },
-    { path: 'schedule', element: <ExamSchedulePage /> },
-    { path: 'results', element: <ExamResultsPage /> },
-    { path: 'admit-card', element: <AdmitCardTemplatesPage /> },
-    { path: 'marksheet', element: <MarksheetTemplatesPage /> },
-    { path: 'grades', element: <GradesPage /> },
-    { path: 'divisions', element: <MarkDivisionsPage /> },
-    { path: 'cbse-exams', element: <CbseExamsPage /> },
-  ]),
+  createModuleRoutes(
+    '/examinations',
+    ROUTES.examinations.groups,
+    [
+      { path: 'groups', element: <ExamGroupsPage /> },
+      { path: 'exams', element: <ExamsPage /> },
+      { path: 'enroll', element: <ExamEnrollPage /> },
+      { path: 'schedule', element: <ExamSchedulePage /> },
+      { path: 'results', element: <ExamResultsPage /> },
+      { path: 'admit-card', element: <AdmitCardTemplatesPage /> },
+      { path: 'marksheet', element: <MarksheetTemplatesPage /> },
+      { path: 'grades', element: <GradesPage /> },
+      { path: 'divisions', element: <MarkDivisionsPage /> },
+      { path: 'cbse-exams', element: <CbseExamsPage /> },
+    ],
+    <ExaminationsModuleLayout />,
+  ),
 
-  createModuleRoutes('/settings', ROUTES.settings.general, [
-    { path: 'general', element: <GeneralSettingsPage /> },
-    { path: 'languages', element: <LanguagesPage /> },
-    { path: 'currency', element: <CurrencyPage /> },
-    { path: 'notifications', element: <NotificationSettingsPage /> },
-    { path: 'sms', element: <SmsSettingsPage /> },
-    { path: 'email', element: <EmailSettingsPage /> },
-    { path: 'payment-methods', element: <PaymentMethodsPage /> },
-    { path: 'print-header-footer', element: <PrintHeaderFooterPage /> },
-    { path: 'roles', element: <RolesPage /> },
-    { path: 'users', element: <UsersPage /> },
-    { path: 'modules', element: <ModulesPage /> },
-    { path: 'custom-fields', element: <CustomFieldsPage /> },
-    { path: 'captcha', element: <CaptchaPage /> },
-    { path: 'system-fields', element: <SystemFieldsPage /> },
-    { path: 'online-admission', element: <OnlineAdmissionSettingsPage /> },
-    { path: 'sidebar-menu', element: <SidebarMenuPage /> },
-    { path: 'backup', element: <BackupPage /> },
-    { path: 'file-types', element: <FileTypesPage /> },
-  ]),
+  createModuleRoutes(
+    '/settings',
+    ROUTES.settings.general,
+    [
+      { path: 'general', element: <GeneralSettingsPage /> },
+      { path: 'languages', element: <LanguagesPage /> },
+      { path: 'currency', element: <CurrencyPage /> },
+      { path: 'notifications', element: <NotificationSettingsPage /> },
+      { path: 'sms', element: <SmsSettingsPage /> },
+      { path: 'email', element: <EmailSettingsPage /> },
+      { path: 'payment-methods', element: <PaymentMethodsPage /> },
+      { path: 'print-header-footer', element: <PrintHeaderFooterPage /> },
+      { path: 'roles', element: <RolesPage /> },
+      { path: 'users', element: <UsersPage /> },
+      { path: 'modules', element: <ModulesPage /> },
+      { path: 'custom-fields', element: <CustomFieldsPage /> },
+      { path: 'captcha', element: <CaptchaPage /> },
+      { path: 'system-fields', element: <SystemFieldsPage /> },
+      { path: 'online-admission', element: <OnlineAdmissionSettingsPage /> },
+      { path: 'sidebar-menu', element: <SidebarMenuPage /> },
+      { path: 'backup', element: <BackupPage /> },
+      { path: 'file-types', element: <FileTypesPage /> },
+    ],
+    <SettingsModuleLayout />,
+  ),
 
   createModuleRoutes('/front-office', ROUTES.frontOffice.enquiry, [
     { path: 'enquiry', element: <EnquiryPage /> },
@@ -1234,17 +1282,22 @@ export const adminRoutes: RouteObject[] = [
     { path: 'assignments', element: <HomeworkPage /> },
     { path: 'daily', element: <DailyAssignmentsPage /> },
   ]),
-  createModuleRoutes('/communicate', ROUTES.communicate.notices, [
-    { path: 'notices', element: <NoticesPage /> },
-    { path: 'send-email', element: <SendEmailPage /> },
-    { path: 'send-sms', element: <SendSmsPage /> },
-    { path: 'email-sms', element: <EmailSmsPage /> },
-    { path: 'email-sms-log', element: <EmailSmsLogPage /> },
-    { path: 'schedule-log', element: <ScheduleLogPage /> },
-    { path: 'bulk-email', element: <BulkEmailPage /> },
-    { path: 'email-template', element: <EmailTemplatesPage /> },
-    { path: 'sms-template', element: <SmsTemplatesPage /> },
-  ]),
+  createModuleRoutes(
+    '/communicate',
+    ROUTES.communicate.notices,
+    [
+      { path: 'notices', element: <NoticesPage /> },
+      { path: 'send-email', element: <SendEmailPage /> },
+      { path: 'send-sms', element: <SendSmsPage /> },
+      { path: 'email-sms', element: <EmailSmsPage /> },
+      { path: 'email-sms-log', element: <EmailSmsLogPage /> },
+      { path: 'schedule-log', element: <ScheduleLogPage /> },
+      { path: 'bulk-email', element: <BulkEmailPage /> },
+      { path: 'email-template', element: <EmailTemplatesPage /> },
+      { path: 'sms-template', element: <SmsTemplatesPage /> },
+    ],
+    <CommunicationsModuleLayout />,
+  ),
   createModuleRoutes('/download-center', ROUTES.downloadCenter.contentTypes, [
     { path: 'content-types', element: <ContentTypesPage /> },
     { path: 'content', element: <UploadContentPage /> },
@@ -1302,48 +1355,59 @@ export const adminRoutes: RouteObject[] = [
     { path: 'heads', element: <ExpenseHeadsPage /> },
     { path: 'search', element: <SearchExpensePage /> },
   ]),
-  createModuleRoutes('/finance', ROUTES.finance.chartOfAccounts, [
-    { path: 'chart-of-accounts', element: <ChartOfAccountsPage /> },
-    { path: 'ledgers', element: <LedgersPage /> },
-    { path: 'groups', element: <LedgerGroupsPage /> },
-    { path: 'entries', element: <JournalEntriesPage /> },
-    { path: 'mapper', element: <FeeMapperPage /> },
-    { path: 'reports', element: <FinanceReportsHubPage /> },
-    { path: 'reports/trial-balance', element: <TrialBalancePage /> },
-    { path: 'reports/balance-sheet', element: <BalanceSheetPage /> },
-    { path: 'reports/profit-loss', element: <ProfitLossPage /> },
-    { path: 'reports/ledger-statement', element: <LedgerStatementPage /> },
-    { path: 'reports/ledger-entries', element: <LedgerEntriesPage /> },
-    { path: 'reports/reconciliation', element: <ReconciliationPage /> },
-  ]),
-  createModuleRoutes('/reports', ROUTES.reports.students, [
-    { path: 'students', element: <StudentReportPage /> },
-    { path: 'attendance', element: <AttendanceReportPage /> },
-    { path: 'fees', element: <FeesReportPage /> },
-    { path: 'examinations', element: <ExamReportPage /> },
-    { path: 'finance', element: <IncomeExpenseReportPage /> },
-    { path: 'hr', element: <StaffReportPage /> },
-    { path: 'transport', element: <TransportHostelReportPage /> },
-    { path: 'library', element: <LibraryReportPage /> },
-    { path: 'inventory', element: <InventoryReportPage /> },
-    { path: 'homework', element: <HomeworkReportPage /> },
-    { path: 'alumni', element: <AlumniReportPage /> },
-    { path: 'lesson-plan', element: <LessonPlanReportPage /> },
-    { path: 'user-log', element: <UserLogReportPage /> },
-    { path: 'audit-trail', element: <AuditTrailReportPage /> },
-    { path: 'online-exams', element: <OnlineExamReportPage /> },
-    {
-      path: 'timetable',
-      element: <TimetableReportPage />,
-      handle: {
-        page: {
-          title: 'Timetable Report',
-          description: 'View Class Timetable Report.',
-          module: 'Reports',
+  createModuleRoutes(
+    '/finance',
+    ROUTES.finance.chartOfAccounts,
+    [
+      { path: 'chart-of-accounts', element: <ChartOfAccountsPage /> },
+      { path: 'ledgers', element: <LedgersPage /> },
+      { path: 'groups', element: <LedgerGroupsPage /> },
+      { path: 'entries', element: <JournalEntriesPage /> },
+      { path: 'mapper', element: <FeeMapperPage /> },
+      { path: 'reports', element: <FinanceReportsHubPage /> },
+      { path: 'reports/trial-balance', element: <TrialBalancePage /> },
+      { path: 'reports/balance-sheet', element: <BalanceSheetPage /> },
+      { path: 'reports/profit-loss', element: <ProfitLossPage /> },
+      { path: 'reports/ledger-statement', element: <LedgerStatementPage /> },
+      { path: 'reports/ledger-entries', element: <LedgerEntriesPage /> },
+      { path: 'reports/reconciliation', element: <ReconciliationPage /> },
+    ],
+    <FinanceModuleLayout />,
+  ),
+  createModuleRoutes(
+    '/reports',
+    ROUTES.reports.hub,
+    [
+      { path: 'hub', element: <ReportsHubPage /> },
+      { path: 'students', element: <StudentReportPage /> },
+      { path: 'attendance', element: <AttendanceReportPage /> },
+      { path: 'fees', element: <FeesReportPage /> },
+      { path: 'examinations', element: <ExamReportPage /> },
+      { path: 'finance', element: <IncomeExpenseReportPage /> },
+      { path: 'hr', element: <StaffReportPage /> },
+      { path: 'transport', element: <TransportHostelReportPage /> },
+      { path: 'library', element: <LibraryReportPage /> },
+      { path: 'inventory', element: <InventoryReportPage /> },
+      { path: 'homework', element: <HomeworkReportPage /> },
+      { path: 'alumni', element: <AlumniReportPage /> },
+      { path: 'lesson-plan', element: <LessonPlanReportPage /> },
+      { path: 'user-log', element: <UserLogReportPage /> },
+      { path: 'audit-trail', element: <AuditTrailReportPage /> },
+      { path: 'online-exams', element: <OnlineExamReportPage /> },
+      {
+        path: 'timetable',
+        element: <TimetableReportPage />,
+        handle: {
+          page: {
+            title: 'Timetable Report',
+            description: 'View Class Timetable Report.',
+            module: 'Reports',
+          },
         },
       },
-    },
-  ]),
+    ],
+    <ReportsModuleLayout />,
+  ),
   createModuleRoutes('/certificates', ROUTES.certificates.templates, [
     { path: 'templates', element: <CertificateTemplatesPage /> },
     { path: 'generate', element: <GenerateCertificatePage /> },

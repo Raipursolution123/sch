@@ -1,0 +1,44 @@
+/* School ERP — portable design tokens (Cobalt / modern-minimal)
+ * Source of truth: src/assets/styles/tokens.css
+ * Full CSS color values for handoff outside Tailwind.
+ */
+
+:root {
+  --color-paper: oklch(98.5% 0.004 250);
+  --color-paper-2: oklch(96.5% 0.005 252);
+  --color-paper-3: oklch(94% 0.006 254);
+  --color-rule: oklch(91% 0.008 255);
+  --color-rule-2: oklch(83% 0.011 255);
+  --color-muted: oklch(56% 0.013 255);
+  --color-ink-2: oklch(34% 0.018 257);
+  --color-ink: oklch(24% 0.02 258);
+  --color-accent: oklch(58% 0.2 256);
+  --color-accent-ink: oklch(99% 0.004 256);
+  --color-focus: oklch(58% 0.2 256);
+  --color-graphite: oklch(24% 0.018 260);
+  --color-success: oklch(55% 0.14 155);
+  --color-warning: oklch(72% 0.14 85);
+  --color-danger: oklch(55% 0.18 25);
+
+  --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+
+  --text-display: clamp(3.25rem, 8vw + 1rem, 6.5rem);
+  --text-display-s: clamp(1.75rem, 3vw + 0.5rem, 2.75rem);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-short: 220ms;
+  --radius-card: 10px;
+  --radius-pill: 6px;
+  --radius-input: 6px;
+}

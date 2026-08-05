@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { PageContainer } from '@components/layout/PageContainer';
 import { ReportFilterBar, ReportHeader, ReportPrintShell } from '@components/reports';
 import { EmptyState } from '@components/feedback/EmptyState';
 import { ErrorState } from '@components/feedback/ErrorState';
@@ -29,6 +30,7 @@ interface ModuleReportPackProps {
   emptyTitle?: string;
   emptyDescription?: string;
   children?: ReactNode;
+  bare?: boolean;
 }
 
 /** Report module shell: header + filters + summary + printable content. */
@@ -56,9 +58,10 @@ export function ModuleReportPack({
   emptyTitle = 'No records found',
   emptyDescription,
   children,
+  bare = false,
 }: ModuleReportPackProps) {
-  return (
-    <div className="space-y-6">
+  const body = (
+    <>
       <ReportHeader
         title={title}
         description={description}
@@ -86,6 +89,12 @@ export function ModuleReportPack({
           {isEmpty ? <EmptyState title={emptyTitle} description={emptyDescription} /> : children}
         </ReportPrintShell>
       )}
-    </div>
+    </>
   );
+
+  if (bare) {
+    return <div className="space-y-6">{body}</div>;
+  }
+
+  return <PageContainer>{body}</PageContainer>;
 }

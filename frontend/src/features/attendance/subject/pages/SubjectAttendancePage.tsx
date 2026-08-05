@@ -3,9 +3,10 @@ import { Save } from 'lucide-react';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { FormField } from '@components/forms/FormField';
 import { PermissionButton } from '@components/rbac/PermissionButton';
+import { Button } from '@components/ui/button';
+import { Combobox } from '@components/ui/combobox';
 import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
-import { AttendanceStatusBadge } from '@features/attendance/components/AttendanceStatusBadge';
+import { AttendanceStatusChips } from '@features/attendance/components/AttendanceStatusChips';
 import {
   firstSectionIdForClass,
   sectionOptionsForClass,
@@ -18,7 +19,6 @@ import {
 } from '@hooks/useSubjectAttendance';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
-import type { AttendanceStatusKey } from '@app-types/attendance/attendance';
 import type { SubjectAttendanceRosterEntry } from '@app-types/attendance/subject-attendance';
 import { todayIsoDate } from '@utils/student';
 import { ModuleMarkGridPack } from '@workflow-packs';
@@ -67,14 +67,26 @@ export function SubjectAttendancePage() {
   } = useSubjectAttendanceRoster(periodId, date, rosterReady);
   const saveMutation = useSaveSubjectAttendance();
 
+  const presentTypeId = useMemo(
+    () => types.find((t) => t.is_active === 'yes' && t.key === 'present')?.id,
+    [types],
+  );
+  const absentTypeId = useMemo(
+    () => types.find((t) => t.is_active === 'yes' && t.key === 'absent')?.id,
+    [types],
+  );
+
   useEffect(() => {
     if (activeClasses.length > 0 && classId === 0) setClassId(activeClasses[0].id);
   }, [activeClasses, classId]);
 
   useEffect(() => {
-    if (classId <= 0) return;
+    if (classId <= 0) {
+      setSectionId(0);
+      return;
+    }
     const next = firstSectionIdForClass(classSections, classId);
-    if (next) setSectionId(next);
+    setSectionId(next ?? 0);
   }, [classId, classSections]);
 
   useEffect(() => {
@@ -107,9 +119,18 @@ export function SubjectAttendancePage() {
       .join(' · '),
   }));
 
-  const typeOptions = types
-    .filter((t) => t.is_active === 'yes')
-    .map((t) => ({ value: String(t.id), label: t.label }));
+  const applyStatusToAll = (attendenceTypeId: number) => {
+    const type = types.find((t) => t.id === attendenceTypeId);
+    if (!type) return;
+    setRows((prev) =>
+      prev.map((row) => ({
+        ...row,
+        attendence_type_id: attendenceTypeId,
+        status_key: type.key,
+        status_label: type.label,
+      })),
+    );
+  };
 
   const handleStatusChange = (studentId: number, typeId: number) => {
     const type = types.find((t) => t.id === typeId);
@@ -131,13 +152,13 @@ export function SubjectAttendancePage() {
     {
       id: 'roll',
       header: 'Roll',
-      cellClassName: 'tabular-nums text-muted-foreground w-16',
+      cellClassName: 'tabular-nums text-muted-foreground w-16 align-middle',
       cell: (row) => (row.roll_no != null ? row.roll_no : '—'),
     },
     {
       id: 'student',
       header: 'Student',
-      cellClassName: 'font-medium',
+      cellClassName: 'font-medium align-middle',
       cell: (row) => (
         <div>
           <span>{row.full_name}</span>
@@ -148,33 +169,26 @@ export function SubjectAttendancePage() {
     {
       id: 'status',
       header: 'Status',
+      cellClassName: 'align-middle min-w-[16rem]',
       cell: (row) => (
-        <Select
-          aria-label={`Status for ${row.full_name}`}
-          options={typeOptions}
-          value={String(row.attendence_type_id)}
-          onChange={(e) => handleStatusChange(row.student_id, Number(e.target.value))}
-        />
-      ),
-    },
-    {
-      id: 'preview',
-      header: 'Mark',
-      cell: (row) => (
-        <AttendanceStatusBadge
-          label={row.status_label}
-          statusKey={(row.status_key as AttendanceStatusKey) || 'present'}
+        <AttendanceStatusChips
+          types={types}
+          value={row.attendence_type_id}
+          onChange={(typeId) => handleStatusChange(row.student_id, typeId)}
+          ariaLabel={`Status for ${row.full_name}`}
         />
       ),
     },
     {
       id: 'remark',
       header: 'Remark',
+      cellClassName: 'align-middle min-w-[10rem]',
       cell: (row) => (
         <Input
           aria-label={`Remark for ${row.full_name}`}
           value={row.remark}
           placeholder="Optional"
+          className="min-h-11"
           onChange={(e) =>
             setRows((prev) =>
               prev.map((r) =>
@@ -187,33 +201,36 @@ export function SubjectAttendancePage() {
     },
   ];
 
+  const saveButton = (
+    <PermissionButton
+      permission="attendance.mark"
+      onClick={() => {
+        if (!rosterReady) return;
+        saveMutation.mutate({
+          subject_timetable_id: periodId,
+          date,
+          entries: rows.map((row) => ({
+            student_id: row.student_id,
+            attendence_type_id: row.attendence_type_id,
+            remark: row.remark,
+          })),
+        });
+      }}
+      className="min-h-11 gap-1"
+      disabled={!rosterReady || rows.length === 0}
+      isLoading={saveMutation.isPending}
+    >
+      <Save className="h-4 w-4" aria-hidden="true" />
+      Save attendance
+    </PermissionButton>
+  );
+
   return (
     <ModuleMarkGridPack
       title="Subject Attendance"
-      description="Mark period-wise attendance for students based on the class timetable."
-      actions={
-        <PermissionButton
-          permission="attendance.mark"
-          onClick={() => {
-            if (!rosterReady) return;
-            saveMutation.mutate({
-              subject_timetable_id: periodId,
-              date,
-              entries: rows.map((row) => ({
-                student_id: row.student_id,
-                attendence_type_id: row.attendence_type_id,
-                remark: row.remark,
-              })),
-            });
-          }}
-          className="gap-1"
-          disabled={!rosterReady || rows.length === 0}
-          isLoading={saveMutation.isPending}
-        >
-          <Save className="h-4 w-4" aria-hidden="true" />
-          Save attendance
-        </PermissionButton>
-      }
+      description="Mark period-wise attendance from the class timetable. Built for tablet marking."
+      actions={saveButton}
+      filterColumns={4}
       prerequisiteHint={
         activeClasses.length === 0 ? (
           <p className="text-sm text-muted-foreground">
@@ -233,34 +250,40 @@ export function SubjectAttendancePage() {
             />
           </FormField>
           <FormField label="Class" htmlFor="subject_att_class">
-            <Select
+            <Combobox
               id="subject_att_class"
               options={activeClasses.map((c) => ({
                 value: String(c.id),
                 label: c.class_name,
               }))}
               value={classId ? String(classId) : ''}
-              onChange={(e) => setClassId(Number(e.target.value))}
+              onValueChange={(v) => setClassId(Number(v) || 0)}
               placeholder="Select class"
+              searchPlaceholder="Search class…"
             />
           </FormField>
           <FormField label="Section" htmlFor="subject_att_section">
-            <Select
+            <Combobox
               id="subject_att_section"
               options={sectionOptions}
               value={sectionId ? String(sectionId) : ''}
-              onChange={(e) => setSectionId(Number(e.target.value))}
-              placeholder="Select section"
+              onValueChange={(v) => setSectionId(Number(v) || 0)}
+              placeholder={sectionOptions.length ? 'Select section' : 'No sections for class'}
+              searchPlaceholder="Search section…"
+              disabled={sectionOptions.length === 0}
+              emptyMessage="No sections mapped to this class"
             />
           </FormField>
           <FormField label="Period" htmlFor="subject_att_period">
-            <Select
+            <Combobox
               id="subject_att_period"
               options={periodOptions}
               value={periodId ? String(periodId) : ''}
-              onChange={(e) => setPeriodId(Number(e.target.value))}
+              onValueChange={(v) => setPeriodId(Number(v) || 0)}
               placeholder={periods.length ? 'Select period' : 'No periods for this day'}
+              searchPlaceholder="Search period…"
               disabled={!filtersReady || periods.length === 0}
+              emptyMessage="No timetable periods for this day"
             />
           </FormField>
         </>
@@ -273,7 +296,40 @@ export function SubjectAttendancePage() {
       onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && rows.length === 0}
       emptyTitle="No students to mark"
-      emptyDescription="No active students found for this class section, or no timetable period is selected."
+      emptyDescription="No active students for this class section, or no timetable period is selected."
+      gridToolbar={
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-panel border border-border bg-muted/30 px-3 py-2">
+          <p className="text-sm text-muted-foreground">
+            <span className="font-medium tabular-nums text-foreground">{rows.length}</span> students
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="min-h-11"
+              disabled={!presentTypeId || rows.length === 0}
+              onClick={() => presentTypeId && applyStatusToAll(presentTypeId)}
+            >
+              Mark all present
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="min-h-11"
+              disabled={!absentTypeId || rows.length === 0}
+              onClick={() => absentTypeId && applyStatusToAll(absentTypeId)}
+            >
+              Mark all absent
+            </Button>
+          </div>
+        </div>
+      }
+      stickyActions={
+        <>
+          <p className="text-sm text-muted-foreground">Changes are not saved until you confirm.</p>
+          {saveButton}
+        </>
+      }
     >
       <DataTable data={rows} columns={columns} getRowKey={(row) => row.student_id} />
     </ModuleMarkGridPack>

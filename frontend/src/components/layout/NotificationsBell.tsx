@@ -3,7 +3,6 @@ import { Bell } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { NotificationCenter } from '@components/layout/NotificationCenter';
 import { useNotifications } from '@hooks/useNotifications';
-import { cn } from '@utils/cn';
 
 export function NotificationsBell() {
   const [open, setOpen] = useState(false);
@@ -23,12 +22,9 @@ export function NotificationsBell() {
         <Bell className="h-4 w-4" aria-hidden="true" />
         {unreadCount > 0 && (
           <span
-            className={cn(
-              'absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground',
-            )}
-          >
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </span>
+            className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-primary"
+            aria-hidden="true"
+          />
         )}
       </Button>
 

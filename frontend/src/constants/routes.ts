@@ -177,6 +177,7 @@ export const ROUTES = {
   },
   reports: {
     root: '/reports',
+    hub: '/reports/hub',
     students: '/reports/students',
     attendance: '/reports/attendance',
     fees: '/reports/fees',

@@ -12,7 +12,7 @@ interface StaffOverviewTabProps {
 function DetailItem({ label, value }: { label: string; value: string | null | undefined }) {
   return (
     <div>
-      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</dt>
+      <dt className="text-label text-muted-foreground">{label}</dt>
       <dd className="mt-1 text-sm text-foreground">{value?.trim() ? value : '—'}</dd>
     </div>
   );
@@ -21,20 +21,23 @@ function DetailItem({ label, value }: { label: string; value: string | null | un
 export function StaffOverviewTab({ staff }: StaffOverviewTabProps) {
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 rounded-lg border bg-card p-6 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-4 rounded-panel border border-border bg-card p-6 sm:flex-row sm:items-center">
         <div
-          className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg font-semibold text-primary"
+          className="flex h-16 w-16 shrink-0 items-center justify-center rounded-panel bg-primary-pale font-display text-lg font-medium tracking-display text-ink"
           aria-hidden="true"
         >
           {getStaffInitials(staff)}
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-xl font-semibold text-foreground">{staff.full_name}</h2>
+            <h2 className="font-display text-xl font-medium tracking-display text-foreground">
+              {staff.full_name}
+            </h2>
             <StatusBadge isActive={staff.is_active} />
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {staff.employee_id} ·{' '}
+          <p className="mt-1 font-mono text-xs uppercase tracking-label text-muted-foreground">
+            {staff.employee_id}
+            <span aria-hidden="true"> · </span>
             {formatDepartmentDesignation(staff.department_name, staff.designation_name)}
           </p>
         </div>

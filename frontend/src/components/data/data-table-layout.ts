@@ -6,8 +6,6 @@ import {
 } from '@components/data/data-table-density';
 import type { DataTableDensity } from '@components/data/data-table-types';
 import { cn } from '@utils/cn';
-
-/** Shared column metadata consumed by DataTable header/body cells. */
 export interface DataTableColumnMeta {
   headerClassName?: string;
   cellClassName?: string;
@@ -35,7 +33,7 @@ export function getHeaderCellClassName(
   density: DataTableDensity,
 ): string {
   return cn(
-    'align-middle text-left font-medium text-muted-foreground',
+    'align-middle text-left text-label font-medium text-muted-foreground',
     sharedHorizontalPadding(density),
     densityHeadRowClass[density],
     meta?.headerClassName,

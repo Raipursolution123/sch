@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FormField } from '@components/forms/FormField';
 import { PermissionButton } from '@components/rbac/PermissionButton';
+import { Combobox } from '@components/ui/combobox';
 import { Select } from '@components/ui/select';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { ExamEnrollmentTable } from '@features/examinations/enroll/components/ExamEnrollmentTable';
@@ -107,7 +108,16 @@ export function ExamEnrollPage() {
         setSectionId(initialSectionId);
       }
     }
-  }, [activeClasses, classSections, classId]);
+  }, [activeClasses, classId]);
+
+  useEffect(() => {
+    if (classId <= 0) {
+      setSectionId(0);
+      return;
+    }
+    const next = firstSectionIdForClass(classSections, classId);
+    setSectionId(next ?? 0);
+  }, [classId, classSections]);
 
   useEffect(() => {
     setSelectedIds([]);
@@ -143,6 +153,26 @@ export function ExamEnrollPage() {
     );
   };
 
+  const setExamFromUi = (nextId: number) => {
+    setExamId(nextId);
+    const params = new URLSearchParams(searchParams);
+    if (nextId > 0) params.set('exam_id', String(nextId));
+    else params.delete('exam_id');
+    setSearchParams(params, { replace: true });
+  };
+
+  const enrollButton = (
+    <PermissionButton
+      permission="exams.create"
+      className="min-h-11"
+      disabled={selectedIds.length === 0 || enrollMutation.isPending}
+      isLoading={enrollMutation.isPending}
+      onClick={handleEnroll}
+    >
+      Enroll selected ({selectedIds.length})
+    </PermissionButton>
+  );
+
   return (
     <>
       <ModuleMarkGridPack
@@ -174,74 +204,67 @@ export function ExamEnrollPage() {
               />
             </FormField>
             <FormField label="Exam" htmlFor="exam_enroll_exam">
-              <Select
+              <Combobox
                 id="exam_enroll_exam"
                 placeholder="Select exam"
+                searchPlaceholder="Search exam…"
                 options={activeExams.map((e) => ({
                   value: String(e.id),
                   label: e.name,
                 }))}
                 value={examId ? String(examId) : ''}
-                onChange={(e) => {
-                  const nextId = Number(e.target.value);
-                  setExamId(nextId);
-                  const params = new URLSearchParams(searchParams);
-                  if (nextId > 0) params.set('exam_id', String(nextId));
-                  else params.delete('exam_id');
-                  setSearchParams(params, { replace: true });
-                }}
+                onValueChange={(v) => setExamFromUi(Number(v) || 0)}
                 disabled={!canEnroll || activeExams.length === 0}
               />
             </FormField>
             <FormField label="Class" htmlFor="exam_enroll_class">
-              <Select
+              <Combobox
                 id="exam_enroll_class"
                 placeholder="Select class"
+                searchPlaceholder="Search class…"
                 options={activeClasses.map((c) => ({
                   value: String(c.id),
                   label: c.class_name,
                 }))}
                 value={classId ? String(classId) : ''}
-                onChange={(e) => {
-                  const nextClassId = Number(e.target.value);
-                  setClassId(nextClassId);
-                  const nextSectionId = firstSectionIdForClass(classSections, nextClassId);
-                  setSectionId(nextSectionId ?? 0);
-                }}
+                onValueChange={(v) => setClassId(Number(v) || 0)}
                 disabled={!canEnroll}
               />
             </FormField>
             <FormField label="Section" htmlFor="exam_enroll_section">
-              <Select
+              <Combobox
                 id="exam_enroll_section"
-                placeholder="Select section"
+                placeholder={sectionOptions.length ? 'Select section' : 'No sections for class'}
+                searchPlaceholder="Search section…"
                 options={sectionOptions}
                 value={sectionId ? String(sectionId) : ''}
-                onChange={(e) => setSectionId(Number(e.target.value))}
+                onValueChange={(v) => setSectionId(Number(v) || 0)}
                 disabled={!canEnroll || sectionOptions.length === 0}
               />
             </FormField>
           </>
         }
-        actions={
-          <PermissionButton
-            permission="exams.create"
-            disabled={selectedIds.length === 0 || enrollMutation.isPending}
-            onClick={handleEnroll}
-          >
-            Enroll selected ({selectedIds.length})
-          </PermissionButton>
-        }
-        isLoading={filtersReady && isLoading}
+        actions={enrollButton}
+        filtersReady={filtersReady}
+        isLoading={isLoading}
         loadingMessage="Loading students..."
-        isError={filtersReady && isError}
+        isError={isError}
         error={error}
         onRetry={() => void refetch()}
-        isEmpty={filtersReady && !isLoading && !isError && (roster?.students.length ?? 0) === 0}
+        isEmpty={!isLoading && !isError && (roster?.students.length ?? 0) === 0}
         emptyTitle="No students in this class section"
         emptyDescription="Choose another class or section with students in the exam session."
+        stickyActions={
+          <>
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium tabular-nums text-foreground">{selectedIds.length}</span>{' '}
+              selected for enrollment
+            </p>
+            {enrollButton}
+          </>
+        }
       >
-        {filtersReady && roster ? (
+        {roster ? (
           <ExamEnrollmentTable
             students={roster.students}
             selectedIds={selectedIds}

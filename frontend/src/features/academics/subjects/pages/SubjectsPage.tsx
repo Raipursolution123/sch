@@ -83,7 +83,7 @@ export function SubjectsPage() {
       onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && subjects?.length === 0}
       emptyTitle="No subjects configured"
-      emptyDescription="Add your first subject to build the academic curriculum."
+      emptyDescription="Add subjects for the curriculum, then group them for class sections and timetable."
       emptyAction={addSubjectAction}
       footer={
         <>

@@ -16,6 +16,31 @@ export function annotateNavImplementationStatus(items: NavItem[]): NavItem[] {
   return items.map(annotateComingSoon);
 }
 
+/**
+ * Removes unimplemented (Coming Soon) leaves and empty groups so the sidebar
+ * only surfaces production-ready destinations.
+ */
+export function pruneUnimplementedNav(items: NavItem[]): NavItem[] {
+  const pruned: NavItem[] = [];
+
+  for (const item of items) {
+    const children = item.children ? pruneUnimplementedNav(item.children) : undefined;
+    const hasChildren = Boolean(children?.length);
+    const selfReady = Boolean(item.path && !item.comingSoon && !item.disabled);
+
+    if (!selfReady && !hasChildren) continue;
+
+    pruned.push({
+      ...item,
+      children,
+      path: selfReady ? item.path : hasChildren ? undefined : item.path,
+      comingSoon: false,
+    });
+  }
+
+  return pruned;
+}
+
 function filterNavItem(item: NavItem, checker: NavigationPermissionChecker): NavItem | null {
   if (item.disabled) return null;
 
@@ -49,7 +74,7 @@ export function flattenNavigation(items: NavItem[], group?: string): FlatNavRout
   const routes: FlatNavRoute[] = [];
 
   for (const item of items) {
-    if (item.path && !item.disabled) {
+    if (item.path && !item.disabled && !item.comingSoon) {
       routes.push({
         id: item.id,
         label: item.label,

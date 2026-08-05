@@ -1,14 +1,14 @@
 export { ChartPanel, ChartPanelInlineEmpty } from './ChartPanel';
 export { ActivityFeed, ActivityFeedEmpty } from './ActivityFeed';
+export { AttentionBand } from './AttentionBand';
 export { AttentionList } from './AttentionList';
 export { DashboardCard } from './DashboardCard';
 export { DashboardHero, getTodayLabel } from './DashboardHero';
 export { DashboardSkeleton } from './DashboardSkeleton';
 export { FeeProgressList } from './FeeProgressList';
-export { StatCard } from './StatCard';
-export { KpiStatCard } from './KpiStatCard';
 export { MetricTrend } from './MetricTrend';
 export { MiniBarChart } from './MiniBarChart';
+export { MissionTiles, type MissionTileItem } from './MissionTiles';
 export { QuickActionTile, type QuickActionItem } from './QuickActionTile';
 export { Sparkline } from './Sparkline';
 export { StatAccentCard } from './StatAccentCard';

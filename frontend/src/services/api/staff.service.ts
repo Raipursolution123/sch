@@ -274,19 +274,43 @@ export const staffService = {
     return extractList<StaffDesignation>(data);
   },
 
-  list: async (page = 1): Promise<{ results: StaffListItem[]; count: number }> => {
+  list: async (
+    page = 1,
+    pageSize = 20,
+    search = '',
+  ): Promise<{ results: StaffListItem[]; count: number }> => {
     if (USE_MOCK) {
+      const term = search.trim().toLowerCase();
       const all = [...mockStaff]
         .map(toListItem)
+        .filter((item) => {
+          if (!term) return true;
+          return (
+            item.full_name.toLowerCase().includes(term) ||
+            item.employee_id.toLowerCase().includes(term) ||
+            item.email.toLowerCase().includes(term) ||
+            item.contact_no.toLowerCase().includes(term) ||
+            item.department_name.toLowerCase().includes(term) ||
+            item.designation_name.toLowerCase().includes(term)
+          );
+        })
         .sort(
           (a, b) =>
             a.department_name.localeCompare(b.department_name) ||
             a.full_name.localeCompare(b.full_name),
         );
-      return delay({ results: all, count: all.length });
+      const start = (page - 1) * pageSize;
+      return delay({ results: all.slice(start, start + pageSize), count: all.length });
     }
+    const params = new URLSearchParams({
+      page: String(page),
+      page_size: String(pageSize),
+    });
+    const term = search.trim();
+    if (term) params.set('search', term);
+
     const { data } = await apiClient.get<BackendPayload>(
-      `${API_ENDPOINTS.staff.list}?page=${page}`,
+      `${API_ENDPOINTS.staff.list}?${params.toString()}`,
     );
     const results = extractList<StaffListItem>(data, 'staff');
     return { results, count: extractCount(data, results.length) };
@@ -306,7 +330,7 @@ export const staffService = {
     if (USE_MOCK) {
       return delay(suggestEmployeeId(mockStaff.map((s) => s.employee_id)));
     }
-    const { results: staff } = await staffService.list();
+    const { results: staff } = await staffService.list(1, 100);
     return suggestEmployeeId(staff.map((s) => s.employee_id));
   },
 

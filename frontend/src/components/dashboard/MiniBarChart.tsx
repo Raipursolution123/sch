@@ -14,7 +14,7 @@ interface MiniBarChartProps {
   className?: string;
 }
 
-/** Accessible CSS bar chart for dashboard summaries. */
+/** Cobalt bar chart — single accent + muted alternate columns. */
 export const MiniBarChart = memo(function MiniBarChart({
   data,
   maxValue,
@@ -25,43 +25,32 @@ export const MiniBarChart = memo(function MiniBarChart({
   const peak = maxValue ?? Math.max(...data.map((point) => point.value), 1);
 
   if (data.length === 0) {
-    return (
-      <p className={cn('py-10 text-center text-sm text-muted-foreground', className)}>
-        No attendance data available yet.
-      </p>
-    );
+    return <p className={cn('hm-empty', className)}>No attendance data available yet.</p>;
   }
 
   return (
-    <div className={cn('space-y-4', className)} role="group" aria-label={ariaLabel}>
-      <div className="flex h-40 items-end gap-2 sm:gap-3">
-        {data.map((point, index) => {
-          const height = Math.max(8, (point.value / peak) * 100);
+    <div className={cn('hm-bars', className)} role="group" aria-label={ariaLabel}>
+      {data.map((point, index) => {
+        const height = Math.max(4, (point.value / peak) * 100);
 
-          return (
-            <div key={point.label} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-              <span className="text-xs font-medium text-muted-foreground">
-                {point.value}
-                {valueSuffix}
-              </span>
-              <div className="flex w-full flex-1 items-end">
-                <div
-                  className={cn(
-                    'w-full rounded-t-md transition-all duration-300',
-                    index % 2 === 0
-                      ? 'bg-chart-2/80 hover:bg-chart-2'
-                      : 'bg-chart-3/70 hover:bg-chart-3',
-                  )}
-                  style={{ height: `${height}%` }}
-                  role="img"
-                  aria-label={`${point.label}: ${point.value}${valueSuffix}`}
-                />
-              </div>
-              <span className="text-xs text-muted-foreground">{point.label}</span>
+        return (
+          <div key={point.label} className="hm-bars__col">
+            <span className="hm-bars__val hm-tnum">
+              {point.value}
+              {valueSuffix}
+            </span>
+            <div className="hm-bars__track">
+              <div
+                className={cn('hm-bars__fill', index % 2 === 1 && 'is-alt')}
+                style={{ height: `${height}%` }}
+                role="img"
+                aria-label={`${point.label}: ${point.value}${valueSuffix}`}
+              />
             </div>
-          );
-        })}
-      </div>
+            <span className="hm-bars__label">{point.label}</span>
+          </div>
+        );
+      })}
     </div>
   );
 });

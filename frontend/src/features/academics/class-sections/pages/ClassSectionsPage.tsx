@@ -101,7 +101,7 @@ export function ClassSectionsPage() {
       onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && mappings?.length === 0}
       emptyTitle="No class sections configured"
-      emptyDescription="Link a class with a section to enable student enrollment per group."
+      emptyDescription="Link each class to its sections so attendance, fees, and enrollment can target a group."
       emptyAction={canCreate ? addClassSectionAction : undefined}
       footer={
         <>

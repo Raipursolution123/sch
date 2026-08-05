@@ -30,6 +30,10 @@ export interface StudentDetail extends StudentListItem {
   mother_name: string | null;
   guardian_name: string | null;
   guardian_phone: string | null;
+  guardian_relation?: string | null;
+  guardian_email?: string | null;
+  guardian_occupation?: string | null;
+  guardian_address?: string | null;
   current_address: string | null;
   permanent_address: string | null;
   blood_group: string | null;

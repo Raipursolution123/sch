@@ -55,3 +55,9 @@ export { DataTablePagination } from './data/DataTablePagination';
 export { DataTableSkeleton } from './data/DataTableSkeleton';
 export { DataTableToolbar } from './data/DataTableToolbar';
 export { TableActions } from './data/TableActions';
+
+/** Workflow pack surfaces — panels, stat strips, toolbars. */
+export * from './pack';
+
+/** Workflow packs — composable module layouts. */
+export * from '@workflow-packs';

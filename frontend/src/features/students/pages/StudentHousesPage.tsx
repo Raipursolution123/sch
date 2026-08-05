@@ -92,8 +92,8 @@ export function StudentHousesPage() {
         error={error}
         onRetry={() => void refetch()}
         isEmpty={!isLoading && !isError && data.length === 0}
-        emptyTitle="No houses"
-        emptyDescription="Create houses such as Red, Blue, Green, or Yellow."
+        emptyTitle="No houses yet"
+        emptyDescription="Create houses (Red, Blue…) so admissions can place students into house competitions."
         emptyAction={addAction}
       >
         <DataTable

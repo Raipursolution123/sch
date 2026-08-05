@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Save } from 'lucide-react';
 import { FormField } from '@components/forms/FormField';
 import { PermissionButton } from '@components/rbac/PermissionButton';
+import { Combobox } from '@components/ui/combobox';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
 import {
@@ -144,6 +145,19 @@ export function ExamResultsPage() {
     });
   };
 
+  const saveButton = (
+    <PermissionButton
+      permission="exams.edit"
+      disabled={!filtersReady || rows.length === 0 || saveMutation.isPending}
+      isLoading={saveMutation.isPending}
+      onClick={handleSave}
+      className="min-h-11 gap-1"
+    >
+      <Save className="h-4 w-4" aria-hidden="true" />
+      Save results
+    </PermissionButton>
+  );
+
   return (
     <ModuleMarkGridPack
       title="Exam Results"
@@ -175,26 +189,29 @@ export function ExamResultsPage() {
             />
           </FormField>
           <FormField label="Exam" htmlFor="exam_results_exam">
-            <Select
+            <Combobox
               id="exam_results_exam"
               placeholder="Select exam"
+              searchPlaceholder="Search exam…"
               options={activeExams.map((e) => ({
                 value: String(e.id),
                 label: e.name,
               }))}
               value={examId ? String(examId) : ''}
-              onChange={(e) => setExamId(Number(e.target.value))}
+              onValueChange={(v) => setExamId(Number(v) || 0)}
               disabled={!canEnter}
             />
           </FormField>
           <FormField label="Subject paper" htmlFor="exam_results_schedule">
-            <Select
+            <Combobox
               id="exam_results_schedule"
-              placeholder="Select schedule"
+              placeholder={scheduleOptions.length ? 'Select schedule' : 'No schedules for exam'}
+              searchPlaceholder="Search subject…"
               options={scheduleOptions}
               value={scheduleId ? String(scheduleId) : ''}
-              onChange={(e) => setScheduleId(Number(e.target.value))}
+              onValueChange={(v) => setScheduleId(Number(v) || 0)}
               disabled={!canEnter || scheduleOptions.length === 0}
+              emptyMessage="Add a schedule for this exam first"
             />
           </FormField>
           {roster ? (
@@ -203,32 +220,33 @@ export function ExamResultsPage() {
                 id="exam_results_full_marks"
                 value={roster.full_marks != null ? String(roster.full_marks) : 'Not set'}
                 disabled
+                readOnly
               />
             </FormField>
           ) : null}
         </>
       }
-      actions={
-        <PermissionButton
-          permission="exams.edit"
-          disabled={!filtersReady || rows.length === 0 || saveMutation.isPending}
-          onClick={handleSave}
-          className="gap-1"
-        >
-          <Save className="h-4 w-4" aria-hidden="true" />
-          Save results
-        </PermissionButton>
-      }
-      isLoading={filtersReady && isLoading}
+      actions={saveButton}
+      filtersReady={filtersReady}
+      isLoading={isLoading}
       loadingMessage="Loading exam result roster..."
-      isError={filtersReady && isError}
+      isError={isError}
       error={error}
       onRetry={() => void refetch()}
-      isEmpty={filtersReady && !isLoading && !isError && rows.length === 0}
+      isEmpty={!isLoading && !isError && rows.length === 0}
       emptyTitle="No enrolled students"
       emptyDescription="Enroll students in this exam before entering marks."
+      stickyActions={
+        <>
+          <p className="text-sm text-muted-foreground">
+            <span className="font-medium tabular-nums text-foreground">{rows.length}</span> students
+            · changes save when you confirm
+          </p>
+          {saveButton}
+        </>
+      }
     >
-      {filtersReady && rows.length > 0 ? (
+      {rows.length > 0 ? (
         <ExamResultsTable
           students={rows}
           fullMarks={roster?.full_marks ?? null}

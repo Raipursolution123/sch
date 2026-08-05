@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { PermissionButton } from '@components/rbac/PermissionButton';
@@ -39,6 +40,8 @@ function toPayload(values: ExamScheduleFormValues) {
 }
 
 export function ExamSchedulePage() {
+  const [searchParams] = useSearchParams();
+  const defaultExamId = Number(searchParams.get('exam_id') || 0) || undefined;
   const { data: schedules, isLoading, isError, error, refetch } = useExamSchedules();
   const { data: examsData } = useExams();
   const exams = examsData?.results || [];
@@ -123,6 +126,7 @@ export function ExamSchedulePage() {
             subjects={subjects}
             sessions={sessions}
             schedule={dialogMode === 'edit' ? selectedSchedule : null}
+            defaultExamId={dialogMode === 'create' ? defaultExamId : undefined}
             onSubmit={handleFormSubmit}
             isLoading={isFormLoading}
           />

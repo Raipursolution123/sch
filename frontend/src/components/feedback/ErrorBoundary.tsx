@@ -30,11 +30,13 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback ?? (
-          <div className="flex min-h-screen items-center justify-center p-8">
-            <div className="max-w-md rounded-lg border border-red-200 bg-white p-6 shadow-sm">
-              <h1 className="text-lg font-semibold text-red-700">Something went wrong</h1>
-              <p className="mt-2 text-sm text-gray-600">
-                {this.state.error?.message || 'An unexpected error occurred.'}
+          <div className="flex min-h-dvh items-center justify-center bg-canvas-soft p-8">
+            <div className="max-w-md rounded-panel border border-border bg-card p-6">
+              <h1 className="font-display text-lg font-medium tracking-display text-foreground">
+                Something went wrong
+              </h1>
+              <p className="mt-2 text-sm text-muted-foreground">
+                The page hit an unexpected error. Reload to continue, or go back and try again.
               </p>
               <Button type="button" className="mt-4" onClick={() => window.location.reload()}>
                 Reload page

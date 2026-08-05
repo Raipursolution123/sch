@@ -38,10 +38,20 @@ export type {
 
 function SortIndicator({ direction }: { direction: false | 'asc' | 'desc' }) {
   if (direction === 'asc')
-    return <ArrowUp className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />;
+    return <ArrowUp className="ml-1 inline h-3.5 w-3.5 shrink-0" aria-hidden="true" />;
   if (direction === 'desc')
-    return <ArrowDown className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />;
-  return <ArrowUpDown className="ml-1 inline h-3.5 w-3.5 opacity-40" aria-hidden="true" />;
+    return <ArrowDown className="ml-1 inline h-3.5 w-3.5 shrink-0" aria-hidden="true" />;
+  return <ArrowUpDown className="ml-1 inline h-3.5 w-3.5 shrink-0 opacity-40" aria-hidden="true" />;
+}
+
+function sortAriaLabel(header: ReactNode, direction: false | 'asc' | 'desc'): string {
+  const label =
+    typeof header === 'string' || typeof header === 'number' ? String(header) : 'column';
+  if (direction === 'asc')
+    return `Sort by ${label}, currently ascending. Activate to sort descending.`;
+  if (direction === 'desc')
+    return `Sort by ${label}, currently descending. Activate to clear sort.`;
+  return `Sort by ${label}`;
 }
 
 function buildColumns<T>({
@@ -90,14 +100,16 @@ function buildColumns<T>({
       header: ({ column: tableColumn }) => {
         const canSort = enableSorting && column.enableSorting;
         if (!canSort) return <span>{column.header}</span>;
+        const direction = tableColumn.getIsSorted();
         return (
           <button
             type="button"
-            className="-mx-0 inline-flex items-center font-medium hover:text-foreground"
+            className="-mx-0 inline-flex items-center rounded-sm font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             onClick={tableColumn.getToggleSortingHandler()}
+            aria-label={sortAriaLabel(column.header, direction)}
           >
             {column.header}
-            <SortIndicator direction={tableColumn.getIsSorted()} />
+            <SortIndicator direction={direction} />
           </button>
         );
       },
@@ -215,7 +227,12 @@ export function DataTable<T>({
   const showToolbar = onSearchChange != null || showDensityToggle || toolbarExtra != null;
 
   return (
-    <div className={cn('overflow-hidden rounded-lg border bg-card shadow-sm', className)}>
+    <div
+      className={cn(
+        'overflow-hidden rounded-panel border border-border bg-card shadow-sm',
+        className,
+      )}
+    >
       {showToolbar && (
         <DataTableToolbar
           searchValue={searchValue}
@@ -245,24 +262,41 @@ export function DataTable<T>({
             hasSelection={enableRowSelection}
           />
         ) : data.length === 0 ? (
-          <div className="px-4 py-12 text-center text-sm text-muted-foreground">{emptyMessage}</div>
+          <div className="px-4 py-10 text-center">
+            <p className="text-sm font-medium text-foreground">{emptyMessage}</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Adjust filters or add a record to see it here.
+            </p>
+          </div>
         ) : (
           <table className={DATA_TABLE_TABLE_CLASS}>
             <thead
               className={cn(
                 '[&_tr]:border-b',
-                stickyHeader && 'sticky top-0 z-20 bg-card shadow-[0_1px_0_0_hsl(var(--border))]',
+                stickyHeader &&
+                  'sticky top-0 z-20 border-b border-border bg-canvas-soft/80 backdrop-blur-sm',
               )}
             >
               {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id} className="border-b">
+                <tr key={headerGroup.id} className="border-b border-border">
                   {headerGroup.headers.map((header) => {
                     const meta = header.column.columnDef.meta as DataTableColumnMeta | undefined;
+                    const sorted = header.column.getIsSorted();
+                    const canSort = header.column.getCanSort();
                     return (
                       <th
                         key={header.id}
                         className={getHeaderCellClassName(meta, density)}
                         style={getColumnSizeStyle(meta)}
+                        aria-sort={
+                          !canSort
+                            ? undefined
+                            : sorted === 'asc'
+                              ? 'ascending'
+                              : sorted === 'desc'
+                                ? 'descending'
+                                : 'none'
+                        }
                       >
                         {header.isPlaceholder
                           ? null
@@ -278,7 +312,7 @@ export function DataTable<T>({
                 <tr
                   key={row.id}
                   data-state={row.getIsSelected() ? 'selected' : undefined}
-                  className="border-b transition-colors hover:bg-muted/40 data-[state=selected]:bg-primary-pale/30"
+                  className="border-b border-border transition-colors hover:bg-canvas-soft/50 data-[state=selected]:bg-primary-pale/40"
                 >
                   {row.getVisibleCells().map((cell) => {
                     const meta = cell.column.columnDef.meta as DataTableColumnMeta | undefined;

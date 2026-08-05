@@ -1,0 +1,10 @@
+{
+  "scannedAt": "2026-07-25",
+  "fontStack": "Space Grotesk + Inter + JetBrains Mono",
+  "palette": "Unified Cobalt OKLCH (tokens.css); dashboard.css uses global tokens",
+  "motion": "motion-cut; CSS IntersectionObserver reveals on dashboard",
+  "spacing": "4pt --space-* scale",
+  "framework": "React 19 + Vite 6 + Tailwind 3.4",
+  "preserve": ["ERP shell", "AppShell layout", "dashboard data hooks/API"],
+  "introduce": ["Stat-Led dashboard", "Cobalt theme", "hairline panels"]
+}

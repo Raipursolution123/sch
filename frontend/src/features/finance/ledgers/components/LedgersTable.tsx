@@ -89,11 +89,7 @@ export const LedgersTable = ({ ledgers, pagination, onEdit, onDelete }: LedgersT
             variant="ghost"
             size="icon"
             className="text-destructive hover:text-destructive/90"
-            onClick={() => {
-              if (window.confirm('Are you sure you want to delete this ledger?')) {
-                onDelete(row.id);
-              }
-            }}
+            onClick={() => onDelete(row.id)}
           >
             <Trash2 className="h-4 w-4" />
           </Button>

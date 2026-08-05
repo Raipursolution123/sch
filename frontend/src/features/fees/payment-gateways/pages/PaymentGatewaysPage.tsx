@@ -54,7 +54,7 @@ export function PaymentGatewaysPage() {
       onRetry={() => void refetch()}
       isEmpty={!isLoading && !isError && (data?.length ?? 0) === 0}
       emptyTitle="No payment gateways"
-      emptyDescription="Gateway settings are managed in the database / legacy admin."
+      emptyDescription="Gateways are read-only here. Configure payment methods under Settings → Payment methods."
     >
       <DataTable data={data ?? []} columns={columns} getRowKey={(row) => row.id} />
     </ModuleListPack>

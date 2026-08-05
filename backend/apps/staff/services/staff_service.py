@@ -65,8 +65,8 @@ def _clean_fk_id(val: Any) -> int | None:
 
 
 class StaffService:
-    def list_staff(self):
-        return selectors.list_staff_qs()
+    def list_staff(self, *, search: str | None = None):
+        return selectors.list_staff_qs(search=search)
 
     def enrich_list_page(self, rows) -> list[dict[str, Any]]:
         return [selectors.staff_list_item(row) for row in rows]

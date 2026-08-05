@@ -1,0 +1,181 @@
+[
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Workflow packs v1 — PackPanel/StatStrip/FilterPanel/GridToolbar/StickyBar; list+mark grid; DataTable bulk select",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Stat-Led",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Dashboard grid gaps via Tailwind (gap-4/gap-8); cooler canvas paper-2; docker frontend reload",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Stat-Led",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Shell v1 — Instrument Rail sidebar + hybrid A/B dashboard (missions, queue, feed, graphite band)",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 13 \u2014 Agent governance: baseline-ui/improve-ui skills, UI PR checklist, quarterly audit",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 12 \u2014 Auth/public polish: BrandMark, public branding API, product home copy, a11y",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 11 \u2014 Settings: grouped SubNav, ModuleSettingsPack, denser SettingsCard, Combobox",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 10 \u2014 Exams/Reports/Comms: ModuleSubNav, reports hub, Combobox, compose wizard",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 9 \u2014 Finance & Fees: ModuleSubNav, Combobox, sticky collect/assign, ConfirmDialog, KPIs",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 8 \u2014 Attendance & Academics: ModuleSubNav, Combobox, mark-grid bulk/tablet, report KPIs",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 7 \u2014 Staff: server search/pagination, add-staff wizard, profile polish",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 6 \u2014 Students: server search/pagination, admission wizard, profile polish",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Stat-Led",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 5 polish \u2014 hero empty fix, lead fallback, typographic empties, KPI/band depth",
+    "genre": "modern-minimal",
+    "scope": "single-page",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Stat-Led",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 5 \u2014 dashboard unscoped to global tokens, dark parity, greeting + school meta",
+    "genre": "modern-minimal",
+    "scope": "single-page",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 4 \u2014 core components: DataTable a11y, EmptyState, badges, form chrome, auth a11y",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 3 \u2014 layout system, module sub-nav, workflow pack PageContainer",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 2 \u2014 app shell & navigation: lg breakpoint, prune Soon, drawer a11y",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "Phase 1 \u2014 unified OKLCH token system app-wide; Wise lime retired",
+    "genre": "modern-minimal",
+    "scope": "app",
+    "design_system": "DESIGN.md"
+  },
+  {
+    "date": "2026-07-25",
+    "macrostructure": "Stat-Led",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "School ERP admin dashboard redesign \u2014 instrument-panel KPIs",
+    "genre": "modern-minimal",
+    "scope": "single-page"
+  }
+]

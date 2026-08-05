@@ -1,15 +1,14 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import { FormField } from '@components/forms/FormField';
 import { ReportSummaryGrid } from '@components/reports';
 import { AttendanceReportTable } from '@features/attendance/report/components/AttendanceReportTable';
+import { sectionOptionsForClass } from '@features/students/utils/class-section-options';
 import { useAttendanceReport } from '@hooks/useAttendance';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
 import { useActiveSession } from '@hooks/useSessions';
-import { useSections } from '@hooks/useSections';
-import { sectionOptionsForClass } from '@features/students/utils/class-section-options';
 import { exportToCsv } from '@utils/export-csv';
 import { formatDate } from '@utils/format';
 import { printReport } from '@utils/print-report';
@@ -26,9 +25,6 @@ export function AttendanceReportPage() {
   const { data: activeSession } = useActiveSession();
   const { data: classesData } = useClasses();
   const classes = classesData?.results || [];
-
-  const { data: sectionsData } = useSections();
-  const sections = sectionsData?.results || [];
   const { data: classSectionsData } = useClassSections(1, { noPaginate: true });
   const classSections = classSectionsData?.results || [];
 
@@ -56,32 +52,49 @@ export function AttendanceReportPage() {
     refetch,
   } = useAttendanceReport(filters, submitted);
 
-  const classOptions = [
-    { value: '', label: 'All classes' },
-    ...classes
-      .filter((c) => c.is_active === 'yes')
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map((c) => ({ value: String(c.id), label: c.class_name })),
-  ];
+  const classOptions = useMemo(
+    () => [
+      { value: '', label: 'All classes' },
+      ...classes
+        .filter((c) => c.is_active === 'yes')
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map((c) => ({ value: String(c.id), label: c.class_name })),
+    ],
+    [classes],
+  );
+
   const sectionOptions = useMemo(() => {
-    const list =
-      classId > 0
-        ? sectionOptionsForClass(classSections, classId)
-        : sections
-            .filter((s) => s.is_active === 'yes')
-            .map((s) => ({ value: String(s.id), label: s.section_name }));
-
-    const sorted = [...list].sort((a, b) => a.label.localeCompare(b.label));
-
-    if (classId > 0 && sorted.length === 0) {
-      return [
-        { value: '', label: 'All sections' },
-        { value: '0', label: 'No Sections (Auto-Selected)' },
-      ];
+    if (classId > 0) {
+      const sorted = [...sectionOptionsForClass(classSections, classId)].sort((a, b) =>
+        a.label.localeCompare(b.label),
+      );
+      if (sorted.length === 0) {
+        return [
+          { value: '', label: 'All sections' },
+          { value: '0', label: 'No Sections (Auto-Selected)' },
+        ];
+      }
+      return [{ value: '', label: 'All sections' }, ...sorted];
     }
 
+    const seen = new Map<number, string>();
+    for (const row of classSections) {
+      if (row.is_active === 'no') continue;
+      seen.set(row.section_id, row.section_name);
+    }
+    const sorted = Array.from(seen.entries())
+      .map(([value, label]) => ({ value: String(value), label }))
+      .sort((a, b) => a.label.localeCompare(b.label));
     return [{ value: '', label: 'All sections' }, ...sorted];
-  }, [classSections, classId, sections]);
+  }, [classId, classSections]);
+
+  useEffect(() => {
+    if (classId <= 0) return;
+    if (sectionId > 0 && !sectionOptions.some((o) => Number(o.value) === sectionId)) {
+      setSectionId(0);
+      setSubmitted(false);
+    }
+  }, [classId, sectionId, sectionOptions]);
 
   const printSubtitle = `${formatDate(fromDate)} – ${formatDate(toDate)}${
     activeSession ? ` · Session ${activeSession.session}` : ''
@@ -104,6 +117,11 @@ export function AttendanceReportPage() {
     );
   };
 
+  const attendanceRate =
+    report && report.total_records > 0
+      ? Math.round((report.present / report.total_records) * 100)
+      : null;
+
   return (
     <ModuleReportPack
       title="Attendance Report"
@@ -124,13 +142,19 @@ export function AttendanceReportPage() {
       error={error}
       onRetry={() => void refetch()}
       isEmpty={Boolean(report && report.rows.length === 0)}
-      emptyTitle="No records found"
-      emptyDescription="Try a different date range or mark attendance for this period."
+      emptyTitle="No attendance recorded"
+      emptyDescription="No marks in this range. Widen the dates, clear class filters, or mark attendance first."
       summary={
         report ? (
           <ReportSummaryGrid
+            className="lg:grid-cols-7"
             items={[
               { label: 'Records', value: report.total_records },
+              {
+                label: 'Present rate',
+                value: attendanceRate != null ? `${attendanceRate}%` : '—',
+                tone: 'success',
+              },
               { label: 'Present', value: report.present, tone: 'success' },
               { label: 'Absent', value: report.absent, tone: 'destructive' },
               { label: 'Late', value: report.late, tone: 'warning' },
@@ -167,25 +191,35 @@ export function AttendanceReportPage() {
             />
           </FormField>
           <FormField label="Class" htmlFor="report_class">
-            <Select
+            <Combobox
               id="report_class"
               options={classOptions}
               value={classId ? String(classId) : ''}
-              onChange={(e) => {
-                setClassId(e.target.value ? Number(e.target.value) : 0);
+              onValueChange={(v) => {
+                const next = v ? Number(v) : 0;
+                setClassId(next);
+                setSectionId(0);
                 setSubmitted(false);
               }}
+              allowEmpty
+              emptyLabel="All classes"
+              placeholder="All classes"
+              searchPlaceholder="Search class…"
             />
           </FormField>
           <FormField label="Section" htmlFor="report_section">
-            <Select
+            <Combobox
               id="report_section"
               options={sectionOptions}
               value={sectionId ? String(sectionId) : ''}
-              onChange={(e) => {
-                setSectionId(e.target.value ? Number(e.target.value) : 0);
+              onValueChange={(v) => {
+                setSectionId(v ? Number(v) : 0);
                 setSubmitted(false);
               }}
+              allowEmpty
+              emptyLabel="All sections"
+              placeholder="All sections"
+              searchPlaceholder="Search section…"
             />
           </FormField>
         </>

@@ -32,6 +32,24 @@ Guidance for developers and AI agents working on the School ERP codebase.
 - New pages: `ModuleListPack`, `PermissionButton`, `ConfirmDialog` (no `window.confirm`).
 - Register routes in `admin-routes.tsx` + `implemented-paths.ts` for nav visibility.
 
+## UI governance (Hallmark Phase 13)
+
+Contract: `frontend/DESIGN.md` (Cobalt · Workbench / Stat-Led).
+
+| When | Skill / doc |
+| --- | --- |
+| Building or polishing UI | Project skill `baseline-ui` (`.cursor/skills/baseline-ui`) |
+| Auditing a surface (read-only) | Project skill `improve-ui` → plans in `design-plans/` only |
+| Opening a UI PR | `docs/UI_PR_CHECKLIST.md` (+ GitHub PR template UI section) |
+| Quarterly drift check | `docs/UI_QUARTERLY_AUDIT.md` |
+
+Hard constraints for agents:
+
+- No raw `gray-*` / `slate-*` / `zinc-*` — semantic tokens only.
+- Interactive controls: eight states via existing primitives when possible.
+- Do **not** import Hallmark landing macros onto app pages.
+- Do **not** invent KPIs or proof stats.
+
 ## Testing
 
 ```bash

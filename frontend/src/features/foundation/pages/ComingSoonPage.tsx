@@ -31,20 +31,20 @@ export function ComingSoonPage() {
         actions={<Badge variant="secondary">Coming Soon</Badge>}
       />
 
-      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-card px-6 py-16 text-center shadow-sm">
-        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-pale text-ink">
+      <div className="flex flex-col items-center justify-center rounded-panel border border-dashed border-border bg-card px-6 py-16 text-center">
+        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-sm bg-primary-pale text-ink">
           <Construction className="h-7 w-7" aria-hidden="true" />
         </div>
-        <h2 className="text-lg font-semibold text-foreground">Module not yet implemented</h2>
+        <h2 className="font-display text-lg font-medium tracking-display text-foreground">
+          Module not yet implemented
+        </h2>
         <p className="mt-2 max-w-md text-sm text-muted-foreground">
           The navigation and routing foundation is in place. Business logic for{' '}
           <span className="font-medium text-foreground">{meta.title}</span> will be delivered in a
           vertical slice without changing legacy business rules.
         </p>
         {meta.module && (
-          <p className="mt-4 text-xs uppercase tracking-wide text-muted-foreground">
-            Module group: {meta.module}
-          </p>
+          <p className="text-label mt-4 text-muted-foreground">Module group: {meta.module}</p>
         )}
       </div>
     </PageContainer>

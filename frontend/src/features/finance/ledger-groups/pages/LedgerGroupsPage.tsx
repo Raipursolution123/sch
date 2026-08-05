@@ -1,70 +1,92 @@
 import { useState } from 'react';
-import { Button } from '@components/ui/button';
 import { Plus } from 'lucide-react';
-import { PageHeader } from '@components/layout/PageHeader';
+import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
+import { Button } from '@components/ui/button';
+import { ModuleListPack } from '@workflow-packs';
 import { LedgerGroupsTable } from '../components/LedgerGroupsTable';
 import { LedgerGroupCreateDialog } from '../components/LedgerGroupCreateDialog';
 import { LedgerGroupUpdateDialog } from '../components/LedgerGroupUpdateDialog';
 import { useLedgerGroupsList, useDeleteLedgerGroup } from '@hooks/useLedgerGroups';
 import type { LedgerGroup } from '@app-types/finance';
 
-export const LedgerGroupsPage = () => {
+export function LedgerGroupsPage() {
   const [page, setPage] = useState(1);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editGroup, setEditGroup] = useState<LedgerGroup | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<LedgerGroup | null>(null);
 
-  const { data, isLoading } = useLedgerGroupsList(page);
-  const { mutate: deleteGroup } = useDeleteLedgerGroup();
+  const { data, isLoading, isError, error, refetch } = useLedgerGroupsList(page);
+  const deleteMutation = useDeleteLedgerGroup();
 
-  const handleEdit = (group: LedgerGroup) => {
-    setEditGroup(group);
-  };
+  const groups = data?.results || [];
+  const count = data?.count || 0;
 
-  const handleDelete = (id: number) => {
-    if (window.confirm('Are you sure you want to delete this ledger group?')) {
-      deleteGroup(id);
-    }
-  };
+  const addGroupAction = (
+    <Button onClick={() => setIsCreateOpen(true)} className="gap-1">
+      <Plus className="h-4 w-4" aria-hidden="true" />
+      Add group
+    </Button>
+  );
 
   return (
-    <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
-      <div className="flex items-center justify-between">
-        <PageHeader
-          title="Ledger Groups"
-          description="Manage your account hierarchy and financial groups"
-        />
-        <Button onClick={() => setIsCreateOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Add Group
-        </Button>
-      </div>
-
-      <div className="rounded-md border bg-card">
-        {isLoading ? (
-          <div className="p-8 text-center text-muted-foreground">Loading...</div>
-        ) : (
-          <LedgerGroupsTable
-            groups={data?.results || []}
-            pagination={{
-              page,
-              pageSize: 10,
-              totalCount: data?.count || 0,
-              onPageChange: setPage,
+    <ModuleListPack
+      title="Ledger Groups"
+      description="Account hierarchy parents for the chart of accounts."
+      actions={addGroupAction}
+      isLoading={isLoading}
+      loadingMessage="Loading ledger groups..."
+      isError={isError}
+      error={error}
+      onRetry={() => void refetch()}
+      isEmpty={!isLoading && !isError && groups.length === 0}
+      emptyTitle="No ledger groups"
+      emptyDescription="Add groups (Assets, Liabilities, Income, …) before creating ledgers."
+      emptyAction={addGroupAction}
+      footer={
+        <>
+          <LedgerGroupCreateDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+          {editGroup && (
+            <LedgerGroupUpdateDialog
+              group={editGroup}
+              open={!!editGroup}
+              onOpenChange={(open) => !open && setEditGroup(null)}
+            />
+          )}
+          <ConfirmDialog
+            open={Boolean(deleteTarget)}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null);
             }}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
+            title="Delete ledger group?"
+            description={
+              deleteTarget
+                ? `Remove “${deleteTarget.name}”? Child ledgers must be moved or deleted first.`
+                : ''
+            }
+            confirmLabel="Delete"
+            destructive
+            isLoading={deleteMutation.isPending}
+            onConfirm={() => {
+              if (!deleteTarget) return;
+              deleteMutation.mutate(deleteTarget.id, {
+                onSuccess: () => setDeleteTarget(null),
+              });
+            }}
           />
-        )}
-      </div>
-
-      <LedgerGroupCreateDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
-
-      {editGroup && (
-        <LedgerGroupUpdateDialog
-          group={editGroup}
-          open={!!editGroup}
-          onOpenChange={(open) => !open && setEditGroup(null)}
-        />
-      )}
-    </div>
+        </>
+      }
+    >
+      <LedgerGroupsTable
+        groups={groups}
+        pagination={{
+          page,
+          pageSize: 10,
+          totalCount: count,
+          onPageChange: setPage,
+        }}
+        onEdit={setEditGroup}
+        onDelete={(id) => setDeleteTarget(groups.find((g) => g.id === id) ?? null)}
+      />
+    </ModuleListPack>
   );
-};
+}

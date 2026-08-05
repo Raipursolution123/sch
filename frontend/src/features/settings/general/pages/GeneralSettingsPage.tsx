@@ -33,6 +33,7 @@ export function GeneralSettingsPage() {
 
   return (
     <ModuleSettingsPack
+      bare
       title="General Settings"
       description={
         settings?.session

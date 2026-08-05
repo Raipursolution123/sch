@@ -1,15 +1,16 @@
 import { useMemo, useState } from 'react';
 import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 import { FormField } from '@components/forms/FormField';
-import { ReportHeader, ReportSummaryGrid } from '@components/reports';
+import { PageContainer } from '@components/layout/PageContainer';
+import { EmptyState } from '@components/feedback/EmptyState';
+import { ErrorState } from '@components/feedback/ErrorState';
+import { LoadingState } from '@components/feedback/LoadingState';
+import { ReportHeader, ReportSummaryGrid, ReportFilterBar } from '@components/reports';
 import { DueFeesSearchTable } from '@features/fees/due-search/components/DueFeesSearchTable';
 import { PaymentSearchTable } from '@features/fees/payment-search/components/PaymentSearchTable';
-import {
-  firstSectionIdForClass,
-  sectionOptionsForClass,
-} from '@features/students/utils/class-section-options';
+import { sectionOptionsForClass } from '@features/students/utils/class-section-options';
 import { useFeeDueSearch, useFeePaymentSearch } from '@hooks/useFeeSearch';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
@@ -18,7 +19,6 @@ import { exportToCsv } from '@utils/export-csv';
 import { formatAmount, formatDate } from '@utils/format';
 import { printReport } from '@utils/print-report';
 import { todayIsoDate } from '@utils/student';
-import { ReportFilterBar } from '@components/reports/ReportFilterBar';
 
 function daysAgoIso(days: number): string {
   const date = new Date();
@@ -27,7 +27,6 @@ function daysAgoIso(days: number): string {
 }
 
 const PAYMENT_MODE_OPTIONS = [
-  { value: '', label: 'All modes' },
   { value: 'cash', label: 'Cash' },
   { value: 'cheque', label: 'Cheque' },
   { value: 'bank transfer', label: 'Bank Transfer' },
@@ -80,28 +79,23 @@ export function FeesReportPage() {
   const dueReport = useFeeDueSearch(dueFilters, dueSubmitted && tab === 'due');
   const payReport = useFeePaymentSearch(payFilters, paySubmitted && tab === 'payments');
 
-  const classOptions = [
-    { value: '', label: 'All classes' },
-    ...classes
-      .filter((c) => c.is_active === 'yes')
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map((c) => ({ value: String(c.id), label: c.class_name })),
-  ];
+  const classOptions = useMemo(
+    () =>
+      classes
+        .filter((c) => c.is_active === 'yes')
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map((c) => ({ value: String(c.id), label: c.class_name })),
+    [classes],
+  );
 
   const dueSectionOptions = useMemo(() => {
-    if (dueClassId <= 0) return [{ value: '', label: 'All sections' }];
-    return [
-      { value: '', label: 'All sections' },
-      ...sectionOptionsForClass(classSections, dueClassId),
-    ];
+    if (dueClassId <= 0) return [];
+    return sectionOptionsForClass(classSections, dueClassId);
   }, [dueClassId, classSections]);
 
   const paySectionOptions = useMemo(() => {
-    if (payClassId <= 0) return [{ value: '', label: 'All sections' }];
-    return [
-      { value: '', label: 'All sections' },
-      ...sectionOptionsForClass(classSections, payClassId),
-    ];
+    if (payClassId <= 0) return [];
+    return sectionOptionsForClass(classSections, payClassId);
   }, [payClassId, classSections]);
 
   const handleExportCsv = () => {
@@ -139,8 +133,10 @@ export function FeesReportPage() {
   const exportDisabled =
     tab === 'due' ? !dueReport.data?.students.length : !payReport.data?.payments.length;
 
+  const sessionLabel = activeSession ? `Session ${activeSession.session}` : undefined;
+
   return (
-    <div className="space-y-6">
+    <PageContainer>
       <ReportHeader
         title="Finance & Fees Report"
         description="Outstanding dues and collected payments for the active session."
@@ -155,37 +151,42 @@ export function FeesReportPage() {
           <TabsTrigger value="payments">Payments</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="due">
+        <TabsContent value="due" className="space-y-4">
           <ReportFilterBar
-            sessionLabel={activeSession ? `Session ${activeSession.session}` : undefined}
+            sessionLabel={sessionLabel}
             onApply={() => setDueSubmitted(true)}
             applyDisabled={dueSubmitted && dueReport.isLoading}
           >
             <FormField label="Class" htmlFor="fees_report_due_class">
-              <Select
+              <Combobox
                 id="fees_report_due_class"
                 options={classOptions}
                 value={dueClassId ? String(dueClassId) : ''}
-                onChange={(e) => {
-                  const nextClassId = Number(e.target.value) || 0;
-                  setDueClassId(nextClassId);
-                  setDueSectionId(
-                    nextClassId > 0 ? (firstSectionIdForClass(classSections, nextClassId) ?? 0) : 0,
-                  );
+                onValueChange={(v) => {
+                  setDueClassId(v ? Number(v) : 0);
+                  setDueSectionId(0);
                   setDueSubmitted(false);
                 }}
+                allowEmpty
+                emptyLabel="All classes"
+                placeholder="All classes"
+                searchPlaceholder="Search class…"
               />
             </FormField>
             <FormField label="Section" htmlFor="fees_report_due_section">
-              <Select
+              <Combobox
                 id="fees_report_due_section"
                 options={dueSectionOptions}
                 value={dueSectionId ? String(dueSectionId) : ''}
-                onChange={(e) => {
-                  setDueSectionId(Number(e.target.value) || 0);
+                onValueChange={(v) => {
+                  setDueSectionId(v ? Number(v) : 0);
                   setDueSubmitted(false);
                 }}
-                disabled={dueClassId <= 0}
+                allowEmpty
+                emptyLabel="All sections"
+                placeholder="All sections"
+                searchPlaceholder="Search section…"
+                disabled={dueClassId > 0 && dueSectionOptions.length === 0}
               />
             </FormField>
             <FormField label="Search" htmlFor="fees_report_due_q">
@@ -201,11 +202,12 @@ export function FeesReportPage() {
             </FormField>
           </ReportFilterBar>
 
-          {dueSubmitted && dueReport.isLoading && (
-            <p className="text-sm text-muted-foreground">Loading due fees report…</p>
-          )}
+          {dueSubmitted && dueReport.isLoading && <LoadingState message="Loading due fees…" />}
           {dueSubmitted && dueReport.isError && (
-            <p className="text-sm text-destructive">Could not load due fees report.</p>
+            <ErrorState
+              message="Could not load due fees report."
+              onRetry={() => void dueReport.refetch()}
+            />
           )}
           {dueSubmitted && dueReport.data && (
             <>
@@ -215,21 +217,25 @@ export function FeesReportPage() {
                   {
                     label: 'Total outstanding',
                     value: formatAmount(dueReport.data.total_balance),
+                    tone: dueReport.data.total_balance > 0 ? 'destructive' : 'success',
                   },
                 ]}
               />
               {dueReport.data.students.length > 0 ? (
                 <DueFeesSearchTable students={dueReport.data.students} />
               ) : (
-                <p className="text-sm text-muted-foreground">No outstanding dues found.</p>
+                <EmptyState
+                  title="No outstanding dues"
+                  description="Widen class filters or clear search — or collect fees first."
+                />
               )}
             </>
           )}
         </TabsContent>
 
-        <TabsContent value="payments">
+        <TabsContent value="payments" className="space-y-4">
           <ReportFilterBar
-            sessionLabel={activeSession ? `Session ${activeSession.session}` : undefined}
+            sessionLabel={sessionLabel}
             onApply={() => setPaySubmitted(true)}
             applyDisabled={paySubmitted && payReport.isLoading}
           >
@@ -256,41 +262,50 @@ export function FeesReportPage() {
               />
             </FormField>
             <FormField label="Class" htmlFor="fees_report_pay_class">
-              <Select
+              <Combobox
                 id="fees_report_pay_class"
                 options={classOptions}
                 value={payClassId ? String(payClassId) : ''}
-                onChange={(e) => {
-                  const nextClassId = Number(e.target.value) || 0;
-                  setPayClassId(nextClassId);
-                  setPaySectionId(
-                    nextClassId > 0 ? (firstSectionIdForClass(classSections, nextClassId) ?? 0) : 0,
-                  );
+                onValueChange={(v) => {
+                  setPayClassId(v ? Number(v) : 0);
+                  setPaySectionId(0);
                   setPaySubmitted(false);
                 }}
+                allowEmpty
+                emptyLabel="All classes"
+                placeholder="All classes"
+                searchPlaceholder="Search class…"
               />
             </FormField>
             <FormField label="Section" htmlFor="fees_report_pay_section">
-              <Select
+              <Combobox
                 id="fees_report_pay_section"
                 options={paySectionOptions}
                 value={paySectionId ? String(paySectionId) : ''}
-                onChange={(e) => {
-                  setPaySectionId(Number(e.target.value) || 0);
+                onValueChange={(v) => {
+                  setPaySectionId(v ? Number(v) : 0);
                   setPaySubmitted(false);
                 }}
-                disabled={payClassId <= 0}
+                allowEmpty
+                emptyLabel="All sections"
+                placeholder="All sections"
+                searchPlaceholder="Search section…"
+                disabled={payClassId > 0 && paySectionOptions.length === 0}
               />
             </FormField>
             <FormField label="Payment mode" htmlFor="fees_report_mode">
-              <Select
+              <Combobox
                 id="fees_report_mode"
                 options={PAYMENT_MODE_OPTIONS}
                 value={paymentMode}
-                onChange={(e) => {
-                  setPaymentMode(e.target.value);
+                onValueChange={(v) => {
+                  setPaymentMode(v);
                   setPaySubmitted(false);
                 }}
+                allowEmpty
+                emptyLabel="All modes"
+                placeholder="All modes"
+                searchPlaceholder="Search mode…"
               />
             </FormField>
             <FormField label="Student" htmlFor="fees_report_pay_q">
@@ -306,11 +321,12 @@ export function FeesReportPage() {
             </FormField>
           </ReportFilterBar>
 
-          {paySubmitted && payReport.isLoading && (
-            <p className="text-sm text-muted-foreground">Loading payment report…</p>
-          )}
+          {paySubmitted && payReport.isLoading && <LoadingState message="Loading payments…" />}
           {paySubmitted && payReport.isError && (
-            <p className="text-sm text-destructive">Could not load payment report.</p>
+            <ErrorState
+              message="Could not load payment report."
+              onRetry={() => void payReport.refetch()}
+            />
           )}
           {paySubmitted && payReport.data && (
             <>
@@ -320,6 +336,7 @@ export function FeesReportPage() {
                   {
                     label: 'Total collected',
                     value: formatAmount(payReport.data.total_amount),
+                    tone: 'success',
                   },
                   {
                     label: 'Period',
@@ -330,12 +347,15 @@ export function FeesReportPage() {
               {payReport.data.payments.length > 0 ? (
                 <PaymentSearchTable payments={payReport.data.payments} />
               ) : (
-                <p className="text-sm text-muted-foreground">No payments found for this period.</p>
+                <EmptyState
+                  title="No payments found"
+                  description="Widen the date range or clear class/mode filters."
+                />
               )}
             </>
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </PageContainer>
   );
 }

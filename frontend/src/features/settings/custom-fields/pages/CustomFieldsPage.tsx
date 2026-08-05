@@ -16,7 +16,8 @@ import {
 } from '@components/forms/fields';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { StatusBadge } from '@components/feedback/StatusBadge';
-import { Button, Input, Select } from '@components/ui';
+import { Button, Input } from '@components/ui';
+import { Combobox } from '@components/ui/combobox';
 import {
   useCreateCustomField,
   useCustomFields,
@@ -189,15 +190,18 @@ export function CustomFieldsPage() {
       description="Add extra profile fields for students or staff that appear alongside system fields."
       actions={
         <div className="flex flex-wrap items-center gap-2">
-          <Select
+          <Combobox
             value={belongTo}
-            onChange={(e) => {
+            onValueChange={(v) => {
               setPage(1);
-              setBelongTo(e.target.value);
+              setBelongTo(v);
             }}
-            options={BELONG_TO_FILTER_OPTIONS}
+            options={BELONG_TO_FILTER_OPTIONS.filter((o) => o.value !== '')}
+            allowEmpty
+            emptyLabel={BELONG_TO_FILTER_OPTIONS.find((o) => o.value === '')?.label ?? 'All'}
             className="w-36"
-            aria-label="Filter by belongs to"
+            placeholder="All"
+            searchPlaceholder="Filter…"
           />
           <form
             className="flex gap-2"

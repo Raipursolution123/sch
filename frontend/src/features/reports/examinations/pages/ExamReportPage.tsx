@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FormField } from '@components/forms/FormField';
-import { Select } from '@components/ui/select';
+import { Combobox } from '@components/ui/combobox';
 import { ReportSummaryGrid } from '@components/reports';
 import { ExamReportTable } from '@features/reports/examinations/components/ExamReportTable';
 import { useExamResultRoster } from '@hooks/useExamResults';
@@ -122,26 +122,28 @@ export function ExamReportPage() {
       filters={
         <>
           <FormField label="Exam" htmlFor="exam_report_exam">
-            <Select
+            <Combobox
               id="exam_report_exam"
               placeholder="Select exam"
+              searchPlaceholder="Search exam…"
               options={activeExams.map((e) => ({ value: String(e.id), label: e.name }))}
               value={examId ? String(examId) : ''}
-              onChange={(e) => {
-                setExamId(Number(e.target.value));
+              onValueChange={(v) => {
+                setExamId(Number(v) || 0);
                 setSubmitted(false);
               }}
               disabled={activeExams.length === 0}
             />
           </FormField>
           <FormField label="Subject paper" htmlFor="exam_report_schedule">
-            <Select
+            <Combobox
               id="exam_report_schedule"
-              placeholder="Select schedule"
+              placeholder={scheduleOptions.length ? 'Select schedule' : 'No schedules'}
+              searchPlaceholder="Search subject…"
               options={scheduleOptions}
               value={scheduleId ? String(scheduleId) : ''}
-              onChange={(e) => {
-                setScheduleId(Number(e.target.value));
+              onValueChange={(v) => {
+                setScheduleId(Number(v) || 0);
                 setSubmitted(false);
               }}
               disabled={scheduleOptions.length === 0}

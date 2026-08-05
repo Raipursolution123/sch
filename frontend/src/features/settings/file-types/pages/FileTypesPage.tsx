@@ -2,15 +2,12 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { PageHeader } from '@components/layout/PageHeader';
-import { ErrorState } from '@components/feedback/ErrorState';
-import { LoadingState } from '@components/feedback/LoadingState';
 import { SettingsCard } from '@components/forms/SettingsCard';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
 import { FormNumberField, FormTextField } from '@components/forms/fields';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import { useFileTypes, useUpdateFileTypes } from '@hooks/useAdvancedSettings';
-import { getApiErrorMessage } from '@utils/error-message';
+import { ModuleSettingsPack } from '@workflow-packs';
 
 const schema = z.object({
   file_extension: z.string().trim().min(1, 'At least one extension is required'),
@@ -48,39 +45,33 @@ export function FileTypesPage() {
     if (settings) reset(settings);
   }, [settings, reset]);
 
-  if (isLoading) {
-    return <LoadingState message="Loading file type settings..." />;
-  }
-
-  if (isError || !settings) {
-    return (
-      <ErrorState
-        message={getApiErrorMessage(error, 'Could not load file type settings')}
-        onRetry={() => void refetch()}
-      />
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="File Types"
-        description="Control the allowed file extensions, MIME types, and maximum upload size for documents and images."
-      />
-
-      <form onSubmit={handleSubmit((values) => updateMutation.mutate(values))} noValidate>
-        <FormErrorSummary errors={errors} className="mb-4" />
-        <div className="space-y-6">
-          <SettingsCard
-            title="Document Uploads"
-            description="Allowed file types for general document uploads (certificates, receipts, etc.)."
-          >
+    <ModuleSettingsPack
+      title="File Types"
+      description="Control allowed extensions, MIME types, and maximum upload size for documents and images."
+      isLoading={isLoading}
+      loadingMessage="Loading file type settings..."
+      isError={isError || !settings}
+      error={error}
+      onRetry={() => void refetch()}
+    >
+      <form
+        className="space-y-4"
+        onSubmit={handleSubmit((values) => updateMutation.mutate(values))}
+        noValidate
+      >
+        <FormErrorSummary errors={errors} />
+        <SettingsCard
+          title="Document uploads"
+          description="Allowed types for certificates, receipts, and other documents."
+        >
+          <div className="grid gap-3 sm:grid-cols-2">
             <FormTextField
               control={control}
               name="file_extension"
               label="Allowed extensions"
               placeholder="pdf,doc,docx,xls,xlsx"
-              hint="Comma-separated list of allowed file extensions, without the leading dot."
+              hint="Comma-separated, without the leading dot."
               required
             />
             <FormTextField
@@ -88,7 +79,7 @@ export function FileTypesPage() {
               name="file_mime"
               label="Allowed MIME types"
               placeholder="application/pdf,application/msword"
-              hint="Comma-separated list of allowed MIME types."
+              hint="Comma-separated MIME types."
               required
             />
             <FormNumberField
@@ -98,28 +89,31 @@ export function FileTypesPage() {
               min={0}
               required
             />
-          </SettingsCard>
+          </div>
+        </SettingsCard>
 
-          <SettingsCard
-            title="Image Uploads"
-            description="Allowed file types for image uploads (photos, logos, etc.)."
-            footer={
-              <PermissionButton
-                type="submit"
-                permission="settings.manage"
-                isLoading={updateMutation.isPending}
-                disabled={!isDirty && !updateMutation.isPending}
-              >
-                Save changes
-              </PermissionButton>
-            }
-          >
+        <SettingsCard
+          title="Image uploads"
+          description="Allowed types for photos, logos, and other images."
+          footer={
+            <PermissionButton
+              type="submit"
+              permission="settings.manage"
+              className="min-h-11"
+              isLoading={updateMutation.isPending}
+              disabled={!isDirty && !updateMutation.isPending}
+            >
+              Save changes
+            </PermissionButton>
+          }
+        >
+          <div className="grid gap-3 sm:grid-cols-2">
             <FormTextField
               control={control}
               name="image_extension"
               label="Allowed extensions"
               placeholder="jpg,jpeg,png,gif"
-              hint="Comma-separated list of allowed image extensions, without the leading dot."
+              hint="Comma-separated, without the leading dot."
               required
             />
             <FormTextField
@@ -127,7 +121,7 @@ export function FileTypesPage() {
               name="image_mime"
               label="Allowed MIME types"
               placeholder="image/jpeg,image/png,image/gif"
-              hint="Comma-separated list of allowed MIME types."
+              hint="Comma-separated MIME types."
               required
             />
             <FormNumberField
@@ -137,9 +131,9 @@ export function FileTypesPage() {
               min={0}
               required
             />
-          </SettingsCard>
-        </div>
+          </div>
+        </SettingsCard>
       </form>
-    </div>
+    </ModuleSettingsPack>
   );
 }

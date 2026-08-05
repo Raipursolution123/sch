@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { FormField } from '@components/forms/FormField';
 import { ReportSummaryGrid } from '@components/reports';
+import { Combobox } from '@components/ui/combobox';
 import { Input } from '@components/ui/input';
-import { Select } from '@components/ui/select';
 import { useLedgerEntriesReport } from '@hooks/useFinanceReports';
 import { useLedgersList } from '@hooks/useLedgers';
 import type { LedgerEntryRow } from '@app-types/finance';
@@ -70,10 +70,7 @@ export function LedgerEntriesPage() {
   const { data: report, isLoading, isError, error, refetch } = useLedgerEntriesReport(params);
   const rows = report?.rows ?? [];
 
-  const ledgerOptions = [
-    { value: '', label: 'All ledgers' },
-    ...ledgers.map((l) => ({ value: String(l.id), label: l.name })),
-  ];
+  const ledgerOptions = ledgers.map((l) => ({ value: String(l.id), label: l.name }));
 
   const handleExportCsv = () => {
     exportToCsv(
@@ -112,11 +109,15 @@ export function LedgerEntriesPage() {
       filters={
         <>
           <FormField label="Ledger" htmlFor="le-ledger">
-            <Select
+            <Combobox
               id="le-ledger"
               value={ledgerId > 0 ? String(ledgerId) : ''}
-              onChange={(e) => setLedgerId(Number(e.target.value) || 0)}
+              onValueChange={(v) => setLedgerId(Number(v) || 0)}
               options={ledgerOptions}
+              allowEmpty
+              emptyLabel="All ledgers"
+              placeholder="All ledgers"
+              searchPlaceholder="Search ledger…"
             />
           </FormField>
           <FormField label="From date" htmlFor="le-from">

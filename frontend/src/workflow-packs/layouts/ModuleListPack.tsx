@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { PageContainer } from '@components/layout/PageContainer';
 import { PageHeader } from '@components/layout/PageHeader';
 import { EmptyState } from '@components/feedback/EmptyState';
 import { ErrorState } from '@components/feedback/ErrorState';
@@ -9,6 +10,10 @@ interface ModuleListPackProps {
   title: string;
   description?: string;
   actions?: ReactNode;
+  /** Optional stat strip between header and filters (e.g. enrollment counts). */
+  stats?: ReactNode;
+  /** Filter / search panel above the table slot. */
+  filters?: ReactNode;
   prerequisiteHint?: ReactNode;
   isLoading?: boolean;
   loadingMessage?: string;
@@ -21,10 +26,12 @@ interface ModuleListPackProps {
   emptyAction?: ReactNode;
   children?: ReactNode;
   footer?: ReactNode;
+  /** Skip PageContainer when already wrapped by a parent shell. */
+  bare?: boolean;
 }
 
 /**
- * Standard list module shell: header + async states + DataTable slot.
+ * Standard list module shell: header + optional stats/filters + async states + table slot.
  *
  * When `isEmpty` is true the empty state is shown instead of the table.
  * Children are still mounted (hidden) so create/edit dialogs kept inside
@@ -34,6 +41,8 @@ export function ModuleListPack({
   title,
   description,
   actions,
+  stats,
+  filters,
   prerequisiteHint,
   isLoading,
   loadingMessage = 'Loading…',
@@ -46,12 +55,17 @@ export function ModuleListPack({
   emptyAction,
   children,
   footer,
+  bare = false,
 }: ModuleListPackProps) {
-  return (
-    <div className="space-y-6">
+  const body = (
+    <>
       <PageHeader title={title} description={description} actions={actions} />
 
       {prerequisiteHint}
+
+      {stats}
+
+      {filters}
 
       {isLoading && <LoadingState message={loadingMessage} />}
 
@@ -62,7 +76,6 @@ export function ModuleListPack({
       {!isLoading && !isError && isEmpty && (
         <>
           <EmptyState title={emptyTitle} description={emptyDescription} action={emptyAction} />
-          {/* Keep dialogs/overlays in the tree while the list is empty. */}
           {children ? (
             <div className="hidden" aria-hidden="true">
               {children}
@@ -74,6 +87,12 @@ export function ModuleListPack({
       {!isLoading && !isError && !isEmpty && children}
 
       {footer}
-    </div>
+    </>
   );
+
+  if (bare) {
+    return <div className="space-y-6">{body}</div>;
+  }
+
+  return <PageContainer size="pack">{body}</PageContainer>;
 }

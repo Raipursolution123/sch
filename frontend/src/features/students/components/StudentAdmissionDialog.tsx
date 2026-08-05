@@ -1,6 +1,7 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@components/ui/button';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
 import { FormField } from '@components/forms/FormField';
@@ -32,6 +33,7 @@ import { studentToFormValues } from '@features/students/utils/student-payload';
 import { useClassSections } from '@hooks/useClassSections';
 import { useStudentCategories, useStudentHouses } from '@hooks/useStudentMasters';
 import { todayIsoDate } from '@utils/student';
+import { cn } from '@utils/cn';
 
 interface StudentAdmissionDialogProps {
   open: boolean;
@@ -42,6 +44,20 @@ interface StudentAdmissionDialogProps {
   onSubmit: (values: StudentAdmissionFormValues) => void;
   isLoading?: boolean;
 }
+
+const ADMISSION_STEPS = [
+  { id: 'identity', label: 'Identity' },
+  { id: 'academic', label: 'Academic' },
+  { id: 'family', label: 'Family' },
+  { id: 'more', label: 'More' },
+] as const;
+
+const STEP_FIELDS: (keyof StudentAdmissionFormValues)[][] = [
+  ['admission_no', 'admission_date', 'firstname', 'lastname', 'gender', 'dob'],
+  ['class_id', 'section_id'],
+  [],
+  ['rte'],
+];
 
 function toSelectOptions<T extends { id: number }>(
   items: T[],
@@ -78,6 +94,7 @@ export function StudentAdmissionDialog({
   isLoading,
 }: StudentAdmissionDialogProps) {
   const isEdit = student != null;
+  const [step, setStep] = useState(0);
   const { data: classSectionsData, isLoading: mappingsLoading } = useClassSections(1, {
     enabled: open,
     noPaginate: true,
@@ -160,6 +177,7 @@ export function StudentAdmissionDialog({
     reset,
     setValue,
     watch,
+    trigger,
     formState: { errors },
   } = useForm<StudentAdmissionFormValues>({
     resolver: zodResolver(studentAdmissionSchema),
@@ -214,7 +232,10 @@ export function StudentAdmissionDialog({
   }, [open, selectedClassId, selectedSectionId, sectionOptions, setValue]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      setStep(0);
+      return;
+    }
 
     if (isEdit && student) {
       reset(studentToFormValues(student));
@@ -256,6 +277,19 @@ export function StudentAdmissionDialog({
   const sectionSelectDisabled =
     !hasClassSectionOptions || !selectedClassId || sectionOptions.length === 0;
 
+  const isLastStep = step === ADMISSION_STEPS.length - 1;
+
+  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!isLastStep) {
+      const fields = STEP_FIELDS[step];
+      const ok = fields.length === 0 ? true : await trigger(fields);
+      if (ok) setStep((current) => Math.min(current + 1, ADMISSION_STEPS.length - 1));
+      return;
+    }
+    await handleSubmit(onSubmit)(event);
+  };
+
   return (
     <EntityFormDialog
       open={open}
@@ -265,154 +299,221 @@ export function StudentAdmissionDialog({
       title={isEdit ? 'Edit student' : 'Admit student'}
       description={
         isEdit
-          ? 'Update student details. Required fields are marked with an asterisk.'
-          : 'Register a new student. Required fields are marked with an asterisk.'
+          ? 'Update enrollment details across the steps below.'
+          : 'Walk through identity, class placement, family, then extras.'
       }
-      submitLabel={isEdit ? 'Save changes' : 'Admit student'}
-      submitDisabled={!hasClassSectionOptions || sectionSelectDisabled}
-      onSubmit={handleSubmit(onSubmit)}
+      submitLabel={isLastStep ? (isEdit ? 'Save changes' : 'Admit student') : 'Continue'}
+      submitDisabled={!hasClassSectionOptions || (step === 1 && sectionSelectDisabled)}
+      onSubmit={handleFormSubmit}
       size="lg"
       scrollable
+      leadingActions={
+        step > 0 ? (
+          <Button type="button" variant="ghost" onClick={() => setStep((s) => s - 1)}>
+            Back
+          </Button>
+        ) : undefined
+      }
     >
+      <nav aria-label="Admission steps" className="mb-2">
+        <ol className="flex flex-wrap gap-2">
+          {ADMISSION_STEPS.map((item, index) => {
+            const active = index === step;
+            const done = index < step;
+            return (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  className={cn(
+                    'rounded-sm border px-2.5 py-1 font-mono text-[0.65rem] font-medium uppercase tracking-label transition-colors',
+                    active && 'border-primary bg-primary-pale text-ink',
+                    done && !active && 'border-border bg-card text-muted-foreground',
+                    !active && !done && 'border-border text-muted-foreground',
+                  )}
+                  onClick={() => {
+                    if (index <= step) setStep(index);
+                  }}
+                  aria-current={active ? 'step' : undefined}
+                >
+                  {index + 1}. {item.label}
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+
       <FormErrorSummary errors={errors} />
 
       {!hasClassSectionOptions && !mappingsLoading && (
-        <p className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
+        <p className="rounded-panel border border-dashed border-border p-3 text-sm text-muted-foreground">
           Assign at least one active class section under Academics → Class Sections before admitting
           a student.
         </p>
       )}
 
-      <FormSection title="Admission">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FormTextField
-            control={control}
-            name="admission_no"
-            label="Admission number"
-            required
-            disabled={isEdit}
-          />
-          <FormDateField control={control} name="admission_date" label="Admission date" required />
-        </div>
-      </FormSection>
+      {step === 0 && (
+        <>
+          <FormSection title="Admission">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormTextField
+                control={control}
+                name="admission_no"
+                label="Admission number"
+                required
+                disabled={isEdit}
+              />
+              <FormDateField
+                control={control}
+                name="admission_date"
+                label="Admission date"
+                required
+              />
+            </div>
+          </FormSection>
 
-      <FormSection title="Personal details">
-        <div className="grid gap-4 sm:grid-cols-3">
-          <FormTextField control={control} name="firstname" label="First name" required />
-          <FormTextField control={control} name="middlename" label="Middle name" optional />
-          <FormTextField control={control} name="lastname" label="Last name" required />
-        </div>
-        <div className="grid gap-4 sm:grid-cols-3">
-          <FormSelectField
-            control={control}
-            name="gender"
-            label="Gender"
-            options={genderOptions}
-            required
-          />
-          <FormDateField control={control} name="dob" label="Date of birth" required />
-          <FormTextField control={control} name="mobileno" label="Mobile" optional />
-        </div>
-        <FormTextField control={control} name="email" label="Email" type="email" optional />
-      </FormSection>
+          <FormSection title="Personal details">
+            <div className="grid gap-4 sm:grid-cols-3">
+              <FormTextField control={control} name="firstname" label="First name" required />
+              <FormTextField control={control} name="middlename" label="Middle name" optional />
+              <FormTextField control={control} name="lastname" label="Last name" required />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <FormSelectField
+                control={control}
+                name="gender"
+                label="Gender"
+                options={genderOptions}
+                required
+              />
+              <FormDateField control={control} name="dob" label="Date of birth" required />
+              <FormTextField control={control} name="mobileno" label="Mobile" optional />
+            </div>
+            <FormTextField control={control} name="email" label="Email" type="email" optional />
+          </FormSection>
+        </>
+      )}
 
-      <FormSection title="Academic assignment">
-        <div className="grid gap-4 sm:grid-cols-3">
-          <FormField label="Class" htmlFor="class_id" error={errors.class_id?.message} required>
-            <Controller
-              name="class_id"
+      {step === 1 && (
+        <FormSection title="Academic assignment">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <FormField label="Class" htmlFor="class_id" error={errors.class_id?.message} required>
+              <Controller
+                name="class_id"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    id="class_id"
+                    placeholder="Select class"
+                    options={classOptions}
+                    value={field.value ? String(field.value) : ''}
+                    onChange={(e) => {
+                      const newClassId = Number(e.target.value);
+                      field.onChange(newClassId);
+                      const nextSectionId = firstSectionIdForClass(activeMappings, newClassId);
+                      setValue('section_id', nextSectionId ?? 0);
+                    }}
+                    disabled={!hasClassSectionOptions}
+                  />
+                )}
+              />
+            </FormField>
+            <FormField
+              label="Section"
+              htmlFor="section_id"
+              error={errors.section_id?.message}
+              required
+            >
+              <Controller
+                name="section_id"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    id="section_id"
+                    placeholder={selectedClassId ? 'Select section' : 'Select a class first'}
+                    options={sectionOptions}
+                    value={field.value ? String(field.value) : ''}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    disabled={sectionSelectDisabled}
+                  />
+                )}
+              />
+            </FormField>
+            <FormTextField control={control} name="roll_no" label="Roll number" optional />
+          </div>
+        </FormSection>
+      )}
+
+      {step === 2 && (
+        <>
+          <FormSection title="Parents">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormTextField control={control} name="father_name" label="Father's name" optional />
+              <FormTextField control={control} name="mother_name" label="Mother's name" optional />
+            </div>
+          </FormSection>
+          <FormSection title="Guardian">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormTextField
+                control={control}
+                name="guardian_name"
+                label="Guardian's name"
+                optional
+              />
+              <FormTextField
+                control={control}
+                name="guardian_phone"
+                label="Guardian phone"
+                optional
+              />
+            </div>
+          </FormSection>
+        </>
+      )}
+
+      {step === 3 && (
+        <FormSection title="Additional">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <FormSelectField
               control={control}
-              render={({ field }) => (
-                <Select
-                  id="class_id"
-                  placeholder="Select class"
-                  options={classOptions}
-                  value={field.value ? String(field.value) : ''}
-                  onChange={(e) => {
-                    const newClassId = Number(e.target.value);
-                    field.onChange(newClassId);
-                    const nextSectionId = firstSectionIdForClass(activeMappings, newClassId);
-                    setValue('section_id', nextSectionId ?? 0);
-                  }}
-                  disabled={!hasClassSectionOptions}
-                />
-              )}
+              name="blood_group"
+              label="Blood group"
+              options={bloodGroupOptions}
+              optional
             />
-          </FormField>
-          <FormField
-            label="Section"
-            htmlFor="section_id"
-            error={errors.section_id?.message}
-            required
-          >
-            <Controller
-              name="section_id"
+            <FormSelectField
               control={control}
-              render={({ field }) => (
-                <Select
-                  id="section_id"
-                  placeholder={selectedClassId ? 'Select section' : 'Select a class first'}
-                  options={sectionOptions}
-                  value={field.value ? String(field.value) : ''}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                  disabled={sectionSelectDisabled}
-                />
-              )}
+              name="category_id"
+              label="Category"
+              options={categoryOptions}
+              optional
             />
-          </FormField>
-          <FormTextField control={control} name="roll_no" label="Roll number" optional />
-        </div>
-      </FormSection>
-
-      <FormSection title="Parents Details">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FormTextField control={control} name="father_name" label="Father's name" optional />
-          <FormTextField control={control} name="mother_name" label="Mother's name" optional />
-        </div>
-      </FormSection>
-
-      <FormSection title="Guardian">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FormTextField control={control} name="guardian_name" label="Guardian's name" optional />
-          <FormTextField control={control} name="guardian_phone" label="Guardian phone" optional />
-        </div>
-      </FormSection>
-
-      <FormSection title="Additional">
-        <div className="grid gap-4 sm:grid-cols-3">
-          <FormSelectField
+            <FormSelectField
+              control={control}
+              name="school_house_id"
+              label="House"
+              options={houseOptions}
+              optional
+            />
+            <FormSelectField
+              control={control}
+              name="rte"
+              label="RTE"
+              options={rteOptions}
+              required
+            />
+          </div>
+          <FormTextField control={control} name="religion" label="Religion" optional />
+          <FormTextareaField
             control={control}
-            name="blood_group"
-            label="Blood group"
-            options={bloodGroupOptions}
+            name="current_address"
+            label="Current address"
+            rows={2}
             optional
           />
-          <FormSelectField
-            control={control}
-            name="category_id"
-            label="Category"
-            options={categoryOptions}
-            optional
-          />
-          <FormSelectField
-            control={control}
-            name="school_house_id"
-            label="House"
-            options={houseOptions}
-            optional
-          />
-          <FormSelectField control={control} name="rte" label="RTE" options={rteOptions} required />
-        </div>
-        <FormTextField control={control} name="religion" label="Religion" optional />
-        <FormTextareaField
-          control={control}
-          name="current_address"
-          label="Current address"
-          rows={2}
-          optional
-        />
-        <FormSwitchField control={control} name="is_active" label="Active enrollment" />
-      </FormSection>
+          <FormSwitchField control={control} name="is_active" label="Active enrollment" />
+        </FormSection>
+      )}
     </EntityFormDialog>
   );
 }
