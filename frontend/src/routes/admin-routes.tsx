@@ -638,6 +638,12 @@ const OnlineExamReportPage = lazy(() =>
   })),
 );
 
+const TimetableReportPage = lazy(() =>
+  import('@features/reports/timetable/pages/TimetableReportPage').then((m) => ({
+    default: m.TimetableReportPage,
+  })),
+);
+
 const ApproveLeavePage = lazy(() =>
   import('@features/attendance/approve-leave/pages/ApproveLeavePage').then((m) => ({
     default: m.ApproveLeavePage,
@@ -842,6 +848,12 @@ const IncomeHeadsPage = lazy(() =>
   })),
 );
 
+const SearchIncomePage = lazy(() =>
+  import('@features/income/search/SearchIncomePage').then((m) => ({
+    default: m.SearchIncomePage,
+  })),
+);
+
 const ExpenseListPage = lazy(() =>
   import('@features/expense/list/pages/ExpenseListPage').then((m) => ({
     default: m.ExpenseListPage,
@@ -851,6 +863,12 @@ const ExpenseListPage = lazy(() =>
 const ExpenseHeadsPage = lazy(() =>
   import('@features/expense/heads/pages/ExpenseHeadsPage').then((m) => ({
     default: m.ExpenseHeadsPage,
+  })),
+);
+
+const SearchExpensePage = lazy(() =>
+  import('@features/expense/search/SearchExpensePage').then((m) => ({
+    default: m.SearchExpensePage,
   })),
 );
 
@@ -905,6 +923,12 @@ const UploadContentPage = lazy(() =>
 const VideoTutorialsPage = lazy(() =>
   import('@features/download-center/pages/VideoTutorialsPage').then((m) => ({
     default: m.VideoTutorialsPage,
+  })),
+);
+
+const ContentShareListPage = lazy(() =>
+  import('@features/download-center/pages/Contentsharelist').then((m) => ({
+    default: m.default,
   })),
 );
 
@@ -1225,6 +1249,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'content-types', element: <ContentTypesPage /> },
     { path: 'content', element: <UploadContentPage /> },
     { path: 'videos', element: <VideoTutorialsPage /> },
+    { path: 'share-content', element: <ContentShareListPage /> },
   ]),
   createModuleRoutes('/lesson-plan', ROUTES.lessonPlan.syllabusStatus, [
     {
@@ -1270,10 +1295,12 @@ export const adminRoutes: RouteObject[] = [
   createModuleRoutes('/income', ROUTES.income.list, [
     { path: 'list', element: <IncomeListPage /> },
     { path: 'heads', element: <IncomeHeadsPage /> },
+    { path: 'search', element: <SearchIncomePage /> },
   ]),
   createModuleRoutes('/expense', ROUTES.expense.list, [
     { path: 'list', element: <ExpenseListPage /> },
     { path: 'heads', element: <ExpenseHeadsPage /> },
+    { path: 'search', element: <SearchExpensePage /> },
   ]),
   createModuleRoutes('/finance', ROUTES.finance.chartOfAccounts, [
     { path: 'chart-of-accounts', element: <ChartOfAccountsPage /> },
@@ -1305,6 +1332,17 @@ export const adminRoutes: RouteObject[] = [
     { path: 'user-log', element: <UserLogReportPage /> },
     { path: 'audit-trail', element: <AuditTrailReportPage /> },
     { path: 'online-exams', element: <OnlineExamReportPage /> },
+    {
+      path: 'timetable',
+      element: <TimetableReportPage />,
+      handle: {
+        page: {
+          title: 'Timetable Report',
+          description: 'View Class Timetable Report.',
+          module: 'Reports',
+        },
+      },
+    },
   ]),
   createModuleRoutes('/certificates', ROUTES.certificates.templates, [
     { path: 'templates', element: <CertificateTemplatesPage /> },

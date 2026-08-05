@@ -239,6 +239,8 @@ const ALL_PERMISSIONS: Permission[] = [
   'downloadcenter.video.create',
   'downloadcenter.video.edit',
   'downloadcenter.video.delete',
+  'downloadcenter.share.create',
+  'downloadcenter.share.delete',
   'onlineexams.exam.create',
   'onlineexams.exam.edit',
   'onlineexams.exam.delete',

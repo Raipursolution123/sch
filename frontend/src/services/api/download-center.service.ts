@@ -10,6 +10,8 @@ import type {
   UpdateVideoTutorialPayload,
   UploadContent,
   VideoTutorial,
+  ShareContent,
+  CreateShareContentPayload,
 } from '@app-types/download-center';
 import { type BackendPayload, extractList } from '@utils/api-response';
 
@@ -88,5 +90,24 @@ export const downloadCenterService = {
 
   deleteVideo: async (id: number): Promise<void> => {
     await apiClient.delete(API_ENDPOINTS.documents.videoDetail(id));
+  },
+
+  listShareContent: async (query?: string): Promise<ShareContent[]> => {
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.documents.shareContent, {
+      params: { page_size: 100, ...(query ? { q: query } : {}) },
+    });
+    return extractList<ShareContent>(data);
+  },
+
+  createShareContent: async (payload: CreateShareContentPayload): Promise<ShareContent> => {
+    const { data } = await apiClient.post<ApiSuccessResponse<ShareContent>>(
+      API_ENDPOINTS.documents.shareContent,
+      payload,
+    );
+    return data.data;
+  },
+
+  deleteShareContent: async (id: number): Promise<void> => {
+    await apiClient.delete(`${API_ENDPOINTS.documents.shareContent}${id}/`);
   },
 };

@@ -75,3 +75,28 @@ export type CreateVideoTutorialPayload = {
 };
 
 export type UpdateVideoTutorialPayload = Partial<CreateVideoTutorialPayload>;
+
+export interface ShareContent {
+  id: number;
+  title: string;
+  description: string | null;
+  send_to: string;
+  share_date: string | null;
+  valid_upto: string | null;
+  created_by: number;
+  created_at: string | null;
+  upload_content_ids: number[];
+  class_section_ids: number[];
+  group_id: string | null;
+}
+
+export type CreateShareContentPayload = {
+  title: string;
+  description?: string | null;
+  send_to: string;
+  share_date?: string | null;
+  valid_upto?: string | null;
+  upload_content_ids?: number[];
+  class_section_ids?: number[];
+  group_id?: string | null;
+};

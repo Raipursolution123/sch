@@ -44,14 +44,18 @@ export function ContentTypesPage() {
   const createMutation = useCreateContentType();
   const updateMutation = useUpdateContentType();
   const deleteMutation = useDeleteContentType();
+
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<ContentType | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<ContentType | null>(null);
+  const [isDeletingId, setIsDeletingId] = useState<number | null>(null); // track per-row deletion
+
   const { control, handleSubmit, reset, formState } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { name: '', description: '', is_active: true },
   });
 
+  // Reset form when dialog opens or selected changes
   useEffect(() => {
     if (!open) return;
     reset(
@@ -64,6 +68,58 @@ export function ContentTypesPage() {
         : { name: '', description: '', is_active: true },
     );
   }, [open, selected, reset]);
+
+  const handleAddEdit = (values: FormValues) => {
+    const payload = {
+      name: values.name,
+      description: values.description || '',
+      is_active: values.is_active ? 1 : 0,
+    };
+    if (selected) {
+      updateMutation.mutate(
+        { id: selected.id, payload },
+        {
+          onSuccess: () => {
+            setOpen(false);
+            refetch(); // refresh list
+          },
+          onError: (err) => {
+            console.error('Update failed:', err);
+            alert('Failed to update content type. Please try again.');
+          },
+        },
+      );
+    } else {
+      createMutation.mutate(payload, {
+        onSuccess: () => {
+          setOpen(false);
+          refetch();
+        },
+        onError: (err) => {
+          console.error('Create failed:', err);
+          alert('Failed to create content type. Please try again.');
+        },
+      });
+    }
+  };
+
+  const handleDelete = () => {
+    if (!deleteTarget) return;
+    setIsDeletingId(deleteTarget.id);
+    deleteMutation.mutate(deleteTarget.id, {
+      onSuccess: () => {
+        setDeleteTarget(null);
+        setIsDeletingId(null);
+        refetch();
+      },
+      onError: (err) => {
+        console.error('Delete failed:', err);
+        alert('Failed to delete content type. Please try again.');
+        setIsDeletingId(null);
+        setDeleteTarget(null);
+      },
+    });
+  };
 
   const addAction = (
     <PermissionButton
@@ -100,7 +156,8 @@ export function ContentTypesPage() {
           columns={columns}
           getRowKey={(r) => r.id}
           actions={(row) => (
-            <>
+            // 👇 Added a wrapper div with a proper key
+            <div key={row.id} className="flex items-center gap-1">
               <PermissionButton
                 permission="downloadcenter.type.edit"
                 variant="ghost"
@@ -118,32 +175,25 @@ export function ContentTypesPage() {
                 size="sm"
                 className="text-destructive hover:text-destructive"
                 onClick={() => setDeleteTarget(row)}
+                disabled={isDeletingId === row.id} // disable only this row's delete button
               >
-                <Trash2 className="h-4 w-4" />
+                {isDeletingId === row.id ? (
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
               </PermissionButton>
-            </>
+            </div>
           )}
         />
       </ModuleListPack>
+
+      {/* Dialog for Add/Edit */}
       <EntityFormDialog
         open={open}
         onOpenChange={setOpen}
         title={selected ? 'Edit Content Type' : 'Add Content Type'}
-        onSubmit={handleSubmit((values) => {
-          const payload = {
-            name: values.name,
-            description: values.description || '',
-            is_active: values.is_active ? 1 : 0,
-          };
-          if (selected) {
-            updateMutation.mutate(
-              { id: selected.id, payload },
-              { onSuccess: () => setOpen(false) },
-            );
-            return;
-          }
-          createMutation.mutate(payload, { onSuccess: () => setOpen(false) });
-        })}
+        onSubmit={handleSubmit(handleAddEdit)}
         isLoading={createMutation.isPending || updateMutation.isPending}
       >
         <FormErrorSummary errors={formState.errors} />
@@ -151,6 +201,8 @@ export function ContentTypesPage() {
         <FormTextareaField control={control} name="description" label="Description" />
         <FormSwitchField control={control} name="is_active" label="Active" />
       </EntityFormDialog>
+
+      {/* Delete confirmation */}
       <ConfirmDialog
         open={deleteTarget !== null}
         onOpenChange={(v) => !v && setDeleteTarget(null)}
@@ -158,11 +210,8 @@ export function ContentTypesPage() {
         description={`Remove “${deleteTarget?.name ?? ''}”.`}
         confirmLabel="Delete"
         destructive
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
-        }}
-        isLoading={deleteMutation.isPending}
+        onConfirm={handleDelete}
+        isLoading={isDeletingId !== null} // show loading when deleting
       />
     </>
   );

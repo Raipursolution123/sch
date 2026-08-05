@@ -292,6 +292,7 @@ export const API_ENDPOINTS = {
     uploadContentDetail: (id: number) => `/documents/download-center/content/${id}/`,
     videos: '/documents/download-center/videos/',
     videoDetail: (id: number) => `/documents/download-center/videos/${id}/`,
+    shareContent: '/documents/download-center/share-content/',
   },
   finance: {
     groups: '/finance/groups/',

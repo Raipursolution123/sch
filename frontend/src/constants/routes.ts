@@ -148,6 +148,8 @@ export const ROUTES = {
     contentTypes: '/download-center/content-types',
     content: '/download-center/content',
     videos: '/download-center/videos',
+    shareContent: '/download-center/share-content',
+
   },
   lessonPlan: {
     root: '/lesson-plan',
@@ -166,11 +168,13 @@ export const ROUTES = {
     root: '/income',
     list: '/income/list',
     heads: '/income/heads',
+    search: '/income/search',
   },
   expense: {
     root: '/expense',
     list: '/expense/list',
     heads: '/expense/heads',
+    search: '/expense/search',
   },
   reports: {
     root: '/reports',
@@ -189,6 +193,7 @@ export const ROUTES = {
     userLog: '/reports/user-log',
     auditTrail: '/reports/audit-trail',
     onlineExams: '/reports/online-exams',
+    timetable: '/reports/timetable',
   },
   certificates: {
     root: '/certificates',

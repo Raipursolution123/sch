@@ -17,6 +17,7 @@ from apps.documents.domain.certificate_exceptions import (
 )
 from apps.documents.models.content_types import ContentTypes
 from apps.shared.models.upload_contents import UploadContents
+from apps.shared.models import ShareContents, ShareContentFor, ShareUploadContents
 
 
 class ContentTypeService:
@@ -268,4 +269,83 @@ class VideoTutorialService:
     def delete(self, pk: int) -> None:
         row = self.get(pk)
         VideoTutorialClassSections.objects.filter(video_tutorial_id=row.id).delete()
+        row.delete()
+
+class ShareContentService:
+    def list(self, *, query: str | None = None):
+        qs = ShareContents.objects.all().order_by("-id")
+        term = (query or "").strip()
+        if term:
+            qs = qs.filter(
+                Q(title__icontains=term)
+                | Q(description__icontains=term)
+            )
+        return qs
+
+    def get(self, pk: int) -> ShareContents:
+        row = ShareContents.objects.filter(id=pk).first()
+        if row is None:
+            raise CertificateNotFoundError("Share content not found.")
+        return row
+
+    @transaction.atomic
+    def create(self, payload: dict[str, Any], *, created_by: int) -> ShareContents:
+        title = str(payload.get("title", "")).strip()
+        if not title:
+            raise CertificateValidationError("title is required.")
+        send_to = str(payload.get("send_to", "")).strip()
+        if not send_to:
+            raise CertificateValidationError("send_to is required.")
+        if not created_by:
+            raise CertificateValidationError("created_by staff id is required.")
+
+        share_date = payload.get("share_date") or timezone.now().date()
+        valid_upto = payload.get("valid_upto") or None
+
+        row = ShareContents.objects.create(
+            title=title,
+            description=str(payload.get("description", "")).strip() or None,
+            send_to=send_to,
+            share_date=share_date,
+            valid_upto=valid_upto,
+            created_by=int(created_by),
+            created_at=timezone.now(),
+        )
+
+        upload_content_ids = payload.get("upload_content_ids") or []
+        for uc_id in upload_content_ids:
+            UploadContentService().get(int(uc_id))
+            ShareUploadContents.objects.create(
+                upload_content_id=int(uc_id),
+                share_content_id=row.id,
+                created_at=timezone.now(),
+            )
+
+        if send_to == "group":
+            group_id = str(payload.get("group_id", "")).strip()
+            if not group_id:
+                raise CertificateValidationError("group_id is required when sharing with a group.")
+            ShareContentFor.objects.create(
+                share_content_id=row.id,
+                group_id=group_id,
+                created_at=timezone.now(),
+            )
+        elif send_to == "class":
+            class_section_ids = payload.get("class_section_ids") or []
+            if not class_section_ids:
+                raise CertificateValidationError("class_section_ids are required when sharing with a class.")
+            for cs_id in class_section_ids:
+                ShareContentFor.objects.create(
+                    share_content_id=row.id,
+                    class_section_id=int(cs_id),
+                    created_at=timezone.now(),
+                )
+
+        return row
+
+    @transaction.atomic
+    def delete(self, pk: int) -> None:
+        row = self.get(pk)
+        ShareUploadContents.objects.filter(share_content_id=row.id).delete()
+        ShareContentFor.objects.filter(share_content_id=row.id).delete()
         row.delete()

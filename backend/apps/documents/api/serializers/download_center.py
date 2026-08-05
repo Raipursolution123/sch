@@ -113,3 +113,39 @@ class VideoTutorialUpdateSerializer(serializers.Serializer):
     class_section_ids = serializers.ListField(
         child=serializers.IntegerField(), required=False
     )
+
+class ShareContentSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField()
+    description = serializers.CharField(allow_blank=True, allow_null=True)
+    send_to = serializers.CharField()
+    share_date = serializers.DateField(allow_null=True)
+    valid_upto = serializers.DateField(allow_null=True)
+    created_by = serializers.IntegerField()
+    created_at = serializers.DateTimeField(read_only=True, allow_null=True)
+    upload_content_ids = serializers.SerializerMethodField()
+    class_section_ids = serializers.SerializerMethodField()
+    group_id = serializers.SerializerMethodField()
+
+    def get_upload_content_ids(self, obj):
+        from apps.shared.models import ShareUploadContents
+        return list(ShareUploadContents.objects.filter(share_content_id=obj.id).values_list("upload_content_id", flat=True))
+
+    def get_class_section_ids(self, obj):
+        from apps.shared.models import ShareContentFor
+        return list(ShareContentFor.objects.filter(share_content_id=obj.id).exclude(class_section_id__isnull=True).values_list("class_section_id", flat=True))
+
+    def get_group_id(self, obj):
+        from apps.shared.models import ShareContentFor
+        row = ShareContentFor.objects.filter(share_content_id=obj.id, class_section_id__isnull=True).first()
+        return row.group_id if row else None
+
+class ShareContentCreateSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=200)
+    description = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    send_to = serializers.CharField(max_length=50)
+    share_date = serializers.DateField(required=False, allow_null=True)
+    valid_upto = serializers.DateField(required=False, allow_null=True)
+    upload_content_ids = serializers.ListField(child=serializers.IntegerField(), required=False)
+    group_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    class_section_ids = serializers.ListField(child=serializers.IntegerField(), required=False)

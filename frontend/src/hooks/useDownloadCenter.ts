@@ -8,6 +8,7 @@ import type {
   CreateVideoTutorialPayload,
   UpdateContentTypePayload,
   UpdateVideoTutorialPayload,
+  CreateShareContentPayload,
 } from '@app-types/download-center';
 import { getApiErrorMessage } from '@utils/session';
 
@@ -129,5 +130,37 @@ export function useDeleteVideoTutorial() {
       toast.success('Video tutorial deleted');
     },
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to delete video tutorial')),
+  });
+}
+
+export function useShareContents(query = '') {
+  return useQuery({
+    queryKey: ['download-center', 'share-content', 'list', query],
+    queryFn: () => downloadCenterService.listShareContent(query || undefined),
+  });
+}
+
+export function useCreateShareContent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateShareContentPayload) =>
+      downloadCenterService.createShareContent(payload),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['download-center', 'share-content'] });
+      toast.success('Content shared successfully');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to share content')),
+  });
+}
+
+export function useDeleteShareContent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => downloadCenterService.deleteShareContent(id),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['download-center', 'share-content'] });
+      toast.success('Shared content removed');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to remove shared content')),
   });
 }

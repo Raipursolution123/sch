@@ -7,6 +7,7 @@ from apps.documents.services.download_center_service import (
     ContentTypeService,
     UploadContentService,
     VideoTutorialService,
+    ShareContentService,
 )
 
 
@@ -57,4 +58,22 @@ def test_video_tutorial_requires_created_by():
         VideoTutorialService().create(
             {"title": "Intro", "description": "d", "video_link": "http://x"},
             created_by=0,
+        )
+
+
+@pytest.mark.django_db
+def test_share_content_requires_title():
+    with pytest.raises(CertificateValidationError, match="title"):
+        ShareContentService().create(
+            {"title": " ", "send_to": "group", "group_id": "student"},
+            created_by=1,
+        )
+
+
+@pytest.mark.django_db
+def test_share_content_requires_send_to():
+    with pytest.raises(CertificateValidationError, match="send_to"):
+        ShareContentService().create(
+            {"title": "Exam Prep", "send_to": " ", "group_id": "student"},
+            created_by=1,
         )

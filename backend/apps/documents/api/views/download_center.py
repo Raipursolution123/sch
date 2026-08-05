@@ -10,6 +10,8 @@ from apps.documents.api.serializers.download_center import (
     UploadContentSerializer,
     VideoTutorialCreateSerializer,
     VideoTutorialUpdateSerializer,
+     ShareContentCreateSerializer,
+     ShareContentSerializer,
 )
 from apps.documents.api.views.certificates import certificate_error_response
 from apps.documents.domain.certificate_exceptions import CertificateError
@@ -17,6 +19,7 @@ from apps.documents.services.download_center_service import (
     ContentTypeService,
     UploadContentService,
     VideoTutorialService,
+    ShareContentService
 )
 from common.pagination.standard import StandardResultsSetPagination
 from common.responses.api import APIResponse
@@ -226,5 +229,52 @@ class VideoTutorialDetailView(APIView):
         try:
             VideoTutorialService().delete(pk)
             return APIResponse.success(message="Video tutorial deleted.")
+        except CertificateError as exc:
+            return certificate_error_response(exc)
+
+class ShareContentListCreateView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "share_content"
+
+    def get(self, request):
+        qs = ShareContentService().list(query=request.query_params.get("q"))
+        return _paginated(request, self, qs, ShareContentSerializer, "Shared content retrieved.")
+
+    def post(self, request):
+        serializer = ShareContentCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return APIResponse.error(
+                message="Validation failed",
+                data=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        created_by = getattr(request.user, "user_id", None)
+        try:
+            row = ShareContentService().create(serializer.validated_data, created_by=int(created_by or 0))
+            return APIResponse.success(
+                data=ShareContentSerializer(row).data,
+                message="Content shared.",
+                status_code=status.HTTP_201_CREATED,
+            )
+        except CertificateError as exc:
+            return certificate_error_response(exc)
+
+class ShareContentDetailView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "share_content"
+
+    def get(self, request, pk):
+        try:
+            row = ShareContentService().get(pk)
+            return APIResponse.success(data=ShareContentSerializer(row).data)
+        except CertificateError as exc:
+            return certificate_error_response(exc)
+
+    def delete(self, request, pk):
+        try:
+            ShareContentService().delete(pk)
+            return APIResponse.success(message="Shared content removed.")
         except CertificateError as exc:
             return certificate_error_response(exc)
