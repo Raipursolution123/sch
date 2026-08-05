@@ -32,10 +32,12 @@ export interface FeeDueSearchFilters {
 
 export interface FeePaymentSearchRow {
   payment_id: string;
+  receipt_no?: number | null;
   date: string;
   amount: number;
   payment_mode: string;
   description: string | null;
+  collected_by?: string | null;
   feetype_name: string | null;
   feetype_code: string | null;
   student_id: number;

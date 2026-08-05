@@ -4,6 +4,12 @@ from apps.examinations.api.views.cbse_exam import (
     CbseExamDetailView,
     CbseExamsListCreateView,
 )
+from apps.examinations.api.views.cbse_marks import (
+    CbseExamTimetableListView,
+    CbseMarksheetView,
+    CbseMarksRosterView,
+    CbseMarksSaveView,
+)
 from apps.examinations.api.views.exam import ExamsDetailView, ExamsListCreateView
 from apps.examinations.api.views.exam_enrollment import (
     ExamEnrollmentAssignView,
@@ -124,6 +130,26 @@ urlpatterns = [
         "cbse-exams/<int:pk>/",
         CbseExamDetailView.as_view(),
         name="cbse_exams_detail",
+    ),
+    path(
+        "cbse-exams/<int:pk>/timetable/",
+        CbseExamTimetableListView.as_view(),
+        name="cbse_exam_timetable",
+    ),
+    path(
+        "cbse-marks/roster/",
+        CbseMarksRosterView.as_view(),
+        name="cbse_marks_roster",
+    ),
+    path(
+        "cbse-marks/",
+        CbseMarksSaveView.as_view(),
+        name="cbse_marks_save",
+    ),
+    path(
+        "cbse-marksheet/",
+        CbseMarksheetView.as_view(),
+        name="cbse_marksheet",
     ),
     path(
         "questions/",

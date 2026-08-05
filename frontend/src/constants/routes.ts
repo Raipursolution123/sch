@@ -34,6 +34,11 @@ export const ROUTES = {
     multiClass: '/students/multi-class',
     detail: (id: number | string) => `/students/${id}`,
   },
+  behaviour: {
+    root: '/behaviour',
+    incidents: '/behaviour/incidents',
+    assignments: '/behaviour/assignments',
+  },
   staff: {
     root: '/staff',
     attendance: '/staff/attendance',
@@ -43,6 +48,7 @@ export const ROUTES = {
     leaveAllotments: '/staff/leave-allotments',
     departments: '/staff/departments',
     designations: '/staff/designations',
+    ratings: '/staff/ratings',
     detail: (id: number | string) => `/staff/${id}`,
   },
   attendance: {
@@ -85,6 +91,7 @@ export const ROUTES = {
     grades: '/examinations/grades',
     divisions: '/examinations/divisions',
     cbseExams: '/examinations/cbse-exams',
+    cbseMarks: '/examinations/cbse-marks',
   },
   frontOffice: {
     root: '/front-office',

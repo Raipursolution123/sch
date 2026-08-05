@@ -126,13 +126,21 @@ def search_payment_rows(
                     if query_value not in haystack:
                         continue
 
+                receipt_no = detail.get("receipt_no") or detail.get("inv_no")
+                try:
+                    receipt_no = int(receipt_no) if receipt_no is not None else None
+                except (TypeError, ValueError):
+                    receipt_no = None
+
                 rows.append(
                     {
                         "payment_id": f"dep-{record['deposite_id']}-{trans_id}",
+                        "receipt_no": receipt_no,
                         "date": payment_date,
                         "amount": float(detail.get("amount") or 0),
                         "payment_mode": mode,
                         "description": detail.get("description") or None,
+                        "collected_by": detail.get("collected_by"),
                         "feetype_name": record.get("feetype_name"),
                         "feetype_code": record.get("feetype_code"),
                         "student_id": record.get("student_id"),

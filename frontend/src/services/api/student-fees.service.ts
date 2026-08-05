@@ -1,6 +1,7 @@
 import { apiClient } from '@services/api/client';
 import { API_ENDPOINTS } from '@constants/index';
 import type { ApiSuccessResponse } from '@app-types/api';
+import type { FeeReceipt } from '@app-types/fees/fee-receipt';
 import type {
   StudentFeeLine,
   StudentFeeLineStatus,
@@ -176,8 +177,12 @@ export const studentFeesService = {
       description?: string;
       date?: string;
     },
-  ): Promise<void> => {
-    await apiClient.post(API_ENDPOINTS.students.fees(studentId), payload);
+  ): Promise<FeeReceipt> => {
+    const { data } = await apiClient.post<ApiSuccessResponse<FeeReceipt>>(
+      API_ENDPOINTS.students.fees(studentId),
+      payload,
+    );
+    return data.data;
   },
   revertFee: async (studentId: number, feetypeId: number): Promise<void> => {
     await apiClient.delete(`${API_ENDPOINTS.students.fees(studentId)}?feetype_id=${feetypeId}`);

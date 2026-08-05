@@ -397,7 +397,9 @@ class FinanceReportService:
             entry_qs = entry_qs.filter(date__gte=start)
         if end:
             entry_qs = entry_qs.filter(date__lte=end)
-        entries = list(entry_qs[:500])
+        total_entries = entry_qs.count()
+        entries = list(entry_qs[:5000])
+        truncated = total_entries > len(entries)
         entry_ids = [e.id for e in entries]
         items_qs = CycEntryitems.objects.filter(entry_id__in=entry_ids)
         if ledger_id:
@@ -431,6 +433,8 @@ class FinanceReportService:
             "from_date": start.isoformat() if start else None,
             "to_date": end.isoformat() if end else None,
             "ledger_id": ledger_id,
+            "total_entries": total_entries,
+            "truncated": truncated,
             "rows": rows,
         }
 

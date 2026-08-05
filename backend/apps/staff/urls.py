@@ -13,6 +13,12 @@ from apps.staff.api.views.leave_type import (
     LeaveTypeDetailView,
     LeaveTypesListCreateView,
 )
+from apps.staff.api.views.staff_rating import (
+    StaffRatingApproveView,
+    StaffRatingDeclineView,
+    StaffRatingDetailView,
+    StaffRatingListView,
+)
 from apps.staff.api.views.staff import StaffDetailView, StaffListCreateView
 from apps.staff.api.views.staff_document import (
     StaffDocumentDeleteView,
@@ -119,6 +125,22 @@ urlpatterns = [
         "leave-allotments/<int:pk>/",
         StaffLeaveAllotmentDetailView.as_view(),
         name="staff_leave_allotment_detail",
+    ),
+    path("ratings/", StaffRatingListView.as_view(), name="staff_ratings_list"),
+    path(
+        "ratings/<int:pk>/approve/",
+        StaffRatingApproveView.as_view(),
+        name="staff_rating_approve",
+    ),
+    path(
+        "ratings/<int:pk>/decline/",
+        StaffRatingDeclineView.as_view(),
+        name="staff_rating_decline",
+    ),
+    path(
+        "ratings/<int:pk>/",
+        StaffRatingDetailView.as_view(),
+        name="staff_rating_detail",
     ),
     path("<int:pk>/", StaffDetailView.as_view(), name="staff_detail"),
     path(

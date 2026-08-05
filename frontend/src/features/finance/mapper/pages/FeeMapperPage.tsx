@@ -18,7 +18,7 @@ import { ModuleListPack } from '@workflow-packs';
 export function FeeMapperPage() {
   const { data: rows = [], isLoading, isError, error, refetch } = useFeeMapper();
   const { data: feeTypes = [] } = useFeeTypes();
-  const { data: ledgersData } = useLedgersList(1, 100);
+  const { data: ledgersData } = useLedgersList(1, 500);
   const ledgers = ledgersData?.results ?? [];
 
   const createMutation = useCreateFeeMapper();

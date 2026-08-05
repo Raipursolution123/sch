@@ -260,6 +260,23 @@ export const queryKeys = {
       roster: (staffId: number) =>
         [...queryKeys.staff.all, 'leave-allotments', 'roster', staffId] as const,
     },
+    ratings: {
+      list: (status?: number | '') =>
+        [...queryKeys.staff.all, 'ratings', 'list', status ?? 'all'] as const,
+    },
+  },
+  behaviour: {
+    all: ['behaviour'] as const,
+    incidents: () => [...queryKeys.behaviour.all, 'incidents'] as const,
+    assignments: (sessionId?: number) =>
+      [...queryKeys.behaviour.all, 'assignments', sessionId ?? 'all'] as const,
+  },
+  systemReports: {
+    all: ['system-reports'] as const,
+    userLogs: (filters: Record<string, string>) =>
+      [...queryKeys.systemReports.all, 'user-logs', filters] as const,
+    auditTrail: (filters: Record<string, string>) =>
+      [...queryKeys.systemReports.all, 'audit-trail', filters] as const,
   },
   fees: {
     all: ['fees'] as const,
@@ -450,6 +467,27 @@ export const queryKeys = {
     },
     cbseExams: {
       list: () => [...queryKeys.examinations.all, 'cbse-exams', 'list'] as const,
+    },
+    cbseMarks: {
+      timetable: (examId: number) =>
+        [...queryKeys.examinations.all, 'cbse-marks', 'timetable', examId] as const,
+      roster: (examId: number, timetableId: number, assessmentTypeId: number) =>
+        [
+          ...queryKeys.examinations.all,
+          'cbse-marks',
+          'roster',
+          examId,
+          timetableId,
+          assessmentTypeId,
+        ] as const,
+      marksheet: (examId: number, cbseExamStudentId: number) =>
+        [
+          ...queryKeys.examinations.all,
+          'cbse-marks',
+          'marksheet',
+          examId,
+          cbseExamStudentId,
+        ] as const,
     },
     admitCards: {
       list: () => [...queryKeys.examinations.all, 'admit-cards', 'list'] as const,

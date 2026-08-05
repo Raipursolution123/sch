@@ -290,17 +290,24 @@ def fetch_deposite_payments(student_session_id: int) -> list[dict[str, Any]]:
                 continue
 
             for trans_id, detail in detail_dict.items():
+                receipt_no = detail.get("receipt_no") or detail.get("inv_no")
+                try:
+                    receipt_no = int(receipt_no) if receipt_no is not None else None
+                except (TypeError, ValueError):
+                    receipt_no = None
                 payments.append(
                     {
                         "id": f"dep-{dep_id}-{trans_id}",
                         "deposite_id": dep_id,
                         "trans_id": trans_id,
+                        "receipt_no": receipt_no,
                         "date": safe_date_str(detail.get("date")),
                         "amount": float(detail.get("amount") or 0),
                         "amount_discount": float(detail.get("amount_discount") or 0),
                         "amount_fine": float(detail.get("amount_fine") or 0),
                         "payment_mode": detail.get("payment_mode", "Cash"),
                         "description": detail.get("description", ""),
+                        "collected_by": detail.get("collected_by"),
                         "feetype_name": feetype_name,
                         "feetype_id": feetype_id,
                         "feetype_code": feetype_code,

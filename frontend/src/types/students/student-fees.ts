@@ -15,15 +15,20 @@ export interface StudentFeeLine {
 
 export interface StudentFeePayment {
   id: string;
+  receipt_no?: number | null;
   date: string;
   amount: number;
   payment_mode: string;
   description: string | null;
   feetype_name: string | null;
+  feetype_id?: number | null;
+  collected_by?: string | null;
 }
 
 export interface StudentFeeSummary {
   student_id: number;
+  admission_no?: string;
+  full_name?: string;
   session_name: string;
   class_name: string;
   section_name: string | null;

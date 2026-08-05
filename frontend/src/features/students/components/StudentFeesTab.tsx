@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Trash2 } from 'lucide-react';
+import { Printer, Trash2 } from 'lucide-react';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { SettingsCard } from '@components/forms/SettingsCard';
 import { PermissionButton } from '@components/rbac/PermissionButton';
+import { FeeReceiptModal } from '@features/fees/components/FeeReceiptModal';
 import { FeeLineStatusBadge } from '@features/students/components/FeeLineStatusBadge';
 import { CollectFeeDialog } from '@features/students/components/CollectFeeDialog';
 import {
@@ -15,6 +16,7 @@ import {
   useDeletePayment,
 } from '@hooks/useStudentFees';
 import { ROUTES } from '@constants/index';
+import type { FeeReceipt } from '@app-types/fees/fee-receipt';
 import type { StudentDetail } from '@app-types/students/student';
 import type { StudentFeeLine, StudentFeePayment } from '@app-types/students/student-fees';
 import { formatAmount, formatDate } from '@utils/format';
@@ -43,6 +45,28 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
 
   const [collectDialogOpen, setCollectDialogOpen] = useState(false);
   const [selectedFeeLine, setSelectedFeeLine] = useState<StudentFeeLine | null>(null);
+  const [receipt, setReceipt] = useState<FeeReceipt | null>(null);
+  const [receiptOpen, setReceiptOpen] = useState(false);
+
+  const openReceipt = (payment: StudentFeePayment) => {
+    setReceipt({
+      payment_id: payment.id,
+      receipt_no: payment.receipt_no ?? null,
+      date: payment.date,
+      amount: payment.amount,
+      payment_mode: payment.payment_mode,
+      description: payment.description,
+      feetype_id: payment.feetype_id,
+      feetype_name: payment.feetype_name,
+      student_id: student.id,
+      admission_no: fees?.admission_no || student.admission_no || '',
+      full_name: fees?.full_name || student.full_name,
+      class_name: fees?.class_name || student.class_name || '—',
+      section_name: fees?.section_name ?? student.section_name,
+      collected_by: payment.collected_by,
+    });
+    setReceiptOpen(true);
+  };
 
   const paymentColumns = useMemo<DataTableColumn<StudentFeePayment>[]>(
     () => [
@@ -51,6 +75,12 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
         header: 'Date of Payment',
         cellClassName: 'text-muted-foreground',
         cell: (row) => formatDate(row.date),
+      },
+      {
+        id: 'receipt',
+        header: 'Receipt',
+        cellClassName: 'tabular-nums text-muted-foreground',
+        cell: (row) => row.receipt_no ?? '—',
       },
       {
         id: 'feetype',
@@ -74,22 +104,35 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
         header: '',
         cellClassName: 'text-right',
         cell: (row) => (
-          <PermissionButton
-            permission="fees.manage"
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-muted-foreground hover:text-destructive"
-            disabled={deletePaymentMutation.isPending}
-            onClick={() => deletePaymentMutation.mutate(row.id)}
-            title="Delete Payment"
-          >
-            <Trash2 className="h-4 w-4" />
-            <span className="sr-only">Delete</span>
-          </PermissionButton>
+          <div className="flex items-center justify-end gap-1">
+            <PermissionButton
+              permission="fees.manage"
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground"
+              onClick={() => openReceipt(row)}
+              title="Print Receipt"
+            >
+              <Printer className="h-4 w-4" />
+              <span className="sr-only">Print</span>
+            </PermissionButton>
+            <PermissionButton
+              permission="fees.manage"
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+              disabled={deletePaymentMutation.isPending}
+              onClick={() => deletePaymentMutation.mutate(row.id)}
+              title="Delete Payment"
+            >
+              <Trash2 className="h-4 w-4" />
+              <span className="sr-only">Delete</span>
+            </PermissionButton>
+          </div>
         ),
       },
     ],
-    [deletePaymentMutation],
+    [deletePaymentMutation, fees, student],
   );
 
   const lineColumns = useMemo<DataTableColumn<StudentFeeLine>[]>(
@@ -248,11 +291,17 @@ export function StudentFeesTab({ student }: StudentFeesTabProps) {
         feeLine={selectedFeeLine}
         onSubmit={(payload) => {
           payFeeMutation.mutate(payload, {
-            onSuccess: () => setCollectDialogOpen(false),
+            onSuccess: (payment) => {
+              setCollectDialogOpen(false);
+              setReceipt(payment);
+              setReceiptOpen(true);
+            },
           });
         }}
         isLoading={payFeeMutation.isPending}
       />
+
+      <FeeReceiptModal open={receiptOpen} onOpenChange={setReceiptOpen} receipt={receipt} />
     </div>
   );
 }

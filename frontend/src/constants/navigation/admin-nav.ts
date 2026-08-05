@@ -212,6 +212,28 @@ export const ADMIN_NAV: NavItem[] = [
     ],
   },
   {
+    id: 'behaviour',
+    label: 'Behaviour Records',
+    path: ROUTES.behaviour.incidents,
+    icon: ClipboardList,
+    section: 'people',
+    permissionKeys: ['behaviour_records'],
+    children: [
+      {
+        id: 'behaviour-incidents',
+        label: 'Incident Types',
+        path: ROUTES.behaviour.incidents,
+        permissionKeys: ['behaviour_records_incident'],
+      },
+      {
+        id: 'behaviour-assignments',
+        label: 'Assign Incidents',
+        path: ROUTES.behaviour.assignments,
+        permissionKeys: ['behaviour_records_assign_incident'],
+      },
+    ],
+  },
+  {
     id: 'staff',
     label: 'Staff',
     path: ROUTES.staff.root,
@@ -265,8 +287,7 @@ export const ADMIN_NAV: NavItem[] = [
       {
         id: 'staff-rating',
         label: 'Teachers Rating',
-        path: ROUTES.staff.root,
-        comingSoon: true,
+        path: ROUTES.staff.ratings,
         permissionKeys: ['teachers_rating'],
       },
       {
@@ -539,7 +560,13 @@ export const ADMIN_NAV: NavItem[] = [
         id: 'exams-cbse',
         label: 'CBSE Exams',
         path: ROUTES.examinations.cbseExams,
-        permissionKeys: ['exam_group'],
+        permissionKeys: ['cbse_exam', 'exam_group'],
+      },
+      {
+        id: 'exams-cbse-marks',
+        label: 'CBSE Marks',
+        path: ROUTES.examinations.cbseMarks,
+        permissionKeys: ['cbse_exam_marks', 'exam_result'],
       },
     ],
   },

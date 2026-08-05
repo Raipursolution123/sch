@@ -12,6 +12,7 @@ export const EXAMINATIONS_MODULE_NAV: ModuleNavItem[] = [
   { label: 'Grades', path: ROUTES.examinations.grades },
   { label: 'Divisions', path: ROUTES.examinations.divisions },
   { label: 'CBSE exams', path: ROUTES.examinations.cbseExams },
+  { label: 'CBSE marks', path: ROUTES.examinations.cbseMarks },
 ];
 
 export function ExaminationsModuleLayout() {

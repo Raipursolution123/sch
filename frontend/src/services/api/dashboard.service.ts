@@ -16,14 +16,12 @@ import { ROUTES } from '@constants/index';
 import { attendanceService } from '@services/api/attendance.service';
 import { examsService } from '@services/api/exams.service';
 import { feeAssignmentsService } from '@services/api/fee-assignments.service';
+import { feeSearchService } from '@services/api/fee-search.service';
 import { staffService } from '@services/api/staff.service';
 import { studentsService } from '@services/api/students.service';
 import { formatAmount, formatDate } from '@utils/format';
 
 // TODO: Wire GET /api/v1/dashboard/overview/ when backend exposes a dedicated overview endpoint.
-// TODO: Wire attendance KPI + weekly chart when attendance reporting API is available.
-// TODO: Wire school-wide fee collection summary when aggregate fees endpoint is available.
-// TODO: Wire exam paper schedules when GET /api/v1/examinations/schedules/ is available.
 
 const ACTIVITY_LIMIT = 6;
 const UPCOMING_EXAM_LIMIT = 3;
@@ -94,7 +92,10 @@ function computeAttendanceRate(rows: AttendanceReportRow[]): number | null {
   return total > 0 ? Math.round((present / total) * 100) : null;
 }
 
-function buildFeeOverviewFromAssignments(assignments: FeeAssignment[]): FeeOverview {
+function buildFeeOverviewFromAssignments(
+  assignments: FeeAssignment[],
+  collected: number,
+): FeeOverview {
   const today = new Date().toISOString().slice(0, 10);
   let pending = 0;
   let overdue = 0;
@@ -108,7 +109,6 @@ function buildFeeOverviewFromAssignments(assignments: FeeAssignment[]): FeeOverv
     }
   }
 
-  const collected = 0;
   const total = pending;
   const collectionRate = total > 0 ? (collected / total) * 100 : 0;
 
@@ -137,11 +137,8 @@ function buildKpis(
   };
 
   const fees: KpiMetric = {
-    label: 'Fees Assigned',
-    value:
-      feeOverview.collected + feeOverview.pending + feeOverview.overdue > 0
-        ? formatAmount(feeOverview.pending + feeOverview.overdue + feeOverview.collected)
-        : '—',
+    label: 'Fees Collected',
+    value: feeOverview.collected > 0 ? formatAmount(feeOverview.collected) : '—',
   };
 
   const attendance: KpiMetric = {
@@ -278,19 +275,25 @@ export const dashboardService = {
   async getOverview(sessionId?: number): Promise<DashboardOverview> {
     const weekFrom = daysAgoIso(6);
     const weekTo = daysAgoIso(0);
+    // Session-to-date collection window (approx. academic year start if unknown).
+    const collectionFrom = daysAgoIso(365);
 
-    const [studentsPage, staffPage, examsPage, feeAssignments, attendanceReport] =
+    const [studentsPage, staffPage, examsPage, feeAssignments, attendanceReport, payments] =
       await Promise.all([
         studentsService.listPaginated(1, RECENT_STUDENTS_PAGE_SIZE),
         staffService.list(1),
         examsService.list(),
         feeAssignmentsService.list(),
         attendanceService.getReport({ from_date: weekFrom, to_date: weekTo }).catch(() => null),
+        feeSearchService
+          .searchPayments({ from_date: collectionFrom, to_date: weekTo })
+          .catch(() => null),
       ]);
 
     const sessionFeeAssignments = filterBySession(feeAssignments, sessionId);
     const sessionExams = filterBySession(examsPage.results, sessionId);
-    const feeOverview = buildFeeOverviewFromAssignments(sessionFeeAssignments);
+    const collected = payments?.total_amount ?? 0;
+    const feeOverview = buildFeeOverviewFromAssignments(sessionFeeAssignments, collected);
     const weeklyAttendance = attendanceReport
       ? buildWeeklyAttendancePoints(attendanceReport.rows)
       : [];

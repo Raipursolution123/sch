@@ -14,6 +14,7 @@ from apps.students.domain.student_fee_exceptions import (
     StudentFeeNotFoundError,
     StudentFeeValidationError,
 )
+from apps.fees.models.fee_receipt_no import FeeReceiptNo
 from apps.students.models.student_fees_deposite import StudentFeesDeposite
 from apps.students.models.student_fees_master import StudentFeesMaster
 from apps.students.selectors import student_fee_selectors as fee_selectors
@@ -65,6 +66,10 @@ class StudentFeeService:
 
         return {
             "student_id": student.id,
+            "admission_no": student.admission_no or "",
+            "full_name": selectors.format_student_name(
+                student.firstname, student.middlename, student.lastname
+            ),
             "session_name": active_session.session,
             "class_name": class_name,
             "section_name": section_name,
@@ -76,15 +81,30 @@ class StudentFeeService:
             "payments": [
                 {
                     "id": payment["id"],
+                    "receipt_no": payment.get("receipt_no"),
                     "date": payment["date"],
                     "amount": payment["amount"],
                     "payment_mode": payment["payment_mode"],
                     "description": payment.get("description") or None,
                     "feetype_name": payment.get("feetype_name"),
+                    "feetype_id": payment.get("feetype_id"),
+                    "collected_by": payment.get("collected_by"),
                 }
                 for payment in payments
             ],
         }
+
+    @staticmethod
+    def _allocate_receipt_no() -> int:
+        """Allocate next school-wide fee receipt number from fee_receipt_no."""
+        row = FeeReceiptNo.objects.select_for_update().order_by("id").first()
+        if row is None:
+            row = FeeReceiptNo.objects.create(payment=1)
+            return 1
+        next_no = int(row.payment or 0) + 1
+        row.payment = next_no
+        row.save(update_fields=["payment"])
+        return next_no
 
     def record_payment(
         self,
@@ -92,7 +112,7 @@ class StudentFeeService:
         payload: dict[str, Any],
         *,
         collected_by: str,
-    ) -> None:
+    ) -> dict[str, Any]:
         amount = payload.get("amount")
         feetype_id = payload.get("feetype_id")
         payment_mode = payload.get("payment_mode", "Cash")
@@ -146,7 +166,12 @@ class StudentFeeService:
             )
 
         fgft_id, fsg_id, sfm_id = resolved
+        class_name, section_name = fee_selectors.resolve_class_section_names(
+            student_session
+        )
         with transaction.atomic():
+            receipt_no = self._allocate_receipt_no()
+
             if sfm_id:
                 sfm = StudentFeesMaster.objects.get(id=sfm_id)
             else:
@@ -165,15 +190,18 @@ class StudentFeeService:
                 student_fees_master_id=sfm.id, fee_groups_feetype_id=fgft_id
             ).first()
 
+            payment_date_str = selectors.safe_date_str(payment_date)
             new_payment = {
                 "amount": float(amount),
                 "amount_discount": 0.0,
                 "amount_fine": 0.0,
-                "date": selectors.safe_date_str(payment_date),
+                "date": payment_date_str,
                 "description": description,
                 "collected_by": collected_by,
                 "payment_mode": str(payment_mode).lower(),
                 "received_by": "1",
+                "inv_no": receipt_no,
+                "receipt_no": receipt_no,
             }
 
             if sfd:
@@ -186,13 +214,13 @@ class StudentFeeService:
 
                 existing_keys = [int(k) for k in detail_dict if str(k).isdigit()]
                 next_key = str(max(existing_keys) + 1) if existing_keys else "1"
-                new_payment["inv_no"] = int(next_key)
                 detail_dict[next_key] = new_payment
                 sfd.amount_detail = json.dumps(detail_dict)
                 sfd.save()
+                deposit_id = sfd.id
+                trans_id = next_key
             else:
-                new_payment["inv_no"] = 1
-                StudentFeesDeposite.objects.create(
+                created = StudentFeesDeposite.objects.create(
                     student_fees_master_id=sfm.id,
                     fee_groups_feetype_id=fgft_id,
                     student_transport_fee_id=None,
@@ -201,13 +229,35 @@ class StudentFeeService:
                     is_active="yes",
                     created_at=timezone.now(),
                 )
+                deposit_id = created.id
+                trans_id = "1"
 
+        payment_id = f"dep-{deposit_id}-{trans_id}"
         logger.info(
-            "Recorded fee payment student_id=%s feetype_id=%s amount=%s",
+            "Recorded fee payment student_id=%s feetype_id=%s amount=%s receipt_no=%s",
             student_id,
             feetype_id,
             amount,
+            receipt_no,
         )
+        return {
+            "payment_id": payment_id,
+            "receipt_no": receipt_no,
+            "date": payment_date_str,
+            "amount": float(amount),
+            "payment_mode": str(payment_mode).lower(),
+            "description": description or None,
+            "feetype_id": int(feetype_id),
+            "feetype_name": fee_line.get("feetype_name"),
+            "student_id": student.id,
+            "admission_no": student.admission_no or "",
+            "full_name": selectors.format_student_name(
+                student.firstname, student.middlename, student.lastname
+            ),
+            "class_name": class_name,
+            "section_name": section_name,
+            "collected_by": collected_by,
+        }
 
     def delete_payment(self, payment_id: str) -> None:
         if not payment_id.startswith("dep-"):

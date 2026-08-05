@@ -50,12 +50,15 @@ class StudentFeesView(APIView):
         serializer = StudentFeePaymentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            StudentFeeService().record_payment(
+            payment = StudentFeeService().record_payment(
                 pk,
                 serializer.validated_data,
                 collected_by=_collected_by_label(request.user),
             )
-            return APIResponse.success(message="Payment recorded successfully.")
+            return APIResponse.success(
+                data=payment,
+                message="Payment recorded successfully.",
+            )
         except StudentError as exc:
             return _error_response(exc)
 

@@ -23,9 +23,41 @@ from apps.students.api.views.student_masters import (
     StudentImportView,
 )
 from apps.students.api.views.student_transport import StudentTransportView
+from apps.students.api.views.behaviour import (
+    BehaviourAssignmentDetailView,
+    BehaviourAssignmentListCreateView,
+    BehaviourIncidentTypeDetailView,
+    BehaviourIncidentTypeListCreateView,
+    BehaviourSettingsView,
+)
 
 urlpatterns = [
     path("", StudentListCreateView.as_view(), name="students-list"),
+    path(
+        "behaviour/incidents/",
+        BehaviourIncidentTypeListCreateView.as_view(),
+        name="behaviour-incident-types",
+    ),
+    path(
+        "behaviour/incidents/<int:pk>/",
+        BehaviourIncidentTypeDetailView.as_view(),
+        name="behaviour-incident-type-detail",
+    ),
+    path(
+        "behaviour/assignments/",
+        BehaviourAssignmentListCreateView.as_view(),
+        name="behaviour-assignments",
+    ),
+    path(
+        "behaviour/assignments/<int:pk>/",
+        BehaviourAssignmentDetailView.as_view(),
+        name="behaviour-assignment-detail",
+    ),
+    path(
+        "behaviour/settings/",
+        BehaviourSettingsView.as_view(),
+        name="behaviour-settings",
+    ),
     path("categories/", StudentCategoriesListView.as_view(), name="student-categories"),
     path(
         "categories/<int:pk>/",

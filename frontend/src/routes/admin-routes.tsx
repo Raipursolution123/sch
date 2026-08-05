@@ -413,6 +413,18 @@ const MultiClassPage = lazy(() =>
   })),
 );
 
+const BehaviourIncidentsPage = lazy(() =>
+  import('@features/behaviour/pages/BehaviourIncidentsPage').then((m) => ({
+    default: m.BehaviourIncidentsPage,
+  })),
+);
+
+const BehaviourAssignmentsPage = lazy(() =>
+  import('@features/behaviour/pages/BehaviourAssignmentsPage').then((m) => ({
+    default: m.BehaviourAssignmentsPage,
+  })),
+);
+
 const StaffPage = lazy(() =>
   import('@features/staff/pages/StaffPage').then((m) => ({
     default: m.StaffPage,
@@ -422,6 +434,12 @@ const StaffPage = lazy(() =>
 const LeaveTypesPage = lazy(() =>
   import('@features/staff/leave-types/pages/LeaveTypesPage').then((m) => ({
     default: m.LeaveTypesPage,
+  })),
+);
+
+const StaffRatingsPage = lazy(() =>
+  import('@features/staff/ratings/pages/StaffRatingsPage').then((m) => ({
+    default: m.StaffRatingsPage,
   })),
 );
 
@@ -770,6 +788,11 @@ const OnlineAdmissionsPage = lazy(() =>
 const CbseExamsPage = lazy(() =>
   import('@features/examinations/cbse-exams/pages/CbseExamsPage').then((m) => ({
     default: m.CbseExamsPage,
+  })),
+);
+const CbseMarksPage = lazy(() =>
+  import('@features/examinations/cbse-exams/pages/CbseMarksPage').then((m) => ({
+    default: m.CbseMarksPage,
   })),
 );
 
@@ -1140,6 +1163,11 @@ export const adminRoutes: RouteObject[] = [
     ],
   },
 
+  createModuleRoutes('/behaviour', ROUTES.behaviour.incidents, [
+    { path: 'incidents', element: <BehaviourIncidentsPage /> },
+    { path: 'assignments', element: <BehaviourAssignmentsPage /> },
+  ]),
+
   {
     path: 'staff',
     children: [
@@ -1154,6 +1182,7 @@ export const adminRoutes: RouteObject[] = [
           { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
           { path: 'departments', element: <StaffDepartmentsPage /> },
           { path: 'designations', element: <StaffDesignationsPage /> },
+          { path: 'ratings', element: <StaffRatingsPage /> },
           ...buildPlaceholderChildren('/staff'),
         ],
       },
@@ -1213,6 +1242,7 @@ export const adminRoutes: RouteObject[] = [
       { path: 'grades', element: <GradesPage /> },
       { path: 'divisions', element: <MarkDivisionsPage /> },
       { path: 'cbse-exams', element: <CbseExamsPage /> },
+      { path: 'cbse-marks', element: <CbseMarksPage /> },
     ],
     <ExaminationsModuleLayout />,
   ),

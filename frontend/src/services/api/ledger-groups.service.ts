@@ -19,7 +19,7 @@ export const ledgerGroupsService = {
   getAllGroups: async () => {
     const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<LedgerGroup>>>(
       API_ENDPOINTS.finance.groups,
-      { params: { page: 1, page_size: 100 } },
+      { params: { page: 1, page_size: 500 } },
     );
     return response.data.data.results || [];
   },

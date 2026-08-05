@@ -16,7 +16,7 @@ export const ledgersService = {
     const response = await apiClient.get<ApiSuccessResponse<PaginatedResponse<Ledger>>>(
       API_ENDPOINTS.finance.ledgers,
       {
-        params: { page: 1, limit: 1000 },
+        params: { page: 1, page_size: 500 },
       },
     );
     return response.data.data.results || [];

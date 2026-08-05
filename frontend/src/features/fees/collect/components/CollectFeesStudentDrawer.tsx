@@ -10,11 +10,13 @@ import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { PermissionButton } from '@components/rbac/PermissionButton';
+import { FeeReceiptModal } from '@features/fees/components/FeeReceiptModal';
 import { CollectFeeDialog } from '@features/students/components/CollectFeeDialog';
 import { FeeLineStatusBadge } from '@features/students/components/FeeLineStatusBadge';
 import { usePayStudentFeeFromCollect, useRevertStudentFeeFromCollect } from '@hooks/useCollectFees';
 import { useStudentFees } from '@hooks/useStudentFees';
 import type { FeeCollectRosterStudent } from '@app-types/fees/fee-collect';
+import type { FeeReceipt } from '@app-types/fees/fee-receipt';
 import type { StudentFeeLine } from '@app-types/students/student-fees';
 import { formatAmount, formatDate } from '@utils/format';
 
@@ -55,6 +57,8 @@ export function CollectFeesStudentDrawer({
 
   const [collectDialogOpen, setCollectDialogOpen] = useState(false);
   const [selectedFeeLine, setSelectedFeeLine] = useState<StudentFeeLine | null>(null);
+  const [receipt, setReceipt] = useState<FeeReceipt | null>(null);
+  const [receiptOpen, setReceiptOpen] = useState(false);
 
   const lineColumns = useMemo<DataTableColumn<StudentFeeLine>[]>(
     () => [
@@ -182,11 +186,17 @@ export function CollectFeesStudentDrawer({
         feeLine={selectedFeeLine}
         onSubmit={(payload) => {
           payFeeMutation.mutate(payload, {
-            onSuccess: () => setCollectDialogOpen(false),
+            onSuccess: (payment) => {
+              setCollectDialogOpen(false);
+              setReceipt(payment);
+              setReceiptOpen(true);
+            },
           });
         }}
         isLoading={payFeeMutation.isPending}
       />
+
+      <FeeReceiptModal open={receiptOpen} onOpenChange={setReceiptOpen} receipt={receipt} />
     </>
   );
 }

@@ -19,7 +19,7 @@ export function JournalEntriesPage() {
   const [page, setPage] = useState(1);
   const { data, isLoading, isError, error, refetch } = useJournalEntries(page);
   const { data: entryTypes = [] } = useEntryTypes();
-  const { data: ledgersData } = useLedgersList(1, 100);
+  const { data: ledgersData } = useLedgersList(1, 500);
   const ledgers = ledgersData?.results ?? [];
 
   const createMutation = useCreateJournalEntry();

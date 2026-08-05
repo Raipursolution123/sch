@@ -59,6 +59,8 @@ urlpatterns = [
     path("cms/", include("apps.cms.urls")),
     # lms
     path("lms/", include("apps.lms.urls")),
+    # reports (user log / audit trail)
+    path("reports/", include("apps.system.urls")),
     # cyc_extensions (Finance / accounting)
     path("", include("apps.cyc_extensions.urls")),
 ]

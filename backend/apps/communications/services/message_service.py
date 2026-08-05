@@ -109,7 +109,7 @@ class MessageService:
             is_individual=_yes_no(audience == "individual"),
             is_class=1 if audience == "class" else 0,
             is_schedule=is_schedule_val,
-            sent=0,  # Queued — live SMTP/SMS delivery is not configured in MVP.
+            sent=0,
             schedule_date_time=schedule_dt,
             group_list=group_list,
             user_list=user_list,
@@ -123,7 +123,7 @@ class MessageService:
             updated_at=now.date(),
         )
         logger.info("Composed %s message id=%s title=%s", channel, row.id, row.title)
-        return self._to_dict(row)
+        return self._finalize_delivery(row, channel=channel, is_schedule=is_schedule_val)
 
     def bulk_email_to_students(self, payload: dict[str, Any]) -> dict[str, Any]:
         title = str(payload.get("title") or "").strip()
@@ -195,7 +195,7 @@ class MessageService:
             created_at=now,
             updated_at=now.date(),
         )
-        data = self._to_dict(row)
+        data = self._finalize_delivery(row, channel="email", is_schedule=0)
         data["recipient_count"] = len(emails)
         logger.info(
             "Bulk email message id=%s recipients=%s class_id=%s",
@@ -203,6 +203,28 @@ class MessageService:
             len(emails),
             class_id,
         )
+        return data
+
+    def _finalize_delivery(
+        self, row: Messages, *, channel: str, is_schedule: int
+    ) -> dict[str, Any]:
+        """Attempt live delivery for immediate (non-scheduled) messages."""
+        delivery_meta: dict[str, Any] = {"attempted": False}
+        if int(is_schedule or 0) == 0:
+            from apps.communications.services.delivery_service import DeliveryService
+
+            result = DeliveryService().deliver_message(row, channel=channel)
+            delivery_meta = {
+                "attempted": True,
+                "ok": bool(result.get("ok")),
+                "detail": result.get("detail") or "",
+                "stub": bool(result.get("stub")),
+            }
+            if result.get("ok") and int(result.get("sent") or 0) == 1:
+                row.sent = 1
+                row.save(update_fields=["sent"])
+        data = self._to_dict(row)
+        data["delivery"] = delivery_meta
         return data
 
     def _to_dict(self, row: Messages) -> dict[str, Any]:

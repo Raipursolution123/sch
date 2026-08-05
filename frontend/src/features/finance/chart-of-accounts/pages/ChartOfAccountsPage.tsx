@@ -27,7 +27,7 @@ export function ChartOfAccountsPage() {
     isError: ledgersError,
     error: ledgersErr,
     refetch: refetchLedgers,
-  } = useLedgersList(1, 100);
+  } = useLedgersList(1, 500);
 
   const ledgers = ledgersData?.results ?? [];
   const [search, setSearch] = useState('');
