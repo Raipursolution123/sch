@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { cn } from '@utils/cn';
 
 export interface ModuleNavItem {
@@ -19,6 +19,8 @@ export function ModuleSubNavLayout({
   nav,
   'aria-label': ariaLabel,
 }: ModuleSubNavLayoutProps) {
+  const location = useLocation();
+
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
       <nav className="w-full shrink-0 lg:w-52" aria-label={ariaLabel ?? `${title} navigation`}>
@@ -36,14 +38,17 @@ export function ModuleSubNavLayout({
               ) : (
                 <NavLink
                   to={item.path}
-                  className={({ isActive }) =>
-                    cn(
+                  className={({ isActive }) => {
+                    const isLinkActive = item.path?.includes('?')
+                      ? location.pathname + location.search === item.path
+                      : isActive && !location.search;
+                    return cn(
                       'block rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                      isActive
+                      isLinkActive
                         ? 'bg-primary-pale font-semibold text-ink'
                         : 'text-foreground hover:bg-muted',
-                    )
-                  }
+                    );
+                  }}
                 >
                   {item.label}
                 </NavLink>

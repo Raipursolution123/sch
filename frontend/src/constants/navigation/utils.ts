@@ -4,9 +4,10 @@ import { isImplementedPath } from '@routes/implemented-paths';
 
 function annotateComingSoon(item: NavItem): NavItem {
   const children = item.children?.map(annotateComingSoon);
+  const basePath = item.path ? item.path.split('?')[0] : '';
   return {
     ...item,
-    comingSoon: item.path ? !isImplementedPath(item.path) : false,
+    comingSoon: item.path ? !isImplementedPath(basePath) : false,
     children,
   };
 }

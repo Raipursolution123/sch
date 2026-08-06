@@ -165,6 +165,12 @@ const GeneralSettingsPage = lazy(() =>
   })),
 );
 
+const StudentProfileUpdatePage = lazy(() =>
+  import('@features/settings/student-profile-update/pages/StudentProfileUpdatePage').then((m) => ({
+    default: m.StudentProfileUpdatePage,
+  })),
+);
+
 const LanguagesPage = lazy(() =>
   import('@features/settings/languages/pages/LanguagesPage').then((m) => ({
     default: m.LanguagesPage,
@@ -443,6 +449,42 @@ const StaffAttendancePage = lazy(() =>
 const StaffPayrollPage = lazy(() =>
   import('@features/staff/pages/StaffPayrollPage').then((m) => ({
     default: m.StaffPayrollPage,
+  })),
+);
+
+const PayrollIncrementPage = lazy(() =>
+  import('@features/staff/pages/PayrollIncrementPage').then((m) => ({
+    default: m.PayrollIncrementPage,
+  })),
+);
+
+const ApprovePayrollIncrementPage = lazy(() =>
+  import('@features/staff/pages/ApprovePayrollIncrementPage').then((m) => ({
+    default: m.ApprovePayrollIncrementPage,
+  })),
+);
+
+const AssignIncidentPage = lazy(() =>
+  import('@features/behaviour/pages/AssignIncidentPage').then((m) => ({
+    default: m.AssignIncidentPage,
+  })),
+);
+
+const IncidentsPage = lazy(() =>
+  import('@features/behaviour/pages/IncidentsPage').then((m) => ({
+    default: m.IncidentsPage,
+  })),
+);
+
+const IncidentReportsPage = lazy(() =>
+  import('@features/behaviour/pages/IncidentReportsPage').then((m) => ({
+    default: m.IncidentReportsPage,
+  })),
+);
+
+const IncidentSettingPage = lazy(() =>
+  import('@features/behaviour/pages/IncidentSettingPage').then((m) => ({
+    default: m.IncidentSettingPage,
   })),
 );
 
@@ -800,6 +842,18 @@ const LibraryIssueReturnPage = lazy(() =>
   })),
 );
 
+const LibraryAddStudentPage = lazy(() =>
+  import('@features/library/members/pages/AddStudentPage').then((m) => ({
+    default: m.AddStudentPage,
+  })),
+);
+
+const LibraryAddStaffPage = lazy(() =>
+  import('@features/library/members/pages/AddStaffPage').then((m) => ({
+    default: m.AddStaffPage,
+  })),
+);
+
 const ItemCategoriesPage = lazy(() =>
   import('@features/inventory/categories/pages/ItemCategoriesPage').then((m) => ({
     default: m.ItemCategoriesPage,
@@ -1128,6 +1182,8 @@ export const adminRoutes: RouteObject[] = [
       { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
       { path: 'departments', element: <StaffDepartmentsPage /> },
       { path: 'designations', element: <StaffDesignationsPage /> },
+      { path: 'payroll-increment', element: <PayrollIncrementPage /> },
+      { path: 'payroll-increment-approve', element: <ApprovePayrollIncrementPage /> },
       { path: ':staffId', element: <StaffProfilePage /> },
       ...buildPlaceholderChildren('/staff'),
     ],
@@ -1189,6 +1245,7 @@ export const adminRoutes: RouteObject[] = [
     { path: 'custom-fields', element: <CustomFieldsPage /> },
     { path: 'captcha', element: <CaptchaPage /> },
     { path: 'system-fields', element: <SystemFieldsPage /> },
+    { path: 'student-profile-update', element: <StudentProfileUpdatePage /> },
     { path: 'online-admission', element: <OnlineAdmissionSettingsPage /> },
     { path: 'sidebar-menu', element: <SidebarMenuPage /> },
     { path: 'backup', element: <BackupPage /> },
@@ -1207,6 +1264,8 @@ export const adminRoutes: RouteObject[] = [
   createModuleRoutes('/library', ROUTES.library.books, [
     { path: 'books', element: <LibraryBooksPage /> },
     { path: 'issue-return', element: <LibraryIssueReturnPage /> },
+    { path: 'add-student', element: <LibraryAddStudentPage /> },
+    { path: 'add-staff', element: <LibraryAddStaffPage /> },
   ]),
   createModuleRoutes('/transport', ROUTES.transport.fees, [
     { path: 'fees', element: <TransportFeesPage /> },
@@ -1380,5 +1439,11 @@ export const adminRoutes: RouteObject[] = [
     { path: 'menus', element: <CmsMenusPage /> },
     { path: 'banners', element: <CmsBannersPage /> },
     { path: 'settings', element: <CmsSettingsPage /> },
+  ]),
+  createModuleRoutes('/behaviour', '/behaviour/studentincidents', [
+    { path: 'studentincidents', element: <AssignIncidentPage /> },
+    { path: 'incidents', element: <IncidentsPage /> },
+    { path: 'report', element: <IncidentReportsPage /> },
+    { path: 'setting', element: <IncidentSettingPage /> },
   ]),
 ];

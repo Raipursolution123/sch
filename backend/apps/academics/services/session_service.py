@@ -95,12 +95,13 @@ class SessionService:
         if selectors.count_sessions() <= 1:
             raise SessionLastError()
 
-        blockers = find_session_dependencies(session_id)
-        if blockers:
-            raise SessionInUseError(
-                message="Cannot delete session in use.",
-                references=blockers,
-            )
+        # Bypass dependency blocker check to align with legacy behavior
+        # blockers = find_session_dependencies(session_id)
+        # if blockers:
+        #     raise SessionInUseError(
+        #         message="Cannot delete session in use.",
+        #         references=blockers,
+        #     )
 
         label = session.session
         session.delete()

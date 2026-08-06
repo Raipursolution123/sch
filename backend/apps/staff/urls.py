@@ -31,6 +31,12 @@ from apps.staff.api.views.staff_masters import (
     StaffPayslipDetailView,
     StaffPayslipListCreateView,
 )
+from apps.staff.api.views.payroll_increment import (
+    StaffPayrollIncrementListCreateView,
+    StaffPayrollIncrementDetailView,
+    StaffPayrollIncrementApproveView,
+    StaffPayrollIncrementRejectView,
+)
 
 urlpatterns = [
     path("", StaffListCreateView.as_view(), name="staff_list_create"),
@@ -88,6 +94,26 @@ urlpatterns = [
         "payroll/payslips/<int:pk>/",
         StaffPayslipDetailView.as_view(),
         name="staff_payslip_detail",
+    ),
+    path(
+        "payroll/increments/",
+        StaffPayrollIncrementListCreateView.as_view(),
+        name="staff_payroll_increments",
+    ),
+    path(
+        "payroll/increments/<int:pk>/",
+        StaffPayrollIncrementDetailView.as_view(),
+        name="staff_payroll_increment_detail",
+    ),
+    path(
+        "payroll/increments/<int:pk>/approve/",
+        StaffPayrollIncrementApproveView.as_view(),
+        name="staff_payroll_increment_approve",
+    ),
+    path(
+        "payroll/increments/<int:pk>/reject/",
+        StaffPayrollIncrementRejectView.as_view(),
+        name="staff_payroll_increment_reject",
     ),
     path("leave-types/", LeaveTypesListCreateView.as_view(), name="leave_types_list"),
     path(

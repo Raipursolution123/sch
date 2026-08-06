@@ -54,6 +54,7 @@ export const API_ENDPOINTS = {
     backups: '/settings/backups/',
     backupDetail: (filename: string) => `/settings/backups/${filename}/`,
     backupRestore: (filename: string) => `/settings/backups/${filename}/restore/`,
+    studentProfileUpdateFields: '/settings/student-profile-update/fields/',
   },
   academics: {
     classes: '/academics/classes/',
@@ -95,6 +96,14 @@ export const API_ENDPOINTS = {
     houseDetail: (id: number) => `/students/houses/${id}/`,
     import: '/students/import/',
     importTemplate: '/students/import/template/',
+    behaviour: {
+      incidents: '/students/behaviour/incidents/',
+      incidentDetail: (id: number) => `/students/behaviour/incidents/${id}/`,
+      assign: '/students/behaviour/assign/',
+      comments: '/students/behaviour/comments/',
+      commentDetail: (id: number) => `/students/behaviour/comments/${id}/`,
+      settings: '/students/behaviour/settings/',
+    },
   },
   staff: {
     list: '/staff/',
@@ -110,6 +119,10 @@ export const API_ENDPOINTS = {
     payrollScaleDetail: (id: number) => `/staff/payroll/scales/${id}/`,
     payrollPayslips: '/staff/payroll/payslips/',
     payrollPayslipDetail: (id: number) => `/staff/payroll/payslips/${id}/`,
+    payrollIncrements: '/staff/payroll/increments/',
+    payrollIncrementDetail: (id: number) => `/staff/payroll/increments/${id}/`,
+    payrollIncrementApprove: (id: number) => `/staff/payroll/increments/${id}/approve/`,
+    payrollIncrementReject: (id: number) => `/staff/payroll/increments/${id}/reject/`,
     leaveTypes: '/staff/leave-types/',
     leaveTypeDetail: (id: number) => `/staff/leave-types/${id}/`,
     leaveRequests: '/staff/leave-requests/',

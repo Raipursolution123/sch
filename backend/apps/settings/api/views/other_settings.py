@@ -349,3 +349,88 @@ class FileTypesSettingsView(APIView):
 
     def patch(self, request):
         return APIResponse.success(message="File types configuration updated.")
+
+
+class StudentProfileUpdateFieldsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    DEFAULT_FIELDS = [
+        "roll_no",
+        "student_photo",
+        "mobile_no",
+        "student_email",
+        "guardian_name",
+        "guardian_relation",
+        "guardian_phone",
+        "guardian_email",
+        "guardian_pic",
+        "guardian_occupation",
+        "guardian_address",
+        "current_address",
+        "permanent_address",
+        "bank_account_no",
+        "ifsc_code",
+        "bank_name",
+        "national_identification_no",
+        "local_identification_no",
+        "previous_school_details",
+        "student_note",
+        "upload_documents",
+    ]
+
+    def get(self, request):
+        from apps.students.models.student_edit_fields import StudentEditFields
+        from django.utils import timezone
+
+        count = StudentEditFields.objects.count()
+        if count == 0:
+            for name in self.DEFAULT_FIELDS:
+                try:
+                    StudentEditFields.objects.create(
+                        name=name,
+                        status=0,
+                        created_at=timezone.now(),
+                    )
+                except Exception:
+                    pass
+
+        fields = StudentEditFields.objects.all().order_by("id")
+        data = [
+            {
+                "id": f.id,
+                "name": f.name,
+                "status": f.status,
+            }
+            for f in fields
+        ]
+        return APIResponse.success(
+            data=data, message="Student profile edit fields retrieved."
+        )
+
+    def patch(self, request):
+        from apps.students.models.student_edit_fields import StudentEditFields
+
+        field_id = request.data.get("id")
+        status_val = request.data.get("status")
+        if field_id is not None and status_val is not None:
+            try:
+                cf = StudentEditFields.objects.get(id=field_id)
+                cf.status = int(status_val)
+                cf.save()
+                return APIResponse.success(message="Student profile edit field updated.")
+            except StudentEditFields.DoesNotExist:
+                return APIResponse.error(message="Field not found.", status_code=404)
+
+        batch_fields = request.data.get("fields")
+        if isinstance(batch_fields, list):
+            for item in batch_fields:
+                fid = item.get("id")
+                fstatus = item.get("status")
+                if fid is not None and fstatus is not None:
+                    StudentEditFields.objects.filter(id=fid).update(
+                        status=int(fstatus)
+                    )
+            return APIResponse.success(message="Student profile edit fields updated.")
+
+        return APIResponse.error(message="Invalid parameters.", status_code=400)
+

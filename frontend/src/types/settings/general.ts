@@ -29,6 +29,7 @@ export interface GeneralSettings {
   lock_grace_period: number;
   student_panel_login: number;
   parent_panel_login: number;
+  student_profile_edit: number;
   /** Read-only — owned by Session module (`sch_settings.session_id`). */
   session_id: number | null;
   /** Read-only resolved session label (e.g. 2026-27). */
@@ -78,4 +79,5 @@ export type GeneralSettingsUpdatePayload =
   | RegionalPayload
   | AttendanceSettingsPayload
   | FeesSettingsPayload
-  | MaintenancePayload;
+  | MaintenancePayload
+  | { student_profile_edit: number };

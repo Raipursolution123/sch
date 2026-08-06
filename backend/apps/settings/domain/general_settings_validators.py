@@ -33,6 +33,7 @@ MVP_FIELDS = frozenset(
         "lock_grace_period",
         "student_panel_login",
         "parent_panel_login",
+        "student_profile_edit",
     }
 )
 

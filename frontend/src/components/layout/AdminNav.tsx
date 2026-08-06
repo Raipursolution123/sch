@@ -49,17 +49,22 @@ function NavLinkItem({
       to={item.path}
       onClick={onNavigate}
       title={collapsed ? item.label : undefined}
-      className={({ isActive }) =>
-        cn(
+      className={({ isActive }) => {
+        const isLinkActive = item.path?.includes('?')
+          ? location.pathname + location.search === item.path
+          : depth > 0
+            ? isActive && !location.search
+            : isActive || location.pathname.startsWith(item.path!);
+        return cn(
           'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-fast',
           depth > 0 && !collapsed && 'pl-9',
           collapsed && 'justify-center px-2',
-          isActive || location.pathname.startsWith(item.path!)
+          isLinkActive
             ? 'bg-primary-pale font-semibold text-ink'
             : 'text-sidebar-foreground hover:bg-sidebar-accent/70',
-        )
-      }
-      end={item.path === ROUTES.dashboard}
+        );
+      }}
+      end={depth > 0 || item.path === ROUTES.dashboard}
     >
       {Icon && depth === 0 && <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />}
       {!collapsed && (

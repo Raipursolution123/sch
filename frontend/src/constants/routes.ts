@@ -43,6 +43,8 @@ export const ROUTES = {
     leaveAllotments: '/staff/leave-allotments',
     departments: '/staff/departments',
     designations: '/staff/designations',
+    payrollIncrement: '/staff/payroll-increment',
+    approvePayrollIncrement: '/staff/payroll-increment-approve',
     detail: (id: number | string) => `/staff/${id}`,
   },
   attendance: {
@@ -100,6 +102,8 @@ export const ROUTES = {
     root: '/library',
     books: '/library/books',
     issueReturn: '/library/issue-return',
+    addStudent: '/library/add-student',
+    addStaff: '/library/add-staff',
   },
   transport: {
     root: '/transport',
@@ -266,6 +270,7 @@ export const ROUTES = {
     customFields: '/settings/custom-fields',
     captcha: '/settings/captcha',
     systemFields: '/settings/system-fields',
+    studentProfileUpdate: '/settings/student-profile-update',
     onlineAdmission: '/settings/online-admission',
     sidebarMenu: '/settings/sidebar-menu',
     backup: '/settings/backup',

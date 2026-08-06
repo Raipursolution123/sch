@@ -83,3 +83,4 @@ export type {
   UpdateDailyAssignmentPayload,
 } from './academics/homework';
 export type { Course, CreateCoursePayload, UpdateCoursePayload } from './lms';
+export * from './behaviour';

@@ -41,6 +41,7 @@ from apps.settings.api.views.setup_front_office import (
     SourceDetailView,
     SourceListCreateView,
 )
+from apps.settings.api.views.other_settings import StudentProfileUpdateFieldsView
 from apps.settings.api.views.system_config import (
     EmailConfigActivateView,
     EmailConfigDetailView,
@@ -153,6 +154,11 @@ urlpatterns = [
     path("captcha/", CaptchaListView.as_view(), name="captcha_list"),
     path("captcha/<int:pk>/", CaptchaDetailView.as_view(), name="captcha_detail"),
     path("system-fields/", SystemFieldsView.as_view(), name="system_fields"),
+    path(
+        "student-profile-update/fields/",
+        StudentProfileUpdateFieldsView.as_view(),
+        name="student_profile_update_fields",
+    ),
     path(
         "online-admission/",
         OnlineAdmissionSettingsView.as_view(),

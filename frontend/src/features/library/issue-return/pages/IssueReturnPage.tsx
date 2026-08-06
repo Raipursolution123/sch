@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { DataTable, type DataTableColumn } from '@components/data/DataTable';
 import { EntityFormDialog } from '@components/forms/EntityFormDialog';
 import { FormErrorSummary } from '@components/forms/FormErrorSummary';
-import { FormSelectField, FormTextField, FormDateField } from '@components/forms/fields';
+import { FormSelectField, FormDateField } from '@components/forms/fields';
 import { FormField } from '@components/forms/FormField';
 import { Input } from '@components/ui/input';
 import { Select } from '@components/ui/select';
@@ -15,7 +15,6 @@ import { ConfirmDialog } from '@components/overlays/ConfirmDialog';
 import { PermissionButton } from '@components/rbac/PermissionButton';
 import {
   useBookIssues,
-  useCreateLibraryMember,
   useIssueBook,
   useLibraryBooks,
   useLibraryMembers,
@@ -32,14 +31,7 @@ const issueSchema = z.object({
   duereturn_date: z.string().optional(),
 });
 
-const memberSchema = z.object({
-  library_card_no: z.string().optional(),
-  member_type: z.enum(['student', 'staff', 'teacher']),
-  member_id: z.string().min(1, 'Student/Staff ID is required'),
-});
-
 type IssueFormValues = z.infer<typeof issueSchema>;
-type MemberFormValues = z.infer<typeof memberSchema>;
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -51,10 +43,8 @@ export function IssueReturnPage() {
   const { data: members = [] } = useLibraryMembers();
   const issueMutation = useIssueBook();
   const returnMutation = useReturnBook();
-  const createMemberMutation = useCreateLibraryMember();
 
   const [issueOpen, setIssueOpen] = useState(false);
-  const [memberOpen, setMemberOpen] = useState(false);
   const [returnTarget, setReturnTarget] = useState<BookIssue | null>(null);
 
   const issueForm = useForm<IssueFormValues>({
@@ -67,15 +57,6 @@ export function IssueReturnPage() {
     },
   });
 
-  const memberForm = useForm<MemberFormValues>({
-    resolver: zodResolver(memberSchema),
-    defaultValues: {
-      library_card_no: '',
-      member_type: 'student',
-      member_id: '',
-    },
-  });
-
   useEffect(() => {
     if (!issueOpen) return;
     issueForm.reset({
@@ -85,15 +66,6 @@ export function IssueReturnPage() {
       duereturn_date: '',
     });
   }, [issueOpen, issueForm]);
-
-  useEffect(() => {
-    if (!memberOpen) return;
-    memberForm.reset({
-      library_card_no: '',
-      member_type: 'student',
-      member_id: '',
-    });
-  }, [memberOpen, memberForm]);
 
   const bookOptions = useMemo(
     () =>
@@ -192,13 +164,6 @@ export function IssueReturnPage() {
                 className="w-56"
               />
             </FormField>
-            <PermissionButton
-              permission="library.issue.view"
-              variant="outline"
-              onClick={() => setMemberOpen(true)}
-            >
-              Add member
-            </PermissionButton>
             {issueAction}
           </div>
         }
@@ -270,47 +235,6 @@ export function IssueReturnPage() {
         />
         <FormDateField control={issueForm.control} name="issue_date" label="Issue date" required />
         <FormDateField control={issueForm.control} name="duereturn_date" label="Due date" />
-      </EntityFormDialog>
-
-      <EntityFormDialog
-        open={memberOpen}
-        onOpenChange={setMemberOpen}
-        title="Add Library Member"
-        onSubmit={memberForm.handleSubmit((values) => {
-          createMemberMutation.mutate(
-            {
-              library_card_no: values.library_card_no?.trim() || null,
-              member_type: values.member_type,
-              member_id: Number(values.member_id),
-            },
-            { onSuccess: () => setMemberOpen(false) },
-          );
-        })}
-        isLoading={createMemberMutation.isPending}
-      >
-        <FormErrorSummary errors={memberForm.formState.errors} />
-        <FormSelectField
-          control={memberForm.control}
-          name="member_type"
-          label="Member type"
-          required
-          options={[
-            { value: 'student', label: 'Student' },
-            { value: 'staff', label: 'Staff' },
-            { value: 'teacher', label: 'Teacher' },
-          ]}
-        />
-        <FormTextField
-          control={memberForm.control}
-          name="member_id"
-          label="Student / Staff ID"
-          required
-        />
-        <FormTextField
-          control={memberForm.control}
-          name="library_card_no"
-          label="Library card no"
-        />
       </EntityFormDialog>
 
       <ConfirmDialog

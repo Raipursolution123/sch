@@ -231,6 +231,7 @@ export const queryKeys = {
       scales: () => [...queryKeys.staff.all, 'payroll', 'scales'] as const,
       payslips: (staffId?: number) =>
         [...queryKeys.staff.all, 'payroll', 'payslips', staffId ?? 'all'] as const,
+      increments: () => [...queryKeys.staff.all, 'payroll', 'increments'] as const,
     },
     leaveTypes: {
       list: () => [...queryKeys.staff.all, 'leave-types', 'list'] as const,
@@ -693,6 +694,23 @@ export const queryKeys = {
         [...queryKeys.onlineExams.all, 'exams', examId, 'questions'] as const,
       roster: (examId: number, classId: number, sectionId: number) =>
         [...queryKeys.onlineExams.all, 'exams', examId, 'roster', classId, sectionId] as const,
+    },
+  },
+  behaviour: {
+    all: ['behaviour'] as const,
+    incidents: {
+      list: () => [...queryKeys.behaviour.all, 'incidents', 'list'] as const,
+    },
+    assignments: {
+      list: (classId?: number, sectionId?: number) =>
+        [...queryKeys.behaviour.all, 'assignments', 'list', classId, sectionId] as const,
+    },
+    comments: {
+      list: (incidentId: number) =>
+        [...queryKeys.behaviour.all, 'comments', 'list', incidentId] as const,
+    },
+    settings: {
+      detail: () => [...queryKeys.behaviour.all, 'settings', 'detail'] as const,
     },
   },
 } as const;

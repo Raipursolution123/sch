@@ -23,6 +23,12 @@ from apps.students.api.views.student_masters import (
     StudentImportView,
 )
 from apps.students.api.views.student_transport import StudentTransportView
+from apps.students.api.views.student_behaviour_views import (
+    StudentBehaviourViewSet,
+    StudentIncidentsViewSet,
+    StudentIncidentCommentsViewSet,
+    BehaviourSettingsView,
+)
 
 urlpatterns = [
     path("", StudentListCreateView.as_view(), name="students-list"),
@@ -92,5 +98,35 @@ urlpatterns = [
         "<int:student_id>/academic-sessions/",
         StudentAcademicSessionsView.as_view(),
         name="student-academic-sessions",
+    ),
+    path(
+        "behaviour/incidents/",
+        StudentBehaviourViewSet.as_view({"get": "list", "post": "create"}),
+        name="behaviour-incidents-list",
+    ),
+    path(
+        "behaviour/incidents/<int:pk>/",
+        StudentBehaviourViewSet.as_view({"get": "retrieve", "put": "update", "delete": "destroy"}),
+        name="behaviour-incident-detail",
+    ),
+    path(
+        "behaviour/assign/",
+        StudentIncidentsViewSet.as_view({"get": "list", "post": "create"}),
+        name="behaviour-assign-list",
+    ),
+    path(
+        "behaviour/comments/",
+        StudentIncidentCommentsViewSet.as_view({"get": "list", "post": "create"}),
+        name="behaviour-comments-list",
+    ),
+    path(
+        "behaviour/comments/<int:pk>/",
+        StudentIncidentCommentsViewSet.as_view({"delete": "destroy"}),
+        name="behaviour-comments-detail",
+    ),
+    path(
+        "behaviour/settings/",
+        BehaviourSettingsView.as_view(),
+        name="behaviour-settings",
     ),
 ]

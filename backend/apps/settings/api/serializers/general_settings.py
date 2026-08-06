@@ -33,3 +33,4 @@ class GeneralSettingsUpdateSerializer(serializers.Serializer):
     lock_grace_period = serializers.IntegerField(required=False)
     student_panel_login = serializers.IntegerField(required=False)
     parent_panel_login = serializers.IntegerField(required=False)
+    student_profile_edit = serializers.IntegerField(required=False)

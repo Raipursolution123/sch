@@ -66,6 +66,7 @@ def settings_to_dict(settings: SchSettings) -> dict[str, Any]:
         "lock_grace_period": settings.lock_grace_period or 0,
         "student_panel_login": settings.student_panel_login or 0,
         "parent_panel_login": settings.parent_panel_login or 0,
+        "student_profile_edit": settings.student_profile_edit or 0,
         "session_id": session_id,
         "session": resolve_session_label(session_id),
         "updated_at": (

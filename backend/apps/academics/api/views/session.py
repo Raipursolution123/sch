@@ -89,6 +89,12 @@ class SessionDetailView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = SESSION_MODULE
     legacy_permission_category = SESSION_CATEGORY
+    legacy_method_actions = {
+        "GET": "can_view",
+        "PATCH": "can_edit",
+        "PUT": "can_edit",
+        "DELETE": "can_edit",
+    }
 
     def get(self, request, pk):
         try:
