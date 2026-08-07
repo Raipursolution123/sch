@@ -11,6 +11,7 @@ export interface StaffListParams {
   page?: number;
   pageSize?: number;
   search?: string;
+  status?: 'active' | 'disabled' | 'all';
 }
 
 /** Paginated, searchable staff list for the module roster. */
@@ -18,10 +19,11 @@ export function useStaffList(params: StaffListParams = {}) {
   const page = params.page ?? 1;
   const pageSize = params.pageSize ?? 20;
   const search = params.search ?? '';
+  const status = params.status ?? 'active';
 
   return useQuery({
-    queryKey: queryKeys.staff.list({ page, pageSize, search }),
-    queryFn: () => staffService.list(page, pageSize, search),
+    queryKey: queryKeys.staff.list({ page, pageSize, search, status }),
+    queryFn: () => staffService.list(page, pageSize, search, status),
     placeholderData: (previous) => previous,
   });
 }
@@ -208,6 +210,19 @@ export function useUpdateStaff(id: number) {
       toast.success(`${staff.full_name} updated successfully`);
     },
     onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to update staff member')),
+  });
+}
+
+export function useEnableStaff() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => staffService.enable(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.all });
+      toast.success('Staff member re-enabled');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to re-enable staff member')),
   });
 }
 

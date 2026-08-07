@@ -6,12 +6,19 @@ from apps.staff.api.views.leave_allotment import (
     StaffLeaveAllotmentsView,
 )
 from apps.staff.api.views.leave_request import (
+    StaffLeaveApplyView,
+    StaffLeaveMineView,
     StaffLeaveRequestDetailView,
     StaffLeaveRequestsListCreateView,
 )
 from apps.staff.api.views.leave_type import (
     LeaveTypeDetailView,
     LeaveTypesListCreateView,
+)
+from apps.staff.api.views.payroll_increment import (
+    StaffPayrollIncrementApproveView,
+    StaffPayrollIncrementListCreateView,
+    StaffPayrollIncrementRejectView,
 )
 from apps.staff.api.views.staff import StaffDetailView, StaffListCreateView
 from apps.staff.api.views.staff_document import (
@@ -107,6 +114,16 @@ urlpatterns = [
         name="staff_leave_requests_list",
     ),
     path(
+        "leave-requests/apply/",
+        StaffLeaveApplyView.as_view(),
+        name="staff_leave_apply",
+    ),
+    path(
+        "leave-requests/mine/",
+        StaffLeaveMineView.as_view(),
+        name="staff_leave_mine",
+    ),
+    path(
         "leave-requests/<int:pk>/",
         StaffLeaveRequestDetailView.as_view(),
         name="staff_leave_request_detail",
@@ -125,6 +142,21 @@ urlpatterns = [
         "leave-allotments/<int:pk>/",
         StaffLeaveAllotmentDetailView.as_view(),
         name="staff_leave_allotment_detail",
+    ),
+    path(
+        "payroll/increments/",
+        StaffPayrollIncrementListCreateView.as_view(),
+        name="staff_payroll_increments",
+    ),
+    path(
+        "payroll/increments/<int:pk>/approve/",
+        StaffPayrollIncrementApproveView.as_view(),
+        name="staff_payroll_increment_approve",
+    ),
+    path(
+        "payroll/increments/<int:pk>/reject/",
+        StaffPayrollIncrementRejectView.as_view(),
+        name="staff_payroll_increment_reject",
     ),
     path("ratings/", StaffRatingListView.as_view(), name="staff_ratings_list"),
     path(

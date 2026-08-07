@@ -34,6 +34,35 @@ class StaffLeaveRequestsListCreateView(APIView):
             return staff_error_response(exc)
 
 
+class StaffLeaveApplyView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "apply_leave"
+
+    def post(self, request):
+        try:
+            data = StaffLeaveRequestService().apply_request(request.data, request.user)
+            return APIResponse.success(
+                data=data,
+                message="Leave request submitted successfully.",
+                status_code=status.HTTP_201_CREATED,
+            )
+        except StaffError as exc:
+            return staff_error_response(exc)
+
+
+class StaffLeaveMineView(APIView):
+    permission_classes = [IsAuthenticated, HasLegacyPrivilege]
+    legacy_module_short_code = MODULE
+    legacy_permission_category = "apply_leave"
+
+    def get(self, request):
+        data = StaffLeaveRequestService().list_requests_for_user(request.user)
+        return APIResponse.success(
+            data=data, message="Your leave requests retrieved successfully."
+        )
+
+
 class StaffLeaveRequestDetailView(APIView):
     permission_classes = [IsAuthenticated, HasLegacyPrivilege]
     legacy_module_short_code = MODULE

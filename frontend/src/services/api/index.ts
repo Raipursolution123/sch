@@ -22,6 +22,7 @@ export { leaveTypesService } from './leave-types.service';
 export { staffLeaveRequestsService } from './staff-leave-requests.service';
 export { staffLeaveAllotmentsService } from './staff-leave-allotments.service';
 export { staffRatingsService } from './staff-ratings.service';
+export { staffPayrollIncrementService } from './staff-payroll-increment.service';
 export { behaviourService } from './behaviour.service';
 export { systemReportsService } from './system-reports.service';
 export { feeTypesService } from './fee-types.service';

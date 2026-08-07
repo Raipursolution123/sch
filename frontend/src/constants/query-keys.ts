@@ -229,13 +229,14 @@ export const queryKeys = {
   },
   staff: {
     all: ['staff'] as const,
-    list: (params?: { page?: number; pageSize?: number; search?: string }) =>
+    list: (params?: { page?: number; pageSize?: number; search?: string; status?: string }) =>
       [
         ...queryKeys.staff.all,
         'list',
         params?.page ?? 1,
         params?.pageSize ?? 20,
         params?.search ?? '',
+        params?.status ?? 'active',
       ] as const,
     detail: (id: number) => [...queryKeys.staff.all, 'detail', id] as const,
     departments: () => [...queryKeys.staff.all, 'departments'] as const,
@@ -255,6 +256,7 @@ export const queryKeys = {
     },
     leaveRequests: {
       list: () => [...queryKeys.staff.all, 'leave-requests', 'list'] as const,
+      mine: () => [...queryKeys.staff.all, 'leave-requests', 'mine'] as const,
     },
     leaveAllotments: {
       roster: (staffId: number) =>
@@ -263,6 +265,10 @@ export const queryKeys = {
     ratings: {
       list: (status?: number | '') =>
         [...queryKeys.staff.all, 'ratings', 'list', status ?? 'all'] as const,
+    },
+    payrollIncrements: {
+      list: (status?: string) =>
+        [...queryKeys.staff.all, 'payroll-increments', 'list', status ?? 'all'] as const,
     },
   },
   behaviour: {

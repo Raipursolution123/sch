@@ -35,6 +35,7 @@ export type Permission =
   | 'staff.payroll.create'
   | 'staff.payroll.edit'
   | 'staff.payroll.delete'
+  | 'apply_leave'
   | 'settings.manage'
   | 'general_settings.view'
   | 'general_settings.edit'

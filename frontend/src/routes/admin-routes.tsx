@@ -449,6 +449,12 @@ const StaffLeaveRequestsPage = lazy(() =>
   })),
 );
 
+const StaffApplyLeavePage = lazy(() =>
+  import('@features/staff/leave-requests/pages/StaffApplyLeavePage').then((m) => ({
+    default: m.StaffApplyLeavePage,
+  })),
+);
+
 const StaffLeaveAllotmentsPage = lazy(() =>
   import('@features/staff/leave-allotments/pages/StaffLeaveAllotmentsPage').then((m) => ({
     default: m.StaffLeaveAllotmentsPage,
@@ -482,6 +488,24 @@ const StaffDepartmentsPage = lazy(() =>
 const StaffDesignationsPage = lazy(() =>
   import('@features/staff/pages/StaffDesignationsPage').then((m) => ({
     default: m.StaffDesignationsPage,
+  })),
+);
+
+const DisabledStaffPage = lazy(() =>
+  import('@features/staff/pages/DisabledStaffPage').then((m) => ({
+    default: m.DisabledStaffPage,
+  })),
+);
+
+const StaffPayrollIncrementPage = lazy(() =>
+  import('@features/staff/payroll-increment/pages/StaffPayrollIncrementPage').then((m) => ({
+    default: m.StaffPayrollIncrementPage,
+  })),
+);
+
+const StaffPayrollIncrementApprovePage = lazy(() =>
+  import('@features/staff/payroll-increment/pages/StaffPayrollIncrementApprovePage').then((m) => ({
+    default: m.StaffPayrollIncrementApprovePage,
   })),
 );
 
@@ -1179,10 +1203,14 @@ export const adminRoutes: RouteObject[] = [
           { path: 'payroll', element: <StaffPayrollPage /> },
           { path: 'leave-types', element: <LeaveTypesPage /> },
           { path: 'leave', element: <StaffLeaveRequestsPage /> },
+          { path: 'apply-leave', element: <StaffApplyLeavePage /> },
           { path: 'leave-allotments', element: <StaffLeaveAllotmentsPage /> },
           { path: 'departments', element: <StaffDepartmentsPage /> },
           { path: 'designations', element: <StaffDesignationsPage /> },
           { path: 'ratings', element: <StaffRatingsPage /> },
+          { path: 'disabled', element: <DisabledStaffPage /> },
+          { path: 'payroll-increment', element: <StaffPayrollIncrementPage /> },
+          { path: 'payroll-increment/approve', element: <StaffPayrollIncrementApprovePage /> },
           ...buildPlaceholderChildren('/staff'),
         ],
       },

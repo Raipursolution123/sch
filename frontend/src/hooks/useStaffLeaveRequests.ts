@@ -28,6 +28,27 @@ export function useCreateStaffLeaveRequest() {
   });
 }
 
+export function useMyStaffLeaveRequests() {
+  return useQuery({
+    queryKey: queryKeys.staff.leaveRequests.mine(),
+    queryFn: staffLeaveRequestsService.listMine,
+  });
+}
+
+export function useApplyStaffLeave() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateStaffLeaveRequestPayload) =>
+      staffLeaveRequestsService.apply(payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.leaveRequests.mine() });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.staff.leaveRequests.list() });
+      toast.success('Leave request submitted');
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, 'Failed to submit leave request')),
+  });
+}
+
 export function useReviewStaffLeaveRequest() {
   const queryClient = useQueryClient();
   return useMutation({

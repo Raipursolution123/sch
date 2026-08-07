@@ -32,6 +32,36 @@ class StaffLeaveRequestService:
         rows = list(StaffLeaveRequest.objects.all().order_by("-id"))
         return self._enrich(rows)
 
+    def list_requests_for_user(self, user) -> list[dict[str, Any]]:
+        staff = self._staff_for_user(user)
+        if staff is None:
+            return []
+        rows = list(StaffLeaveRequest.objects.filter(staff_id=staff.id).order_by("-id"))
+        return self._enrich(rows)
+
+    def apply_request(self, payload: dict[str, Any], user) -> dict[str, Any]:
+        staff = self._staff_for_user(user)
+        staff_id = payload.get("staff_id")
+        if staff_id in (None, ""):
+            if staff is None:
+                raise StaffValidationError(
+                    "No staff profile is linked to your account."
+                )
+            payload = {**payload, "staff_id": staff.id}
+        else:
+            try:
+                staff_id = int(staff_id)
+            except (TypeError, ValueError) as exc:
+                raise StaffValidationError("Invalid staff selection.") from exc
+            if staff is not None and staff_id != staff.id:
+                raise StaffValidationError(
+                    "You can only apply leave for your own staff profile."
+                )
+        entry_by = getattr(user, "user_id", None) or getattr(user, "pk", None)
+        if entry_by is not None:
+            payload = {**payload, "applied_by": entry_by}
+        return self.create_request(payload)
+
     def get_request(self, request_id: int) -> dict[str, Any]:
         row = StaffLeaveRequest.objects.filter(id=request_id).first()
         if row is None:
@@ -211,6 +241,15 @@ class StaffLeaveRequestService:
             raise StaffValidationError(
                 f"Insufficient leave balance. Remaining: {remaining:g} day(s)."
             )
+
+    def _staff_for_user(self, user) -> Staff | None:
+        user_ref = getattr(user, "user_id", None) or getattr(user, "pk", None)
+        if user_ref is None:
+            return None
+        staff = Staff.objects.filter(user_id=user_ref, is_active=1).first()
+        if staff is not None:
+            return staff
+        return Staff.objects.filter(id=user_ref, is_active=1).first()
 
     def _parse_status(self, value: Any) -> str:
         if value in (None, ""):

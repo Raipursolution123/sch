@@ -22,6 +22,19 @@ export const staffLeaveRequestsService = {
     return data.data;
   },
 
+  apply: async (payload: CreateStaffLeaveRequestPayload): Promise<StaffLeaveRequest> => {
+    const { data } = await apiClient.post<ApiSuccessResponse<StaffLeaveRequest>>(
+      API_ENDPOINTS.staff.leaveRequestApply,
+      payload,
+    );
+    return data.data;
+  },
+
+  listMine: async (): Promise<StaffLeaveRequest[]> => {
+    const { data } = await apiClient.get<BackendPayload>(API_ENDPOINTS.staff.leaveRequestMine);
+    return extractList<StaffLeaveRequest>(data);
+  },
+
   review: async (id: number, payload: ReviewStaffLeavePayload): Promise<StaffLeaveRequest> => {
     const { data } = await apiClient.patch<ApiSuccessResponse<StaffLeaveRequest>>(
       API_ENDPOINTS.staff.leaveRequestDetail(id),

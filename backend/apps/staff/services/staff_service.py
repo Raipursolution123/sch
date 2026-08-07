@@ -65,8 +65,8 @@ def _clean_fk_id(val: Any) -> int | None:
 
 
 class StaffService:
-    def list_staff(self, *, search: str | None = None):
-        return selectors.list_staff_qs(search=search)
+    def list_staff(self, *, search: str | None = None, status: str = "active"):
+        return selectors.list_staff_qs(search=search, status=status)
 
     def enrich_list_page(self, rows) -> list[dict[str, Any]]:
         return [selectors.staff_list_item(row) for row in rows]
@@ -198,7 +198,12 @@ class StaffService:
                 setattr(staff, field, payload[field])
 
         if "is_active" in payload:
-            staff.is_active = 1 if str(payload["is_active"]).lower() == "yes" else 0
+            active = str(payload["is_active"]).lower() == "yes"
+            staff.is_active = 1 if active else 0
+            if active:
+                staff.disable_at = None
+            else:
+                staff.disable_at = timezone.now().date()
 
         if payload.get("password"):
             from core.provisioning.school_setup import hash_staff_password

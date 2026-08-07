@@ -280,8 +280,7 @@ export const ADMIN_NAV: NavItem[] = [
       {
         id: 'staff-apply-leave',
         label: 'Apply Leave',
-        path: ROUTES.staff.leave,
-        comingSoon: true,
+        path: ROUTES.staff.applyLeave,
         permissionKeys: ['apply_leave'],
       },
       {
@@ -305,20 +304,19 @@ export const ADMIN_NAV: NavItem[] = [
       {
         id: 'staff-disabled',
         label: 'Disabled Staff',
-        path: ROUTES.staff.root,
-        comingSoon: true,
+        path: ROUTES.staff.disabled,
         permissionKeys: ['disable_staff'],
       },
       {
         id: 'staff-payroll-increment',
         label: 'Payroll Increment',
-        comingSoon: true,
+        path: ROUTES.staff.payrollIncrement,
         permissionKeys: ['staff'],
       },
       {
         id: 'staff-payroll-increment-approve',
         label: 'Approve Payroll Increment',
-        comingSoon: true,
+        path: ROUTES.staff.payrollIncrementApprove,
         permissionKeys: ['staff'],
       },
     ],

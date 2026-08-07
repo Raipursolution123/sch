@@ -278,6 +278,7 @@ export const staffService = {
     page = 1,
     pageSize = 20,
     search = '',
+    status: 'active' | 'disabled' | 'all' = 'active',
   ): Promise<{ results: StaffListItem[]; count: number }> => {
     if (USE_MOCK) {
       const term = search.trim().toLowerCase();
@@ -305,6 +306,7 @@ export const staffService = {
     const params = new URLSearchParams({
       page: String(page),
       page_size: String(pageSize),
+      status,
     });
     const term = search.trim();
     if (term) params.set('search', term);
@@ -383,6 +385,13 @@ export const staffService = {
       return delay(toDetail(updated));
     }
     const { data } = await apiClient.put<BackendPayload>(API_ENDPOINTS.staff.detail(id), payload);
+    return extractEntity<StaffDetail>(data, 'staff');
+  },
+
+  enable: async (id: number): Promise<StaffDetail> => {
+    const { data } = await apiClient.patch<BackendPayload>(API_ENDPOINTS.staff.detail(id), {
+      is_active: 'yes',
+    });
     return extractEntity<StaffDetail>(data, 'staff');
   },
 

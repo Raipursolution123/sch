@@ -83,6 +83,7 @@ def staff_list_item(staff: Staff) -> dict[str, Any]:
         "designation_id": staff.designation,
         "designation_name": designation_name(staff.designation),
         "date_of_joining": format_date(staff.date_of_joining),
+        "disable_at": format_date(staff.disable_at),
         "is_active": "yes" if staff.is_active == 1 else "no",
     }
 
@@ -118,7 +119,7 @@ def staff_detail(staff: Staff) -> dict[str, Any]:
     return item
 
 
-def list_staff_qs(*, search: str | None = None):
+def list_staff_qs(*, search: str | None = None, status: str = "active"):
     from apps.accounts.models.user import User
 
     # Hide Admins from the staff directory so only actual staff members show up
@@ -126,6 +127,12 @@ def list_staff_qs(*, search: str | None = None):
         "id", flat=True
     )
     qs = Staff.objects.exclude(user_id__in=admin_user_ids)
+    if status == "active":
+        qs = qs.filter(is_active=1)
+    elif status == "disabled":
+        qs = qs.filter(is_active=0)
+    elif status != "all":
+        raise ValueError("Invalid status filter. Use active, disabled, or all.")
     term = (search or "").strip()
     if term:
         qs = qs.filter(

@@ -42,6 +42,7 @@ export interface StaffListItem {
   designation_id: number;
   designation_name: string;
   date_of_joining: string | null;
+  disable_at?: string | null;
   is_active: ActiveFlag;
 }
 

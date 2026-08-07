@@ -10,6 +10,7 @@ from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
 CATEGORY = "staff"
+DISABLE_CATEGORY = "disable_staff"
 
 
 class StaffListCreateView(APIView):
@@ -17,9 +18,26 @@ class StaffListCreateView(APIView):
     legacy_module_short_code = MODULE
     legacy_permission_category = CATEGORY
 
+    def initial(self, request, *args, **kwargs):
+        status_filter = request.query_params.get("status", "active")
+        if status_filter == "disabled" and request.method == "GET":
+            self.legacy_permission_category = DISABLE_CATEGORY
+        else:
+            self.legacy_permission_category = CATEGORY
+        super().initial(request, *args, **kwargs)
+
     def get(self, request):
+        status_filter = request.query_params.get("status", "active")
+        if status_filter not in {"active", "disabled", "all"}:
+            return APIResponse.error(
+                message="Invalid status filter. Use active, disabled, or all.",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
         service = StaffService()
-        staff_qs = service.list_staff(search=request.query_params.get("search"))
+        staff_qs = service.list_staff(
+            search=request.query_params.get("search"),
+            status=status_filter,
+        )
         paginator = StandardResultsSetPagination()
         page = paginator.paginate_queryset(staff_qs, request, view=self)
         rows = page if page is not None else staff_qs
