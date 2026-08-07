@@ -68,7 +68,10 @@ class BehaviourService:
             qs = qs.filter(student_id=student_id)
         rows = list(qs[:1000])
         type_map = {
-            t.id: t for t in StudentBehaviour.objects.filter(id__in={r.incident_id for r in rows})
+            t.id: t
+            for t in StudentBehaviour.objects.filter(
+                id__in={r.incident_id for r in rows}
+            )
         }
         students = {
             s.id: s
@@ -76,13 +79,17 @@ class BehaviourService:
         }
         return [self._assignment_to_dict(row, type_map, students) for row in rows]
 
-    def assign_incident(self, payload: dict[str, Any], *, assign_by: int) -> dict[str, Any]:
+    def assign_incident(
+        self, payload: dict[str, Any], *, assign_by: int
+    ) -> dict[str, Any]:
         try:
             student_id = int(payload.get("student_id"))
             incident_id = int(payload.get("incident_id"))
             session_id = int(payload.get("session_id"))
         except (TypeError, ValueError) as exc:
-            raise ValueError("student_id, incident_id, and session_id are required.") from exc
+            raise ValueError(
+                "student_id, incident_id, and session_id are required."
+            ) from exc
 
         if not Students.objects.filter(id=student_id).exists():
             raise LookupError("Student not found.")

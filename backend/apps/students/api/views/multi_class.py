@@ -18,9 +18,13 @@ CATEGORY = "multi_class_student"
 
 def _error_response(exc: StudentError) -> Response:
     if isinstance(exc, StudentNotFoundError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_404_NOT_FOUND)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_404_NOT_FOUND
+        )
     if isinstance(exc, StudentValidationError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+        )
     return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
 
 
@@ -36,8 +40,12 @@ class MultiClassRosterView(APIView):
         except (TypeError, ValueError):
             class_id = section_id = None
         try:
-            data = MultiClassService().get_roster(class_id=class_id, section_id=section_id)
-            return APIResponse.success(data=data, message="Multi-class roster retrieved.")
+            data = MultiClassService().get_roster(
+                class_id=class_id, section_id=section_id
+            )
+            return APIResponse.success(
+                data=data, message="Multi-class roster retrieved."
+            )
         except StudentError as exc:
             return _error_response(exc)
 
@@ -51,6 +59,8 @@ class MultiClassSaveView(APIView):
     def post(self, request):
         try:
             data = MultiClassService().save_enrollments(request.data)
-            return APIResponse.success(data=data, message="Multi-class enrollments saved.")
+            return APIResponse.success(
+                data=data, message="Multi-class enrollments saved."
+            )
         except StudentError as exc:
             return _error_response(exc)

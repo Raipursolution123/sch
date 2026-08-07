@@ -40,13 +40,12 @@ class CbseMarksService:
             raise ExaminationNotFoundError("CBSE exam not found.")
 
         rows = list(
-            CbseExamTimetable.objects.filter(cbse_exam_id=exam_id).order_by("date", "id")
+            CbseExamTimetable.objects.filter(cbse_exam_id=exam_id).order_by(
+                "date", "id"
+            )
         )
         subject_ids = [r.subject_id for r in rows if r.subject_id]
-        subjects = {
-            s.id: s.name
-            for s in Subjects.objects.filter(id__in=subject_ids)
-        }
+        subjects = {s.id: s.name for s in Subjects.objects.filter(id__in=subject_ids)}
 
         timetable_ids = [r.id for r in rows]
         link_rows = list(
@@ -61,7 +60,9 @@ class CbseMarksService:
         ]
         assessment_types = {
             row.id: row
-            for row in CbseExamAssessmentTypes.objects.filter(id__in=assessment_type_ids)
+            for row in CbseExamAssessmentTypes.objects.filter(
+                id__in=assessment_type_ids
+            )
         }
 
         links_by_timetable: dict[int, list[dict[str, Any]]] = {}
@@ -84,15 +85,17 @@ class CbseMarksService:
             assessments = links_by_timetable.get(row.id, [])
             max_marks = _safe_float(row.written_maximum_marks)
             if assessments:
-                max_marks = sum(
-                    a["maximum_marks"] or 0 for a in assessments
-                ) or max_marks
+                max_marks = (
+                    sum(a["maximum_marks"] or 0 for a in assessments) or max_marks
+                )
             result.append(
                 {
                     "id": row.id,
                     "cbse_exam_id": exam_id,
                     "subject_id": row.subject_id,
-                    "subject_name": subjects.get(row.subject_id) if row.subject_id else None,
+                    "subject_name": (
+                        subjects.get(row.subject_id) if row.subject_id else None
+                    ),
                     "date": row.date.isoformat() if row.date else None,
                     "room_no": row.room_no,
                     "written_maximum_marks": _safe_float(row.written_maximum_marks),
@@ -164,11 +167,10 @@ class CbseMarksService:
         enrollments = list(
             CbseExamStudents.objects.filter(cbse_exam_id=exam_id).order_by("id")
         )
-        session_ids = [e.student_session_id for e in enrollments if e.student_session_id]
-        sessions = {
-            s.id: s
-            for s in StudentSession.objects.filter(id__in=session_ids)
-        }
+        session_ids = [
+            e.student_session_id for e in enrollments if e.student_session_id
+        ]
+        sessions = {s.id: s for s in StudentSession.objects.filter(id__in=session_ids)}
         student_ids = [s.student_id for s in sessions.values() if s.student_id]
         students = {
             s.id: s
@@ -206,7 +208,9 @@ class CbseMarksService:
                         student.firstname, student.middlename, student.lastname
                     ),
                     "marks_id": mark.id if mark else None,
-                    "marks": float(mark.marks) if mark and mark.marks is not None else 0.0,
+                    "marks": (
+                        float(mark.marks) if mark and mark.marks is not None else 0.0
+                    ),
                     "is_absent": bool(mark.is_absent) if mark else False,
                     "note": mark.note if mark else None,
                     "marks_grade": mark.marks_grade if mark else None,
@@ -353,7 +357,9 @@ class CbseMarksService:
         if enrollment is None:
             raise ExaminationNotFoundError("CBSE exam student enrollment not found.")
 
-        session = StudentSession.objects.filter(id=enrollment.student_session_id).first()
+        session = StudentSession.objects.filter(
+            id=enrollment.student_session_id
+        ).first()
         student = (
             Students.objects.filter(id=session.student_id).first() if session else None
         )
@@ -397,11 +403,7 @@ class CbseMarksService:
             if not assessments:
                 # Fall back to timetable-level marks
                 mark = next(
-                    (
-                        m
-                        for m in marks
-                        if m.cbse_exam_timetable_id == tt["id"]
-                    ),
+                    (m for m in marks if m.cbse_exam_timetable_id == tt["id"]),
                     None,
                 )
                 obtained = float(mark.marks) if mark and not mark.is_absent else 0.0

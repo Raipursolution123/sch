@@ -5,6 +5,7 @@ from typing import Any
 from django.db import connection, transaction
 from django.utils import timezone
 
+from apps.fees.models.fee_receipt_no import FeeReceiptNo
 from apps.students.domain.student_exceptions import (
     StudentNotFoundError,
     StudentValidationError,
@@ -14,7 +15,6 @@ from apps.students.domain.student_fee_exceptions import (
     StudentFeeNotFoundError,
     StudentFeeValidationError,
 )
-from apps.fees.models.fee_receipt_no import FeeReceiptNo
 from apps.students.models.student_fees_deposite import StudentFeesDeposite
 from apps.students.models.student_fees_master import StudentFeesMaster
 from apps.students.selectors import student_fee_selectors as fee_selectors

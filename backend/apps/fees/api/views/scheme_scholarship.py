@@ -27,7 +27,9 @@ class SchemeListCreateView(APIView):
         try:
             data = SchemeScholarshipService().create_scheme(request.data)
             return APIResponse.success(
-                data=data, message="Scheme created.", status_code=status.HTTP_201_CREATED
+                data=data,
+                message="Scheme created.",
+                status_code=status.HTTP_201_CREATED,
             )
         except FeeError as exc:
             return fee_error_response(exc)
@@ -70,7 +72,9 @@ class SchemeConfigView(APIView):
     def get(self, request, pk):
         try:
             data = SchemeScholarshipService().get_scheme_config(pk)
-            return APIResponse.success(data=data, message="Scheme configuration retrieved.")
+            return APIResponse.success(
+                data=data, message="Scheme configuration retrieved."
+            )
         except FeeError as exc:
             return fee_error_response(exc)
 
@@ -97,18 +101,24 @@ class SchemeApplicationListCreateView(APIView):
         try:
             data = SchemeScholarshipService().list_applications(
                 ss_id=int(ss_id) if ss_id else None,
-                applied_status=int(applied_status) if applied_status not in (None, "") else None,
+                applied_status=(
+                    int(applied_status) if applied_status not in (None, "") else None
+                ),
                 class_id=int(class_id) if class_id else None,
                 section_id=int(section_id) if section_id else None,
             )
-            return APIResponse.success(data=data, message="Scheme applications retrieved.")
+            return APIResponse.success(
+                data=data, message="Scheme applications retrieved."
+            )
         except FeeError as exc:
             return fee_error_response(exc)
 
     def post(self, request):
         applied_by = getattr(request.user, "id", 0) or 0
         try:
-            data = SchemeScholarshipService().apply_scheme(request.data, applied_by=applied_by)
+            data = SchemeScholarshipService().apply_scheme(
+                request.data, applied_by=applied_by
+            )
             return APIResponse.success(
                 data=data,
                 message="Scheme applied.",

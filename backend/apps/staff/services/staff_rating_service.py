@@ -43,18 +43,12 @@ class StaffRatingService:
         row.status = status
         row.entrydt = timezone.now()
         row.save(update_fields=["status", "entrydt"])
-        staff_map = {
-            row.staff_id: Staff.objects.filter(id=row.staff_id).first()
-        }
+        staff_map = {row.staff_id: Staff.objects.filter(id=row.staff_id).first()}
         return self._to_dict(row, {k: v for k, v in staff_map.items() if v})
 
-    def _to_dict(
-        self, row: StaffRating, staff_map: dict[int, Staff]
-    ) -> dict[str, Any]:
+    def _to_dict(self, row: StaffRating, staff_map: dict[int, Staff]) -> dict[str, Any]:
         staff = staff_map.get(row.staff_id)
-        status_label = (
-            "approved" if int(row.status or 0) == 1 else "declined"
-        )
+        status_label = "approved" if int(row.status or 0) == 1 else "declined"
         return {
             "id": row.id,
             "staff_id": row.staff_id,

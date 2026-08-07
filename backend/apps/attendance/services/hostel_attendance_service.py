@@ -30,7 +30,9 @@ class HostelAttendanceService:
         try:
             target_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
         except ValueError as exc:
-            raise AttendanceValidationError("Invalid date format. Use YYYY-MM-DD.") from exc
+            raise AttendanceValidationError(
+                "Invalid date format. Use YYYY-MM-DD."
+            ) from exc
 
         if not Hostel.objects.filter(id=hostel_id).exists():
             raise AttendanceValidationError("Hostel not found.")
@@ -53,9 +55,7 @@ class HostelAttendanceService:
         student_ids = [e.student_id for e in enrollments if e.student_id]
         students = students_by_ids(student_ids)
 
-        room_map = {
-            r.id: r for r in HostelRooms.objects.filter(id__in=room_ids)
-        }
+        room_map = {r.id: r for r in HostelRooms.objects.filter(id__in=room_ids)}
         attendance_rows = StudentAttendencesHostel.objects.filter(
             student_session_id__in=[e.id for e in enrollments],
             date=target_date,
@@ -86,9 +86,7 @@ class HostelAttendanceService:
                     .first(),
                     "room_no": room.room_no if room else "",
                     "attendence_type_id": type_id,
-                    "status_key": ATTENDANCE_TYPE_KEY_MAP.get(
-                        status_label, "present"
-                    ),
+                    "status_key": ATTENDANCE_TYPE_KEY_MAP.get(status_label, "present"),
                     "status_label": status_label,
                     "remark": record.remark if record else "",
                 }
@@ -106,7 +104,9 @@ class HostelAttendanceService:
         try:
             target_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
         except ValueError as exc:
-            raise AttendanceValidationError("Invalid date format. Use YYYY-MM-DD.") from exc
+            raise AttendanceValidationError(
+                "Invalid date format. Use YYYY-MM-DD."
+            ) from exc
 
         now = timezone.now()
         with transaction.atomic():
@@ -132,5 +132,10 @@ class HostelAttendanceService:
                     record.updated_at = now
                     record.save()
 
-        logger.info("Marked hostel attendance hostel=%s date=%s count=%s", hostel_id, date_str, len(entries))
+        logger.info(
+            "Marked hostel attendance hostel=%s date=%s count=%s",
+            hostel_id,
+            date_str,
+            len(entries),
+        )
         return self.get_roster(hostel_id=int(hostel_id), date_str=date_str)

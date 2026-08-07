@@ -81,7 +81,9 @@ class PositiveFeeAdjustmentService:
                 )
                 applied += 1
 
-        logger.info("Applied %s positive fee adjustments session=%s", applied, session.id)
+        logger.info(
+            "Applied %s positive fee adjustments session=%s", applied, session.id
+        )
         return {"applied_count": applied, "session_id": session.id}
 
     def get_roster(
@@ -137,7 +139,13 @@ class PositiveFeeAdjustmentService:
                 }
             )
 
-        rows.sort(key=lambda r: (r["class_name"], r["section_name"], r["student_name"].lower()))
+        rows.sort(
+            key=lambda r: (
+                r["class_name"],
+                r["section_name"],
+                r["student_name"].lower(),
+            )
+        )
         return {"session_id": session.id, "students": rows}
 
     def list_recent(self, *, limit: int = 200) -> list[dict[str, Any]]:
@@ -153,9 +161,7 @@ class PositiveFeeAdjustmentService:
         rows = list(qs[:limit])
         enrollments = {
             e.id: e
-            for e in StudentSession.objects.filter(
-                id__in={r.student_id for r in rows}
-            )
+            for e in StudentSession.objects.filter(id__in={r.student_id for r in rows})
         }
         student_ids = {e.student_id for e in enrollments.values()}
         students = students_by_ids(list(student_ids))
@@ -163,17 +169,21 @@ class PositiveFeeAdjustmentService:
             {
                 "id": row.af_id,
                 "student_session_id": row.student_id,
-                "student_id": enrollments[row.student_id].student_id
-                if row.student_id in enrollments
-                else None,
-                "student_name": student_sel.format_student_name(
-                    students[enrollments[row.student_id].student_id].firstname,
-                    students[enrollments[row.student_id].student_id].middlename,
-                    students[enrollments[row.student_id].student_id].lastname,
-                )
-                if row.student_id in enrollments
-                and enrollments[row.student_id].student_id in students
-                else str(row.student_id),
+                "student_id": (
+                    enrollments[row.student_id].student_id
+                    if row.student_id in enrollments
+                    else None
+                ),
+                "student_name": (
+                    student_sel.format_student_name(
+                        students[enrollments[row.student_id].student_id].firstname,
+                        students[enrollments[row.student_id].student_id].middlename,
+                        students[enrollments[row.student_id].student_id].lastname,
+                    )
+                    if row.student_id in enrollments
+                    and enrollments[row.student_id].student_id in students
+                    else str(row.student_id)
+                ),
                 "amount": row.amount,
                 "remark": row.remark or "",
                 "date": row.date.isoformat() if row.date else None,

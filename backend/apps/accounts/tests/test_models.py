@@ -3,7 +3,6 @@ import pytest
 from apps.accounts.models import Role, User
 
 
-@pytest.mark.django_db(databases=["default"])
 class TestLegacyUserModel:
     def test_user_maps_to_db_current_table(self):
         assert User._meta.db_table == "users"
@@ -28,7 +27,6 @@ class TestLegacyUserModel:
         assert expected == field_names
 
 
-@pytest.mark.django_db(databases=["default"])
 class TestLegacyRoleModel:
     def test_role_maps_to_db_current_table(self):
         assert Role._meta.db_table == "roles"
@@ -46,8 +44,7 @@ class TestLegacyRoleModel:
 
 
 @pytest.mark.django_db(databases=["default"])
-class TestHealthEndpoint:
-    def test_health_check(self, client):
-        response = client.get("/health/")
-        assert response.status_code == 200
-        assert response.json()["status"] == "healthy"
+def test_health_check(client):
+    response = client.get("/health/")
+    assert response.status_code == 200
+    assert response.json()["status"] == "healthy"

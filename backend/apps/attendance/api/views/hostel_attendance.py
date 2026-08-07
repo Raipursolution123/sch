@@ -26,7 +26,9 @@ class HostelAttendanceRosterView(APIView):
             data = HostelAttendanceService().get_roster(
                 hostel_id=hostel_id, date_str=date_str
             )
-            return APIResponse.success(data=data, message="Hostel attendance roster retrieved.")
+            return APIResponse.success(
+                data=data, message="Hostel attendance roster retrieved."
+            )
         except AttendanceError as exc:
             return attendance_error_response(exc)
 

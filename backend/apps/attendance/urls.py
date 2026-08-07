@@ -4,15 +4,15 @@ from apps.attendance.api.views.approve_leave import (
     ApproveLeaveDetailView,
     ApproveLeaveListCreateView,
 )
-from apps.attendance.api.views.hostel_attendance import (
-    HostelAttendanceMarkView,
-    HostelAttendanceRosterView,
-)
 from apps.attendance.api.views.attendance import (
     AttendanceMarkView,
     AttendanceReportView,
     AttendanceRosterView,
     AttendanceTypeListView,
+)
+from apps.attendance.api.views.hostel_attendance import (
+    HostelAttendanceMarkView,
+    HostelAttendanceRosterView,
 )
 from apps.attendance.api.views.subject_attendance import (
     SubjectAttendanceMarkView,

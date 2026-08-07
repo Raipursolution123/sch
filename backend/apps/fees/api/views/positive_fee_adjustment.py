@@ -3,7 +3,9 @@ from rest_framework.views import APIView
 
 from apps.fees.api.views.common import MODULE, fee_error_response
 from apps.fees.domain.fee_exceptions import FeeError
-from apps.fees.services.positive_fee_adjustment_service import PositiveFeeAdjustmentService
+from apps.fees.services.positive_fee_adjustment_service import (
+    PositiveFeeAdjustmentService,
+)
 from common.responses.api import APIResponse
 from core.permissions.legacy_privilege import HasLegacyPrivilege
 
@@ -28,7 +30,9 @@ class PositiveFeeAdjustmentListView(APIView):
                 )
                 return APIResponse.success(data=data, message="Roster retrieved.")
             data = service.list_recent()
-            return APIResponse.success(data=data, message="Positive fee adjustments retrieved.")
+            return APIResponse.success(
+                data=data, message="Positive fee adjustments retrieved."
+            )
         except FeeError as exc:
             return fee_error_response(exc)
 

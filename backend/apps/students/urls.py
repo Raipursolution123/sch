@@ -1,9 +1,17 @@
 from django.urls import path
 
+from apps.students.api.views.behaviour import (
+    BehaviourAssignmentDetailView,
+    BehaviourAssignmentListCreateView,
+    BehaviourIncidentTypeDetailView,
+    BehaviourIncidentTypeListCreateView,
+    BehaviourSettingsView,
+)
 from apps.students.api.views.categories_houses import (
     StudentCategoriesListView,
     StudentHousesListView,
 )
+from apps.students.api.views.multi_class import MultiClassRosterView, MultiClassSaveView
 from apps.students.api.views.student import (
     StudentAcademicSessionsView,
     StudentDetailView,
@@ -22,15 +30,7 @@ from apps.students.api.views.student_masters import (
     StudentImportTemplateView,
     StudentImportView,
 )
-from apps.students.api.views.multi_class import MultiClassRosterView, MultiClassSaveView
 from apps.students.api.views.student_transport import StudentTransportView
-from apps.students.api.views.behaviour import (
-    BehaviourAssignmentDetailView,
-    BehaviourAssignmentListCreateView,
-    BehaviourIncidentTypeDetailView,
-    BehaviourIncidentTypeListCreateView,
-    BehaviourSettingsView,
-)
 
 urlpatterns = [
     path("", StudentListCreateView.as_view(), name="students-list"),
@@ -39,7 +39,9 @@ urlpatterns = [
         MultiClassRosterView.as_view(),
         name="students-multi-class-roster",
     ),
-    path("multi-class/", MultiClassSaveView.as_view(), name="students-multi-class-save"),
+    path(
+        "multi-class/", MultiClassSaveView.as_view(), name="students-multi-class-save"
+    ),
     path(
         "behaviour/incidents/",
         BehaviourIncidentTypeListCreateView.as_view(),

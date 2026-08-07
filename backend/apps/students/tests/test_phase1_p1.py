@@ -66,7 +66,9 @@ class TestStaffRatingService:
 class TestDeliveryService:
     @patch("apps.communications.services.delivery_service.EmailConfig")
     def test_email_without_config(self, mock_cfg):
-        mock_cfg.objects.filter.return_value.order_by.return_value.first.return_value = None
+        mock_cfg.objects.filter.return_value.order_by.return_value.first.return_value = (
+            None
+        )
         mock_cfg.objects.order_by.return_value.first.return_value = None
         msg = MagicMock(id=1, user_list="a@b.com", title="Hi", message="Body")
         result = DeliveryService().deliver_message(msg, channel="email")
@@ -78,7 +80,9 @@ class TestDeliveryService:
         cfg = MagicMock()
         cfg.name = "Twilio"
         cfg.type = "twilio"
-        mock_cfg.objects.filter.return_value.order_by.return_value.first.return_value = cfg
+        mock_cfg.objects.filter.return_value.order_by.return_value.first.return_value = (
+            cfg
+        )
         msg = MagicMock(id=2, user_list="9999999999", message="Hello")
         result = DeliveryService().deliver_message(msg, channel="sms")
         assert result["ok"] is True

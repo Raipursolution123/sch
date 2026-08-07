@@ -46,11 +46,11 @@ def test_allocate_receipt_no_increments_existing():
 
 def test_cbse_save_marks_requires_entries():
     with pytest.raises(ExaminationValidationError, match="At least one marks entry"):
-        CbseMarksService().save_marks(
-            {"exam_id": 1, "timetable_id": 1, "entries": []}
-        )
+        CbseMarksService().save_marks({"exam_id": 1, "timetable_id": 1, "entries": []})
 
 
 def test_cbse_save_marks_requires_exam():
     with pytest.raises(ExaminationValidationError, match="Exam is required"):
-        CbseMarksService().save_marks({"timetable_id": 1, "entries": [{"cbse_exam_student_id": 1}]})
+        CbseMarksService().save_marks(
+            {"timetable_id": 1, "entries": [{"cbse_exam_student_id": 1}]}
+        )

@@ -7,11 +7,11 @@ import time
 from datetime import date
 from typing import Any
 
-from django.utils import timezone
-
 from apps.academics.models import Classes, Sections
 from apps.academics.selectors.session_selectors import get_current_session
-from apps.cyc_extensions.models.cyc_scheme_and_scholarship import CycSchemeAndScholarship
+from apps.cyc_extensions.models.cyc_scheme_and_scholarship import (
+    CycSchemeAndScholarship,
+)
 from apps.cyc_extensions.models.cyc_scheme_and_scholarship_feetype import (
     CycSchemeAndScholarshipFeetype,
 )
@@ -48,7 +48,9 @@ class SchemeScholarshipService:
             raise FeeValidationError("Scheme name is required.")
         row = CycSchemeAndScholarship.objects.create(
             ss_name=name[:255],
-            ss_type=str(payload.get("ss_type") or payload.get("type") or "scholarship")[:255],
+            ss_type=str(payload.get("ss_type") or payload.get("type") or "scholarship")[
+                :255
+            ],
             ss_applicable_on=str(
                 payload.get("ss_applicable_on") or payload.get("applicable_on") or "fee"
             )[:255],
@@ -62,7 +64,9 @@ class SchemeScholarshipService:
         if row is None:
             raise FeeNotFoundError("Scheme not found.")
         if "ss_name" in payload or "name" in payload:
-            row.ss_name = str(payload.get("ss_name") or payload.get("name") or "").strip()[:255]
+            row.ss_name = str(
+                payload.get("ss_name") or payload.get("name") or ""
+            ).strip()[:255]
         if "ss_type" in payload or "type" in payload:
             row.ss_type = str(payload.get("ss_type") or payload.get("type") or "")[:255]
         if "ss_applicable_on" in payload or "applicable_on" in payload:
@@ -79,7 +83,9 @@ class SchemeScholarshipService:
         if row is None:
             raise FeeNotFoundError("Scheme not found.")
         if CycSchemeAndScholarshipStudent.objects.filter(ss_id=pk).exists():
-            raise FeeValidationError("Cannot delete a scheme with student applications.")
+            raise FeeValidationError(
+                "Cannot delete a scheme with student applications."
+            )
         CycSchemeAndScholarshipValue.objects.filter(ss_id=pk).delete()
         CycSchemeAndScholarshipFeetype.objects.filter(ss_id=pk).delete()
         row.delete()
@@ -98,8 +104,7 @@ class SchemeScholarshipService:
         from apps.fees.models.feetype import Feetype
 
         feetype_map = {
-            ft.id: ft.type
-            for ft in Feetype.objects.filter(id__in=feetype_ids)
+            ft.id: ft.type for ft in Feetype.objects.filter(id__in=feetype_ids)
         }
         return {
             **self._scheme_to_dict(row, len(values)),
@@ -158,7 +163,12 @@ class SchemeScholarshipService:
                 ssvft_status=1,
             )
 
-        logger.info("Saved scheme config ss_id=%s values=%s feetypes=%s", pk, len(values), len(feetype_ids))
+        logger.info(
+            "Saved scheme config ss_id=%s values=%s feetypes=%s",
+            pk,
+            len(values),
+            len(feetype_ids),
+        )
         return self.get_scheme_config(pk)
 
     def list_applications(
@@ -255,7 +265,9 @@ class SchemeScholarshipService:
         student = students_by_ids([row.student_id]).get(row.student_id)
         return self._application_to_dict(row, student, scheme, None, {}, {})
 
-    def _scheme_to_dict(self, row: CycSchemeAndScholarship, value_count: int) -> dict[str, Any]:
+    def _scheme_to_dict(
+        self, row: CycSchemeAndScholarship, value_count: int
+    ) -> dict[str, Any]:
         return {
             "id": row.ss_id,
             "ss_name": row.ss_name,
@@ -281,14 +293,18 @@ class SchemeScholarshipService:
             "ss_id": row.ss_id,
             "scheme_name": scheme.ss_name if scheme else None,
             "student_id": row.student_id,
-            "student_name": student_sel.format_student_name(
-                student.firstname, student.middlename, student.lastname
-            )
-            if student
-            else str(row.student_id),
+            "student_name": (
+                student_sel.format_student_name(
+                    student.firstname, student.middlename, student.lastname
+                )
+                if student
+                else str(row.student_id)
+            ),
             "admission_no": student.admission_no if student else None,
             "class_name": class_map.get(enrollment.class_id, "") if enrollment else "",
-            "section_name": section_map.get(enrollment.section_id, "") if enrollment else "",
+            "section_name": (
+                section_map.get(enrollment.section_id, "") if enrollment else ""
+            ),
             "applied_on": row.applied_on.isoformat() if row.applied_on else None,
             "applied_by": row.applied_by,
             "applied_status": row.applied_status,

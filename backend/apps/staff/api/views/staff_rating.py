@@ -15,9 +15,13 @@ CATEGORY = "teachers_rating"
 
 def _error(exc: Exception):
     if isinstance(exc, LookupError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_404_NOT_FOUND)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_404_NOT_FOUND
+        )
     if isinstance(exc, ValueError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+        )
     logger.exception("Staff rating error: %s", exc)
     return APIResponse.error(
         message="Staff rating operation failed.",

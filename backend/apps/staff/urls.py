@@ -13,12 +13,6 @@ from apps.staff.api.views.leave_type import (
     LeaveTypeDetailView,
     LeaveTypesListCreateView,
 )
-from apps.staff.api.views.staff_rating import (
-    StaffRatingApproveView,
-    StaffRatingDeclineView,
-    StaffRatingDetailView,
-    StaffRatingListView,
-)
 from apps.staff.api.views.staff import StaffDetailView, StaffListCreateView
 from apps.staff.api.views.staff_document import (
     StaffDocumentDeleteView,
@@ -36,6 +30,12 @@ from apps.staff.api.views.staff_masters import (
     StaffPayrollScaleListCreateView,
     StaffPayslipDetailView,
     StaffPayslipListCreateView,
+)
+from apps.staff.api.views.staff_rating import (
+    StaffRatingApproveView,
+    StaffRatingDeclineView,
+    StaffRatingDetailView,
+    StaffRatingListView,
 )
 
 urlpatterns = [

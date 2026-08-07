@@ -1,17 +1,5 @@
 from django.urls import path
 
-from apps.fees.api.views.positive_fee_adjustment import (
-    PositiveFeeAdjustmentApplyView,
-    PositiveFeeAdjustmentListView,
-)
-from apps.fees.api.views.scheme_scholarship import (
-    SchemeApplicationApproveView,
-    SchemeApplicationListCreateView,
-    SchemeApplicationRejectView,
-    SchemeConfigView,
-    SchemeDetailView,
-    SchemeListCreateView,
-)
 from apps.fees.api.views.fee_assignment import (
     FeeAssignmentDetailView,
     FeeAssignmentsListView,
@@ -44,6 +32,18 @@ from apps.fees.api.views.offline_bank_payments import (
     OfflineBankPaymentsListView,
 )
 from apps.fees.api.views.payment_settings import PaymentGatewaysListView
+from apps.fees.api.views.positive_fee_adjustment import (
+    PositiveFeeAdjustmentApplyView,
+    PositiveFeeAdjustmentListView,
+)
+from apps.fees.api.views.scheme_scholarship import (
+    SchemeApplicationApproveView,
+    SchemeApplicationListCreateView,
+    SchemeApplicationRejectView,
+    SchemeConfigView,
+    SchemeDetailView,
+    SchemeListCreateView,
+)
 
 urlpatterns = [
     path("collect/roster/", FeeCollectRosterView.as_view(), name="fee-collect-roster"),
@@ -144,7 +144,11 @@ urlpatterns = [
     ),
     path("schemes/", SchemeListCreateView.as_view(), name="fee-schemes-list"),
     path("schemes/<int:pk>/", SchemeDetailView.as_view(), name="fee-schemes-detail"),
-    path("schemes/<int:pk>/config/", SchemeConfigView.as_view(), name="fee-schemes-config"),
+    path(
+        "schemes/<int:pk>/config/",
+        SchemeConfigView.as_view(),
+        name="fee-schemes-config",
+    ),
     path(
         "scheme-applications/",
         SchemeApplicationListCreateView.as_view(),

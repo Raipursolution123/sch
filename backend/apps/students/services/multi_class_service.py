@@ -10,7 +10,10 @@ from django.utils import timezone
 
 from apps.academics.models import Classes, Sections
 from apps.academics.selectors.session_selectors import get_current_session
-from apps.students.domain.student_exceptions import StudentNotFoundError, StudentValidationError
+from apps.students.domain.student_exceptions import (
+    StudentNotFoundError,
+    StudentValidationError,
+)
 from apps.students.models.student_session import StudentSession
 from apps.students.selectors import student_selectors as student_sel
 from apps.students.selectors.promotion_selectors import students_by_ids
@@ -48,14 +51,22 @@ class MultiClassService:
         class_map = {
             c.id: c.class_field
             for c in Classes.objects.filter(
-                id__in={e.class_id for rows in by_student.values() for e in rows if e.class_id}
+                id__in={
+                    e.class_id
+                    for rows in by_student.values()
+                    for e in rows
+                    if e.class_id
+                }
             )
         }
         section_map = {
             s.id: s.section
             for s in Sections.objects.filter(
                 id__in={
-                    e.section_id for rows in by_student.values() for e in rows if e.section_id
+                    e.section_id
+                    for rows in by_student.values()
+                    for e in rows
+                    if e.section_id
                 }
             )
         }
@@ -152,5 +163,9 @@ class MultiClassService:
                 if key not in desired and int(row.default_login or 0) != 1:
                     row.delete()
 
-        logger.info("Saved multi-class enrollments student=%s count=%s", student_id, len(desired))
+        logger.info(
+            "Saved multi-class enrollments student=%s count=%s",
+            student_id,
+            len(desired),
+        )
         return self.get_roster()

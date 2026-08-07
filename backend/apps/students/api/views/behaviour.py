@@ -1,5 +1,4 @@
 import logging
-from typing import Any
 
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -15,9 +14,13 @@ MODULE = "behaviour_records"
 
 def _error(exc: Exception):
     if isinstance(exc, LookupError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_404_NOT_FOUND)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_404_NOT_FOUND
+        )
     if isinstance(exc, ValueError):
-        return APIResponse.error(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
+        return APIResponse.error(
+            message=str(exc), status_code=status.HTTP_400_BAD_REQUEST
+        )
     logger.exception("Behaviour error: %s", exc)
     return APIResponse.error(
         message="Behaviour operation failed.",
