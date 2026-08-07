@@ -89,6 +89,11 @@ export { leadsService } from './leads.service';
 export { cmsService } from './cms.service';
 export { journalEntriesService } from './journal-entries.service';
 export { feeMapperService } from './fee-mapper.service';
+export { positiveFeeAdjustmentService } from './positive-fee-adjustment.service';
+export { schemeScholarshipService } from './scheme-scholarship.service';
+export { studentTransportFeesService } from './student-transport-fees.service';
+export { hostelAttendanceService } from './hostel-attendance.service';
+export { multiClassService } from './multi-class.service';
 export { homeworkService, dailyAssignmentsService } from './homework.service';
 export { rolesService, usersService } from './roles.service';
 export {

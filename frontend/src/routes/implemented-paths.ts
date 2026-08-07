@@ -79,6 +79,7 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.transport.vehicles,
   ROUTES.transport.assignVehicle,
   ROUTES.transport.routePickupPoints,
+  ROUTES.transport.studentFees,
   ROUTES.hostel.rooms,
   ROUTES.hostel.roomTypes,
   ROUTES.hostel.hostels,

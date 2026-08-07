@@ -4,6 +4,10 @@ from apps.attendance.api.views.approve_leave import (
     ApproveLeaveDetailView,
     ApproveLeaveListCreateView,
 )
+from apps.attendance.api.views.hostel_attendance import (
+    HostelAttendanceMarkView,
+    HostelAttendanceRosterView,
+)
 from apps.attendance.api.views.attendance import (
     AttendanceMarkView,
     AttendanceReportView,
@@ -35,6 +39,16 @@ urlpatterns = [
         "subject/mark/",
         SubjectAttendanceMarkView.as_view(),
         name="subject_attendance_mark",
+    ),
+    path(
+        "hostel/roster/",
+        HostelAttendanceRosterView.as_view(),
+        name="hostel_attendance_roster",
+    ),
+    path(
+        "hostel/mark/",
+        HostelAttendanceMarkView.as_view(),
+        name="hostel_attendance_mark",
     ),
     path(
         "approve-leave/",

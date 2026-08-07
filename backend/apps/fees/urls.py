@@ -1,5 +1,17 @@
 from django.urls import path
 
+from apps.fees.api.views.positive_fee_adjustment import (
+    PositiveFeeAdjustmentApplyView,
+    PositiveFeeAdjustmentListView,
+)
+from apps.fees.api.views.scheme_scholarship import (
+    SchemeApplicationApproveView,
+    SchemeApplicationListCreateView,
+    SchemeApplicationRejectView,
+    SchemeConfigView,
+    SchemeDetailView,
+    SchemeListCreateView,
+)
 from apps.fees.api.views.fee_assignment import (
     FeeAssignmentDetailView,
     FeeAssignmentsListView,
@@ -119,6 +131,34 @@ urlpatterns = [
         "reminders/<int:pk>/",
         FeeReminderDetailView.as_view(),
         name="fee-reminder-detail",
+    ),
+    path(
+        "positive-adjustments/",
+        PositiveFeeAdjustmentListView.as_view(),
+        name="positive-fee-adjustments-list",
+    ),
+    path(
+        "positive-adjustments/apply/",
+        PositiveFeeAdjustmentApplyView.as_view(),
+        name="positive-fee-adjustments-apply",
+    ),
+    path("schemes/", SchemeListCreateView.as_view(), name="fee-schemes-list"),
+    path("schemes/<int:pk>/", SchemeDetailView.as_view(), name="fee-schemes-detail"),
+    path("schemes/<int:pk>/config/", SchemeConfigView.as_view(), name="fee-schemes-config"),
+    path(
+        "scheme-applications/",
+        SchemeApplicationListCreateView.as_view(),
+        name="fee-scheme-applications",
+    ),
+    path(
+        "scheme-applications/<int:pk>/approve/",
+        SchemeApplicationApproveView.as_view(),
+        name="fee-scheme-application-approve",
+    ),
+    path(
+        "scheme-applications/<int:pk>/reject/",
+        SchemeApplicationRejectView.as_view(),
+        name="fee-scheme-application-reject",
     ),
     path(
         "payment-gateways/",

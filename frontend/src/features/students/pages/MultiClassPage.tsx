@@ -1,154 +1,107 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Plus, Check, GraduationCap, X } from 'lucide-react';
-import { toast } from 'sonner';
 import { ModuleListPack } from '@workflow-packs';
 import { sectionOptionsForClass } from '@features/students/utils/class-section-options';
 import { useClasses } from '@hooks/useClasses';
 import { useClassSections } from '@hooks/useClassSections';
-import { useStudents } from '@hooks/useStudents';
+import { useMultiClassRoster, useSaveMultiClass } from '@hooks/useMultiClass';
 import type { ClassSection } from '@app-types/academics/class-section';
-
-interface EnrolledClass {
-  classId: number;
-  className: string;
-  sectionId: number;
-  sectionName: string;
-  isPrimary?: boolean;
-}
+import type { MultiClassStudent } from '@services/api/multi-class.service';
 
 export function MultiClassPage() {
   const [selectedClass, setSelectedClass] = useState<string>('');
   const [selectedSection, setSelectedSection] = useState<string>('');
-  const [searchedClass, setSearchedClass] = useState<string>('');
-  const [searchedSection, setSearchedSection] = useState<string>('');
   const [hasSearched, setHasSearched] = useState(false);
 
   const [addingClassStudent, setAddingClassStudent] = useState<number | null>(null);
   const [newClass, setNewClass] = useState<string>('');
   const [newSection, setNewSection] = useState<string>('');
 
-  // Local state to store simulated secondary class enrollments per student
-  const [extraEnrollments, setExtraEnrollments] = useState<Record<number, EnrolledClass[]>>({});
-
-  // Fetch classes
   const { data: classesData } = useClasses(1);
   const classes = classesData?.results || [];
-
-  // Fetch class-section mappings
   const { data: classSectionsData } = useClassSections(1, { noPaginate: true });
   const classSections = classSectionsData?.results || [];
 
-  // Fetch all active students
-  const { data: students = [], isLoading, isError, error, refetch } = useStudents();
+  const classId = selectedClass && selectedClass !== 'all' ? Number(selectedClass) : undefined;
+  const sectionId =
+    selectedSection && selectedSection !== 'all' ? Number(selectedSection) : undefined;
 
-  // Filter sections options based on selected class
+  const {
+    data: roster,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useMultiClassRoster(classId, sectionId, hasSearched);
+  const saveMutation = useSaveMultiClass();
+
+  const students = roster?.students ?? [];
+
   const sectionOptions = useMemo(() => {
     if (!selectedClass || selectedClass === 'all') return [];
     return sectionOptionsForClass(classSections as ClassSection[], Number(selectedClass));
   }, [classSections, selectedClass]);
 
-  // Filter sections options for new assignment
   const newSectionOptions = useMemo(() => {
     if (!newClass) return [];
     return sectionOptionsForClass(classSections as ClassSection[], Number(newClass));
   }, [classSections, newClass]);
 
   const handleSearch = () => {
-    if (!selectedClass || !selectedSection) {
-      toast.error('Please select Class and Section criteria');
-      return;
-    }
-    setSearchedClass(selectedClass);
-    setSearchedSection(selectedSection);
+    if (!selectedClass || !selectedSection) return;
     setHasSearched(true);
   };
 
-  const filteredStudents = useMemo(() => {
-    if (!hasSearched) return [];
-    return students.filter((s) => {
-      // Filter by Class
-      if (searchedClass !== 'all' && String(s.class_id) !== String(searchedClass)) {
-        return false;
-      }
-      // Filter by Section
-      if (searchedSection !== 'all' && String(s.section_id) !== String(searchedSection)) {
-        return false;
-      }
-      return true;
-    });
-  }, [students, searchedClass, searchedSection, hasSearched]);
+  const extraEnrollments = (student: MultiClassStudent) =>
+    student.enrollments.filter((e) => !e.is_primary);
 
-  const handleAddClass = (studentId: number) => {
-    if (!newClass || !newSection) {
-      toast.error('Please select both Class and Section');
-      return;
-    }
-
-    const selectedClassObj = classes.find((c) => String(c.id) === String(newClass));
-    const selectedSectionObj = classSections.find(
-      (s: any) => String(s.section_id) === String(newSection),
+  const saveExtras = (
+    student: MultiClassStudent,
+    extras: Array<{ class_id: number; section_id: number }>,
+  ) => {
+    saveMutation.mutate(
+      { student_id: student.student_id, enrollments: extras },
+      {
+        onSuccess: () => {
+          setAddingClassStudent(null);
+          setNewClass('');
+          setNewSection('');
+        },
+      },
     );
-
-    let sectionName = '';
-    let sectionId = 0;
-
-    if (newSection === 'all') {
-      sectionName = 'All Sections';
-      sectionId = 0;
-    } else if (selectedSectionObj) {
-      sectionName = selectedSectionObj.section_name || '';
-      sectionId = selectedSectionObj.section_id;
-    }
-
-    if (!selectedClassObj) {
-      toast.error('Invalid class selected');
-      return;
-    }
-
-    const newEnrollment: EnrolledClass = {
-      classId: selectedClassObj.id,
-      className: selectedClassObj.class_name,
-      sectionId,
-      sectionName,
-      isPrimary: false,
-    };
-
-    // Check duplicate
-    const currentExtras = extraEnrollments[studentId] || [];
-    const isDuplicate = currentExtras.some(
-      (e) => String(e.classId) === String(newClass) && String(e.sectionId) === String(newSection),
-    );
-
-    const student = students.find((s) => s.id === studentId);
-    const isPrimaryDuplicate =
-      student &&
-      String(student.class_id) === String(newClass) &&
-      String(student.section_id) === String(newSection);
-
-    if (isDuplicate || isPrimaryDuplicate) {
-      toast.error('This class and section is already assigned to this student.');
-      return;
-    }
-
-    setExtraEnrollments((prev) => ({
-      ...prev,
-      [studentId]: [...currentExtras, newEnrollment],
-    }));
-
-    toast.success('Additional Class/Section assigned successfully');
-    setAddingClassStudent(null);
-    setNewClass('');
-    setNewSection('');
   };
 
-  const handleRemoveExtraClass = (studentId: number, classId: number, sectionId: number) => {
-    setExtraEnrollments((prev) => ({
-      ...prev,
-      [studentId]: (prev[studentId] || []).filter(
-        (e) => !(e.classId === classId && e.sectionId === sectionId),
-      ),
-    }));
-    toast.success('Assigned class removed');
+  const handleAddClass = (student: MultiClassStudent) => {
+    if (!newClass || !newSection) return;
+
+    const classIdNum = Number(newClass);
+    const sectionIdNum = newSection === 'all' ? 0 : Number(newSection);
+    if (!classIdNum || (newSection !== 'all' && !sectionIdNum)) return;
+
+    const currentExtras = extraEnrollments(student);
+    const isDuplicate = currentExtras.some(
+      (e) => e.class_id === classIdNum && e.section_id === sectionIdNum,
+    );
+    const isPrimaryDuplicate =
+      student.primary_class_id === classIdNum && student.primary_section_id === sectionIdNum;
+
+    if (isDuplicate || isPrimaryDuplicate) return;
+
+    saveExtras(student, [
+      ...currentExtras.map((e) => ({ class_id: e.class_id, section_id: e.section_id })),
+      { class_id: classIdNum, section_id: sectionIdNum },
+    ]);
+  };
+
+  const handleRemoveExtraClass = (
+    student: MultiClassStudent,
+    classIdToRemove: number,
+    sectionIdToRemove: number,
+  ) => {
+    const extras = extraEnrollments(student)
+      .filter((e) => !(e.class_id === classIdToRemove && e.section_id === sectionIdToRemove))
+      .map((e) => ({ class_id: e.class_id, section_id: e.section_id }));
+    saveExtras(student, extras);
   };
 
   return (
@@ -161,7 +114,6 @@ export function MultiClassPage() {
       error={error}
       onRetry={() => void refetch()}
     >
-      {/* Criteria Filter */}
       <div className="mb-6 grid grid-cols-1 gap-4 rounded-lg border border-border bg-card p-4 md:grid-cols-3">
         <div>
           <label className="text-xs font-semibold uppercase text-muted-foreground">Class</label>
@@ -170,6 +122,7 @@ export function MultiClassPage() {
             onChange={(e) => {
               const val = e.target.value;
               setSelectedClass(val);
+              setHasSearched(false);
               if (val === 'all') {
                 setSelectedSection('all');
               } else {
@@ -177,11 +130,7 @@ export function MultiClassPage() {
                   classSections as ClassSection[],
                   Number(val),
                 );
-                if (options.length === 0) {
-                  setSelectedSection('all');
-                } else {
-                  setSelectedSection('');
-                }
+                setSelectedSection(options.length === 0 ? 'all' : '');
               }
             }}
             className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -200,7 +149,10 @@ export function MultiClassPage() {
           <label className="text-xs font-semibold uppercase text-muted-foreground">Section</label>
           <select
             value={selectedSection}
-            onChange={(e) => setSelectedSection(e.target.value)}
+            onChange={(e) => {
+              setSelectedSection(e.target.value);
+              setHasSearched(false);
+            }}
             disabled={!selectedClass}
             className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
           >
@@ -226,38 +178,38 @@ export function MultiClassPage() {
         <div className="flex items-end">
           <button
             onClick={handleSearch}
-            className="h-10 w-full rounded-md bg-primary text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/95"
+            disabled={!selectedClass || !selectedSection}
+            className="h-10 w-full rounded-md bg-primary text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/95 disabled:opacity-50"
           >
             Search
           </button>
         </div>
       </div>
 
-      {/* Students List */}
       {!hasSearched ? (
         <div className="rounded-xl border border-dashed bg-card/50 py-12 text-center">
           <p className="text-sm text-muted-foreground">
-            Select Class and Section, then click Search to list students.
+            Select class and section, then click Search to list students.
           </p>
         </div>
-      ) : filteredStudents.length === 0 ? (
+      ) : students.length === 0 ? (
         <div className="rounded-xl border border-dashed bg-card/50 py-12 text-center">
           <p className="text-sm text-muted-foreground">
-            No students found for the selected Class and Section criteria.
+            No students found for the selected class and section criteria.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {filteredStudents.map((student) => {
-            const extras = extraEnrollments[student.id] || [];
+          {students.map((student) => {
+            const extras = extraEnrollments(student);
             return (
               <div
-                key={student.id}
+                key={student.student_id}
                 className="relative rounded-xl border border-border bg-card p-5 shadow-sm"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h4 className="font-semibold text-foreground">{student.full_name}</h4>
+                    <h4 className="font-semibold text-foreground">{student.student_name}</h4>
                     <p className="text-xs text-muted-foreground">
                       Admission No: {student.admission_no}
                     </p>
@@ -272,19 +224,20 @@ export function MultiClassPage() {
                   <div className="flex flex-wrap gap-2">
                     <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
                       <Check className="h-3 w-3" />
-                      {student.class_name} ({student.section_name}) [Primary]
+                      {student.primary_class_name} ({student.primary_section_name}) [Primary]
                     </span>
                     {extras.map((enroll) => (
                       <span
-                        key={`${enroll.classId}-${enroll.sectionId}`}
+                        key={`${enroll.class_id}-${enroll.section_id}`}
                         className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground"
                       >
-                        {enroll.className} ({enroll.sectionName})
+                        {enroll.class_name} ({enroll.section_name})
                         <button
                           onClick={() =>
-                            handleRemoveExtraClass(student.id, enroll.classId, enroll.sectionId)
+                            handleRemoveExtraClass(student, enroll.class_id, enroll.section_id)
                           }
-                          className="text-muted-foreground hover:text-destructive"
+                          disabled={saveMutation.isPending}
+                          className="text-muted-foreground hover:text-destructive disabled:opacity-50"
                         >
                           <X className="h-3 w-3" />
                         </button>
@@ -293,7 +246,7 @@ export function MultiClassPage() {
                   </div>
                 </div>
 
-                {addingClassStudent === student.id ? (
+                {addingClassStudent === student.student_id ? (
                   <div className="mt-4 border-t pt-4">
                     <div className="grid grid-cols-2 gap-2">
                       <select
@@ -305,11 +258,7 @@ export function MultiClassPage() {
                             classSections as ClassSection[],
                             Number(val),
                           );
-                          if (options.length === 0) {
-                            setNewSection('all');
-                          } else {
-                            setNewSection('');
-                          }
+                          setNewSection(options.length === 0 ? 'all' : '');
                         }}
                         className="h-9 rounded-md border border-input bg-background px-2 text-xs"
                       >
@@ -343,8 +292,9 @@ export function MultiClassPage() {
                         Cancel
                       </button>
                       <button
-                        onClick={() => handleAddClass(student.id)}
-                        className="h-8 rounded-md bg-primary px-3 text-xs font-medium text-white"
+                        onClick={() => handleAddClass(student)}
+                        disabled={saveMutation.isPending}
+                        className="h-8 rounded-md bg-primary px-3 text-xs font-medium text-white disabled:opacity-50"
                       >
                         Save
                       </button>
@@ -352,7 +302,7 @@ export function MultiClassPage() {
                   </div>
                 ) : (
                   <button
-                    onClick={() => setAddingClassStudent(student.id)}
+                    onClick={() => setAddingClassStudent(student.student_id)}
                     className="mt-4 inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-border text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   >
                     <Plus className="h-4 w-4" />

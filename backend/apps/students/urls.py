@@ -22,6 +22,7 @@ from apps.students.api.views.student_masters import (
     StudentImportTemplateView,
     StudentImportView,
 )
+from apps.students.api.views.multi_class import MultiClassRosterView, MultiClassSaveView
 from apps.students.api.views.student_transport import StudentTransportView
 from apps.students.api.views.behaviour import (
     BehaviourAssignmentDetailView,
@@ -33,6 +34,12 @@ from apps.students.api.views.behaviour import (
 
 urlpatterns = [
     path("", StudentListCreateView.as_view(), name="students-list"),
+    path(
+        "multi-class/roster/",
+        MultiClassRosterView.as_view(),
+        name="students-multi-class-roster",
+    ),
+    path("multi-class/", MultiClassSaveView.as_view(), name="students-multi-class-save"),
     path(
         "behaviour/incidents/",
         BehaviourIncidentTypeListCreateView.as_view(),

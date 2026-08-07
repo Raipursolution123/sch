@@ -1,5 +1,9 @@
 from django.urls import path
 
+from apps.transport.api.views.student_transport_fees import (
+    StudentTransportFeeAssignView,
+    StudentTransportFeeRosterView,
+)
 from apps.transport.api.views.transport_fees import (
     TransportFeesDetailView,
     TransportFeesListCreateView,
@@ -26,6 +30,16 @@ from apps.transport.api.views.route_pickup_point import (
 )
 
 urlpatterns = [
+    path(
+        "student-fees/roster/",
+        StudentTransportFeeRosterView.as_view(),
+        name="student-transport-fees-roster",
+    ),
+    path(
+        "student-fees/assign/",
+        StudentTransportFeeAssignView.as_view(),
+        name="student-transport-fees-assign",
+    ),
     path("fees/", TransportFeesListCreateView.as_view(), name="transport-fees-list-create"),
     path("fees/<int:pk>/", TransportFeesDetailView.as_view(), name="transport-fees-detail"),
     path("pickup-points/", PickupPointListCreateView.as_view(), name="pickup-points-list-create"),
