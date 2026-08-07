@@ -21,10 +21,14 @@ def test_create_group_requires_session(service):
 
 
 def test_create_group_success(service):
-    with patch("apps.academics.services.subject_group_service.transaction.atomic") as atomic:
+    with patch(
+        "apps.academics.services.subject_group_service.transaction.atomic"
+    ) as atomic:
         atomic.return_value.__enter__.return_value = None
         atomic.return_value.__exit__.return_value = False
-        with patch("apps.academics.services.subject_group_service.SubjectGroups") as model:
+        with patch(
+            "apps.academics.services.subject_group_service.SubjectGroups"
+        ) as model:
             with patch(
                 "apps.academics.services.subject_group_service.Sessions"
             ) as sessions_model:
