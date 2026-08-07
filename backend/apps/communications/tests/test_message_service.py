@@ -31,8 +31,15 @@ def test_compose_individual_requires_user_list():
         )
 
 
+@patch("apps.communications.services.delivery_service.DeliveryService")
 @patch("apps.communications.services.message_service.Messages.objects")
-def test_compose_email_persists_queued(objects):
+def test_compose_email_persists_queued(objects, delivery_service_cls):
+    delivery_service_cls.return_value.deliver_message.return_value = {
+        "ok": False,
+        "detail": "stub",
+        "stub": True,
+        "sent": 0,
+    }
     row = MagicMock()
     row.id = 9
     row.title = "Exam notice"

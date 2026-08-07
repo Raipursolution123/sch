@@ -20,29 +20,31 @@ def test_create_group_requires_session(service):
         service.create_group({"name": "Science Group"})
 
 
-@pytest.mark.django_db
 def test_create_group_success(service):
-    with patch("apps.academics.services.subject_group_service.SubjectGroups") as model:
-        with patch(
-            "apps.academics.services.subject_group_service.Sessions"
-        ) as sessions_model:
-            sessions_model.objects.filter.return_value.exists.return_value = True
-            model.objects.filter.return_value.exists.return_value = False
-            created = MagicMock(
-                id=1,
-                name="Science",
-                session_id=5,
-                description=None,
-                created_at=None,
-            )
-            model.objects.create.return_value = created
+    with patch("apps.academics.services.subject_group_service.transaction.atomic") as atomic:
+        atomic.return_value.__enter__.return_value = None
+        atomic.return_value.__exit__.return_value = False
+        with patch("apps.academics.services.subject_group_service.SubjectGroups") as model:
             with patch(
-                "apps.academics.services.subject_group_service.selectors.group_detail_dict",
-                return_value={"id": 1, "name": "Science", "session_id": 5},
-            ):
-                result = service.create_group(
-                    {"name": "Science", "session_id": 5, "description": ""}
+                "apps.academics.services.subject_group_service.Sessions"
+            ) as sessions_model:
+                sessions_model.objects.filter.return_value.exists.return_value = True
+                model.objects.filter.return_value.exists.return_value = False
+                created = MagicMock(
+                    id=1,
+                    name="Science",
+                    session_id=5,
+                    description=None,
+                    created_at=None,
                 )
+                model.objects.create.return_value = created
+                with patch(
+                    "apps.academics.services.subject_group_service.selectors.group_detail_dict",
+                    return_value={"id": 1, "name": "Science", "session_id": 5},
+                ):
+                    result = service.create_group(
+                        {"name": "Science", "session_id": 5, "description": ""}
+                    )
     assert result["name"] == "Science"
 
 

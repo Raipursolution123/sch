@@ -61,19 +61,21 @@ def test_video_tutorial_requires_created_by():
         )
 
 
-@pytest.mark.django_db
 def test_share_content_requires_title():
+    create = ShareContentService.create.__wrapped__
     with pytest.raises(CertificateValidationError, match="title"):
-        ShareContentService().create(
+        create(
+            ShareContentService(),
             {"title": " ", "send_to": "group", "group_id": "student"},
             created_by=1,
         )
 
 
-@pytest.mark.django_db
 def test_share_content_requires_send_to():
+    create = ShareContentService.create.__wrapped__
     with pytest.raises(CertificateValidationError, match="send_to"):
-        ShareContentService().create(
+        create(
+            ShareContentService(),
             {"title": "Exam Prep", "send_to": " ", "group_id": "student"},
             created_by=1,
         )
