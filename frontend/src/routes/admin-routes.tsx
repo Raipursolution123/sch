@@ -10,6 +10,55 @@ const DashboardPage = lazy(() =>
   })),
 );
 
+// GMeet
+const LiveClassesPage = lazy(() =>
+  import('@features/gmeet/pages/LiveClassesPage').then((m) => ({
+    default: m.LiveClassesPage,
+  })),
+);
+const LiveMeetingPage = lazy(() =>
+  import('@features/gmeet/pages/LiveMeetingPage').then((m) => ({
+    default: m.LiveMeetingPage,
+  })),
+);
+const ClassReportPage = lazy(() =>
+  import('@features/gmeet/pages/ClassReportPage').then((m) => ({
+    default: m.ClassReportPage,
+  })),
+);
+const GmeetSettingPage = lazy(() =>
+  import('@features/gmeet/pages/GmeetSettingPage').then((m) => ({
+    default: m.GmeetSettingPage,
+  })),
+);
+
+// Zoom
+const ZoomClassesPage = lazy(() =>
+  import('@features/zoom/pages/ZoomClassesPage').then((m) => ({
+    default: m.ZoomClassesPage,
+  })),
+);
+const ZoomMeetingPage = lazy(() =>
+  import('@features/zoom/pages/ZoomMeetingPage').then((m) => ({
+    default: m.ZoomMeetingPage,
+  })),
+);
+const ZoomClassReportPage = lazy(() =>
+  import('@features/zoom/pages/ZoomClassReportPage').then((m) => ({
+    default: m.ZoomClassReportPage,
+  })),
+);
+const ZoomMeetingReportPage = lazy(() =>
+  import('@features/zoom/pages/ZoomMeetingReportPage').then((m) => ({
+    default: m.ZoomMeetingReportPage,
+  })),
+);
+const ZoomSettingPage = lazy(() =>
+  import('@features/zoom/pages/ZoomSettingPage').then((m) => ({
+    default: m.ZoomSettingPage,
+  })),
+);
+
 // Finance
 const LedgersPage = lazy(() =>
   import('@features/finance/ledgers/pages/LedgersPage').then((m) => ({
@@ -270,6 +319,24 @@ const BackupPage = lazy(() =>
 const FileTypesPage = lazy(() =>
   import('@features/settings/file-types/pages/FileTypesPage').then((m) => ({
     default: m.FileTypesPage,
+  })),
+);
+
+const MultiBranchOverviewPage = lazy(() =>
+  import('@features/multibranch/pages/MultiBranchOverviewPage').then((m) => ({
+    default: m.MultiBranchOverviewPage,
+  })),
+);
+
+const MultiBranchReportPage = lazy(() =>
+  import('@features/multibranch/pages/MultiBranchReportPage').then((m) => ({
+    default: m.MultiBranchReportPage,
+  })),
+);
+
+const MultiBranchSettingPage = lazy(() =>
+  import('@features/multibranch/pages/MultiBranchSettingPage').then((m) => ({
+    default: m.MultiBranchSettingPage,
   })),
 );
 const ClassesPage = lazy(() =>
@@ -1118,6 +1185,30 @@ const LmsCourseEditPage = lazy(() =>
   })),
 );
 
+const CourseCategoryPage = lazy(() =>
+  import('@features/lms/pages/CourseCategoryPage').then((m) => ({
+    default: m.CourseCategoryPage,
+  })),
+);
+
+const LMSOfflinePaymentPage = lazy(() =>
+  import('@features/lms/pages/LMSOfflinePaymentPage').then((m) => ({
+    default: m.LMSOfflinePaymentPage,
+  })),
+);
+
+const LMSReportPage = lazy(() =>
+  import('@features/lms/pages/LMSReportPage').then((m) => ({
+    default: m.LMSReportPage,
+  })),
+);
+
+const LMSSettingsPage = lazy(() =>
+  import('@features/lms/pages/LMSSettingsPage').then((m) => ({
+    default: m.LMSSettingsPage,
+  })),
+);
+
 const StudentTransportFeesPage = lazy(() =>
   import('@features/transport/pages/StudentTransportFeesPage').then((m) => ({
     default: m.StudentTransportFeesPage,
@@ -1150,6 +1241,10 @@ export const adminRoutes: RouteObject[] = [
     { path: 'courses', element: <LmsCourseListPage /> },
     { path: 'courses/new', element: <LmsCourseCreatePage /> },
     { path: 'courses/:id/edit', element: <LmsCourseEditPage /> },
+    { path: 'categories', element: <CourseCategoryPage /> },
+    { path: 'offline-payments', element: <LMSOfflinePaymentPage /> },
+    { path: 'reports', element: <LMSReportPage /> },
+    { path: 'settings', element: <LMSSettingsPage /> },
   ]),
 
   {
@@ -1445,5 +1540,23 @@ export const adminRoutes: RouteObject[] = [
     { path: 'incidents', element: <IncidentsPage /> },
     { path: 'report', element: <IncidentReportsPage /> },
     { path: 'setting', element: <IncidentSettingPage /> },
+  ]),
+  createModuleRoutes('/multibranch', ROUTES.multiBranch.overview, [
+    { path: 'overview', element: <MultiBranchOverviewPage /> },
+    { path: 'report', element: <MultiBranchReportPage /> },
+    { path: 'setting', element: <MultiBranchSettingPage /> },
+  ]),
+  createModuleRoutes('/gmeet', ROUTES.gmeet.classes, [
+    { path: 'classes', element: <LiveClassesPage /> },
+    { path: 'meeting', element: <LiveMeetingPage /> },
+    { path: 'report', element: <ClassReportPage /> },
+    { path: 'setting', element: <GmeetSettingPage /> },
+  ]),
+  createModuleRoutes('/zoom', ROUTES.zoom.classes, [
+    { path: 'classes', element: <ZoomClassesPage /> },
+    { path: 'meeting', element: <ZoomMeetingPage /> },
+    { path: 'report', element: <ZoomClassReportPage /> },
+    { path: 'meeting-report', element: <ZoomMeetingReportPage /> },
+    { path: 'setting', element: <ZoomSettingPage /> },
   ]),
 ];

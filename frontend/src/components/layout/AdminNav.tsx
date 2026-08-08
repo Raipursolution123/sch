@@ -131,7 +131,7 @@ function NavGroup({
         className={cn(
           'flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-fast',
           isGroupActive
-            ? 'bg-primary-pale font-semibold text-ink'
+            ? 'font-semibold text-ink bg-sidebar-accent/30'
             : 'text-sidebar-foreground hover:bg-sidebar-accent/70',
         )}
         aria-expanded={open}

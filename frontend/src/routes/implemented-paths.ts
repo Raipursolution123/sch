@@ -199,6 +199,22 @@ export const IMPLEMENTED_PATHS = new Set<string>([
   ROUTES.cms.banners,
   ROUTES.cms.settings,
   ROUTES.lms.courses.root,
+  ROUTES.lms.categories,
+  ROUTES.lms.offlinePayment,
+  ROUTES.lms.reports,
+  ROUTES.lms.settings,
+  ROUTES.multiBranch.overview,
+  ROUTES.multiBranch.report,
+  ROUTES.multiBranch.setting,
+  ROUTES.gmeet.classes,
+  ROUTES.gmeet.meeting,
+  ROUTES.gmeet.report,
+  ROUTES.gmeet.setting,
+  ROUTES.zoom.classes,
+  ROUTES.zoom.meeting,
+  ROUTES.zoom.report,
+  ROUTES.zoom.meetingReport,
+  ROUTES.zoom.setting,
 ]);
 
 export function isImplementedPath(path: string): boolean {

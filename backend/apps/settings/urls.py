@@ -62,8 +62,18 @@ from apps.settings.api.views.users import (
     UserRoleOptionsView,
     UsersListView,
 )
+from apps.settings.api.views.multibranch import (
+    MultiBranchListCreateView,
+    MultiBranchDetailView,
+    MultiBranchOverviewView,
+    MultiBranchReportsView,
+)
 
 urlpatterns = [
+    path("multibranch/", MultiBranchListCreateView.as_view(), name="multibranch_list_create"),
+    path("multibranch/<int:pk>/", MultiBranchDetailView.as_view(), name="multibranch_detail"),
+    path("multibranch/overview/", MultiBranchOverviewView.as_view(), name="multibranch_overview"),
+    path("multibranch/reports/", MultiBranchReportsView.as_view(), name="multibranch_reports"),
     path("general/", GeneralSettingsView.as_view(), name="general_settings"),
     path("languages/", LanguagesListCreateView.as_view(), name="languages_list_create"),
     path("languages/<int:pk>/", LanguagesDetailView.as_view(), name="languages_detail"),

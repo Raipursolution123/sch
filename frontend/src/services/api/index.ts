@@ -105,3 +105,8 @@ export {
   systemFieldsService,
 } from './advanced-settings.service';
 export { lmsService } from './lms.service';
+export { multibranchService } from './multibranch.service';
+export { gmeetService } from './gmeet.service';
+export { zoomService } from './zoom.service';
+
+
